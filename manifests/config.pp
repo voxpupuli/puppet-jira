@@ -23,6 +23,12 @@ class jira::config{
     creates => "${jira::params::homedir}"
   }
 
+  file { "${jira::params::webappdir}/bin/setenv.sh":
+    content => template('jira/setenv.sh.erb'),
+    mode    => '0755',
+    require => Class['jira::install'],
+  }
+  
   if "${jira::params::db}" == 'postgresql' {
     file { "${jira::params::homedir}/dbconfig.xml":
       content => template('jira/dbconfig.postgres.xml.erb'),
