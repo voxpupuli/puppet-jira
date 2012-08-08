@@ -1,0 +1,68 @@
+#-----------------------------------------------------------------------------
+#   Copyright (c) 2012 Bryce Johnson
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#-----------------------------------------------------------------------------
+#
+# 1.) Place this file in your hieradata directory
+# 2.) Modify the database settings below according to your setup
+#
+# Atlassian jira Git Enterprise Source Control Server
+jira_name: jira
+jira_version: 5.1.1
+jira_package_format: zip
+
+# Directory where the webapp will run from
+jira_install_dir: /opt/jira
+# If you can put this on another filesystem, and even better, a fs that's
+# on another physical disk, you will be happier, but not required
+jira_home_dir: /opt/jira-home
+
+# Database configuration - please change these according to your setup
+# Comment out or uncomment for your db product as this value is also
+# overloaded as the jdbc driver db
+jira_db: postgresql
+#jira_db: mysql
+#jira_db: oracle
+
+jira_dbtype: postgres72
+#jira_dbtype: mysql
+
+jira_dbdriver: org.postgresql.Driver
+#jira_dbdriver: com.mysql.jdbc.Driver
+
+# Change these values to your jira database credentials
+jira_dbuser: jiraadm
+jira_dbpassword: jiraadm
+
+jira_dbname: jira
+# Change port depending on your db product
+jira_dbport: 5432
+#jira_dbport: 3306
+#jira_dbport: 1521
+
+# Change if your database isn't on localhost.  This module will only check
+# to make sure that the service is running and start it if it is not on
+# localhost db's only.  So if your remote database, which is suggested, isn't
+# available, that's your fault.
+jira_dbserver: localhost
+
+# Tomcat configuration
+# TODO because I'm never a fan of the stock tomcat settings
+jira_javahome: /opt/java/jdk1.6.0_33
+jira_jvm_xmx: 1024m
+jira_jvm_optional: -XX:-HeapDumpOnOutOfMemoryError
+#jira_jvm_optional: -XX:NewSize=256m -XX:MaxNewSize=256m -XX:SurvivorRatio=16
+# the New and SR figures are purely optional
+# for heap dumps add -XX:-HeapDumpOnOutOfMemoryError
+# by default jira has 256m permgen which is a good setting to go with
