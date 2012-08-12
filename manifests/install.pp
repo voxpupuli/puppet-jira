@@ -18,16 +18,17 @@ class jira::install {
   require jira::params
 
   case $::osfamily {
-    'Darwin' : { # assuming you did download wget - ill maybe fix this and check for it
+    'Darwin' : {
+      # assuming you did download wget - ill maybe fix this and check for it
       exec { 'wget-jira-package':
-        cwd     => "${jira::params::tmpdir}",
+        cwd     => $jira::params::tmpdir,
         command => "${jira::params::cmdwget} --no-check-certificate ${jira::params::downloadURL}",
         creates => "${jira::params::tmpdir}/atlassian-${jira::params::product}-${jira::params::version}.${jira::params::format}",
       }
     }
     default : {
       exec { 'wget-jira-package':
-        cwd     => "${jira::params::tmpdir}",
+        cwd     => $jira::params::tmpdir,
         command => "${jira::params::cmdwget} --no-check-certificate ${jira::params::downloadURL}",
         creates => "${jira::params::tmpdir}/atlassian-${jira::params::product}-${jira::params::version}.${jira::params::format}",
       }
@@ -35,14 +36,14 @@ class jira::install {
   }
 
   exec { 'mkdirp-installdir':
-    cwd     => "${jira::params::tmpdir}",
+    cwd     => $jira::params::tmpdir,
     command => "/bin/mkdir -p ${jira::params::installdir}",
-    creates => "${jira::params::installdir}",
+    creates => $jira::params::installdir,
   }
   exec { 'unzip-jira-package':
-    cwd     => "${jira::params::installdir}",
+    cwd     => $jira::params::installdir,
     command => "/usr/bin/unzip -o -d ${jira::params::installdir} ${jira::params::tmpdir}/atlassian-${jira::params::product}-${jira::params::version}.${jira::params::format}",
-    creates => "${jira::params::webappdir}",
+    creates => $jira::params::webappdir,
     require => [Exec['wget-jira-package'],Exec['mkdirp-installdir']],
   }
 

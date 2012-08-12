@@ -18,9 +18,9 @@ class jira::config{
   require jira::params
 
   exec { 'mkdirp-homedir':
-    cwd     => "${jira::params::tmpdir}",
+    cwd     => $jira::params::tmpdir,
     command => "/bin/mkdir -p ${jira::params::homedir}",
-    creates => "${jira::params::homedir}"
+    creates => $jira::params::homedir
   }
 
   file { "${jira::params::webappdir}/bin/setenv.sh":
@@ -28,15 +28,16 @@ class jira::config{
     mode    => '0755',
     require => Class['jira::install'],
   }
-  
-  if "${jira::params::db}" == 'postgresql' {
+
+  if $jira::params::db == 'postgresql' {
     file { "${jira::params::homedir}/dbconfig.xml":
       content => template('jira/dbconfig.postgres.xml.erb'),
       mode    => '0600',
       require => [Class['jira::install'],Exec['mkdirp-homedir']],
     }
   }
-  if "${jira::params::db}" == 'mysql' {
+
+  if $jira::params::db == 'mysql' {
     file { "${jira::params::homedir}/dbconfig.xml":
       content => template('jira/dbconfig.mysql.xml.erb'),
       mode    => '0600',
