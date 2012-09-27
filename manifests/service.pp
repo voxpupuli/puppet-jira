@@ -16,9 +16,9 @@
 class jira::service {
 
   service { 'jira':
-    ensure  => 'running',
-    name    => 'jira',
-    enable  => true,
-    require => Class['jira::config'],
+    ensure    => 'running',
+    name      => 'jira',
+    enable    => true,
+    require   => Class['jira::config'],
   }
 }

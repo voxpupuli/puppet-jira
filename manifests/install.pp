@@ -34,7 +34,7 @@ class jira::install {
     }
   }
 
-  exec { 'mkdirp-installdir':
+  exec { 'mkdirp-installdir-jira':
     cwd     => "${jira::params::tmpdir}",
     command => "/bin/mkdir -p ${jira::params::installdir}",
     creates => "${jira::params::installdir}",
@@ -43,7 +43,7 @@ class jira::install {
     cwd     => "${jira::params::installdir}",
     command => "/usr/bin/unzip -o -d ${jira::params::installdir} ${jira::params::tmpdir}/atlassian-${jira::params::product}-${jira::params::version}.${jira::params::format}",
     creates => "${jira::params::webappdir}",
-    require => [Exec['wget-jira-package'],Exec['mkdirp-installdir']],
+    require => [Exec['wget-jira-package'],Exec['mkdirp-installdir-jira']],
   }
 
   file { '/etc/rc.d/init.d/jira':
