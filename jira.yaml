@@ -19,7 +19,7 @@
 #
 # Atlassian jira Git Enterprise Source Control Server
 jira_name: jira
-jira_version: 5.1.4
+jira_version: 5.1.7
 jira_package_format: zip
 
 # Directory where the webapp will run from

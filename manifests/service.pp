@@ -25,5 +25,3 @@ class jira::service {
     require   => Class['jira::config'],
   }
 }
-  #status   => "pg_lsclusters -h | awk 'BEGIN {rc=0} {if (\$4 != \"online\") rc=3} END { exit rc }'",
-#/opt/java/jdk1.6.0_33/bin/jps |grep Bootstrap  # but has high risk for any tomcadt

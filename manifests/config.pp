@@ -27,6 +27,7 @@ class jira::config{
     content => template('jira/setenv.sh.erb'),
     mode    => '0755',
     require => Class['jira::install'],
+    notify  => Class['jira::service'],
   }
   
   if "${jira::params::db}" == 'postgresql' {
@@ -34,6 +35,7 @@ class jira::config{
       content => template('jira/dbconfig.postgres.xml.erb'),
       mode    => '0600',
       require => [Class['jira::install'],Exec['mkdirp-homedir-jira']],
+      notify  => Class['jira::service'],
     }
   }
   if "${jira::params::db}" == 'mysql' {
@@ -41,6 +43,7 @@ class jira::config{
       content => template('jira/dbconfig.mysql.xml.erb'),
       mode    => '0600',
       require => [Class['jira::install'],Exec['mkdirp-homedir-jira']],
+      notify  => Class['jira::service'],
     }
   }
 }
