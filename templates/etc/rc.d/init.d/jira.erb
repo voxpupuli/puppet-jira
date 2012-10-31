@@ -60,6 +60,20 @@ function start() {
   return $RETVAL
 }
 
+function status() {
+
+  ps -ef |grep $SERVICE |grep -v grep |awk '{ print $2 }' | <%= scope.lookupvar('jira::params::javahome') %>/bin/jps |grep -v Jps |grep -v grep > /dev/null
+  RETVAL=$?
+  if [ $RETVAL -eq 0 ];then
+    echo "$SERVICE is running"
+    return $RETVAL
+  else
+    echo "$SERVICE is stopped"
+    return $RETVAL
+  fi
+  
+}
+
 
 
 function execute() {
@@ -71,7 +85,7 @@ function execute() {
       stop
       ;;
     status)
-      status $SERVICE
+      status
       ;;
     restart)
       restart

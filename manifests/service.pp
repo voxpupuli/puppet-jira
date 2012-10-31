@@ -16,9 +16,14 @@
 class jira::service {
 
   service { 'jira':
+    provider  => base,
     ensure    => 'running',
-    name      => 'jira',
-    enable    => true,
+    start     => '/etc/init.d/jira start',
+    restart   => '/etc/init.d/jira restart',
+    stop      => '/etc/init.d/jira stop',
+    status    => '/etc/init.d/jira status',
     require   => Class['jira::config'],
   }
 }
+  #status   => "pg_lsclusters -h | awk 'BEGIN {rc=0} {if (\$4 != \"online\") rc=3} END { exit rc }'",
+#/opt/java/jdk1.6.0_33/bin/jps |grep Bootstrap  # but has high risk for any tomcadt
