@@ -6,10 +6,29 @@ Puppet module authored by Bryce Johnson
 puppet-jira is a module for Atlassian's Enterprise Issue Tracking and
 project management tool.
 
-## Known Issue
-This module needs a service provider created.  Subsequent puppet runs will fail because puppet is not able to get the JIRA service's status.
+* hiera and hiera-puppet
+This puppet module heavily uses hiera-puppet to decouple configuration 
+information from the module itself.  An example is given in jira.yaml
+that you can use to construct your own jira hieradata information.  Params.pp
+is still used since some resource types can't call hiera directly, like file.
 
 ## Requirements
+
+### Puppet
+
+Puppet 3.0+ is required as this module leverages hiera
+
+Puppet itself requires:
+  ruby
+  rubygems
+  Ruby Augeas     http://pkgs.repoforge.org/ruby-augeas/
+  Ruby Shadow     http://pkgs.repoforge.org/ruby-shadow/
+  Ruby JSON       http://pkgs.repoforge.org/ruby-json/
+  
+Hiera requires that you build a hiera.yaml configuration file in /etc/puppet
+
+The puppetlabs production yum repository can be found at:
+http://yum.puppetlabs.com/el/6/products/x86_64
 
 ### Operating System
 * MacOS: UNSUPPORTED
@@ -17,17 +36,8 @@ This module needs a service provider created.  Subsequent puppet runs will fail 
 * Windows:  UNSUPPORTED
 ### Databases
 * Postgres
-* MySQL
+* MySQL (untested)
 
-### Package Requirements
-
-* Puppet 3.0.0
-
-* hiera and hiera-puppet
-This puppet module heavily uses hiera-puppet to decouple configuration 
-information from the module itself.  An example is given in jira.yaml
-that you can use to construct your own jira hieradata information.  Params.pp
-is still used since some resource types can't call hiera directly, like file.
 
 ### Before you begin
 It is your responsibility to backup your database.  Especially do so
@@ -42,18 +52,18 @@ I have my own postgres puppet module that installs pg, creates the JIRA
 database, and the JIRA database user before the JIRA puppet module runs.
 
 Make sure you have a JAVA_HOME and appropriate java installed on your machine.
-Recommended is JDK 1.6u33
+Recommended is JDK 1.6u33+ and not JDK 1.7+
 
 Did I mention if you are upgrading, BACKUP your database first? This module 
 makes no warranty on your data, per its license.
 
 ### Installation
 
-This puppet module will be downloading the jira zip, extract it into
-/opt/jira/atlassian-jira-$version
+This puppet module will automatically download the jira zip from Atlassian
+and extract it into /opt/jira/atlassian-jira-$version
 
 You will also need to enter in the directory to your jira-home, which should
-also be kept in the hiera yaml, for example jira.yaml.
+also be kept in the hiera yaml, for example {{jira.yaml}}.
 
 Once you have installed the yaml information, then run puppet apply with 
 this module included in the modulepath.
