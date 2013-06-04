@@ -16,12 +16,13 @@
 class jira::service {
 
   service { 'jira':
-    provider  => base,
     ensure    => 'running',
+    provider  => base,
     start     => '/etc/init.d/jira start',
     restart   => '/etc/init.d/jira restart',
     stop      => '/etc/init.d/jira stop',
     status    => '/etc/init.d/jira status',
     require   => Class['jira::config'],
   }
+
 }

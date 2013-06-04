@@ -15,39 +15,41 @@
 #-----------------------------------------------------------------------------
 class jira::install {
 
-  require jira::params
+  require jira
 
-  case $::osfamily {
-    'Darwin' : { # assuming you did download wget - ill maybe fix this and check for it
-      exec { 'wget-jira-package':
-        cwd     => "${jira::params::tmpdir}",
-        command => "${jira::params::cmdwget} --no-check-certificate ${jira::params::downloadURL}",
-        creates => "${jira::params::tmpdir}/atlassian-${jira::params::product}-${jira::params::version}.${jira::params::format}",
-      }
-    }
-    default : {
-      exec { 'wget-jira-package':
-        cwd     => "${jira::params::tmpdir}",
-        command => "${jira::params::cmdwget} --no-check-certificate ${jira::params::downloadURL}",
-        creates => "${jira::params::tmpdir}/atlassian-${jira::params::product}-${jira::params::version}.${jira::params::format}",
-      }
-    }
-  }
+  deploy::file { "atlassian-${jira::product}-${jira::version}.${jira::format}":
+    target  => "${jira::installdir}/atlassian-${jira::product}-${jira::version}-standalone",
+    url     => $jira::downloadURL,
+    strip   => true,
+    notify  => Exec["chown_${jira::webappdir}"],
+  } ->
 
-  exec { 'mkdirp-installdir-jira':
-    cwd     => "${jira::params::tmpdir}",
-    command => "/bin/mkdir -p ${jira::params::installdir}",
-    creates => "${jira::params::installdir}",
-  }
-  exec { 'unzip-jira-package':
-    cwd     => "${jira::params::installdir}",
-    command => "/usr/bin/unzip -o -d ${jira::params::installdir} ${jira::params::tmpdir}/atlassian-${jira::params::product}-${jira::params::version}.${jira::params::format}",
-    creates => "${jira::params::webappdir}",
-    require => [Exec['wget-jira-package'],Exec['mkdirp-installdir-jira']],
-  }
+  user { $jira::user:
+    comment          => 'Jira daemon account',
+    shell            => '/bin/true',
+    home             => $jira::homedir,
+    password         => '*',
+    password_min_age => '0',
+    password_max_age => '99999',
+    managehome       => true,
+  } ->
 
-  file { '/etc/rc.d/init.d/jira':
+  file { $jira::homedir:
+    ensure  => 'directory',
+    owner   => 'jira',
+    group   => 'jira',
+    recurse => true,
+  } ->
+
+  exec { "chown_${jira::webappdir}":
+    command     => "/bin/chown -R ${jira::user}:${jira::group} ${jira::webappdir}",
+    refreshonly => true,
+    subscribe   => User[$jira::user]
+  } ->
+
+  file { '/etc/init.d/jira':
     content => template('jira/etc/rc.d/init.d/jira.erb'),
     mode    => '0755',
   }
+
 }
