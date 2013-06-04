@@ -1,18 +1,18 @@
 #
 # One way to set the JIRA HOME path is here via this variable.  Simply uncomment it and set a valid path like /jira/home.  You can of course set it outside in the command terminal.  That will also work.
 #
-JIRA_HOME="<%= scope.lookupvar('jira::params::homedir') %>"
+JIRA_HOME="<%= scope.lookupvar('jira::homedir') %>"
 
 #
 #  Occasionally Atlassian Support may recommend that you set some specific JVM arguments.  You can use this variable below to do that.
 #
-JVM_SUPPORT_RECOMMENDED_ARGS="<%= scope.lookupvar('jira::params::jvm_optional') %>"
+JVM_SUPPORT_RECOMMENDED_ARGS="<%= scope.lookupvar('jira::jvm_optional') %>"
 
 #
 # The following 2 settings control the minimum and maximum given to the JIRA Java virtual machine.  In larger JIRA instances, the maximum amount will need to be increased.
 #
 JVM_MINIMUM_MEMORY="256m"
-JVM_MAXIMUM_MEMORY="<%= scope.lookupvar('jira::params::jvm_xmx') %>"
+JVM_MAXIMUM_MEMORY="<%= scope.lookupvar('jira::jvm_xmx') %>"
 
 #
 # The following are the required arguments for JIRA.

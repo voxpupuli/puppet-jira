@@ -5,10 +5,10 @@
   <delegator-name>default</delegator-name>
   <database-type>mysql</database-type>
   <jdbc-datasource>
-    <url><%= scope.lookupvar('jira::params::dburl') %>?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=storage_engine=InnoDB</url>
-    <driver-class><%= scope.lookupvar('jira::params::jira_dbdriver') %></driver-class>
-    <username><%= scope.lookupvar('jira::params::dbuser') %></username>
-    <password><%= scope.lookupvar('jira::params::dbpassword') %></password>
+    <url><%= scope.lookupvar('jira::dburl') %>?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=storage_engine=InnoDB</url>
+    <driver-class><%= scope.lookupvar('jira::jira_dbdriver') %></driver-class>
+    <username><%= scope.lookupvar('jira::dbuser') %></username>
+    <password><%= scope.lookupvar('jira::dbpassword') %></password>
     <pool-min-size>20</pool-min-size>
     <pool-max-size>20</pool-max-size>
     <pool-max-wait>30000</pool-max-wait>
