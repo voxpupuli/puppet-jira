@@ -16,30 +16,19 @@ variables are then defined in the module's `params.pp`.
 
 ### Puppet
 
-Puppet 3.0+ is required as this module leverages hiera  
-
-Puppet itself requires:  
-
-*  ruby
-*  rubygems
-*  Ruby Augeas     http://pkgs.repoforge.org/ruby-augeas/
-*  Ruby Shadow     http://pkgs.repoforge.org/ruby-shadow/
-*  Ruby JSON       http://pkgs.repoforge.org/ruby-json/
-  
-Hiera requires that you build a `hiera.yaml` configuration file in `/etc/puppet`  
+Tested on Puppet 3.0+ 
+Puppet 2.7+ should work as Hiera is now optional.
 
 The puppetlabs production yum repository can be found at:  
 http://yum.puppetlabs.com/el/6/products/x86_64
 
 ### Operating Systems
-* MacOS: UNSUPPORTED
-* Linux:  RedHat (Debian untested)
-* Windows:  UNSUPPORTED
+* Linux:  RedHat / Centos 5/6 - tested.
+* Linux:  Ubuntu 12.04 - tested.
 
 ### Databases
 * Postgres
 * MySQL (untested)
-
 
 ### Before you begin
 It is your responsibility to backup your database.  Especially do so
@@ -54,7 +43,6 @@ I have my own postgres puppet module that installs pg, creates the JIRA
 database, and the JIRA database user before the JIRA puppet module runs.  
   
 Make sure you have a JAVA_HOME and appropriate java installed on your machine.
-Recommended is JDK 1.6u33+ and not JDK 1.7+  
   
 Did I mention if you are upgrading, BACKUP your database first? This module 
 makes no warranty on your data, per its license.  
@@ -63,15 +51,26 @@ makes no warranty on your data, per its license.
 
 This puppet module will automatically download the jira zip from Atlassian
 and extract it into /opt/jira/atlassian-jira-$version
+
+This module requires: https://github.com/mkrakowitzer/puppet-deploy.git
   
-You will also need to enter in the directory to your jira-home, which should
-also be kept in the hiera yaml, for example {{jira.yaml}}.  
-  
-Once you have installed the yaml information, then run puppet apply with 
-this module included in the modulepath.  
-  
+An example on how to use this module:
+
+    class { 'jira':
+      version     => '6.0.1',
+      installdir  => '/opt/atlassian-jira',
+      homedir     => '/opt/atlassian-jira/jira-home',
+      user        => 'jira',
+      group       => 'jira',
+      dbpassword  => 'secret',
+      dbserver    => 'localhost',
+      javahome    => '/opt/java/jdk1.7.0_21/',
+      downloadURL  => 'http://myserver/pub/development-tools/atlassian/',
+    }
+
+If you would prefer to use Hiera then see jira.yaml file for an example.
+
 ### Fixes and Future Work
 Please feel free to raise any issues here for fixes.  I'm happy to fix them
 up.  Also feel free to make a pull request for anything so I can hopefully
 get it in.
-

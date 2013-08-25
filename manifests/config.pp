@@ -13,37 +13,37 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 #-----------------------------------------------------------------------------
-class jira::config{
+class jira::config {
 
-  require jira::params
+  require jira
 
-  exec { 'mkdirp-homedir-jira':
-    cwd     => "${jira::params::tmpdir}",
-    command => "/bin/mkdir -p ${jira::params::homedir}",
-    creates => "${jira::params::homedir}"
+  File {
+    owner => $jira::user,
+    group => $jira::group,
   }
 
-  file { "${jira::params::webappdir}/bin/setenv.sh":
+  file { "${jira::webappdir}/bin/user.sh":
+    content => template('jira/user.sh.erb'),
+    mode    => '0755',
+    require => [
+      Class['jira::install'],
+      File[$jira::webappdir],
+      File[$jira::homedir]
+    ],
+  } ->
+
+  file { "${jira::webappdir}/bin/setenv.sh":
     content => template('jira/setenv.sh.erb'),
     mode    => '0755',
     require => Class['jira::install'],
     notify  => Class['jira::service'],
+  } ->
+
+  file { "${jira::homedir}/dbconfig.xml":
+    content => template("jira/dbconfig.${jira::db}.xml.erb"),
+    mode    => '0600',
+    require => [ Class['jira::install'],File[$jira::homedir] ],
+    notify  => Class['jira::service'],
   }
-  
-  if "${jira::params::db}" == 'postgresql' {
-    file { "${jira::params::homedir}/dbconfig.xml":
-      content => template('jira/dbconfig.postgres.xml.erb'),
-      mode    => '0600',
-      require => [Class['jira::install'],Exec['mkdirp-homedir-jira']],
-      notify  => Class['jira::service'],
-    }
-  }
-  if "${jira::params::db}" == 'mysql' {
-    file { "${jira::params::homedir}/dbconfig.xml":
-      content => template('jira/dbconfig.mysql.xml.erb'),
-      mode    => '0600',
-      require => [Class['jira::install'],Exec['mkdirp-homedir-jira']],
-      notify  => Class['jira::service'],
-    }
-  }
+
 }

@@ -28,9 +28,14 @@
 ### END INIT INFO
 ACTION=$1
 SERVICE=jira
+OS=`facter osfamily`
 lockfile=/var/lock/subsys/$SERVICE
+if [ $OS == "Debian" ]; then
+  lockfile=/var/lock/$SERVICE
+fi
 
-export JAVA_HOME=<%= scope.lookupvar('jira::params::javahome') %>
+export JAVA_HOME=<%= scope.lookupvar('jira::javahome') %>
+export CATALINA_HOME=<%= scope.lookupvar('jira::webappdir') %>
 
 
 function restart() {
@@ -40,7 +45,7 @@ function restart() {
 
 function stop() {
   echo -n $"Shutting down $SERVICE: "
-  <%= scope.lookupvar('jira::params::webappdir') %>/bin/stop-jira.sh
+  <%= scope.lookupvar('jira::webappdir') %>/bin/stop-jira.sh
   RETVAL=$?
   echo
 
@@ -51,7 +56,7 @@ function stop() {
 
 function start() {
   echo -n $"Starting $SERVICE: "
-  <%= scope.lookupvar('jira::params::webappdir') %>/bin/start-jira.sh
+  <%= scope.lookupvar('jira::webappdir') %>/bin/start-jira.sh
   RETVAL=$?
   echo
 
@@ -62,19 +67,23 @@ function start() {
 
 function status() {
 
-  ps -ef |grep $SERVICE |grep -v grep |awk '{ print $2 }' | <%= scope.lookupvar('jira::params::javahome') %>/bin/jps |grep -v Jps |grep -v grep > /dev/null
-  RETVAL=$?
-  if [ $RETVAL -eq 0 ];then
-    echo "$SERVICE is running"
-    return $RETVAL
+  STATUS=$( ps aux | grep "[c]atalina.base=$CATALINA_HOME" | wc -l )
+  if [ $STATUS -gt 0 ];then
+    ps -ef |grep $SERVICE |grep -v grep |awk '{ print $2 }' | <%= scope.lookupvar('jira::javahome') %>/bin/jps |grep -v Jps |grep -v grep > /dev/null
+    RETVAL=$?
+    if [ $RETVAL -eq 0 ];then
+      echo "$SERVICE is running"
+      return $RETVAL
+    else
+      echo "$SERVICE is stopped"
+      return $RETVAL
+    fi
   else
     echo "$SERVICE is stopped"
-    return $RETVAL
-  fi
+    return 1
+ fi
   
 }
-
-
 
 function execute() {
   case "$ACTION" in
