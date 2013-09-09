@@ -19,14 +19,14 @@
 #
 # Atlassian jira Git Enterprise Source Control Server
 jira::jira_name: jira
-jira::jira_version: 5.1.7
-jira::jira_package_format: tar.gz
+jira::version: 5.1.7
+jira::format: tar.gz
 
 # Directory where the webapp will run from
-jira::jira_install_dir: /opt/jira
+jira::installdir: /opt/jira
 # If you can put this on another filesystem, and even better, a fs that's
 # on another physical disk, you will be happier, but not required
-jira::jira_home_dir: /opt/jira-home
+jira::homedir: /opt/jira-home
 # What user should jira run as
 # Puppet will make the user
 jira::user: jira
@@ -35,25 +35,25 @@ jira::group: jira
 # Database configuration - please change these according to your setup
 # Comment out or uncomment for your db product as this value is also
 # overloaded as the jdbc driver db
-jira::jira_db: postgresql
-#jira::jira_db: mysql
-#jira::jira_db: oracle
+jira::db: postgresql
+#jira::db: mysql
+#jira::db: oracle
 
-jira::jira_dbtype: postgres72
-#jira_dbtype: mysql
+jira::dbtype: postgres72
+#jira::dbtype: mysql
 
-jira::jira_dbdriver: org.postgresql.Driver
-#jira_dbdriver: com.mysql.jdbc.Driver
+jira::dbdriver: org.postgresql.Driver
+#jira::dbdriver: com.mysql.jdbc.Driver
 
 # Change these values to your jira database credentials
-jira::jira_dbuser: jiraadm
-jira::jira_dbpassword: jiraadm
+jira::dbuser: jiraadm
+jira::dbpassword: jiraadm
 
-jira::jira_dbname: jira
+jira::dbname: jira
 # Change port depending on your db product
-jira::jira_dbport: 5432
-#jira::jira_dbport: 3306
-#jira::jira_dbport: 1521
+jira::dbport: 5432
+#jira::dbport: 3306
+#jira::dbport: 1521
 
 # The connection pool size
 jira::poolsize: 15
@@ -62,14 +62,14 @@ jira::poolsize: 15
 # to make sure that the service is running and start it if it is not on
 # localhost db's only.  So if your remote database, which is suggested, isn't
 # available, that's your fault.
-jira::jira_dbserver: localhost
+jira::dbserver: localhost
 
 # Tomcat configuration
 # TODO because I'm never a fan of the stock tomcat settings
-jira::jira_javahome: /opt/java/jdk1.6.0_33
-jira::jira_jvm_xmx: 1024m
-jira::jira_jvm_optional: -XX:-HeapDumpOnOutOfMemoryError
-#jira_jvm_optional: -XX:NewSize=256m -XX:MaxNewSize=256m -XX:SurvivorRatio=16
+jira::javahome: /opt/java/jdk1.6.0_33
+jira::jvm_xmx: 1024m
+jira::jvm_optional: -XX:-HeapDumpOnOutOfMemoryError
+#jira::jvm_optional: -XX:NewSize=256m -XX:MaxNewSize=256m -XX:SurvivorRatio=16
 # the New and SR figures are purely optional
 # for heap dumps add -XX:-HeapDumpOnOutOfMemoryError
 # by default jira has 256m permgen which is a good setting to go with
