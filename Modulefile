@@ -1,5 +1,5 @@
-name    'brycejohnson-jira'
-version '0.0.2'
+name    'mkrakowitzer-jira'
+version '0.0.3'
 source 'https://github.com/brycejohnson/puppet-jira.git'
 author 'brycejohnson'
 license 'Apache License, Version 2.0'
