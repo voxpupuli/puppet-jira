@@ -36,8 +36,8 @@ class jira::install {
 
   file { $jira::homedir:
     ensure  => 'directory',
-    owner   => 'jira',
-    group   => 'jira',
+    owner   => $jira::user,
+    group   => $jira::group,
     recurse => true,
   } ->
 

@@ -51,11 +51,6 @@
 #
 class jira (
 
-  # JVM Settings
-  $javahome,
-  $jvm_xmx      = '1024m',
-  $jvm_optional = '-XX:-HeapDumpOnOutOfMemoryError',
-
   # Jira Settings
   $version      = '6.0',
   $product      = 'jira',
@@ -75,6 +70,11 @@ class jira (
   $dbdriver     = 'org.postgresql.Driver',
   $dbtype       = 'postgres72',
   $poolsize     = '15',
+
+  # JVM Settings
+  $javahome,
+  $jvm_xmx      = '1024m',
+  $jvm_optional = '-XX:-HeapDumpOnOutOfMemoryError',
 
   # Misc Settings
   $downloadURL  = 'http://www.atlassian.com/software/jira/downloads/binary/',

@@ -25,11 +25,7 @@ class jira::config {
   file { "${jira::webappdir}/bin/user.sh":
     content => template('jira/user.sh.erb'),
     mode    => '0755',
-    require => [
-      Class['jira::install'],
-      File[$jira::webappdir],
-      File[$jira::homedir]
-    ],
+    require => [ Class['jira::install'], File[$jira::webappdir], File[$jira::homedir] ],
   } ->
 
   file { "${jira::webappdir}/bin/setenv.sh":
