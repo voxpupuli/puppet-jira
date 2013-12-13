@@ -57,8 +57,8 @@ class jira (
   $format       = 'tar.gz',
   $installdir   = '/opt/jira',
   $homedir      = '/home/jira',
-  $user         = 'root',
-  $group        = 'root',
+  $user         = 'jira',
+  $group        = 'jira',
 
   # Database Settings
   $db           = 'postgresql',
