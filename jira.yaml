@@ -74,3 +74,8 @@ jira::jvm_optional: -XX:-HeapDumpOnOutOfMemoryError
 # for heap dumps add -XX:-HeapDumpOnOutOfMemoryError
 # by default jira has 256m permgen which is a good setting to go with
 jira::downloadURL: "http://www.atlassian.com/software/jira/downloads/binary/"
+
+# Should puppet manage this service
+#  Boolean dictating if puppet should manage the service
+jira::manage_service: true
+

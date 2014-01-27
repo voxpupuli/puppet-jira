@@ -14,15 +14,15 @@
 #   limitations under the License.
 #-----------------------------------------------------------------------------
 class jira::service {
-
-  service { 'jira':
-    ensure    => 'running',
-    provider  => base,
-    start     => '/etc/init.d/jira start',
-    restart   => '/etc/init.d/jira restart',
-    stop      => '/etc/init.d/jira stop',
-    status    => '/etc/init.d/jira status',
-    require   => Class['jira::config'],
+  if $jira::manage_service {
+    service { 'jira':
+      ensure    => service_ensure,
+      provider  => base,
+      start     => '/etc/init.d/jira start',
+      restart   => '/etc/init.d/jira restart',
+      stop      => '/etc/init.d/jira stop',
+      status    => '/etc/init.d/jira status',
+      require   => Class['jira::config'],
+    }
   }
-
 }

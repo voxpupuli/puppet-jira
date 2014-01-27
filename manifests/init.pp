@@ -79,6 +79,9 @@ class jira (
   # Misc Settings
   $downloadURL  = 'http://www.atlassian.com/software/jira/downloads/binary/',
 
+  # Manage service
+  $manage_service  = true,
+
 ) {
 
   $webappdir    = "${installdir}/atlassian-${product}-${version}-standalone"
