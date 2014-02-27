@@ -11,7 +11,7 @@ JVM_SUPPORT_RECOMMENDED_ARGS="<%= scope.lookupvar('jira::jvm_optional') %>"
 #
 # The following 2 settings control the minimum and maximum given to the JIRA Java virtual machine.  In larger JIRA instances, the maximum amount will need to be increased.
 #
-JVM_MINIMUM_MEMORY="256m"
+JVM_MINIMUM_MEMORY="<%= scope.lookupvar('jira::jvm_xms') %>"
 JVM_MAXIMUM_MEMORY="<%= scope.lookupvar('jira::jvm_xmx') %>"
 
 #
