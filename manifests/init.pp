@@ -83,6 +83,12 @@ class jira (
   # Manage service
   $manage_service  = true,
 
+  # Tomcat Tunables
+  $tomcatMaxThreads  = '150',
+  $tomcatAcceptCount = '100',
+  # Reverse https proxy
+  $proxy = {},
+
 ) {
 
   $webappdir    = "${installdir}/atlassian-${product}-${version}-standalone"

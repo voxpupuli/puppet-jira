@@ -79,3 +79,12 @@ jira::downloadURL: "http://www.atlassian.com/software/jira/downloads/binary/"
 #  Boolean dictating if puppet should manage the service
 jira::manage_service: true
 
+# Tomcat settings
+jira::tomcatMaxThreads:  '150'
+jira::tomcatAcceptCount: '100'
+
+# Configure reverse ssl proxy
+jira::proxy:
+  scheme:    'https'
+  proxyName: 'www.exmaple.co.za'
+  proxyPort: '443'

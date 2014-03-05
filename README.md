@@ -55,7 +55,7 @@ and extract it into /opt/jira/atlassian-jira-$version
 This module requires: https://github.com/mkrakowitzer/puppet-deploy.git
   
 An example on how to use this module:
-
+```puppet
     class { 'jira':
       version     => '6.0.1',
       installdir  => '/opt/atlassian-jira',
@@ -67,8 +67,17 @@ An example on how to use this module:
       javahome    => '/opt/java/jdk1.7.0_21/',
       downloadURL  => 'http://myserver/pub/development-tools/atlassian/',
     }
-
+```
 If you would prefer to use Hiera then see jira.yaml file for an example.
+
+Reverse proxy can be configured as a hash as part of the jira resource
+```puppet
+   proxy          => {
+     scheme       => 'https',
+     proxyName    => 'www.example.com',
+     proxyPort    => '443',
+   },
+```
 
 ### Fixes and Future Work
 Please feel free to raise any issues here for fixes.  I'm happy to fix them
