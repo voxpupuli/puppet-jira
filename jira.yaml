@@ -77,7 +77,8 @@ jira::downloadURL: "http://www.atlassian.com/software/jira/downloads/binary/"
 
 # Should puppet manage this service
 #  Boolean dictating if puppet should manage the service
-jira::manage_service: true
+jira::service_manage: true
+jira::service_ensure: running
 
 # Tomcat settings
 jira::tomcatMaxThreads:  '150'

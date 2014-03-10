@@ -14,9 +14,9 @@
 #   limitations under the License.
 #-----------------------------------------------------------------------------
 class jira::service {
-  if $jira::manage_service {
+  if $jira::service_manage {
     service { 'jira':
-      ensure    => service_ensure,
+      ensure    => $jira::service_ensure,
       provider  => base,
       start     => '/etc/init.d/jira start',
       restart   => '/etc/init.d/jira restart',

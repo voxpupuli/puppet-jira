@@ -81,7 +81,8 @@ class jira (
   $downloadURL  = 'http://www.atlassian.com/software/jira/downloads/binary/',
 
   # Manage service
-  $manage_service  = true,
+  $service_manage => true,
+  $service_ensure => running,
 
   # Tomcat Tunables
   $tomcatMaxThreads  = '150',
