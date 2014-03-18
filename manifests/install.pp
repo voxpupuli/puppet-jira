@@ -16,6 +16,7 @@
 class jira::install {
 
   require jira
+  require deploy
 
   deploy::file { "atlassian-${jira::product}-${jira::version}.${jira::format}":
     target  => "${jira::installdir}/atlassian-${jira::product}-${jira::version}-standalone",
