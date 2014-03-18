@@ -42,4 +42,11 @@ class jira::config {
     notify  => Class['jira::service'],
   }
 
+  file { "${jira::webappdir}/conf/server.xml":
+    content => template("jira/server.xml.erb"),
+    mode    => '0600',
+    require => Class['jira::install'],
+    notify  => Class['jira::service'],
+  }
+
 }

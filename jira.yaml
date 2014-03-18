@@ -74,3 +74,18 @@ jira::jvm_optional: -XX:-HeapDumpOnOutOfMemoryError
 # for heap dumps add -XX:-HeapDumpOnOutOfMemoryError
 # by default jira has 256m permgen which is a good setting to go with
 jira::downloadURL: "http://www.atlassian.com/software/jira/downloads/binary/"
+
+# Should puppet manage this service
+#  Boolean dictating if puppet should manage the service
+jira::service_manage: true
+jira::service_ensure: running
+
+# Tomcat settings
+jira::tomcatMaxThreads:  '150'
+jira::tomcatAcceptCount: '100'
+
+# Configure reverse ssl proxy
+jira::proxy:
+  scheme:    'https'
+  proxyName: 'www.exmaple.co.za'
+  proxyPort: '443'

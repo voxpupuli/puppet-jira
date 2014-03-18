@@ -73,11 +73,22 @@ class jira (
 
   # JVM Settings
   $javahome,
+  $jvm_xms      = '256m',
   $jvm_xmx      = '1024m',
   $jvm_optional = '-XX:-HeapDumpOnOutOfMemoryError',
 
   # Misc Settings
   $downloadURL  = 'http://www.atlassian.com/software/jira/downloads/binary/',
+
+  # Manage service
+  $service_manage => true,
+  $service_ensure => running,
+
+  # Tomcat Tunables
+  $tomcatMaxThreads  = '150',
+  $tomcatAcceptCount = '100',
+  # Reverse https proxy
+  $proxy = {},
 
 ) {
 
