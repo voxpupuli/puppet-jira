@@ -19,10 +19,11 @@ class jira::install {
   require deploy
 
   deploy::file { "atlassian-${jira::product}-${jira::version}.${jira::format}":
-    target  => "${jira::installdir}/atlassian-${jira::product}-${jira::version}-standalone",
-    url     => $jira::downloadURL,
-    strip   => true,
-    notify  => Exec["chown_${jira::webappdir}"],
+    target          => "${jira::installdir}/atlassian-${jira::product}-${jira::version}-standalone",
+    url             => $jira::downloadURL,
+    strip           => true,
+    download_timout => 1800,
+    notify          => Exec["chown_${jira::webappdir}"],
   } ->
 
   user { $jira::user:
