@@ -111,7 +111,7 @@ class jira (
   $tomcatAcceptCount = '100',
   # Reverse https proxy
   $proxy = {},
-  
+
 ) {
 
   $webappdir    = "${installdir}/atlassian-${product}-${version}-standalone"
