@@ -11,5 +11,18 @@
     <username><%= scope.lookupvar('jira::dbuser') %></username>
     <password><%= scope.lookupvar('jira::dbpassword') %></password>
     <pool-size><%= scope.lookupvar('jira::poolsize') %></pool-size>
+<% if @enable_connection_pooling -%>
+    <pool-min-size><%= scope.lookupvar('jira::poolMinSize') %></pool-min-size>
+    <pool-max-size><%= scope.lookupvar('jira::poolMaxSize') %></pool-max-size>
+    <pool-max-wait><%= scope.lookupvar('jira::poolMaxWait') %></pool-max-wait>
+    <validation-query><%= scope.lookupvar('jira::validationQuery') %></validation-query>
+    <min-evictable-idle-time-millis><%= scope.lookupvar('jira::minEvictableIdleTime') %></min-evictable-idle-time-millis>
+    <time-between-eviction-runs-millis><%= scope.lookupvar('jira::timeBetweenEvictionRuns') %></time-between-eviction-runs-millis>
+    <pool-max-idle><%= scope.lookupvar('jira::poolMaxIdle') %></pool-max-idle>
+    <pool-remove-abandoned><%= scope.lookupvar('jira::poolRemoveAbandoned') %></pool-remove-abandoned>
+    <pool-remove-abandoned-timeout><%= scope.lookupvar('jira::poolRemoveAbandonedTimout') %></pool-remove-abandoned-timeout>
+    <pool-test-while-idle><%= scope.lookupvar('jira::poolTestWhileIdle') %></pool-test-while-idle>
+    <pool-test-on-borrow><%= scope.lookupvar('jira::poolTestOnBorrow') %></pool-test-on-borrow>
+<% end -%>
   </jdbc-datasource>
 </jira-database-config>

@@ -69,7 +69,29 @@ class jira (
   $dbport       = '5432',
   $dbdriver     = 'org.postgresql.Driver',
   $dbtype       = 'postgres72',
-  $poolsize     = '15',
+  $poolsize     = '20',
+
+  # Configure database settings if you are pooling connections
+  $enable_connection_pooling = false,
+  $poolMinSize               = 20,
+  $poolMaxSize               = 20,
+  $poolMaxWait               = 30000,
+  $validationQuery = $db ? {
+    'postgresql' => 'select version();',
+    'mysql'      => 'select 1',
+    default      =>  fail("db should be postgresql or mysql")
+  },
+  $minEvictableIdleTime      = 60000,
+  $timeBetweenEvictionRuns = $db ? {
+    'postgresql' => '30000',
+    'mysql'      => '300000',
+    default      =>  fail("db should be postgresql or mysql")
+  },
+  $poolMaxIdle               = 20,
+  $poolRemoveAbandoned       = true,
+  $poolRemoveAbandonedTimout = 300,
+  $poolTestWhileIdle         = true,
+  $poolTestOnBorrow          = true,
 
   # JVM Settings
   $javahome,
@@ -89,7 +111,7 @@ class jira (
   $tomcatAcceptCount = '100',
   # Reverse https proxy
   $proxy = {},
-
+  
 ) {
 
   $webappdir    = "${installdir}/atlassian-${product}-${version}-standalone"
