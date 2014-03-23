@@ -22,6 +22,19 @@ class jira::config {
     group => $jira::group,
   }
 
+  if $jira::validationQuery == undef {
+    $validationQuery = $jira::db ? {
+      'postgresql' => 'select version();',
+      'mysql'      => 'select 1',
+    }
+  }
+  if $jira::timeBetweenEvictionRuns == undef {
+    $timeBetweenEvictionRuns = $jira::db ? {
+      'postgresql' => '30000',
+      'mysql'      => '300000',
+    }
+  }
+
   file { "${jira::webappdir}/bin/user.sh":
     content => template('jira/user.sh.erb'),
     mode    => '0755',

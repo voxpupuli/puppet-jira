@@ -13,9 +13,9 @@
     <pool-min-size><%= scope.lookupvar('jira::poolMinSize') %></pool-min-size>
     <pool-max-size><%= scope.lookupvar('jira::poolMaxSize') %></pool-max-size>
     <pool-max-wait><%= scope.lookupvar('jira::poolMaxWait') %></pool-max-wait>
-    <validation-query><%= scope.lookupvar('jira::validationQuery') %></validation-query>
+    <validation-query><% if @validationQuery %><%= @validationQuery %><% else %>scope.lookupvar('jira::validationQuery')<% end %></validation-query>
     <min-evictable-idle-time-millis><%= scope.lookupvar('jira::minEvictableIdleTime') %></min-evictable-idle-time-millis>
-    <time-between-eviction-runs-millis><%= scope.lookupvar('jira::timeBetweenEvictionRuns') %></time-between-eviction-runs-millis>
+    <time-between-eviction-runs-millis><% if @timeBetweenEvictionRuns %><%= @timeBetweenEvictionRuns %><% else %><%= scope.lookupvar('jira::timeBetweenEvictionRuns') %><% end %></time-between-eviction-runs-millis>
     <pool-max-idle><%= scope.lookupvar('jira::poolMaxIdle') %></pool-max-idle>
     <pool-remove-abandoned><%= scope.lookupvar('jira::poolRemoveAbandoned') %></pool-remove-abandoned>
     <pool-remove-abandoned-timeout><%= scope.lookupvar('jira::poolRemoveAbandonedTimout') %></pool-remove-abandoned-timeout>

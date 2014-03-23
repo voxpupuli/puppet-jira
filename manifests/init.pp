@@ -76,17 +76,9 @@ class jira (
   $poolMinSize               = 20,
   $poolMaxSize               = 20,
   $poolMaxWait               = 30000,
-  $validationQuery = $db ? {
-    'postgresql' => 'select version();',
-    'mysql'      => 'select 1',
-    default      =>  fail("db should be postgresql or mysql")
-  },
+  $validationQuery           = undef,
   $minEvictableIdleTime      = 60000,
-  $timeBetweenEvictionRuns = $db ? {
-    'postgresql' => '30000',
-    'mysql'      => '300000',
-    default      =>  fail("db should be postgresql or mysql")
-  },
+  $timeBetweenEvictionRuns   = undef,
   $poolMaxIdle               = 20,
   $poolRemoveAbandoned       = true,
   $poolRemoveAbandonedTimout = 300,
@@ -113,6 +105,10 @@ class jira (
   $proxy = {},
 
 ) {
+
+  if ! ($db in [ "postrgesql", "mysql" ]) {
+    fail("jira db parameter must be postgresql or mysql")
+  }
 
   $webappdir    = "${installdir}/atlassian-${product}-${version}-standalone"
   $dburl        = "jdbc:${db}://${dbserver}:${dbport}/${dbname}"
