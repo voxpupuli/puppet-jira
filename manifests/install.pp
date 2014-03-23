@@ -23,6 +23,8 @@ class jira::install {
     url             => $jira::downloadURL,
     strip           => true,
     download_timout => 1800,
+    owner           => $jira::user,
+    group           => $jira::group,
     notify          => Exec["chown_${jira::webappdir}"],
   } ->
 
@@ -40,7 +42,6 @@ class jira::install {
     ensure  => 'directory',
     owner   => $jira::user,
     group   => $jira::group,
-    recurse => true,
   } ->
 
   exec { "chown_${jira::webappdir}":
