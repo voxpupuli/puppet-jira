@@ -106,7 +106,7 @@ class jira (
 
 ) {
 
-  if ! ($db in [ "postrgesql", "mysql" ]) {
+  if $jira::db != 'postgresql' and $jira::db != 'mysql' {
     fail("jira db parameter must be postgresql or mysql")
   }
 
