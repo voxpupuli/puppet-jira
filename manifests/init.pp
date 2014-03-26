@@ -90,6 +90,7 @@ class jira (
   $jvm_xms      = '256m',
   $jvm_xmx      = '1024m',
   $jvm_optional = '-XX:-HeapDumpOnOutOfMemoryError',
+  $java_opts    = '',
 
   # Misc Settings
   $downloadURL  = 'http://www.atlassian.com/software/jira/downloads/binary/',
