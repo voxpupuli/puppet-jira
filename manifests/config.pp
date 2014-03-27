@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #   Copyright (c) 2012 Bryce Johnson
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@
 #   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 class jira::config {
 
   require jira
@@ -56,7 +56,7 @@ class jira::config {
   }
 
   file { "${jira::webappdir}/conf/server.xml":
-    content => template("jira/server.xml.erb"),
+    content => template('jira/server.xml.erb'),
     mode    => '0600',
     require => Class['jira::install'],
     notify  => Class['jira::service'],
