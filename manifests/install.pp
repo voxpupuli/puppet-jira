@@ -18,6 +18,12 @@ class jira::install {
   require jira
   require deploy
 
+  file { $jira::installdir:
+    ensure  => 'directory',
+    owner   => 'root',
+    group   => 'root',
+  } ->
+
   deploy::file { "atlassian-${jira::product}-${jira::version}.${jira::format}":
     target  => "${jira::installdir}/atlassian-${jira::product}-${jira::version}-standalone",
     url     => $jira::downloadURL,
