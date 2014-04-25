@@ -83,6 +83,7 @@ class jira (
   # Manage service
   $service_manage = true,
   $service_ensure = running,
+  $service_enable = true,
 
   # Tomcat Tunables
   $tomcatMaxThreads  = '150',
