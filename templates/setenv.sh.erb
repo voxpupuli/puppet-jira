@@ -4,6 +4,11 @@
 JIRA_HOME="<%= scope.lookupvar('jira::homedir') %>"
 
 #
+# Additional JAVA_OPTS
+#
+JAVA_OPTS="<%= scope.lookupvar('jira::java_opts') %> $JAVA_OPTS"
+
+#
 #  Occasionally Atlassian Support may recommend that you set some specific JVM arguments.  You can use this variable below to do that.
 #
 JVM_SUPPORT_RECOMMENDED_ARGS="<%= scope.lookupvar('jira::jvm_optional') %>"

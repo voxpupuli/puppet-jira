@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #   Copyright (c) 2012 Bryce Johnson
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,18 +12,11 @@
 #   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 class jira::install {
 
   require jira
   require deploy
-
-  deploy::file { "atlassian-${jira::product}-${jira::version}.${jira::format}":
-    target  => "${jira::installdir}/atlassian-${jira::product}-${jira::version}-standalone",
-    url     => $jira::downloadURL,
-    strip   => true,
-    notify  => Exec["chown_${jira::webappdir}"],
-  } ->
 
   user { $jira::user:
     comment          => 'Jira daemon account',
@@ -35,11 +28,20 @@ class jira::install {
     managehome       => true,
   } ->
 
+  deploy::file { "atlassian-${jira::product}-${jira::version}.${jira::format}":
+    target          => "${jira::installdir}/atlassian-${jira::product}-${jira::version}-standalone",
+    url             => $jira::downloadURL,
+    strip           => true,
+    download_timout => 1800,
+    owner           => $jira::user,
+    group           => $jira::group,
+    notify          => Exec["chown_${jira::webappdir}"],
+  } ->
+
   file { $jira::homedir:
     ensure  => 'directory',
     owner   => $jira::user,
     group   => $jira::group,
-    recurse => true,
   } ->
 
   exec { "chown_${jira::webappdir}":

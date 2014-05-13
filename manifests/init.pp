@@ -1,4 +1,4 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #   Copyright (c) 2012 Bryce Johnson
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@
 #   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # == Class: jira
 #
 # This module is used to install Jira.
@@ -52,7 +52,7 @@
 class jira (
 
   # Jira Settings
-  $version      = '6.0',
+  $version      = '6.2.1',
   $product      = 'jira',
   $format       = 'tar.gz',
   $installdir   = '/opt/jira',
@@ -69,13 +69,28 @@ class jira (
   $dbport       = '5432',
   $dbdriver     = 'org.postgresql.Driver',
   $dbtype       = 'postgres72',
-  $poolsize     = '15',
+  $poolsize     = '20',
+
+  # Configure database settings if you are pooling connections
+  $enable_connection_pooling = false,
+  $poolMinSize               = 20,
+  $poolMaxSize               = 20,
+  $poolMaxWait               = 30000,
+  $validationQuery           = undef,
+  $minEvictableIdleTime      = 60000,
+  $timeBetweenEvictionRuns   = undef,
+  $poolMaxIdle               = 20,
+  $poolRemoveAbandoned       = true,
+  $poolRemoveAbandonedTimout = 300,
+  $poolTestWhileIdle         = true,
+  $poolTestOnBorrow          = true,
 
   # JVM Settings
   $javahome,
   $jvm_xms      = '256m',
   $jvm_xmx      = '1024m',
   $jvm_optional = '-XX:-HeapDumpOnOutOfMemoryError',
+  $java_opts    = '',
 
   # Misc Settings
   $downloadURL  = 'http://www.atlassian.com/software/jira/downloads/binary/',
@@ -91,6 +106,10 @@ class jira (
   $proxy = {},
 
 ) {
+
+  if $jira::db != 'postgresql' and $jira::db != 'mysql' {
+    fail('jira db parameter must be postgresql or mysql')
+  }
 
   $webappdir    = "${installdir}/atlassian-${product}-${version}-standalone"
   $dburl        = "jdbc:${db}://${dbserver}:${dbport}/${dbname}"

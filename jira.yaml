@@ -56,7 +56,17 @@ jira::dbport: 5432
 #jira::dbport: 1521
 
 # The connection pool size
-jira::poolsize: 15
+jira::poolsize: 20
+jira::enable_connection_pooling: false
+jira::poolMinSize: 20
+jira::poolMaxSize: 20
+jira::poolMaxWait: 30000
+jira::minEvictableIdleTime: 60000
+jira::poolMaxIdle: 20
+jira::poolRemoveAbandoned: true
+jira::poolRemoveAbandonedTimout: 300
+jira::poolTestWhileIdle: true
+jira::poolTestOnBorrow: true
 
 # Change if your database isn't on localhost.  This module will only check
 # to make sure that the service is running and start it if it is not on

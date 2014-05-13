@@ -1,5 +1,5 @@
 name    'mkrakowitzer-jira'
-version '0.0.3'
+version '0.0.4'
 source 'https://github.com/brycejohnson/puppet-jira.git'
 author 'brycejohnson'
 license 'Apache License, Version 2.0'
@@ -8,4 +8,4 @@ description 'Module to install Jira'
 project_page 'https://github.com/brycejohnson/puppet-jira/blob/master/README.md'
 
 ## Add dependencies, if any:
-dependency 'mkrakowitzer/deploy', '>= 0.0.1'
+dependency 'mkrakowitzer/deploy', '>= 0.0.2'
