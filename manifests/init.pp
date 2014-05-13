@@ -98,10 +98,14 @@ class jira (
   # Manage service
   $service_manage = true,
   $service_ensure = running,
-
+  
+  # Tomcat
+  $tomcatPort = 8080,
+  
   # Tomcat Tunables
   $tomcatMaxThreads  = '150',
   $tomcatAcceptCount = '100',
+  
   # Reverse https proxy
   $proxy = {},
 

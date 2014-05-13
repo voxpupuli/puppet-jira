@@ -46,7 +46,7 @@
     -->
     <Service name="Catalina">
 
-        <Connector port="8080"
+        <Connector port="<%= scope.lookupvar('jira::tomcatPort') %>"
 
                    maxThreads="<%= scope.lookupvar('jira::tomcatMaxThreads') %>"
                    minSpareThreads="25"
