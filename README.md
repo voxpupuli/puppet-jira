@@ -1,4 +1,7 @@
-# puppet-jira
+# JIRA Module
+
+[![Build Status](https://travis-ci.org/brycejohnson/puppet-jira.svg?branch=master)](https://travis-ci.org/brycejohnson/puppet-jira)
+
 Puppet module for Altassian JIRA  
 authored by Bryce Johnson
 
