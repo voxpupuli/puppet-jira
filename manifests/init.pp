@@ -98,10 +98,9 @@ class jira (
   # Manage service
   $service_manage = true,
   $service_ensure = running,
-  
+  $service_enable = true,
   # Tomcat
   $tomcatPort = 8080,
-  
   # Tomcat Tunables
   $tomcatMaxThreads  = '150',
   $tomcatAcceptCount = '100',
