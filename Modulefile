@@ -9,3 +9,4 @@ project_page 'https://github.com/brycejohnson/puppet-jira/blob/master/README.md'
 
 ## Add dependencies, if any:
 dependency 'mkrakowitzer/deploy', '>= 0.0.2'
+dependency 'puppetlabs/stdlib', '>= 3.0.0'
