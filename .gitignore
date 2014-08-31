@@ -1,2 +1,7 @@
 *kate-swp
 pkg/
+*.swp
+*.settings
+*.project
+spec/fixtures/modules/
+Gemfile.lock
