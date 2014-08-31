@@ -3,5 +3,5 @@ pkg/
 *.swp
 *.settings
 *.project
-spec/fixtures/modules/
+spec/fixtures/modules
 Gemfile.lock

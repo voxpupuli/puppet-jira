@@ -1,0 +1,36 @@
+{
+  "name": "mkrakowitzer-jira",
+  "version": "1.0.0",
+  "author": "brycejohnson",
+  "summary": "Module to install Jira",
+  "license": "Apache License, Version 2.0",
+  "source": "https://github.com/brycejohnson/puppet-jira.git",
+  "project_page": "https://github.com/brycejohnson/puppet-jira/blob/master/README.md",
+  "issues_url": "https://github.com/brycejohnson/puppet-jira/issues",
+  "description": "Module to install Jira",
+  "dependencies": [
+    {
+      "name": "mkrakowitzer/deploy",
+      "version_requirement": ">= 0.0.2"
+    },
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 3.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "5.0",
+        "6.0"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "12.04"
+      ]
+    }
+  ]
+}
