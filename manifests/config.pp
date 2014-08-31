@@ -15,8 +15,6 @@
 # -----------------------------------------------------------------------------
 class jira::config {
 
-  require jira
-
   File {
     owner => $jira::user,
     group => $jira::group,

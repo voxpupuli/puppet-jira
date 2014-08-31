@@ -15,9 +15,12 @@
 # -----------------------------------------------------------------------------
 class jira::install {
 
-  require jira
   require deploy
 
+  group { $jira::group:
+    ensure => present,
+    gid    => $jira::gid
+  } ->
   user { $jira::user:
     comment          => 'Jira daemon account',
     shell            => '/bin/true',
@@ -26,7 +29,18 @@ class jira::install {
     password_min_age => '0',
     password_max_age => '99999',
     managehome       => true,
-  } ->
+    uid              => $jira::uid,
+    gid              => $jira::gid,
+
+  }
+
+  if ! defined(File[$jira::installdir]) {
+    file { $jira::installdir:
+      ensure => 'directory',
+      owner  => $jira::user,
+      group  => $jira::group,
+    }
+  }
 
   deploy::file { "atlassian-${jira::product}-${jira::version}.${jira::format}":
     target          => "${jira::installdir}/atlassian-${jira::product}-${jira::version}-standalone",
@@ -36,6 +50,7 @@ class jira::install {
     owner           => $jira::user,
     group           => $jira::group,
     notify          => Exec["chown_${jira::webappdir}"],
+    require         => [ File[$jira::installdir], User[$jira::user] ],
   } ->
 
   file { $jira::homedir:

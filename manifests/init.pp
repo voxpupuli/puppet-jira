@@ -59,6 +59,8 @@ class jira (
   $homedir      = '/home/jira',
   $user         = 'jira',
   $group        = 'jira',
+  $uid          = undef,
+  $gid          = undef,
 
   # Database Settings
   $db           = 'postgresql',
