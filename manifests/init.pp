@@ -117,8 +117,14 @@ class jira (
   $webappdir    = "${installdir}/atlassian-${product}-${version}-standalone"
   $dburl        = "jdbc:${db}://${dbserver}:${dbport}/${dbname}"
 
-  include jira::install
-  include jira::config
-  include jira::service
+  anchor { 'jira::start':
+  } ->
+  class { 'jira::install':
+  } ->
+  class { 'jira::config':
+  } ~>
+  class { 'jira::service':
+  } ->
+  anchor { 'jira::end': }
 
 }
