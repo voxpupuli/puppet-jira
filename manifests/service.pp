@@ -18,7 +18,6 @@ class jira::service {
     service { 'jira':
       ensure    => $jira::service_ensure,
       enable    => $jira::service_enable,
-      provider  => base,
       start     => '/etc/init.d/jira start',
       restart   => '/etc/init.d/jira restart',
       stop      => '/etc/init.d/jira stop',
