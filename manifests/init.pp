@@ -52,7 +52,7 @@
 class jira (
 
   # Jira Settings
-  $version      = '6.2.1',
+  $version      = '6.3.4a',
   $product      = 'jira',
   $format       = 'tar.gz',
   $installdir   = '/opt/jira',
