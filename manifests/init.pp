@@ -52,13 +52,15 @@
 class jira (
 
   # Jira Settings
-  $version      = '6.2.1',
+  $version      = '6.3.4a',
   $product      = 'jira',
   $format       = 'tar.gz',
   $installdir   = '/opt/jira',
   $homedir      = '/home/jira',
   $user         = 'jira',
   $group        = 'jira',
+  $uid          = undef,
+  $gid          = undef,
 
   # Database Settings
   $db           = 'postgresql',
@@ -117,8 +119,14 @@ class jira (
   $webappdir    = "${installdir}/atlassian-${product}-${version}-standalone"
   $dburl        = "jdbc:${db}://${dbserver}:${dbport}/${dbname}"
 
-  include jira::install
-  include jira::config
-  include jira::service
+  anchor { 'jira::start':
+  } ->
+  class { 'jira::install':
+  } ->
+  class { 'jira::config':
+  } ~>
+  class { 'jira::service':
+  } ->
+  anchor { 'jira::end': }
 
 }
