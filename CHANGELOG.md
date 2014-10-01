@@ -2,8 +2,8 @@
 
 ###Summary
 Update the README file to comply with puppetlabs standards
-https://docs.puppetlabs.com/puppet/latest/reference/modules_documentation.html
-https://docs.puppetlabs.com/puppet/latest/reference/READMEtemplate.markdown
+- https://docs.puppetlabs.com/puppet/latest/reference/modules_documentation.html
+- https://docs.puppetlabs.com/puppet/latest/reference/READMEtemplate.markdown
 
 ####Bugfixes
 - None

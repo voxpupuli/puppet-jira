@@ -9,13 +9,15 @@
 3. [Setup - The basics of getting started with JIRA](#setup)
     * [JIRA Prerequisites] (#JIRA-prerequisites)
     * [What JIRA affects](#what-JIRA-affects)
-    * [Setup requirements](#setup-requirements)
     * [Beginning with JIRA](#beginning-with-JIRA)
+    * [Upgrades](#upgrades)
 4. [Usage - Configuration options and additional functionality](#usage)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 6. [Limitations - OS compatibility, etc.](#limitations)
 7. [Development - Guide for contributing to the module](#development)
-8. [Testing the JIRA module](#testing)
+8. [Testing](#testing)
+9. [Contributors](#contributors)
+
 
 ##Overview
 
@@ -27,6 +29,7 @@ This module installs/upgrades Atlassian's Enterprise Issue Tracking and project 
 
 ##Setup
 
+<a name="JIRA-prerequisites">
 ###JIRA Prerequisites
 
 * JIRA requires a Java Developers Kit (JDK) or Java Run-time Environment (JRE) platform to be installed on your server's operating system. Oracle JDK / JRE (formerly Sun JDK / JRE)	versions 7 and 8 are currently supported by Atlassian.
@@ -35,6 +38,7 @@ This module installs/upgrades Atlassian's Enterprise Issue Tracking and project 
 
 * Whilst not required, for production use we recommend using nginx/apache as a reverse proxy to JIRA. We suggest using the jfryman/nginx puppet module.
 
+<a name="what-JIRA-affects">
 ###What JIRA affects
 
 If installing to an existing JIRA instance, it is your responsibility to backup your database. We also recommend that you backup your JIRA home directory and that you align your current JIRA version with the version you intend to use with puppet JIRA module.
@@ -43,6 +47,7 @@ You must have your database setup with the account user that JIRA will use. This
 
 When using this module to upgrade JIRA, please make sure you have a database/JIRA home backup.
 
+<a name="beginning-with-JIRA">
 ###Beginning with JIRA
 
 This puppet module will automatically download the JIRA zip from Atlassian
@@ -118,7 +123,8 @@ Reverse proxy can be configured as a hash as part of the JIRA resource
 
 A complete example with postgres/nginx/JIRA is available [here](https://github.com/mkrakowitzer/vagrant-puppet-jira/blob/master/manifests/site.pp).
 
-#####upgrades
+<a name="upgrades">
+#####Upgrades
 mkrakowitzer-deploy has been replaced with nanlui-staging as the default module for deploying the JIRA binaries. You can still use mkrakowitzer-deploy with the *staging_or_deploy => 'deploy'*
 
 ```puppet
