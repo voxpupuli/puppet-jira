@@ -15,8 +15,6 @@
 # -----------------------------------------------------------------------------
 class jira::install {
 
-  require deploy
-
   group { $jira::group:
     ensure => present,
     gid    => $jira::gid
@@ -42,21 +40,64 @@ class jira::install {
     }
   }
 
-  deploy::file { "atlassian-${jira::product}-${jira::version}.${jira::format}":
-    target          => "${jira::installdir}/atlassian-${jira::product}-${jira::version}-standalone",
-    url             => $jira::downloadURL,
-    strip           => true,
-    download_timout => 1800,
-    owner           => $jira::user,
-    group           => $jira::group,
-    notify          => Exec["chown_${jira::webappdir}"],
-    require         => [ File[$jira::installdir], User[$jira::user] ],
-  } ->
+  $file    = "atlassian-${jira::product}-${jira::version}.${jira::format}"
+  $ftarget = "${jira::installdir}/atlassian-${jira::product}-${jira::version}-standalone"
+  if $jira::staging_or_deploy == 'staging' {
+
+    require staging
+    $cleanup_file = "${staging::path}/${caller_module_name}/${file}"
+
+    if ! defined(File[$jira::webappdir]) {
+      file { $jira::webappdir:
+        ensure => 'directory',
+        owner  => $jira::user,
+        group  => $jira::group,
+      }
+    }
+    staging::file { $file:
+      source  => "${jira::downloadURL}/${file}",
+      timeout => 1800,
+    } ->
+    staging::extract { $file:
+      target  => $ftarget,
+      creates => "${ftarget}/conf",
+      strip   => 1,
+      user    => $jira::user,
+      group   => $jira::group,
+      notify  => Exec["chown_${jira::webappdir}"],
+      before  => File[$jira::homedir],
+      require => [
+        File[$jira::installdir],
+        User[$jira::user],
+        File[$jira::webappdir] ],
+    } ~>
+    # Remove the downloaded files after they have been uncompressed.
+    exec { "staging-cleanup_${file}":
+      command     => "rm -f ${cleanup_file}",
+      onlyif      => "test -f ${cleanup_file}",
+      refreshonly => true,
+      path        => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ],
+    }
+  } elsif $jira::staging_or_deploy == 'deploy' {
+    deploy::file { "atlassian-${jira::product}-${jira::version}.${jira::format}":
+      target          => $ftarget,
+      url             => $jira::downloadURL,
+      strip           => true,
+      download_timout => 1800,
+      owner           => $jira::user,
+      group           => $jira::group,
+      notify          => Exec["chown_${jira::webappdir}"],
+      before          => File[$jira::homedir],
+      require         => [ File[$jira::installdir], User[$jira::user] ],
+    }
+  } else {
+    fail('staging_or_deploy must equal "staging" or "deploy"')
+  }
 
   file { $jira::homedir:
-    ensure  => 'directory',
-    owner   => $jira::user,
-    group   => $jira::group,
+    ensure => 'directory',
+    owner  => $jira::user,
+    group  => $jira::group,
   } ->
 
   exec { "chown_${jira::webappdir}":
