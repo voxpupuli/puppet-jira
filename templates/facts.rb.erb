@@ -1,0 +1,28 @@
+#!<%= @ruby_bin %>
+# Facts: 
+#   - jira_buildNumber
+#   - jira_version
+#   - jira_baseUrl
+#   - jira_buildDate
+#   - jira_versionNumbers
+#   - jira_scmInfo
+#   - jira_serverTitle
+#
+# Purpose: Return facts for the running version of jira.
+#
+require 'json'
+require 'open-uri'
+begin
+  url = 'http://<%= @uri %>:<%= @port %>/rest/api/2/serverInfo'
+  info = open(url, &:read)
+rescue
+  exit 0
+end
+pinfo = JSON.load(info)
+pinfo.each do |key, value|
+  actual_value = value
+  if value.is_a? Array
+     actual_value = value.join(',')
+  end
+  puts "jira_#{key.to_s.chomp()}=#{actual_value.to_s.chomp}"
+end
