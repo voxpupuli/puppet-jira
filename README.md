@@ -15,9 +15,8 @@
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 6. [Limitations - OS compatibility, etc.](#limitations)
 7. [Development - Guide for contributing to the module](#development)
-8. [Testing](#testing)
+8. [Testing - How to test the JIRA module](#testing)
 9. [Contributors](#contributors)
-
 
 ##Overview
 
@@ -62,79 +61,19 @@ If you would prefer to use Hiera then see jira.yaml file for available options.
   }
 ```
 
-#####More complex examples
-
-```puppet
-    class { 'jira':
-      version     => '6.0.1',
-      installdir  => '/opt/atlassian-jira',
-      homedir     => '/opt/atlassian-jira/jira-home',
-      user        => 'jira',
-      group       => 'jira',
-      dbpassword  => 'secret',
-      dbserver    => 'localhost',
-      javahome    => '/opt/java/jdk1.7.0_21/',
-      downloadURL  => 'http://myserver/pub/development-tools/atlassian/',
-    }
-```
-
-A possible production example in Hiera
-
-```yaml
-jira::version:       '6.2.7'
-jira::installdir:    '/opt/atlassian/atlassian-jira'
-jira::homedir:       '/opt/atlassian/application-data/jira-home'
-jira::user:          'jira'
-jira::group:         'jira'
-jira::shell:         '/bin/bash'
-jira::dbserver:      'dbvip.example.co.za'
-jira::javahome:      '/opt/java'
-jira::java_opts: >
--Dhttp.proxyHost=proxy.example.co.za
--Dhttp.proxyPort=8080
--Dhttps.proxyHost=proxy.example.co.za
--Dhttps.proxyPort=8080
--Dhttp.nonProxyHosts=localhost\|127.0.0.1\|172.*.*.*\|10.*.*.*
--XX:+UseLargePages'
-jira::dbport:        '5432'
-jira::dbuser:        'jira'
-jira::jvm_xms:       '1G'
-jira::jvm_xmx:       '3G'
-jira::jvm_permgen:   '384m'
-jira::service_manage: false
-jira::enable_connection_pooling: 'true'
-jira::env:
-  - 'http_proxy=proxy.example.co.za:8080'
-  - 'https_proxy=proxy.example.co.za:8080'
-jira::proxy:
-  scheme:    'https'
-  proxyName: 'jira.example.co.za'
-  proxyPort: '443'
-```
-
-Reverse proxy can be configured as a hash as part of the JIRA resource
-```puppet
-   proxy          => {
-     scheme       => 'https',
-     proxyName    => 'www.example.com',
-     proxyPort    => '443',
-   },
-```
-
 A complete example with postgres/nginx/JIRA is available [here](https://github.com/mkrakowitzer/vagrant-puppet-jira/blob/master/manifests/site.pp).
 
 <a name="upgrades">
 #####Upgrades
+
+######Upgrades to JIRA
+
+######Upgrades to the JIRA puppet Module
 mkrakowitzer-deploy has been replaced with nanlui-staging as the default module for deploying the JIRA binaries. You can still use mkrakowitzer-deploy with the *staging_or_deploy => 'deploy'*
 
 ```puppet
   class { 'jira':
     javahome    => '/opt/java',
-    proxy       => {
-      scheme    => 'http',
-      proxyName => $::ipaddress_eth1,
-      proxyPort => '80',
-    },
     staging_or_deploy => 'deploy',
   }
 ```
@@ -146,6 +85,7 @@ mkrakowitzer-deploy has been replaced with nanlui-staging as the default module 
 ####Public Classes
 
 * `jira`: Main class, manages the installation and configuration of JIRA
+* `jira::facts`: Enable external facts for running instance of JIRA. This class is required to handle upgrades of jira. As it is an external fact, we chose not to enable it by default.
 
 ####Private Classes
 
@@ -346,11 +286,70 @@ Defaults to '100'
 
 ##Usage
 
-Put the classes, types, and resources for customizing, configuring, and doing the fancy stuff with your module here. 
+####A more complex example
+```puppet
+    class { 'jira':
+      version     => '6.0.1',
+      installdir  => '/opt/atlassian-jira',
+      homedir     => '/opt/atlassian-jira/jira-home',
+      user        => 'jira',
+      group       => 'jira',
+      dbpassword  => 'secret',
+      dbserver    => 'localhost',
+      javahome    => '/opt/java/jdk1.7.0_21/',
+      downloadURL  => 'http://myserver/pub/development-tools/atlassian/',
+    }
+```
 
-##Reference
+### A Hiera example 
 
-Here, list the classes, types, providers, facts, etc contained in your module. This section should include all of the under-the-hood workings of your module so people know what the module is touching on their system but don't need to mess with things. (We are working on automating this section!)
+This example is used in production for 2000 users in an traditional enterprise environment. Your milage may vary. The dbpassword can be stored using eyaml hiera extension.
+
+```yaml
+jira::version:       '6.2.7'
+jira::installdir:    '/opt/atlassian/atlassian-jira'
+jira::homedir:       '/opt/atlassian/application-data/jira-home'
+jira::user:          'jira'
+jira::group:         'jira'
+jira::shell:         '/bin/bash'
+jira::dbserver:      'dbvip.example.co.za'
+jira::javahome:      '/opt/java'
+jira::java_opts: >
+-Dhttp.proxyHost=proxy.example.co.za
+-Dhttp.proxyPort=8080
+-Dhttps.proxyHost=proxy.example.co.za
+-Dhttps.proxyPort=8080
+-Dhttp.nonProxyHosts=localhost\|127.0.0.1\|172.*.*.*\|10.*.*.*
+-XX:+UseLargePages'
+jira::dbport:        '5439'
+jira::dbuser:        'jira'
+jira::jvm_xms:       '1G'
+jira::jvm_xmx:       '3G'
+jira::jvm_permgen:   '384m'
+jira::service_manage: false
+jira::enable_connection_pooling: 'true'
+jira::env:
+  - 'http_proxy=proxy.example.co.za:8080'
+  - 'https_proxy=proxy.example.co.za:8080'
+jira::proxy:
+  scheme:    'https'
+  proxyName: 'jira.example.co.za'
+  proxyPort: '443'
+```
+
+Reverse proxy can be configured as a hash as part of the JIRA resource
+```puppet
+   proxy          => {
+     scheme       => 'https',
+     proxyName    => 'www.example.com',
+     proxyPort    => '443',
+   },
+```
+
+Enable external facts for puppet version. These facts are required to be enabled in order to upgrade to new JIRA versions smoothly.
+```puppet
+  class { 'stash::facts': }
+```
 
 ##Limitations
 
@@ -367,10 +366,9 @@ We plan to support other Linux distributions and possibly Windows in the near fu
 
 ##Development
 
-Please feel free to raise any issues here for bug fixes. We also welcome feature requests.
-Also feel free to make a pull request for anything and we can hopefully get it in. We prefer with tests if possible.
+Please feel free to raise any issues here for bug fixes. We also welcome feature requests. Feel free to make a pull request for anything and we make the effort to review and merge. We prefer with tests if possible.
 
-##Testing the JIRA module
+##Testing - How to test the JIRA module
 Using [puppetlabs_spec_helper](https://github.com/puppetlabs/puppetlabs_spec_helper). Simply run:
 
 ```
