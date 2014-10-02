@@ -97,12 +97,18 @@ class jira (
   # Misc Settings
   $downloadURL  = 'http://www.atlassian.com/software/jira/downloads/binary/',
 
+  # Choose whether to use nanlui-staging, or mkrakowitzer-deploy
+  # Defaults to nanlui-staging as it is puppetlabs approved.
+  $staging_or_deploy = 'staging',
+
   # Manage service
   $service_manage = true,
   $service_ensure = running,
   $service_enable = true,
+
   # Tomcat
   $tomcatPort = 8080,
+
   # Tomcat Tunables
   $tomcatMaxThreads  = '150',
   $tomcatAcceptCount = '100',
