@@ -124,10 +124,10 @@ class jira (
     fail('jira db parameter must be postgresql or mysql')
   }
 
-  if $jira_version {
+  if $::jira_version {
     # If the running version of JIRA is less than the expected version of JIRA
     # Shut it down in preparation for upgrade.
-    if versioncmp($version, $jira_version) > 0 {
+    if versioncmp($version, $::jira_version) > 0 {
       notify { 'Attempting to upgrade JIRA': }
       exec { 'service jira stop && sleep 15': before => Anchor['jira::start'] }
     }
