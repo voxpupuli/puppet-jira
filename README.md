@@ -385,6 +385,14 @@ Finished in 0.38159 seconds
 1 example, 0 failures
 ```
 
+Using [Beaker - Puppet Labs cloud enabled acceptance testing tool.](https://github.com/puppetlabs/beaker).
+
+run (Additional yak shaving may be required):
+
+BEAKER_set=ubuntu-server-12042-x64 bundle exec rake beaker
+BEAKER_set==debian-73-x64 bundle exec rake beaker
+BEAKER_set==centos-64-x64 bundle exec rake beaker
+
 ##Contributors
 
 The list of contributors can be found [here](https://github.com/brycejohnson/puppet-jira/graphs/contributors)
