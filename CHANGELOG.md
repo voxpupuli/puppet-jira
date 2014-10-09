@@ -2,6 +2,7 @@
 
 ###Summary
 Resolve Issue #29
+- Add external fact for running version of JIRA.
 - Replace mkrakowitzer-deploy with nanlui-staging as the default module to deploy jira files
 
 ##2014-10-01 - Release 1.0.1
