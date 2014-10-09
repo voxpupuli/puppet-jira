@@ -16,13 +16,13 @@
 class jira::service {
   if $jira::service_manage {
     service { 'jira':
-      ensure    => $jira::service_ensure,
-      enable    => $jira::service_enable,
-      start     => '/etc/init.d/jira start',
-      restart   => '/etc/init.d/jira restart',
-      stop      => '/etc/init.d/jira stop',
-      status    => '/etc/init.d/jira status',
-      require   => Class['jira::config'],
+      ensure  => $jira::service_ensure,
+      enable  => $jira::service_enable,
+      start   => '/etc/init.d/jira start',
+      restart => '/etc/init.d/jira restart',
+      stop    => '/etc/init.d/jira stop',
+      status  => '/etc/init.d/jira status',
+      require => Class['jira::config'],
     }
   }
 }

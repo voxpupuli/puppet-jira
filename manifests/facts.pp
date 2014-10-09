@@ -41,7 +41,7 @@ class jira::facts(
     }
   }
 
-  if $osfamily == 'RedHat' and $::puppetversion !~ /Puppet Enterprise/ {
+  if $::osfamily == 'RedHat' and $::puppetversion !~ /Puppet Enterprise/ {
     package { [ 'rubygem-json', 'ruby-json' ]:
       ensure => present,
     }

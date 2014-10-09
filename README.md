@@ -66,6 +66,15 @@ A complete example with postgres/nginx/JIRA is available [here](https://github.c
 <a name="upgrades">
 #####Upgrades
 
+Jira can be upgraded by incrementing this version number. This will *STOP* the running instance of Jira and attempt to upgrade. You should take caution when doing large version upgrades. Always backup your database and your home directory.
+
+```puppet
+  class { 'jira':
+    javahome    => '/opt/java',
+    version     => '6.3.7',
+  }
+```
+ 
 ######Upgrades to JIRA
 
 ######Upgrades to the JIRA puppet Module
@@ -384,6 +393,14 @@ ruby-1.9.3-p484/bin/ruby -S rspec spec/classes/stash_install_spec.rb --color
 Finished in 0.38159 seconds
 1 example, 0 failures
 ```
+
+Using [Beaker - Puppet Labs cloud enabled acceptance testing tool.](https://github.com/puppetlabs/beaker).
+
+run (Additional yak shaving may be required):
+
+BEAKER_set=ubuntu-server-12042-x64 bundle exec rake beaker
+BEAKER_set==debian-73-x64 bundle exec rake beaker
+BEAKER_set==centos-64-x64 bundle exec rake beaker
 
 ##Contributors
 

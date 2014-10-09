@@ -12,3 +12,8 @@ gem 'rspec-puppet'
 gem 'puppetlabs_spec_helper'
 gem 'puppet', puppetversion
 gem 'puppet-blacksmith'
+gem 'beaker'
+gem 'pry'
+gem 'serverspec', "~> 1.0"
+gem 'beaker-rspec', "~> 2.2.4",:require => false
+gem 'minitest', "~> 4"
