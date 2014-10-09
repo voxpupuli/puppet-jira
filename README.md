@@ -66,6 +66,15 @@ A complete example with postgres/nginx/JIRA is available [here](https://github.c
 <a name="upgrades">
 #####Upgrades
 
+Jira can be upgraded by incrementing this version number. This will *STOP* the running instance of Jira and attempt to upgrade. You should take caution when doing large version upgrades. Always backup your database and your home directory.
+
+```puppet
+  class { 'jira':
+    javahome    => '/opt/java',
+    version     => '6.3.7',
+  }
+```
+ 
 ######Upgrades to JIRA
 
 ######Upgrades to the JIRA puppet Module

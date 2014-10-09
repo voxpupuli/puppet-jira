@@ -1,6 +1,6 @@
 {
   "name": "mkrakowitzer-jira",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "author": "brycejohnson",
   "summary": "Module to install Jira",
   "license": "Apache License, Version 2.0",
@@ -10,26 +10,55 @@
   "description": "Module to install Jira",
   "dependencies": [
     {
-      "name": "nanlui/staging",
-      "version_requirement": ">= 1.0.0"
-    },
-    {
       "name": "puppetlabs/stdlib",
       "version_requirement": ">= 3.0.0"
+    },
+    {
+      "name": "mkrakowitzer/deploy",
+      "version_requirement": ">= 0.0.3"
+    },
+    {
+      "name": "yguenane/repoforge",
+      "version_requirement": ">= 0.2.0"
+    },
+    {
+      "name": "nanlui/staging",
+      "version_requirement": ">= 1.0.0"
+    }
+  ],
+  "requirements": [
+    {
+      "name": "pe",
+      "version_requirement": "3.x"
+    },
+    {
+      "name": "puppet",
+      "version_requirement": ">=3.4.0 <4.0.0"
     }
   ],
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "5.0",
-        "6.0"
+        "6"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
         "12.04"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "7"
       ]
     }
   ]
