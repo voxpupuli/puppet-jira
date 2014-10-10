@@ -97,8 +97,8 @@ class jira (
   # Misc Settings
   $downloadURL  = 'http://www.atlassian.com/software/jira/downloads/binary/',
 
-  # Choose whether to use nanlui-staging, or mkrakowitzer-deploy
-  # Defaults to nanlui-staging as it is puppetlabs approved.
+  # Choose whether to use nanliu-staging, or mkrakowitzer-deploy
+  # Defaults to nanliu-staging as it is puppetlabs approved.
   $staging_or_deploy = 'staging',
 
   # Manage service
