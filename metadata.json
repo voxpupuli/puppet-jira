@@ -1,6 +1,6 @@
 {
   "name": "mkrakowitzer-jira",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "brycejohnson",
   "summary": "Module to install Jira",
   "license": "Apache License, Version 2.0",

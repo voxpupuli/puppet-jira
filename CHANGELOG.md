@@ -1,4 +1,9 @@
-##TBA - Release 1.1.0
+##2014-10-11 - Release 1.1.1
+- Fix typo of in module nanliu-staging, preving module from being installed
+
+##2014-10-09 - Release 1.1.0
+- Add beaker tests for Ubuntu/Centos/Debian
+- Issue #3 Handle updating of Jira
 
 ###Summary
 Resolve Issue #29
