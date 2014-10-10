@@ -78,7 +78,7 @@ Jira can be upgraded by incrementing this version number. This will *STOP* the r
 ######Upgrades to JIRA
 
 ######Upgrades to the JIRA puppet Module
-mkrakowitzer-deploy has been replaced with nanlui-staging as the default module for deploying the JIRA binaries. You can still use mkrakowitzer-deploy with the *staging_or_deploy => 'deploy'*
+mkrakowitzer-deploy has been replaced with nanliu-staging as the default module for deploying the JIRA binaries. You can still use mkrakowitzer-deploy with the *staging_or_deploy => 'deploy'*
 
 ```puppet
   class { 'jira':
@@ -259,8 +259,8 @@ Defaults to 'http://www.atlassian.com/software/jira/downloads/binary/'
 
 #####`$staging_or_deploy`
 
-Choose whether to use nanlui-staging, or mkrakowitzer-deploy.
-Defaults to 'staging' to use nanlui-staging as it is puppetlabs approved.
+Choose whether to use nanliu-staging, or mkrakowitzer-deploy.
+Defaults to 'staging' to use nanliu-staging as it is puppetlabs approved.
 Alternative option is 'deploy' to use mkrakowitzer-deploy.
 
 #####`$service_manage`
