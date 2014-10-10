@@ -85,7 +85,7 @@ mkrakowitzer-deploy has been replaced with nanliu-staging as the default module 
     javahome    => '/opt/java',
     staging_or_deploy => 'deploy',
   }
-  class { 'stash::facts': }
+  class { 'jira::facts': }
 ```
 
 ##Reference
@@ -358,7 +358,7 @@ Reverse proxy can be configured as a hash as part of the JIRA resource
 
 Enable external facts for puppet version. These facts are required to be enabled in order to upgrade to new JIRA versions smoothly.
 ```puppet
-  class { 'stash::facts': }
+  class { 'jira::facts': }
 ```
 
 ##Limitations
@@ -388,7 +388,7 @@ bundle install && bundle exec rake spec
 to get results.
 
 ```
-ruby-1.9.3-p484/bin/ruby -S rspec spec/classes/stash_install_spec.rb --color
+ruby-1.9.3-p484/bin/ruby -S rspec spec/classes/jira_install_spec.rb --color
 .
 
 Finished in 0.38159 seconds
