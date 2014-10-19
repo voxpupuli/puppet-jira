@@ -1,3 +1,7 @@
+##2014-10-19 - Release 1.1.2
+- Add new parameter: jvm_permgen, defaults to 256m.
+- Updates to readme
+
 ##2014-10-11 - Release 1.1.1
 - Fix typo of in module nanliu-staging, preving module from being installed
 

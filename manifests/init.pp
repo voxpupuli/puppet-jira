@@ -91,6 +91,7 @@ class jira (
   $javahome,
   $jvm_xms      = '256m',
   $jvm_xmx      = '1024m',
+  $jvm_permgen  = '256m',
   $jvm_optional = '-XX:-HeapDumpOnOutOfMemoryError',
   $java_opts    = '',
 
