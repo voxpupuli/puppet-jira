@@ -68,13 +68,14 @@ A complete example with postgres/nginx/JIRA is available [here](https://github.c
 
 ######Upgrades to JIRA
 
-Jira can be upgraded by incrementing this version number. This will *STOP* the running instance of Jira and attempt to upgrade. You should take caution when doing large version upgrades. Always backup your database and your home directory.
+Jira can be upgraded by incrementing this version number. This will *STOP* the running instance of Jira and attempt to upgrade. You should take caution when doing large version upgrades. Always backup your database and your home directory. The jira::facts class is required for upgrades.
 
 ```puppet
   class { 'jira':
     javahome    => '/opt/java',
     version     => '6.3.7',
   }
+  class { 'jira::facts': }
 ```
 
 ######Upgrades to the JIRA puppet Module
@@ -85,7 +86,6 @@ mkrakowitzer-deploy has been replaced with nanliu-staging as the default module 
     javahome    => '/opt/java',
     staging_or_deploy => 'deploy',
   }
-  class { 'jira::facts': }
 ```
 
 ##Reference
@@ -237,11 +237,18 @@ The JAVA_HOME directory, defaults to undef. This is a *required* parameter
 
 #####`$jvm_xms`
 
+The initial memory allocation pool for a Java Virtual Machine.
 defaults to '256m'
 
 #####`$jvm_xmx`
 
+Maximum memory allocation pool for a Java Virtual Machine.
 defaults to '1024m'
+
+#####`$jvm_permgen`
+
+Increase max permgen size for a Java Virtual Machine.
+defaults to '256m'
 
 #####`$jvm_optional`
 
@@ -399,9 +406,11 @@ Using [Beaker - Puppet Labs cloud enabled acceptance testing tool.](https://gith
 
 run (Additional yak shaving may be required):
 
+```
 BEAKER_set=ubuntu-server-12042-x64 bundle exec rake beaker
 BEAKER_set==debian-73-x64 bundle exec rake beaker
 BEAKER_set==centos-64-x64 bundle exec rake beaker
+```
 
 ##Contributors
 
