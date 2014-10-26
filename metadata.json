@@ -18,10 +18,6 @@
       "version_requirement": ">= 0.0.3"
     },
     {
-      "name": "yguenane/repoforge",
-      "version_requirement": ">= 0.2.0"
-    },
-    {
       "name": "nanliu/staging",
       "version_requirement": ">= 1.0.0"
     }
