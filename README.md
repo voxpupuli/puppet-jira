@@ -7,7 +7,7 @@
 1. [Overview](#overview)
 2. [Module Description - What the module does and why it is useful](#module-description)
 3. [Setup - The basics of getting started with JIRA](#setup)
-    * [JIRA Prerequisites] (#JIRA-prerequisites)
+    * [JIRA Prerequisites](#JIRA-prerequisites)
     * [What JIRA affects](#what-JIRA-affects)
     * [Beginning with JIRA](#beginning-with-JIRA)
     * [Upgrades](#upgrades)
@@ -376,8 +376,9 @@ Enable external facts for puppet version. These facts are required to be enabled
 The puppetlabs repositories can be found at:
 http://yum.puppetlabs.com/ and http://apt.puppetlabs.com/
 
-* RedHat / CentOS 5/6
-* Ubuntu 12.04
+* RedHat / CentOS 5/6/7
+* Ubuntu 12.04 / 14.04
+* Debian 7
 
 We plan to support other Linux distributions and possibly Windows in the near future.
 
@@ -404,13 +405,24 @@ Finished in 0.38159 seconds
 
 Using [Beaker - Puppet Labs cloud enabled acceptance testing tool.](https://github.com/puppetlabs/beaker).
 
-run (Additional yak shaving may be required):
+The beaker tests will install oracle Java to /opt/java. When running the beaker tests you agree that you accept the [oracle java license](http://www.oracle.com/technetwork/java/javase/terms/license/index.html).
 
 ```
+bundle install
 BEAKER_set=ubuntu-server-12042-x64 bundle exec rake beaker
-BEAKER_set==debian-73-x64 bundle exec rake beaker
-BEAKER_set==centos-64-x64 bundle exec rake beaker
+BEAKER_set=ubuntu-server-1404-x64 bundle exec rake beaker
+BEAKER_set=debian-73-x64 bundle exec rake beaker
+BEAKER_set=centos-64-x64 bundle exec rake beaker
+BEAKER_set=centos-70-x64 bundle exec rake beaker
+BEAKER_set=centos-64-x64-pe bundle exec rake beaker
 ```
+
+To save build time it is useful to host the installation files locally on a webserver. You can use the download_url environment variable to overwrite the default.
+
+```bash
+export download_url="'http://my.local.server/'"
+```
+
 
 ##Contributors
 

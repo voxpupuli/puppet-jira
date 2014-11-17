@@ -1,3 +1,12 @@
+##2014-11-17 - Release 1.1.3
+- Refactor beaker tests to that they are portable and other people can run them
+- Remove unnecessary comments from init.pp
+- Dont cleanup jira tar.gz file when using staging module.
+- Add/Remove beaker nodesets
+  - Add CentOS 7 nodeset
+  - Remove ubuntu 1004 and Debian 6 nodeset
+- Add support for systemd style init script on RedHat/CentOS 7
+
 ##2014-10-19 - Release 1.1.2
 - Add new parameter: jvm_permgen, defaults to 256m.
 - Updates to readme
