@@ -40,12 +40,10 @@ class jira::install {
     }
   }
 
-  $file    = "atlassian-${jira::product}-${jira::version}.${jira::format}"
-  $ftarget = "${jira::installdir}/atlassian-${jira::product}-${jira::version}-standalone"
+  $file = "atlassian-${jira::product}-${jira::version}.${jira::format}"
   if $jira::staging_or_deploy == 'staging' {
 
     require staging
-    $cleanup_file = "${staging::path}/${caller_module_name}/${file}"
 
     if ! defined(File[$jira::webappdir]) {
       file { $jira::webappdir:
@@ -54,13 +52,15 @@ class jira::install {
         group  => $jira::group,
       }
     }
+
     staging::file { $file:
       source  => "${jira::downloadURL}/${file}",
       timeout => 1800,
     } ->
+
     staging::extract { $file:
-      target  => $ftarget,
-      creates => "${ftarget}/conf",
+      target  => $jira::webappdir,
+      creates => "${jira::webappdir}/conf",
       strip   => 1,
       user    => $jira::user,
       group   => $jira::group,
@@ -70,17 +70,11 @@ class jira::install {
         File[$jira::installdir],
         User[$jira::user],
         File[$jira::webappdir] ],
-    } ~>
-    # Remove the downloaded files after they have been uncompressed.
-    exec { "staging-cleanup_${file}":
-      command     => "rm -f ${cleanup_file}",
-      onlyif      => "test -f ${cleanup_file}",
-      refreshonly => true,
-      path        => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ],
     }
   } elsif $jira::staging_or_deploy == 'deploy' {
-    deploy::file { "atlassian-${jira::product}-${jira::version}.${jira::format}":
-      target          => $ftarget,
+
+    deploy::file { $file:
+      target          => $jira::webappdir,
       url             => $jira::downloadURL,
       strip           => true,
       download_timout => 1800,
@@ -90,6 +84,7 @@ class jira::install {
       before          => File[$jira::homedir],
       require         => [ File[$jira::installdir], User[$jira::user] ],
     }
+
   } else {
     fail('staging_or_deploy must equal "staging" or "deploy"')
   }
