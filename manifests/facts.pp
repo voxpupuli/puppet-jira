@@ -15,10 +15,11 @@
 # class { 'jira::facts': }
 #
 class jira::facts(
-  $ensure = 'present',
-  $port   = $jira::tomcatPort,
-  $uri    = '127.0.0.1',
-) {
+  $ensure       = 'present',
+  $port         = $jira::tomcatPort,
+  $uri          = '127.0.0.1',
+  $json_packages = $jira::params::json_packages,
+) inherits jira::params {
 
   # Puppet Enterprise supplies its own ruby version if your using it.
   # A modern ruby version is required to run the executable fact
@@ -42,7 +43,7 @@ class jira::facts(
   }
 
   if $::osfamily == 'RedHat' and $::puppetversion !~ /Puppet Enterprise/ {
-    package { [ 'rubygem-json', 'ruby-json' ]:
+    package { $json_packages:
       ensure => present,
     }
   }

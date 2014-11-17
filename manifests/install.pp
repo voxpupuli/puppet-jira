@@ -99,11 +99,6 @@ class jira::install {
     command     => "/bin/chown -R ${jira::user}:${jira::group} ${jira::webappdir}",
     refreshonly => true,
     subscribe   => User[$jira::user]
-  } ->
-
-  file { '/etc/init.d/jira':
-    content => template('jira/etc/rc.d/init.d/jira.erb'),
-    mode    => '0755',
   }
 
 }
