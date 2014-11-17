@@ -16,28 +16,9 @@
 # == Class: jira
 #
 # This module is used to install Jira.
-# I have tested it with version 6.0 and upgarded to 6.0.1 succesfully.
 #
-# This module requires mkrakowitzer-deploy
-#
-# === Parameters
-#
-# See jira.yaml for a complete list of parameters
-#
-# === Examples
-#
-#  class { 'jira':
-#    version     => '6.0.1',
-#    installdir  => '/opt/atlassian/atlassian-jira',
-#    homedir     => '/opt/atlassian/atlassian-jira/jira-home',
-#    user        => 'jira',
-#    group       => 'jira',
-#    dbpassword  => 'mysecret',
-#    dbserver    => 'devecodb1',
-#    javahome    => '/opt/development-tools/java/jdk1.7.0_21/',
-#    downloadURL  => 'http://myurl/pub/software/atlassian/',
-#  }
-#
+# See README.md for more details
+# 
 # === Authors
 #
 # Bryce Johnson
