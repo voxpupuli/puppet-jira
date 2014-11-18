@@ -1,0 +1,14 @@
+[Unit]
+Description=Atlassian Systemd Jira Service
+After=syslog.target network.target
+
+[Service]
+Type=forking
+Environment="JAVA_HOME=<%= scope.lookupvar('jira::javahome') %>"
+PIDFile=<%= scope.lookupvar('jira::webappdir') %>/work/catalina.pid
+User=<%= scope.lookupvar('jira::user') %>
+ExecStart=<%= scope.lookupvar('jira::webappdir') %>/bin/start-jira.sh
+ExecStop=<%= scope.lookupvar('jira::webappdir') %>/bin/stop-jira.sh
+
+[Install]
+WantedBy=multi-user.target

@@ -13,15 +13,28 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 #-----------------------------------------------------------------------------
-class jira::service {
-  if $jira::service_manage {
+class jira::service(
+
+  $service_manage        = $jira::service_manage,
+  $service_ensure        = $jira::service_ensure,
+  $service_enable        = $jira::service_enable,
+  $service_file_location = $jira::params::service_file_location,
+  $service_file_template = $jira::params::service_file_template,
+
+) inherits jira::params {
+  
+  validate_bool($service_manage)
+
+  file { $service_file_location:
+    content => template($service_file_template),
+    mode    => '0755',
+    before  => Service['jira'],
+  }
+
+  if $service_manage {
     service { 'jira':
-      ensure  => $jira::service_ensure,
-      enable  => $jira::service_enable,
-      start   => '/etc/init.d/jira start',
-      restart => '/etc/init.d/jira restart',
-      stop    => '/etc/init.d/jira stop',
-      status  => '/etc/init.d/jira status',
+      ensure  => $service_ensure,
+      enable  => $service_enable,
       require => Class['jira::config'],
     }
   }
