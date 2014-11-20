@@ -13,7 +13,7 @@ begin
     PuppetLint.configuration.ignore_paths = ["spec/**/*.pp", "vendor/**/*.pp", "pkg/**/**/*.pp"]
     PuppetLint.configuration.log_format =
         '%{path}:%{linenumber}:%{check}:%{KIND}:%{message}'
-    task :default => [:rspec, :lint]
+    task :default => [:spec,:syntax,:validate,:lint]
   end
 rescue Gem::LoadError
 end
