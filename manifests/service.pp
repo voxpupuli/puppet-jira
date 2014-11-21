@@ -20,6 +20,7 @@ class jira::service(
   $service_enable        = $jira::service_enable,
   $service_file_location = $jira::params::service_file_location,
   $service_file_template = $jira::params::service_file_template,
+  $service_lockfile      = $jira::params::service_lockfile,
 
 ) inherits jira::params {
   
