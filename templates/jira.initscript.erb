@@ -28,12 +28,7 @@
 ### END INIT INFO
 ACTION=$1
 SERVICE=jira
-OS=`facter osfamily`
-lockfile=/var/lock/subsys/$SERVICE
-if [ $OS == "Debian" ]; then
-  lockfile=/var/lock/$SERVICE
-fi
-
+lockfile=<%= @service_lockfile %>
 export JAVA_HOME=<%= scope.lookupvar('jira::javahome') %>
 export CATALINA_HOME=<%= scope.lookupvar('jira::webappdir') %>
 
