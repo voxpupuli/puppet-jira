@@ -44,15 +44,17 @@ class jira (
   $gid          = undef,
 
   # Database Settings
-  $db           = 'postgresql',
-  $dbuser       = 'jiraadm',
-  $dbpassword   = 'mypassword',
-  $dbserver     = 'localhost',
-  $dbname       = 'jira',
-  $dbport       = '5432',
-  $dbdriver     = 'org.postgresql.Driver',
-  $dbtype       = 'postgres72',
-  $poolsize     = '20',
+  $db                      = 'postgresql',
+  $dbuser                  = 'jiraadm',
+  $dbpassword              = 'mypassword',
+  $dbserver                = 'localhost',
+  $dbname                  = 'jira',
+  $dbport                  = '5432',
+  $dbdriver                = 'org.postgresql.Driver',
+  $dbtype                  = 'postgres72',
+  $poolsize                = '20',
+  $mysql_connector_package = $jira::params::mysql_connector_package,
+  $mysql_connector_jar     = $jira::params::mysql_connector_jar,
 
   # Configure database settings if you are pooling connections
   $enable_connection_pooling = false,
@@ -98,7 +100,7 @@ class jira (
   # Reverse https proxy
   $proxy = {},
 
-) {
+) inherits jira::params {
 
   Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
 
