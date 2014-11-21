@@ -181,6 +181,14 @@ Database type, defaults to 'postgres72'
 
 The connection pool size to the database, defaults to 20
 
+#####`$mysql_connector_package`
+
+Package name for the MySQL Connector/J driver. Will be automatically installed if set and $dbtype = 'mysql'. Defaults to 'mysql-connector-java' on Redhat and 'libmysql-java' on Debian.
+
+#####`$mysql_connector_jar`
+
+Path to the JAR for the MySQL Connector/J driver. Defaults to '/usr/share/java/mysql-connector-java.jar' on Redhat and '/usr/share/java/mysql.jar' on Debian.
+
 #####`$enable_connection_pooling`
 
 Configure database settings if you are pooling connections, defaults to 'false'

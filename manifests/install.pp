@@ -101,4 +101,14 @@ class jira::install {
     subscribe   => User[$jira::user]
   }
 
+  if $jira::db == 'mysql' and $jira::mysql_connector_package {
+    package { $jira::mysql_connector_package:
+      ensure => installed,
+    } ->
+
+    file { "${jira::webappdir}/lib/mysql-connector-java.jar":
+      ensure => link,
+      target => $jira::mysql_connector_jar,
+    }
+  }
 }
