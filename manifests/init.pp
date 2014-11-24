@@ -52,6 +52,7 @@ class jira (
   $dbport                  = '5432',
   $dbdriver                = 'org.postgresql.Driver',
   $dbtype                  = 'postgres72',
+  $dburl                   = undef,
   $poolsize                = '20',
   $mysql_connector_package = $jira::params::mysql_connector_package,
   $mysql_connector_jar     = $jira::params::mysql_connector_jar,
@@ -118,7 +119,15 @@ class jira (
   }
 
   $webappdir    = "${installdir}/atlassian-${product}-${version}-standalone"
-  $dburl        = "jdbc:${db}://${dbserver}:${dbport}/${dbname}"
+  if $dburl {
+    $dburl_real = $dburl
+  }
+  else {
+    $dburl_real = $db ? {
+      'postgresql' => "jdbc:${db}://${dbserver}:${dbport}/${dbname}",
+      'mysql'      => "jdbc:${db}://${dbserver}:${dbport}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=storage_engine=InnoDB",
+    }
+  }
 
   anchor { 'jira::start':
   } ->
