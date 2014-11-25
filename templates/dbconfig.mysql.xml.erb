@@ -5,7 +5,7 @@
   <delegator-name>default</delegator-name>
   <database-type>mysql</database-type>
   <jdbc-datasource>
-    <url><%= scope.lookupvar('jira::dburl') %>?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=storage_engine=InnoDB</url>
+    <url><%= scope.lookupvar('jira::dburl_real') %></url>
     <driver-class><%= scope.lookupvar('jira::dbdriver') %></driver-class>
     <username><%= scope.lookupvar('jira::dbuser') %></username>
     <password><%= scope.lookupvar('jira::dbpassword') %></password>
