@@ -24,12 +24,14 @@ class jira::config {
     $validationQuery = $jira::db ? {
       'postgresql' => 'select version();',
       'mysql'      => 'select 1',
+      'sqlserver'  => 'select 1',
     }
   }
   if $jira::timeBetweenEvictionRuns == undef {
     $timeBetweenEvictionRuns = $jira::db ? {
       'postgresql' => '30000',
       'mysql'      => '300000',
+      'sqlserver'  => '300000',
     }
   }
 

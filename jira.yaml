@@ -38,12 +38,15 @@ jira::group: jira
 jira::db: postgresql
 #jira::db: mysql
 #jira::db: oracle
+#jira::db: sqlserver
 
 jira::dbtype: postgres72
 #jira::dbtype: mysql
+#jira::dbtype: mssql
 
 jira::dbdriver: org.postgresql.Driver
 #jira::dbdriver: com.mysql.jdbc.Driver
+#jira::dbdriver: net.sourceforge.jtds.jdbc.Driver
 
 # Change these values to your jira database credentials
 jira::dbuser: jiraadm
@@ -54,6 +57,7 @@ jira::dbname: jira
 jira::dbport: 5432
 #jira::dbport: 3306
 #jira::dbport: 1521
+#jira::dbport: 1433
 
 # The connection pool size
 jira::poolsize: 20

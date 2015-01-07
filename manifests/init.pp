@@ -105,8 +105,8 @@ class jira (
 
   Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
 
-  if $jira::db != 'postgresql' and $jira::db != 'mysql' {
-    fail('jira db parameter must be postgresql or mysql')
+  if $jira::db != 'postgresql' and $jira::db != 'mysql' and $jira::db != 'sqlserver' {
+    fail('jira db parameter must be postgresql or mysql or sqlserver')
   }
 
   if $::jira_version {
@@ -126,6 +126,7 @@ class jira (
     $dburl_real = $db ? {
       'postgresql' => "jdbc:${db}://${dbserver}:${dbport}/${dbname}",
       'mysql'      => "jdbc:${db}://${dbserver}:${dbport}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=storage_engine=InnoDB",
+      'sqlserver'  => "jdbc:jtds:${db}://${dbserver}:${dbport}/${dbname}",
     }
   }
 
