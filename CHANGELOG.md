@@ -2,6 +2,7 @@
 - TODO - Add beaker tests for MySQL
 - Added support for Oracle and Scientific Linux
 - Validate all parameters
+- Bump jira version to 6.3.13
 
 ##2014-01-17 - Release 1.1.4
 - Parameterize the lockfile variable in the init script

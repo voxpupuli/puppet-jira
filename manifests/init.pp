@@ -33,7 +33,7 @@
 class jira (
 
   # Jira Settings
-  $version      = '6.3.4a',
+  $version      = '6.3.13',
   $product      = 'jira',
   $format       = 'tar.gz',
   $installdir   = '/opt/jira',
