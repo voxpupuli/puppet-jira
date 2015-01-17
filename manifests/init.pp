@@ -90,6 +90,10 @@ class jira (
   $service_manage = true,
   $service_ensure = running,
   $service_enable = true,
+  # Command to stop jira in preparation to updgrade. This is configurable
+  # incase the jira service is managed outside of puppet. eg: using the
+  # puppetlabs-corosync module: 'crm resource stop jira && sleep 15'
+  $stop_jira = 'service jira stop && sleep 15',
 
   # Tomcat
   $tomcatPort = 8080,
@@ -103,8 +107,6 @@ class jira (
 
 ) inherits jira::params {
 
-  Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
-
   if $jira::db != 'postgresql' and $jira::db != 'mysql' {
     fail('jira db parameter must be postgresql or mysql')
   }
@@ -114,7 +116,7 @@ class jira (
     # Shut it down in preparation for upgrade.
     if versioncmp($version, $::jira_version) > 0 {
       notify { 'Attempting to upgrade JIRA': }
-      exec { 'service jira stop && sleep 15': before => Anchor['jira::start'] }
+      exec { $stop_jira: before => Anchor['jira::start'] }
     }
   }
 

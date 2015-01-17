@@ -29,14 +29,26 @@ class jira::service(
   file { $service_file_location:
     content => template($service_file_template),
     mode    => '0755',
-    before  => Service['jira'],
   }
 
   if $service_manage {
+
+    validate_string($service_ensure)
+    validate_bool($service_enable)
+
+    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == '7' {
+      exec { 'refresh_systemd':
+        command     => 'systemctl daemon-reload',
+        refreshonly => true,
+        subscribe   => File[$service_file_location],
+        before      => Service['jira'],
+      }
+    }
+
     service { 'jira':
       ensure  => $service_ensure,
       enable  => $service_enable,
-      require => Class['jira::config'],
+      require => File[$service_file_location],
     }
   }
 }
