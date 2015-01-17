@@ -3,6 +3,9 @@
 # Defines default values for jira module
 #
 class jira::params {
+
+  Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
+
   case "${::osfamily}${::operatingsystemmajrelease}" {
     /RedHat7/: {
       $json_packages           = 'rubygem-json'

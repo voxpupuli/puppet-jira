@@ -107,8 +107,6 @@ class jira (
 
 ) inherits jira::params {
 
-  Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
-
   if $jira::db != 'postgresql' and $jira::db != 'mysql' {
     fail('jira db parameter must be postgresql or mysql')
   }
