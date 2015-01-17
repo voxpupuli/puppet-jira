@@ -387,8 +387,11 @@ Enable external facts for puppet version. These facts are required to be enabled
 The puppetlabs repositories can be found at:
 http://yum.puppetlabs.com/ and http://apt.puppetlabs.com/
 
-* RedHat / CentOS 5/6/7
-* Ubuntu 12.04 / 14.04
+* RedHat 6/7
+* CentOS 6/7
+* Scientific 6/7
+* OracleLinux 6/7
+* Ubuntu 12.04/14.04
 * Debian 7
 
 We plan to support other Linux distributions and possibly Windows in the near future.

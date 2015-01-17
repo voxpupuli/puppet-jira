@@ -1,4 +1,9 @@
-##2014-11-18 - Release 1.1.4
+##2014-XX-XX - Release 1.1.5
+- TODO - Add beaker tests for MySQL
+- Added support for Oracle and Scientific Linux
+- Validate all parameters
+
+##2014-01-17 - Release 1.1.4
 - Parameterize the lockfile variable in the init script
 - Autoinstall MySql Connector/J Driver
 - Add parameter stop_jira
