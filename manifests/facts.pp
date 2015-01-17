@@ -15,9 +15,9 @@
 # class { 'jira::facts': }
 #
 class jira::facts(
-  $ensure       = 'present',
-  $port         = $jira::tomcatPort,
-  $uri          = '127.0.0.1',
+  $ensure        = 'present',
+  $port          = $jira::tomcatPort,
+  $uri           = '127.0.0.1',
   $json_packages = $jira::params::json_packages,
 ) inherits jira::params {
 
