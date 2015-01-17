@@ -291,6 +291,9 @@ Manage the JIRA service, defaults to 'running'
 
 Defaults to 'true'
 
+#####`$stop_jira`
+If the jira service is managed outside of puppet the stop_jira paramater can be used to shut down jira for upgrades. Defaults to 'service jira stop && sleep 15'
+
 #####`$proxy = {}`
 
 Defaults to {}, See examples on how to use.
