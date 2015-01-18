@@ -3,7 +3,7 @@
 <jira-database-config>
   <name>defaultDS</name>
   <delegator-name>default</delegator-name>
-  <database-type>mysql</database-type>
+  <database-type><%= scope.lookupvar('jira::dbtype') %></database-type>
   <jdbc-datasource>
     <url><%= scope.lookupvar('jira::dburl_real') %></url>
     <driver-class><%= scope.lookupvar('jira::dbdriver') %></driver-class>
