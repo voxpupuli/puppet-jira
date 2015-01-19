@@ -298,6 +298,10 @@ If the jira service is managed outside of puppet the stop_jira paramater can be 
 
 Defaults to {}, See examples on how to use.
 
+#####`$contextpath = ""`
+
+Defaults to an empty string (""). Will add a path to the Tomcat Server Context.
+
 ####Tomcat parameters####
 
 #####`$tomcatPort`
@@ -363,6 +367,7 @@ jira::proxy:
   scheme:    'https'
   proxyName: 'jira.example.co.za'
   proxyPort: '443'
+jira::contextpath: '/jira'
 ```
 
 Reverse proxy can be configured as a hash as part of the JIRA resource
