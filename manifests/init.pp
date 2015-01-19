@@ -54,8 +54,15 @@ class jira (
   $dbtype                  = 'postgres72',
   $dburl                   = undef,
   $poolsize                = '20',
-  $mysql_connector_package = $jira::params::mysql_connector_package,
-  $mysql_connector_jar     = $jira::params::mysql_connector_jar,
+
+  # MySQL Connector Settings
+  $mysql_connector_manage  = true,
+  $mysql_connector_version = '5.1.34',
+  $mysql_connector_product = 'mysql-connector-java',
+  $mysql_connector_format  = 'tar.gz',
+  $mysql_connector_install = '/opt/MySQL-connector',
+  $mysql_connector_URL     = 'http://cdn.mysql.com/Downloads/Connector-J',
+
 
   # Configure database settings if you are pooling connections
   $enable_connection_pooling = false,

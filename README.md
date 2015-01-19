@@ -113,7 +113,7 @@ Specifies the version of JIRA to install, defaults to latest available at time o
 
 #####`$product`
 
-Product name, defaults to JIRA
+Product name, defaults to jira
 
 #####`$format`
 
@@ -147,7 +147,7 @@ The gid of the JIRA user, defaults to next available (undef)
 
 #####`$db`
 
-Which database to use for JIRA, defaults to 'postgresql'
+Which database to use for JIRA, defaults to 'postgresql'. Can be 'postgresql' or 'mysql'.
 
 #####`$dbuser`
 
@@ -163,31 +163,26 @@ The hostname of the database server, defaults to 'localhost'
 
 #####`$dbname`
 
-The name of the database, defaults to 'jira'
+The name of the database, defaults to 'jira'. If using oracle this should be the SID.
 
 #####`$dbport`
 
-The port of the database, defaults to '5432'
+The port of the database, defaults to '5432'. MySQL runs on '3306'.
 
 #####`$dbdriver`
 
-The database driver to use, defaults to 'org.postgresql.Driver'
+The database driver to use, defaults to 'org.postgresql.Driver'. Can be 'org.postgresql.Driver', 'com.mysql.jdbc.Driver' or 'oracle.jdbc.OracleDriver'.
 
 #####`$dbtype`
 
-Database type, defaults to 'postgres72'
+Database type, defaults to 'postgres72'. Can be 'postgres72', 'mysql' or 'oracle10g'.
 
 #####`$poolsize`
 
 The connection pool size to the database, defaults to 20
 
-#####`$mysql_connector_package`
-
-Package name for the MySQL Connector/J driver. Will be automatically installed if set and $dbtype = 'mysql'. Defaults to 'mysql-connector-java' on Redhat and 'libmysql-java' on Debian.
-
-#####`$mysql_connector_jar`
-
-Path to the JAR for the MySQL Connector/J driver. Defaults to '/usr/share/java/mysql-connector-java.jar' on Redhat and '/usr/share/java/mysql.jar' on Debian.
+#####`$dburl`
+This parameter is not required nor do we recomend setting it. However it can be used to customize the database connection string.
 
 #####`$enable_connection_pooling`
 
@@ -236,6 +231,27 @@ defaults to true
 #####`$poolTestOnBorrow`
 
 defaults to true
+
+####MySQL Java Connector parameters####
+
+#####`mysql_connector_manage`
+Manage the MySQL Java Connector with the JIRA module, defaults to 'true'
+
+#####`mysql_connector_version`
+Specifies the version of  MySQL Java Connector you would like installed. Defaults to '5.1.34',
+
+#####`$mysql_connector_product`
+Product name, defaults to 'mysql-connector-java'
+
+#####`$mysql_connector_format`
+The default file format of the MySQL Java Connector install file, defaults to tar.gz
+
+#####`$mysql_connector_install`
+Installation directory of the MySQL connector. Defaults to '/opt/MySQL-connector'
+
+#####`$mysql_connector_URL`
+The URL used to download the MySQL Java Connector installation file.
+Defaults to 'http://cdn.mysql.com/Downloads/Connector-J'
 
 ####JVM Java parameters####
 
