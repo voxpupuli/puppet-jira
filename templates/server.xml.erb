@@ -119,7 +119,7 @@
         <Engine name="Catalina" defaultHost="localhost">
             <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true">
 
-                <Context path="" docBase="${catalina.home}/atlassian-jira" reloadable="false" useHttpOnly="true">
+                <Context path="<%= @contextpath %>" docBase="${catalina.home}/atlassian-jira" reloadable="false" useHttpOnly="true">
 
 
                     <!--
