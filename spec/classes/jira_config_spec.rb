@@ -59,6 +59,15 @@ describe 'jira' do
       it { should contain_file('/home/jira/dbconfig.xml')
         .with_content(/<url>my custom dburl<\/url>/) }
     end
+    context 'tomcat context path' do
+      let(:params) {{
+        :version => '6.3.4a',
+        :javahome => '/opt/java',
+        :contextpath => '/jira',
+      }}
+      it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
+        .with_content(/<Context path=\"\/jira\" docBase=\"\${catalina.home}\/atlassian-jira\" reloadable=\"false\" useHttpOnly=\"true\">/) }
+    end
 
   end
 end
