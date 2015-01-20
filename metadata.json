@@ -1,6 +1,6 @@
 {
   "name": "mkrakowitzer-jira",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "author": "brycejohnson",
   "summary": "Module to install Jira",
   "license": "Apache-2.0",
@@ -42,6 +42,20 @@
     },
     {
       "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Scientific",
       "operatingsystemrelease": [
         "6",
         "7"

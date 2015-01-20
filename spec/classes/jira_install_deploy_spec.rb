@@ -27,6 +27,7 @@ describe 'jira' do
           'group' => 'jira'
           })
       end
+      it { should_not contain_class('jira::mysql_connector')}
     end
 
     context 'overwriting params' do
@@ -67,6 +68,9 @@ describe 'jira' do
           'group' => 'bar'
           })
       end
+
+      it { should_not contain_class('jira::mysql_connector')}
     end
+
   end
 end
