@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<jira-database-config>
+  <name>defaultDS</name>
+  <delegator-name>default</delegator-name>
+  <database-type><%= scope.lookupvar('jira::dbtype') %></database-type>
+  <jdbc-datasource>
+    <url><%= scope.lookupvar('jira::dburl_real') %></url>
+    <driver-class><%= scope.lookupvar('jira::dbdriver') %></driver-class>
+    <username><%= scope.lookupvar('jira::dbuser') %></username>
+    <password><%= scope.lookupvar('jira::dbpassword') %></password>
+    <pool-min-size><%= scope.lookupvar('jira::poolMinSize') %></pool-min-size>
+    <pool-max-size><%= scope.lookupvar('jira::poolMaxSize') %></pool-max-size>
+    <pool-max-wait><%= scope.lookupvar('jira::poolMaxWait') %></pool-max-wait>
+    <pool-max-idle><%= scope.lookupvar('jira::poolMaxIdle') %></pool-max-idle>
+    <pool-remove-abandoned><%= scope.lookupvar('jira::poolRemoveAbandoned') %></pool-remove-abandoned>
+    <pool-remove-abandoned-timeout><%= scope.lookupvar('jira::poolRemoveAbandonedTimout') %></pool-remove-abandoned-timeout>
+    <validation-query><% if @validationQuery %><%= @validationQuery %><% else %>scope.lookupvar('jira::validationQuery')<% end %></validation-query>
+    <min-evictable-idle-time-millis><%= scope.lookupvar('jira::minEvictableIdleTime') %></min-evictable-idle-time-millis>
+    <time-between-eviction-runs-millis><% if @timeBetweenEvictionRuns %><%= @timeBetweenEvictionRuns %><% else %><%= scope.lookupvar('jira::timeBetweenEvictionRuns') %><% end %></time-between-eviction-runs-millis>
+    <pool-test-while-idle><%= scope.lookupvar('jira::poolTestWhileIdle') %></pool-test-while-idle>
+    <pool-test-on-borrow><%= scope.lookupvar('jira::poolTestOnBorrow') %></pool-test-on-borrow>
+  </jdbc-datasource>
+</jira-database-config>
