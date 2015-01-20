@@ -4,6 +4,7 @@
 - Bump jira version to 6.3.13
 - Add support for parameter 'contextpath' 
 - Add class to install MySQL Java connector from mysql.com
+- Add support for oracle database
 
 Thanks to  Oliver Bertuch  for his contributions.
 

@@ -111,12 +111,15 @@ class jira (
   
   # Reverse https proxy
   $proxy = {},
+  # Context path (usualy used in combination with a reverse proxy)
+  $contextpath = '',
 
 ) inherits jira::params {
 
-  if $jira::db != 'postgresql' and $jira::db != 'mysql' {
-    fail('jira db parameter must be postgresql or mysql')
-  }
+  # Parameter validations
+  validate_re($db, ['^postgresql','^mysql'], 'The JIRA $db parameter must be "postgresql" or "mysql".')
+  validate_hash($proxy)
+  validate_re($contextpath, ['^$', '^/.*'])
 
   if $::jira_version {
     # If the running version of JIRA is less than the expected version of JIRA
