@@ -111,6 +111,8 @@ class jira (
   
   # Reverse https proxy
   $proxy = {},
+  # Options for the AJP connector
+  $ajp   = {},
   # Context path (usualy used in combination with a reverse proxy)
   $contextpath = '',
 
