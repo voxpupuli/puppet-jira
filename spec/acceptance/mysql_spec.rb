@@ -15,9 +15,9 @@ else
   java_url = download_url
 end
 
-describe 'jira postgresql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe 'jira mysql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
 
-  it 'installs with defaults' do
+  it 'installs with mysql database' do
     pp = <<-EOS
       $jh = $osfamily ? {
         default   => '/opt/java',
@@ -28,11 +28,18 @@ describe 'jira postgresql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfa
           allow_virtual => $allow_virtual_packages,
         }
       }
-      class { 'postgresql::globals':
-        manage_package_repo => true,
-        version             => '9.3',
+      class { '::mysql::server':
+        root_password    => 'strongpassword',
+      } ->
+      class { 'mysql::bindings':
+        java_enable => true,
+      } ->
+      mysql::db { 'jira':
+        user     => 'jiraadm',
+        password => 'mypassword',
+        host     => 'localhost',
+        grant    => ['ALL'],
       }->
-      class { 'postgresql::server': } ->
       deploy::file { 'jdk-7u71-linux-x64.tar.gz':
         target          => $jh,
         fetch_options   => '-q -c --header "Cookie: oraclelicense=accept-securebackup-cookie"',
@@ -41,20 +48,24 @@ describe 'jira postgresql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfa
         strip           => true,
       } ->
       class { 'jira':
-        version     => '6.2.7',
+        installdir  => '/opt/atlassian-jira',
+        homedir     => '/opt/jira-home',
+        version     => '6.3.6',
         downloadURL => #{download_url},
         javahome    => $jh,
+        db          => 'mysql',
+        dbport      => '3306',
+        dbdriver    => 'com.mysql.jdbc.Driver',
+        dbtype      => 'mysql',
+        tomcatPort  => '8081',
       }
       class { 'jira::facts': }
-      postgresql::server::db { 'jira':
-        user     => 'jiraadm',
-        password => postgresql_password('jiraadm', 'mypassword'),
-      }
-    EOS
+   EOS
     apply_manifest(pp, :catch_failures => true)
-    shell 'wget -q --tries=240 --retry-connrefused --read-timeout=10 localhost:8080', :acceptable_exit_codes => [0]
-    sleep 120
-    shell 'wget -q --tries=240 --retry-connrefused --read-timeout=10 localhost:8080', :acceptable_exit_codes => [0]
+    sleep 60
+    shell 'wget -q --tries=240 --retry-connrefused --read-timeout=10 localhost:8081', :acceptable_exit_codes => [0,8]
+    sleep 60
+    shell 'wget -q --tries=240 --retry-connrefused --read-timeout=10 localhost:8081', :acceptable_exit_codes => [0,8]
     sleep 60
     apply_manifest(pp, :catch_changes => true)
   end
@@ -63,7 +74,7 @@ describe 'jira postgresql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfa
     it { should be_running }
   end
 
-  describe port(8080) do
+  describe port(8081) do
     it { is_expected.to be_listening }
   end
 
@@ -84,14 +95,14 @@ describe 'jira postgresql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfa
     it { should have_login_shell '/bin/true' }
   end
 
-  describe command('wget -q --tries=240 --retry-connrefused --read-timeout=10 -O- localhost:8080') do
-    its(:stdout) { should match /6\.2\.7/ }
+  describe command('wget -q --tries=240 --retry-connrefused --read-timeout=10 -O- localhost:8081') do
+    its(:stdout) { should match /6\.3\.6/ }
   end
 
   describe 'shutdown' do
     it { shell("service jira stop", :acceptable_exit_codes => [0,1]) }
-    it { shell("pkill -f postgres", :acceptable_exit_codes => [0,1]) }
-    it { shell("pkill -f postgres", :acceptable_exit_codes => [0,1]) }
+    it { shell("pkill -f mysql", :acceptable_exit_codes => [0,1]) }
+    it { shell("pkill -f mysql", :acceptable_exit_codes => [0,1]) }
     it { shell("pkill -f jira", :acceptable_exit_codes => [0,1]) }
     it { shell("pkill -f jira", :acceptable_exit_codes => [0,1]) }
   end

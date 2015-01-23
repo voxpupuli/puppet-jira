@@ -31,9 +31,9 @@ This module installs/upgrades Atlassian's Enterprise Issue Tracking and project 
 <a name="JIRA-prerequisites">
 ###JIRA Prerequisites
 
-* JIRA requires a Java Developers Kit (JDK) or Java Run-time Environment (JRE) platform to be installed on your server's operating system. Oracle JDK / JRE (formerly Sun JDK / JRE)	versions 7 and 8 are currently supported by Atlassian.
+* JIRA requires a Java Developers Kit (JDK) or Java Run-time Environment (JRE) platform to be installed on your server's operating system. Oracle JDK / JRE (formerly Sun JDK / JRE) versions 7 and 8 are currently supported by Atlassian.
 
-* JIRA requires a relational database to store its issue data. This module currently supports PostgreSQL 8.4 to 9.x and MySQL 5.x. We suggest using puppetlabs-postgresql/puppetlabs-mysql modules to configure/manage the database. The module uses PostgreSQL as a default.
+* JIRA requires a relational database to store its issue data. This module currently supports PostgreSQL 8.4 to 9.x and MySQL 5.x and Oracle 11g. We suggest using puppetlabs-postgresql/puppetlabs-mysql modules to configure/manage the database. The module uses PostgreSQL as a default.
 
 * Whilst not required, for production use we recommend using nginx/apache as a reverse proxy to JIRA. We suggest using the jfryman/nginx puppet module.
 
@@ -42,9 +42,11 @@ This module installs/upgrades Atlassian's Enterprise Issue Tracking and project 
 
 If installing to an existing JIRA instance, it is your responsibility to backup your database. We also recommend that you backup your JIRA home directory and that you align your current JIRA version with the version you intend to use with puppet JIRA module.
 
-You must have your database setup with the account user that JIRA will use. This can be done using the puppetlabs-postgresql and puppetlabs-mysql modules. 
+You must have your database setup with the account user that JIRA will use. This can be done using the puppetlabs-postgresql and puppetlabs-mysql modules.
 
 When using this module to upgrade JIRA, please make sure you have a database/JIRA home backup.
+
+When using MySQL, We call the jira::mysql_connector class to install the MySQL java connector directory from mysql.com as per Atlassian's documented recommendations.
 
 <a name="beginning-with-JIRA">
 ###Beginning with JIRA
@@ -102,6 +104,7 @@ mkrakowitzer-deploy has been replaced with nanliu-staging as the default module 
 * `jira::install`: Installs JIRA binaries
 * `jira::config`: Modifies jira/tomcat configuration files
 * `jira::service`: Manage the JIRA service.
+* `jira::mysql_connector`: Install/Manage the MySQL Java connector
 
 ###Parameters
 
@@ -113,7 +116,7 @@ Specifies the version of JIRA to install, defaults to latest available at time o
 
 #####`$product`
 
-Product name, defaults to JIRA
+Product name, defaults to jira
 
 #####`$format`
 
@@ -147,7 +150,7 @@ The gid of the JIRA user, defaults to next available (undef)
 
 #####`$db`
 
-Which database to use for JIRA, defaults to 'postgresql'
+Which database to use for JIRA, defaults to 'postgresql'. Can be 'postgresql', 'mysql' or 'oracle'.
 
 #####`$dbuser`
 
@@ -163,31 +166,26 @@ The hostname of the database server, defaults to 'localhost'
 
 #####`$dbname`
 
-The name of the database, defaults to 'jira'
+The name of the database, defaults to 'jira'. If using oracle this should be the SID.
 
 #####`$dbport`
 
-The port of the database, defaults to '5432'
+The port of the database, defaults to '5432'. MySQL runs on '3306'. Oracle runs on '1521'.
 
 #####`$dbdriver`
 
-The database driver to use, defaults to 'org.postgresql.Driver'
+The database driver to use, defaults to 'org.postgresql.Driver'. Can be 'org.postgresql.Driver', 'com.mysql.jdbc.Driver' or 'oracle.jdbc.OracleDriver'.
 
 #####`$dbtype`
 
-Database type, defaults to 'postgres72'
+Database type, defaults to 'postgres72'. Can be 'postgres72', 'mysql' or 'oracle10g'. Atlassian only supports Oracle 11g, even so this value should be as documented here.
 
 #####`$poolsize`
 
 The connection pool size to the database, defaults to 20
 
-#####`$mysql_connector_package`
-
-Package name for the MySQL Connector/J driver. Will be automatically installed if set and $dbtype = 'mysql'. Defaults to 'mysql-connector-java' on Redhat and 'libmysql-java' on Debian.
-
-#####`$mysql_connector_jar`
-
-Path to the JAR for the MySQL Connector/J driver. Defaults to '/usr/share/java/mysql-connector-java.jar' on Redhat and '/usr/share/java/mysql.jar' on Debian.
+#####`$dburl`
+This parameter is not required nor do we recommend setting it. However it can be used to customize the database connection string.
 
 #####`$enable_connection_pooling`
 
@@ -236,6 +234,27 @@ defaults to true
 #####`$poolTestOnBorrow`
 
 defaults to true
+
+####MySQL Java Connector parameters####
+
+#####`mysql_connector_manage`
+Manage the MySQL Java Connector with the JIRA module, defaults to 'true'
+
+#####`mysql_connector_version`
+Specifies the version of  MySQL Java Connector you would like installed. Defaults to '5.1.34',
+
+#####`$mysql_connector_product`
+Product name, defaults to 'mysql-connector-java'
+
+#####`$mysql_connector_format`
+The default file format of the MySQL Java Connector install file, defaults to tar.gz
+
+#####`$mysql_connector_install`
+Installation directory of the MySQL connector. Defaults to '/opt/MySQL-connector'
+
+#####`$mysql_connector_URL`
+The URL used to download the MySQL Java Connector installation file.
+Defaults to 'http://cdn.mysql.com/Downloads/Connector-J'
 
 ####JVM Java parameters####
 
@@ -291,9 +310,16 @@ Manage the JIRA service, defaults to 'running'
 
 Defaults to 'true'
 
+#####`$stop_jira`
+If the jira service is managed outside of puppet the stop_jira parameter can be used to shut down jira for upgrades. Defaults to 'service jira stop && sleep 15'
+
 #####`$proxy = {}`
 
 Defaults to {}, See examples on how to use.
+
+#####`$contextpath = ""`
+
+Defaults to an empty string (""). Will add a path to the Tomcat Server Context.
 
 ####Tomcat parameters####
 
@@ -328,7 +354,7 @@ Defaults to '100'
 
 ### A Hiera example 
 
-This example is used in production for 2000 users in an traditional enterprise environment. Your milage may vary. The dbpassword can be stored using eyaml hiera extension.
+This example is used in production for 2000 users in an traditional enterprise environment. Your mileage may vary. The dbpassword can be stored using eyaml hiera extension.
 
 ```yaml
 jira::version:       '6.2.7'
@@ -360,6 +386,7 @@ jira::proxy:
   scheme:    'https'
   proxyName: 'jira.example.co.za'
   proxyPort: '443'
+jira::contextpath: '/jira'
 ```
 
 Reverse proxy can be configured as a hash as part of the JIRA resource
@@ -384,9 +411,16 @@ Enable external facts for puppet version. These facts are required to be enabled
 The puppetlabs repositories can be found at:
 http://yum.puppetlabs.com/ and http://apt.puppetlabs.com/
 
-* RedHat / CentOS 5/6/7
-* Ubuntu 12.04 / 14.04
+* RedHat 6/7
+* CentOS 6/7
+* Scientific 6/7
+* Oracle Linux 6/7
+* Ubuntu 12.04/14.04
 * Debian 7
+
+* PostgreSQL
+* MySQL 5.x
+* Oracle 11G with Oracle 11.2.x drivers
 
 We plan to support other Linux distributions and possibly Windows in the near future.
 
@@ -425,7 +459,7 @@ BEAKER_set=centos-70-x64 bundle exec rake beaker
 BEAKER_set=centos-64-x64-pe bundle exec rake beaker
 ```
 
-To save build time it is useful to host the installation files locally on a webserver. You can use the download_url environment variable to overwrite the default.
+To save build time it is useful to host the installation files locally on a web server. You can use the download_url environment variable to overwrite the default.
 
 ```bash
 export download_url="'http://my.local.server/'"

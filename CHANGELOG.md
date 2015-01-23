@@ -1,3 +1,21 @@
+##2014-01-21 - Release 1.1.5
+- Add beaker tests for MySQL
+- Added support for Oracle and Scientific Linux
+- Bump jira version to 6.3.13
+- Add support for parameter 'contextpath' 
+- Add class to install MySQL Java connector from mysql.com
+- Add support for oracle database
+
+Thanks to  Oliver Bertuch  for his contributions.
+
+##2014-01-17 - Release 1.1.4
+- Parameterize the lockfile variable in the init script
+- Autoinstall MySql Connector/J Driver
+- Add parameter stop_jira
+- Fix bug on RHEL7 where updating the systemd script does not take effect without refreshing systemd
+
+Thanks to MasonM for his contributions
+
 ##2014-11-17 - Release 1.1.3
 - Refactor beaker tests to that they are portable and other people can run them
 - Remove unnecessary comments from init.pp

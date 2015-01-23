@@ -104,3 +104,5 @@ jira::proxy:
   scheme:    'https'
   proxyName: 'www.exmaple.co.za'
   proxyPort: '443'
+# Configure path attribute for the <Context>
+jira::contextpath: '/jira'

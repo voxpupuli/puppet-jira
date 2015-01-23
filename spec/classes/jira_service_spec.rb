@@ -8,19 +8,34 @@ describe 'jira' do
       }}
       it { should contain_service('jira')}
       it { should contain_file('/etc/init.d/jira')
-        .with_content(/Short-Description: Start up JIRA/) }
+        .with_content(/Short-Description: Start up JIRA/)
+        .with_content(/lockfile=\/var\/lock\/subsys\/jira/)
+      }  
+      it { should_not contain_file('/usr/lib/systemd/system/jira.service')
+        .with_content(/Atlassian Systemd Jira Service/) }
+      it { should_not contain_exec('refresh_systemd') }
+    end
+    context 'lockfile on Debian' do
+      let(:params) {{
+        :javahome => '/opt/java',
+      }}
+      let(:facts) {{
+        :osfamily => 'Debian',
+      }}
+      it { should contain_file('/etc/init.d/jira')
+        .with_content(/\/var\/lock\/jira/) }
     end
     context 'overwriting service_manage param' do
       let(:params) {{
         :service_manage => false,
-        :javahome => '/opt/java',
+        :javahome       => '/opt/java',
       }}
       it { should_not contain_service('jira')}
     end
     context 'overwriting service_manage param with bad boolean' do
       let(:params) {{
         :service_manage => 'false',
-        :javahome => '/opt/java',
+        :javahome       => '/opt/java',
       }}
       it do
         expect {
@@ -30,7 +45,7 @@ describe 'jira' do
     end
     context 'overwriting service params' do
       let(:params) {{
-        :javahome => '/opt/java',
+        :javahome       => '/opt/java',
         :service_ensure => 'stopped',
         :service_enable => false,
       }}
@@ -49,6 +64,7 @@ describe 'jira' do
       }}
       it { should contain_file('/usr/lib/systemd/system/jira.service')
         .with_content(/Atlassian Systemd Jira Service/) }
+      it { should contain_exec('refresh_systemd') }
     end
 
   end

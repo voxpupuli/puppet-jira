@@ -24,6 +24,7 @@ class jira::config {
     $validationQuery = $jira::db ? {
       'postgresql' => 'select version();',
       'mysql'      => 'select 1',
+      'oracle'     => 'select 1 from dual',
       'sqlserver'  => 'select 1',
     }
   }
@@ -31,6 +32,7 @@ class jira::config {
     $timeBetweenEvictionRuns = $jira::db ? {
       'postgresql' => '30000',
       'mysql'      => '300000',
+      'oracle'     => '300000',
       'sqlserver'  => '300000',
     }
   }
