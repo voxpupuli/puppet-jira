@@ -33,7 +33,7 @@ This module installs/upgrades Atlassian's Enterprise Issue Tracking and project 
 
 * JIRA requires a Java Developers Kit (JDK) or Java Run-time Environment (JRE) platform to be installed on your server's operating system. Oracle JDK / JRE (formerly Sun JDK / JRE) versions 7 and 8 are currently supported by Atlassian.
 
-* JIRA requires a relational database to store its issue data. This module currently supports PostgreSQL 8.4 to 9.x and MySQL 5.x and Oracle 11g. We suggest using puppetlabs-postgresql/puppetlabs-mysql modules to configure/manage the database. The module uses PostgreSQL as a default.
+* JIRA requires a relational database to store its issue data. This module currently supports PostgreSQL 8.4 to 9.x and MySQL 5.x and Oracle 11g and Microsoft SQL Server 2008 & 2012. We suggest using puppetlabs-postgresql/puppetlabs-mysql modules to configure/manage the database. The module uses PostgreSQL as a default.
 
 * Whilst not required, for production use we recommend using nginx/apache as a reverse proxy to JIRA. We suggest using the jfryman/nginx puppet module.
 
@@ -150,7 +150,7 @@ The gid of the JIRA user, defaults to next available (undef)
 
 #####`$db`
 
-Which database to use for JIRA, defaults to 'postgresql'. Can be 'postgresql', 'mysql' or 'oracle'.
+Which database to use for JIRA, defaults to 'postgresql'. Can be 'postgresql', 'mysql', 'oracle' or 'sqlserver'.
 
 #####`$dbuser`
 
@@ -170,15 +170,15 @@ The name of the database, defaults to 'jira'. If using oracle this should be the
 
 #####`$dbport`
 
-The port of the database, defaults to '5432'. MySQL runs on '3306'. Oracle runs on '1521'.
+The port of the database, defaults to '5432'. MySQL runs on '3306'. Oracle runs on '1521'. SQL Server runs on '1433'.
 
 #####`$dbdriver`
 
-The database driver to use, defaults to 'org.postgresql.Driver'. Can be 'org.postgresql.Driver', 'com.mysql.jdbc.Driver' or 'oracle.jdbc.OracleDriver'.
+The database driver to use, defaults to 'org.postgresql.Driver'. Can be 'org.postgresql.Driver', 'com.mysql.jdbc.Driver', 'oracle.jdbc.OracleDriver' or 'net.sourceforge.jtds.jdbc.Driver'.
 
 #####`$dbtype`
 
-Database type, defaults to 'postgres72'. Can be 'postgres72', 'mysql' or 'oracle10g'. Atlassian only supports Oracle 11g, even so this value should be as documented here.
+Database type, defaults to 'postgres72'. Can be 'postgres72', 'mysql', 'oracle10g', or 'mssql'. Atlassian only supports Oracle 11g, even so this value should be as documented here.
 
 #####`$poolsize`
 
@@ -421,6 +421,7 @@ http://yum.puppetlabs.com/ and http://apt.puppetlabs.com/
 * PostgreSQL
 * MySQL 5.x
 * Oracle 11G with Oracle 11.2.x drivers
+* Microsoft SQL Server 2005/2008/2012 with JTDS driver (included in non-WAR version)
 
 We plan to support other Linux distributions and possibly Windows in the near future.
 
