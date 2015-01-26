@@ -138,8 +138,8 @@ class jira (
     $dburl_real = $db ? {
       'postgresql' => "jdbc:${db}://${dbserver}:${dbport}/${dbname}",
       'mysql'      => "jdbc:${db}://${dbserver}:${dbport}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=storage_engine=InnoDB",
-      'oracle'     => "jdbc::${db}:thin:@${dbserver}:${dbport}:${dbname}"
-      'sqlserver'  => "jdbc:jtds:${db}://${dbserver}:${dbport}/${dbname}",
+      'oracle'     => "jdbc::${db}:thin:@${dbserver}:${dbport}:${dbname}",
+      'sqlserver'  => "jdbc:jtds:${db}://${dbserver}:${dbport}/${dbname}"
     }
   }
 
