@@ -117,7 +117,7 @@ class jira (
 ) inherits jira::params {
 
   # Parameter validations
-  validate_re($db, ['^postgresql','^mysql'], 'The JIRA $db parameter must be "postgresql" or "mysql".')
+  validate_re($db, ['^postgresql','^mysql','^sqlserver'], 'The JIRA $db parameter must be "postgresql", "mysql", "sqlserver".')
   validate_hash($proxy)
   validate_re($contextpath, ['^$', '^/.*'])
 
@@ -138,7 +138,8 @@ class jira (
     $dburl_real = $db ? {
       'postgresql' => "jdbc:${db}://${dbserver}:${dbport}/${dbname}",
       'mysql'      => "jdbc:${db}://${dbserver}:${dbport}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=storage_engine=InnoDB",
-      'oracle'     => "jdbc::${db}:thin:@${dbserver}:${dbport}:${dbname}"
+      'oracle'     => "jdbc::${db}:thin:@${dbserver}:${dbport}:${dbname}",
+      'sqlserver'  => "jdbc:jtds:${db}://${dbserver}:${dbport}/${dbname}"
     }
   }
 

@@ -25,6 +25,7 @@ class jira::config {
       'postgresql' => 'select version();',
       'mysql'      => 'select 1',
       'oracle'     => 'select 1 from dual',
+      'sqlserver'  => 'select 1',
     }
   }
   if $jira::timeBetweenEvictionRuns == undef {
@@ -32,6 +33,7 @@ class jira::config {
       'postgresql' => '30000',
       'mysql'      => '300000',
       'oracle'     => '300000',
+      'sqlserver'  => '300000',
     }
   }
 
