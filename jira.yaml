@@ -104,5 +104,13 @@ jira::proxy:
   scheme:    'https'
   proxyName: 'www.exmaple.co.za'
   proxyPort: '443'
+# Configure AJP port
+jira::ajp: 
+  port:         '8009'
+  redirectPort: '8443'
+  protocol:     'AJP/1.3'
+
+# Optionally, configure AJP parameters the same way you do jira::proxy above
+
 # Configure path attribute for the <Context>
 jira::contextpath: '/jira'
