@@ -48,10 +48,13 @@ describe 'jira' do
         :javahome       => '/opt/java',
         :service_ensure => 'stopped',
         :service_enable => false,
+        :service_subscribe => 'Package[jdk]',
       }}
       it { should contain_service('jira').with({
         'ensure' => 'stopped',
         'enable' => 'false',
+        'notify' => nil,
+        'subscribe' => 'Package[jdk]',
       })}
     end
     context 'RedHat/CentOS 7 systemd init script' do
