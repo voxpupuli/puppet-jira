@@ -310,6 +310,14 @@ Manage the JIRA service, defaults to 'running'
 
 Defaults to 'true'
 
+#####`$service_subscribe`
+
+Restart the jira service in response to this subscription
+
+#####`$service_notify`
+
+Notify other puppet resources to refresh after the jira service
+
 #####`$stop_jira`
 If the jira service is managed outside of puppet the stop_jira parameter can be used to shut down jira for upgrades. Defaults to 'service jira stop && sleep 15'
 
