@@ -97,6 +97,8 @@ class jira (
   $service_manage = true,
   $service_ensure = running,
   $service_enable = true,
+  $service_notify = undef,
+  $service_subscribe = undef,
   # Command to stop jira in preparation to updgrade. This is configurable
   # incase the jira service is managed outside of puppet. eg: using the
   # puppetlabs-corosync module: 'crm resource stop jira && sleep 15'

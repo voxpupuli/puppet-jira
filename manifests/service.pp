@@ -18,6 +18,8 @@ class jira::service(
   $service_manage        = $jira::service_manage,
   $service_ensure        = $jira::service_ensure,
   $service_enable        = $jira::service_enable,
+  $service_notify        = $jira::service_notify,
+  $service_subscribe     = $jira::service_subscribe,
   $service_file_location = $jira::params::service_file_location,
   $service_file_template = $jira::params::service_file_template,
   $service_lockfile      = $jira::params::service_lockfile,
@@ -46,9 +48,11 @@ class jira::service(
     }
 
     service { 'jira':
-      ensure  => $service_ensure,
-      enable  => $service_enable,
-      require => File[$service_file_location],
+      ensure    => $service_ensure,
+      enable    => $service_enable,
+      require   => File[$service_file_location],
+      notify    => $service_notify,
+      subscribe => $service_subscribe,
     }
   }
 }
