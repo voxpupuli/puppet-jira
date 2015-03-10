@@ -33,23 +33,24 @@ describe 'jira' do
     context 'overwriting params' do
       let(:params) {{
         :javahome    => '/opt/java',
-        :version => '6.0.0',
-        :format => 'tar.gz',
-        :installdir => '/opt/jira',
-        :homedir => '/random/homedir',
-        :user  => 'foo',
-        :group => 'bar',
-        :uid   => 333,
-        :gid   => 444,
+        :version     => '6.0.0',
+        :format      => 'tar.gz',
+        :installdir  => '/opt/jira',
+        :homedir     => '/random/homedir',
+        :user        => 'foo',
+        :group       => 'bar',
+        :uid         => 333,
+        :gid         => 444,
+        :shell       => '/bin/bash',
         :downloadURL => 'http://downloads.atlassian.com/',
         :staging_or_deploy => 'deploy',
       }}
   
       it { should contain_user('foo').with({
           'home'  => '/random/homedir',
-          'shell' => '/bin/true',
+          'shell' => '/bin/bash',
           'uid'   => 333,
-          'gid'   => 444
+          'gid'   => 444,
         }) }
       it { should contain_group('bar') }
   
