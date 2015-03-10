@@ -146,6 +146,10 @@ The uid of the JIRA user, defaults to next available (undef)
 
 The gid of the JIRA user, defaults to next available (undef)
 
+#####`$shell`
+
+The shell of the JIRA user, defaults to '/bin/true'
+
 ####database parameters####
 
 #####`$db`

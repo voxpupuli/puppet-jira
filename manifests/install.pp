@@ -21,7 +21,7 @@ class jira::install {
   } ->
   user { $jira::user:
     comment          => 'Jira daemon account',
-    shell            => '/bin/true',
+    shell            => $jira::shell,
     home             => $jira::homedir,
     password         => '*',
     password_min_age => '0',

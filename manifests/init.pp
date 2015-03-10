@@ -42,6 +42,7 @@ class jira (
   $group        = 'jira',
   $uid          = undef,
   $gid          = undef,
+  $shell        = '/bin/true',
 
   # Database Settings
   $db                      = 'postgresql',
