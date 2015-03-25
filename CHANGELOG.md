@@ -1,3 +1,13 @@
+##2014-03-25 - Release 1.2.0
+
+:warning: mkrakowitzer-deploy support will be dropped next minor release. It will be replaced by nanlui-archive.
+
+- Issue #51 Make the jira users shell configurable
+- Add a notify and subscribe options to the jira service
+- Added oracle to db input validator
+- Turn on the AJP connector based on a hiera or puppet-variable lookup
+- Added Microsoft SQL Server support
+
 ##2014-01-21 - Release 1.1.5
 - Add beaker tests for MySQL
 - Added support for Oracle and Scientific Linux

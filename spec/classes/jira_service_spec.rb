@@ -37,11 +37,7 @@ describe 'jira' do
         :service_manage => 'false',
         :javahome       => '/opt/java',
       }}
-      it do
-        expect {
-          should compile
-        }.to raise_error(Puppet::Error, /is not a boolean/)
-      end
+      it { should raise_error(Puppet::Error, /is not a boolean/) }
     end
     context 'overwriting service params' do
       let(:params) {{
