@@ -27,5 +27,14 @@ describe 'jira' do
             .with_content(regexp_oss)
         end
     end
+
+    context 'tomcat context path' do
+      let(:params) {{
+        :javahome => '/opt/java',
+        :contextpath => '/jira',
+      }}
+      it { should contain_file(external_fact_file)
+        .with_content(/  url = 'http:\/\/127.0.0.1:8080\/jira/) }
+    end
   end
 end
