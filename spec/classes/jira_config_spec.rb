@@ -56,6 +56,16 @@ describe 'jira' do
       it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
         .with_content(/<Context path=\"\/jira\" docBase=\"\${catalina.home}\/atlassian-jira\" reloadable=\"false\" useHttpOnly=\"true\">/) }
     end
+    context 'customise tomcat connector' do
+      let(:params) {{
+        :version  => '6.3.4a',
+        :javahome => '/opt/java',
+        :tomcatPort => '9229',
+        :tomcatAddress => '127.0.0.1'
+      }}
+      it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
+        .with_content(/<Connector port=\"9229\"\s+address=\"127\.0\.0\.1\"/m) }
+    end
 
   end
 end
