@@ -66,6 +66,11 @@ class jira::config {
     mode    => '0600',
     require => Class['jira::install'],
     notify  => Class['jira::service'],
+  }->
+  file { "${jira::webappdir}/conf/context.xml":
+    content => template('jira/context.xml.erb'),
+    mode    => '0600',
+    require => Class['jira::install'],
+    notify  => Class['jira::service'],
   }
-
 }

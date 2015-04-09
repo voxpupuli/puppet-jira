@@ -119,12 +119,16 @@ class jira (
   # Context path (usualy used in combination with a reverse proxy)
   $contextpath = '',
 
+  # Resources for context.xml
+  $resources = {},
+
 ) inherits jira::params {
 
   # Parameter validations
   validate_re($db, ['^postgresql','^mysql','^sqlserver','^oracle'], 'The JIRA $db parameter must be "postgresql", "mysql", "sqlserver".')
   validate_hash($proxy)
   validate_re($contextpath, ['^$', '^/.*'])
+  validate_hash($resources)
 
   if $::jira_version {
     # If the running version of JIRA is less than the expected version of JIRA
