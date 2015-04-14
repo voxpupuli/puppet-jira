@@ -56,6 +56,15 @@ describe 'jira' do
       it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
         .with_content(/<Context path=\"\/jira\" docBase=\"\${catalina.home}\/atlassian-jira\" reloadable=\"false\" useHttpOnly=\"true\">/) }
     end
+    context 'context resources' do
+      let(:params) {{
+        :version => '6.3.4a',
+        :javahome => '/opt/java',
+        :resources => { 'testdb' => { 'auth' => 'Container' } },
+      }}
+      it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/context.xml')
+        .with_content(/<Resource name = "testdb"\n        auth = "Container"\n    \/>/) }
+    end
 
   end
 end
