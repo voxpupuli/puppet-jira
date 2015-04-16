@@ -106,6 +106,7 @@ class jira (
   $stop_jira = 'service jira stop && sleep 15',
 
   # Tomcat
+  $tomcatAddress = undef,
   $tomcatPort = 8080,
 
   # Tomcat Tunables
