@@ -47,7 +47,9 @@
     <Service name="Catalina">
 
         <Connector port="<%= @tomcatPort %>"
-
+                   <%- unless @tomcatAddress == :undef -%>
+                   address="<%= @tomcatAddress %>"
+                   <%- end -%>
                    maxThreads="<%= @tomcatMaxThreads %>"
                    minSpareThreads="25"
                    connectionTimeout="20000"

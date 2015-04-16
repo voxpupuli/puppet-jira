@@ -335,6 +335,10 @@ Defaults to an empty string (""). Will add a path to the Tomcat Server Context.
 
 ####Tomcat parameters####
 
+#####`$tomcatAddress`
+
+IP address to listen on. Defaults to all addresses.
+
 #####`$tomcatPort`
 
 Port to listen on, defaults to 8080,
