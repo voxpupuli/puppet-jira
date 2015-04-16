@@ -29,6 +29,6 @@ class jira::params {
         $service_file_location   = '/etc/init.d/jira'
         $service_file_template   = 'jira/jira.initscript.erb'
         $service_lockfile        = '/var/lock/subsys/jira'
-      }
     }
+  }
 }
