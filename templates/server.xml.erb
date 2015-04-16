@@ -46,9 +46,9 @@
     -->
     <Service name="Catalina">
 
-        <Connector port="<%= scope.lookupvar('jira::tomcatPort') %>"
+        <Connector port="<%= @tomcatPort %>"
 
-                   maxThreads="<%= scope.lookupvar('jira::tomcatMaxThreads') %>"
+                   maxThreads="<%= @tomcatMaxThreads %>"
                    minSpareThreads="25"
                    connectionTimeout="20000"
 
@@ -57,7 +57,7 @@
                    protocol="HTTP/1.1"
                    useBodyEncodingForURI="true"
                    redirectPort="8443"
-                   acceptCount="<%= scope.lookupvar('jira::tomcatAcceptCount') %>"
+                   acceptCount="<%= @tomcatAcceptCount %>"
                    disableUploadTimeout="true"
 <% if @proxy -%>
 <%   @proxy.sort.each do |key,value| -%>

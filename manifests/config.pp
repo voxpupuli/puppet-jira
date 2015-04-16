@@ -13,7 +13,7 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 # -----------------------------------------------------------------------------
-class jira::config {
+class jira::config inherits jira {
 
   File {
     owner => $jira::user,
