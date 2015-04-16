@@ -1,12 +1,15 @@
-##2014-03-25 - Release 1.2.0
+:warning: Next Major release
+- mkrakowitzer-deploy support will be dropped. It will be replaced by nanlui-archive.
+- :warning: The jira::facts class will be included by default. If you are calling the jira::facts class, you will recieve a Class[jira::facts] is already declared error.
 
-:warning: mkrakowitzer-deploy support will be dropped next minor release. It will be replaced by nanlui-archive.
+##2014-03-25 - Release 1.2.0
 
 - Issue #51 Make the jira users shell configurable
 - Add a notify and subscribe options to the jira service
 - Added oracle to db input validator
 - Turn on the AJP connector based on a hiera or puppet-variable lookup
 - Added Microsoft SQL Server support
+- Include jira::facts class by default.
 
 ##2014-01-21 - Release 1.1.5
 - Add beaker tests for MySQL
