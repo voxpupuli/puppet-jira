@@ -17,7 +17,10 @@
 class jira::facts(
   $ensure        = 'present',
   $port          = $jira::tomcatPort,
-  $uri           = '127.0.0.1',
+  $uri           = $jira::tomcatAddress ? {
+    undef   => '127.0.0.1',
+    default => $jira::tomcatAddress,
+  },
   $contextpath   = $jira::contextpath,
   $json_packages = $jira::params::json_packages,
 ) inherits jira::params {
