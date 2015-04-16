@@ -1,8 +1,8 @@
-:warning: Next Major release
-- mkrakowitzer-deploy support will be dropped. It will be replaced by nanlui-archive.
-- :warning: The jira::facts class will be included by default. If you are calling the jira::facts class, you will recieve a Class[jira::facts] is already declared error.
-
 ##2014-03-25 - Release 1.2.0
+
+:warning: mkrakowitzer-deploy support will be dropped next major release. It will be replaced by nanlui-archive.
+
+:warning: The jira::facts class will be included by default for next major release. You may get a Error: Duplicate declaration: Class[jira::facts] is already declared 
 
 - Issue #51 Make the jira users shell configurable
 - Add a notify and subscribe options to the jira service
@@ -10,6 +10,10 @@
 - Turn on the AJP connector based on a hiera or puppet-variable lookup
 - Added Microsoft SQL Server support
 - Include jira::facts class by default.
+- Adding new feature generating a content.xml configuration
+- Add a notify and subscribe options to the jira service
+
+Thanks to Scott Searcy, Oliver Bertuch, Paul Geringer, Eric Shamow, William Lieurance for their contributions.
 
 ##2014-01-21 - Release 1.1.5
 - Add beaker tests for MySQL
