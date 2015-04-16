@@ -1,31 +1,40 @@
 require 'spec_helper.rb'
-describe 'jira' do
-  describe 'jira::facts' do
-    let(:params) {{
-      :javahome => '/opt/java',
-    }}
-    regexp_pe = /^#\!\/opt\/puppet\/bin\/ruby$/
-    regexp_oss = /^#\!\/usr\/bin\/env ruby$/
-    pe_external_fact_file = '/etc/puppetlabs/facter/facts.d/jira_facts.rb'
-    external_fact_file = '/etc/facter/facts.d/jira_facts.rb'
-
-    it { should contain_file(external_fact_file) }
-
-    # Test puppet enterprise shebang generated correctly
-    context 'with puppet enterprise' do
-        let(:facts) { {:puppetversion => "3.4.3 (Puppet Enterprise 3.2.1)"} }
+describe 'jira::facts' do
+  context 'supported operating systems' do
+    on_supported_os.each do |os, facts|
+      context "on #{os} #{facts}" do
+        let(:facts) do
+          facts
+        end
+        let (:pre_condition) { "class{'::jira': javahome => '/opt/java'}" }
+        regexp_pe = /^#\!\/opt\/puppet\/bin\/ruby$/
+        regexp_oss = /^#\!\/usr\/bin\/env ruby$/
+        pe_external_fact_file = '/etc/puppetlabs/facter/facts.d/jira_facts.rb'
+        external_fact_file = '/etc/facter/facts.d/jira_facts.rb'
+      
+        it { should contain_file(external_fact_file) }
+      
+        # Test puppet enterprise shebang generated correctly
+        context 'with puppet enterprise' do
+        let(:facts) do
+          facts.merge({ :puppetversion => "3.4.3 (Puppet Enterprise 3.2.1)"})
+        end
         it do
           should contain_file(pe_external_fact_file) \
             .with_content(regexp_pe)
+          end
         end
-    end
-    # Test puppet oss shebang generated correctly
-    context 'with puppet oss' do
-        let(:facts) { {:puppetversion => "all other versions"} }
+        # Test puppet oss shebang generated correctly
+        context 'with puppet oss' do
+        let(:facts) do
+          facts.merge({ :puppetversion => "all other versions"})
+        end
         it do
           should contain_file(external_fact_file) \
             .with_content(regexp_oss)
+          end
         end
+      end
     end
   end
 end
