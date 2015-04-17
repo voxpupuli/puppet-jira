@@ -135,6 +135,33 @@ describe 'jira::config' do
           }
         end
 
+        context 'ajp proxy' do
+          context 'with valid config including protocol AJP/1.3' do
+            let(:params) {{
+              :version => '6.3.4a',
+              :javahome => '/opt/java',
+              :ajp => {
+                'port' => '8009',
+                'protocol' => 'AJP/1.3',
+              },
+            }}
+            it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
+              .with_content(/<Connector enableLookups="false" URIEncoding="UTF-8"\s+port = "8009"\s+protocol = "AJP\/1\.3"\s+\/>/) }
+          end
+          context 'with valid config including protocol org.apache.coyote.ajp.AjpNioProtocol' do
+            let(:params) {{
+              :version => '6.3.4a',
+              :javahome => '/opt/java',
+              :ajp => {
+                'port' => '8009',
+                'protocol' => 'org.apache.coyote.ajp.AjpNioProtocol',
+              },
+            }}
+            it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
+              .with_content(/<Connector enableLookups="false" URIEncoding="UTF-8"\s+port = "8009"\s+protocol = "org\.apache\.coyote\.ajp\.AjpNioProtocol"\s+\/>/) }
+          end
+        end
+
         context 'context resources' do
           let(:params) {{
             :version => '6.3.4a',

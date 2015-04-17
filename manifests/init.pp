@@ -130,6 +130,7 @@ class jira (
   validate_hash($proxy)
   validate_re($contextpath, ['^$', '^/.*'])
   validate_hash($resources)
+  validate_hash($ajp)
 
   if $::jira_version {
     # If the running version of JIRA is less than the expected version of JIRA
@@ -150,6 +151,19 @@ class jira (
       'mysql'      => "jdbc:${db}://${dbserver}:${dbport}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=storage_engine=InnoDB",
       'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport}:${dbname}",
       'sqlserver'  => "jdbc:jtds:${db}://${dbserver}:${dbport}/${dbname}"
+    }
+  }
+
+  if ! empty($ajp) {
+    if ! has_key($ajp, 'port') {
+      fail('You need to specify a valid port for the AJP connector.')
+    } else {
+      validate_re($ajp['port'], '^\d+$')
+    }
+    if ! has_key($ajp, 'protocol') {
+      fail('You need to specify a valid protocol for the AJP connector.')
+    } else {
+      validate_re($ajp['protocol'], ['^AJP/1.3$', '^org.apache.coyote.ajp'])
     }
   }
 
