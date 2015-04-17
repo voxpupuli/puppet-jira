@@ -114,13 +114,13 @@
          ====================================================================================
         -->
 
-<% if @ajp -%>
-   <Connector enableLookups="false" URIEncoding="UTF-8"
-<%   @ajp.sort.each do |key,value| -%>
- <%= key %> = <%= "\'#{value}\'" %>
+<% if @ajp and ! @ajp.empty? -%>
+        <Connector enableLookups="false" URIEncoding="UTF-8"
+<%   @ajp.sort.each do |key, value| -%>
+                   <%= key %> = <%= "\"#{value}\"" %>
 <%   end -%>
+        />
 <% end -%>
-/>
   
         <Engine name="Catalina" defaultHost="localhost">
             <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true">
