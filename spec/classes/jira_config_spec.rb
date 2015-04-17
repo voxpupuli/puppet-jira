@@ -62,12 +62,22 @@ describe 'jira::config' do
             :version  => '6.3.4a',
             :javahome => '/opt/java',
             :tomcatPort => '9229',
+          }}
+          it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
+            .with_content(/<Connector port=\"9229\"\s+maxThreads=/m) }
+        end
+
+        context 'customise tomcat connector with a binding address' do
+          let(:params) {{
+            :version  => '6.3.4a',
+            :javahome => '/opt/java',
+            :tomcatPort => '9229',
             :tomcatAddress => '127.0.0.1'
           }}
           it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
-            .with_content(/<Connector port=\"9229\"\s+address=\"127\.0\.0\.1\"/m) }
+            .with_content(/<Connector port=\"9229\"\s+address=\"127\.0\.0\.1\"\s+maxThreads=/m) }
         end
-
+        
         context 'tomcat context path' do
           let(:params) {{
             :version => '6.3.4a',
@@ -123,6 +133,33 @@ describe 'jira::config' do
             .with_content(/scheme = 'https'/)
             .with_content(/proxyPort = '9999'/)
           }
+        end
+
+        context 'ajp proxy' do
+          context 'with valid config including protocol AJP/1.3' do
+            let(:params) {{
+              :version => '6.3.4a',
+              :javahome => '/opt/java',
+              :ajp => {
+                'port' => '8009',
+                'protocol' => 'AJP/1.3',
+              },
+            }}
+            it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
+              .with_content(/<Connector enableLookups="false" URIEncoding="UTF-8"\s+port = "8009"\s+protocol = "AJP\/1\.3"\s+\/>/) }
+          end
+          context 'with valid config including protocol org.apache.coyote.ajp.AjpNioProtocol' do
+            let(:params) {{
+              :version => '6.3.4a',
+              :javahome => '/opt/java',
+              :ajp => {
+                'port' => '8009',
+                'protocol' => 'org.apache.coyote.ajp.AjpNioProtocol',
+              },
+            }}
+            it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
+              .with_content(/<Connector enableLookups="false" URIEncoding="UTF-8"\s+port = "8009"\s+protocol = "org\.apache\.coyote\.ajp\.AjpNioProtocol"\s+\/>/) }
+          end
         end
 
         context 'context resources' do
