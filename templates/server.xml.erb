@@ -47,7 +47,7 @@
     <Service name="Catalina">
 
         <Connector port="<%= @tomcatPort %>"
-                   <%- unless @tomcatAddress == :undef -%>
+                   <%- if @tomcatAddress -%>
                    address="<%= @tomcatAddress %>"
                    <%- end -%>
                    maxThreads="<%= @tomcatMaxThreads %>"

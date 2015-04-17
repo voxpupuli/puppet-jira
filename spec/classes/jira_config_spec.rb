@@ -62,12 +62,22 @@ describe 'jira::config' do
             :version  => '6.3.4a',
             :javahome => '/opt/java',
             :tomcatPort => '9229',
+          }}
+          it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
+            .with_content(/<Connector port=\"9229\"\s+maxThreads=/m) }
+        end
+
+        context 'customise tomcat connector with a binding address' do
+          let(:params) {{
+            :version  => '6.3.4a',
+            :javahome => '/opt/java',
+            :tomcatPort => '9229',
             :tomcatAddress => '127.0.0.1'
           }}
           it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
-            .with_content(/<Connector port=\"9229\"\s+address=\"127\.0\.0\.1\"/m) }
+            .with_content(/<Connector port=\"9229\"\s+address=\"127\.0\.0\.1\"\s+maxThreads=/m) }
         end
-
+        
         context 'tomcat context path' do
           let(:params) {{
             :version => '6.3.4a',
