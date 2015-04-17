@@ -13,6 +13,7 @@
 - Adding new feature generating a content.xml configuration
 - Add a notify and subscribe options to the jira service
 - Provide ability to set the bind address of Tomcat via the jira::tomcatAddress parameter
+- Bump jira version to 6.4.1
 
 Thanks to Scott Searcy, Oliver Bertuch, Paul Geringer, Eric Shamow, William Lieurance, Doug Neal for their contributions.
 
