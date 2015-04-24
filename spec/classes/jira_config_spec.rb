@@ -13,7 +13,8 @@ describe 'jira::config' do
             :version  => '6.3.4a',
             :javahome => '/opt/java',
           }}
-          it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh')}
+          it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh')
+            .with_content(/#DISABLE_NOTIFICATIONS=/) }
           it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/user.sh')}
           it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')}
           it { should contain_file('/home/jira/dbconfig.xml')
@@ -170,6 +171,16 @@ describe 'jira::config' do
           }}
           it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/context.xml')
             .with_content(/<Resource name = "testdb"\n        auth = "Container"\n    \/>/) }
+        end
+
+        context 'disable notifications' do
+          let(:params) {{
+            :version  => '6.3.4a',
+            :javahome => '/opt/java',
+            :disable_notifications => true,
+          }}
+          it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh')
+            .with_content(/^DISABLE_NOTIFICATIONS=/) }
         end
       end
     end

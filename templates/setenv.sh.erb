@@ -27,8 +27,11 @@ JVM_REQUIRED_ARGS="-Djava.awt.headless=true -Datlassian.standalone=JIRA -Dorg.ap
 
 # Uncomment this setting if you want to import data without notifications
 #
+<% if @disable_notifications -%>
+DISABLE_NOTIFICATIONS=" -Datlassian.mail.senddisabled=true -Datlassian.mail.fetchdisabled=true -Datlassian.mail.popdisabled=true"
+<% else %>
 #DISABLE_NOTIFICATIONS=" -Datlassian.mail.senddisabled=true -Datlassian.mail.fetchdisabled=true -Datlassian.mail.popdisabled=true"
-
+<% end -%>
 
 #-----------------------------------------------------------------------------------
 #
