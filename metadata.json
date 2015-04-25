@@ -1,13 +1,14 @@
 {
-  "name": "mkrakowitzer-jira",
-  "version": "1.2.0",
-  "author": "brycejohnson",
-  "summary": "Module to install Jira",
+  "name": "puppet-jira",
+  "version": "1.2.1",
+  "author": "puppetcommunity",
+  "summary": "Module to install, configure and manage Atlassian Jira",
   "license": "Apache-2.0",
-  "source": "https://github.com/brycejohnson/puppet-jira.git",
-  "project_page": "https://github.com/brycejohnson/puppet-jira/blob/master/README.md",
-  "issues_url": "https://github.com/brycejohnson/puppet-jira/issues",
-  "description": "Module to install Jira",
+  "source": "https://github.com/puppet-community/puppet-jira.git",
+  "project_page": "https://github.com/puppet-community/puppet-jira.git",
+  "issues_url": "https://github.com/puppet-community/puppet-jira/issues",
+  "description": "Module to install, configure and manage Atlassian Jira",
+  "tags": ["jira", "Atlassian", "puppet-community"],
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
