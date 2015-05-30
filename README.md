@@ -64,8 +64,6 @@ If you would prefer to use Hiera then see jira.yaml file for available options.
   }
 ```
 
-A complete example with postgres/nginx/JIRA is available [here](https://github.com/mkrakowitzer/vagrant-puppet-jira/blob/master/manifests/site.pp).
-
 <a name="upgrades">
 #####Upgrades
 
