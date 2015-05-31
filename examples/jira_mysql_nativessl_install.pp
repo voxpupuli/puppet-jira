@@ -33,7 +33,7 @@ node default {
     dbtype             => 'mysql',
     tomcatNativeSsl    => true,
     tomcatKeystoreFile => '/tmp/jira.ks',
-  } ->
+  }
 
   include ::jira::facts
 

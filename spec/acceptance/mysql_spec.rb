@@ -49,7 +49,8 @@ describe 'jira mysql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily'
         target => "/opt/java/bin/keytool",
       } ->
       exec { 'tmpkey':
-        command => "/bin/openssl req -x509 -nodes -days 1 -subj '/C=CA/ST=QC/L=Montreal/O=FOO/CN=${fqdn}' -newkey rsa:1024 -keyout /tmp/key.pem -out /tmp/cert.pem",
+        command => "openssl req -x509 -nodes -days 1 -subj '/C=CA/ST=QC/L=Montreal/O=FOO/CN=${fqdn}' -newkey rsa:1024 -keyout /tmp/key.pem -out /tmp/cert.pem",
+        path => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ],
         creates => '/tmp/cert.pem',
       } ->
       java_ks { 'jira':
