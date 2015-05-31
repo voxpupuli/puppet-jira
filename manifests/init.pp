@@ -64,7 +64,6 @@ class jira (
   $mysql_connector_install = '/opt/MySQL-connector',
   $mysql_connector_URL     = 'http://cdn.mysql.com/Downloads/Connector-J',
 
-
   # Configure database settings if you are pooling connections
   $enable_connection_pooling = false,
   $poolMinSize               = 20,
@@ -107,8 +106,14 @@ class jira (
   $stop_jira = 'service jira stop && sleep 15',
 
   # Tomcat
-  $tomcatAddress = undef,
-  $tomcatPort = 8080,
+  $tomcatAddress      = undef,
+  $tomcatPort         = 8080,
+  $tomcatNativeSsl    = false,
+  $tomcatHttpsPort    = 8443,
+  $tomcatKeyAlias     = 'jira',
+  $tomcatKeystoreFile = '/home/jira/jira.jks',
+  $tomcatKeystorePass = 'changeit',
+  $tomcatKeystoreType = 'JKS',
 
   # Tomcat Tunables
   $tomcatMaxThreads  = '150',
@@ -132,6 +137,9 @@ class jira (
   validate_re($contextpath, ['^$', '^/.*'])
   validate_hash($resources)
   validate_hash($ajp)
+  validate_bool($tomcatNativeSsl)
+  validate_absolute_path($tomcatKeystoreFile)
+  validate_re($tomcatKeystoreType, '^(JKS|JCEKS|PKCS12)$')
 
   if $::jira_version {
     # If the running version of JIRA is less than the expected version of JIRA
