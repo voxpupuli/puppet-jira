@@ -29,7 +29,7 @@ class jira::install {
     managehome       => true,
     uid              => $jira::uid,
     gid              => $jira::gid,
-
+    forcelocal       => true,
   }
 
   if ! defined(File[$jira::installdir]) {
