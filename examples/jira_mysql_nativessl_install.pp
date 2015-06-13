@@ -1,29 +1,49 @@
 node default {
 
+  $cert = hiera('cert')
+  $key = hiera('key')
+
   class { '::mysql::server':
     root_password    => 'strongpassword',
-  } ->
+  }
 
   mysql::db { 'jira':
     user     => 'jiraadm',
     password => 'mypassword',
     host     => 'localhost',
     grant    => ['ALL'],
-  } ->
+  }
 
-  exec { 'tmpkey':
-    command => "/bin/openssl req -x509 -nodes -days 365 -subj '/C=ZA/ST=Gautend/L=Johannesburg/O=puppetcommunity/CN=${fqdn}' -newkey rsa:1024 -keyout /tmp/key.pem -out /tmp/cert.pem",
-    creates => '/tmp/cert.pem',
-  } ->
+  file { '/etc/ssl/jira_cert.pem':
+    owner   => 'jira',
+    group   => 'jira',
+    mode    => '0400',
+    content => $cert,
+    require => User['jira'],
+  }
+
+  file { '/etc/ssl/jira_key.pem':
+    owner   => 'jira',
+    group   => 'jira',
+    mode    => '0400',
+    content => $key,
+    require => User['jira'],
+  }
 
   java_ks { 'jira':
-    ensure => present,
+    ensure      => present,
     name        => 'jira',
-    certificate => '/tmp/cert.pem',
-    private_key => '/tmp/key.pem',
-    target      => '/tmp/jira.ks',
+    certificate => '/etc/ssl/jira_cert.pem',
+    private_key => '/etc/ssl/jira_key.pem',
+    target      => '/home/jira/jira.ks',
     password    => 'changeit',
-  } ->
+    before      => Class['jira::service'],
+    require     => [
+      Class['jira::install'],
+      File['/etc/ssl/jira_cert.pem'],
+      File['/etc/ssl/jira_key.pem'],
+    ],
+  }
 
   class { '::jira':
     javahome           => '/opt/java/latest',
@@ -32,7 +52,8 @@ node default {
     dbdriver           => 'com.mysql.jdbc.Driver',
     dbtype             => 'mysql',
     tomcatNativeSsl    => true,
-    tomcatKeystoreFile => '/tmp/jira.ks',
+    tomcatKeystoreFile => '/home/jira/jira.ks',
+    require            => Mysql::Db['jira'],
   }
 
   include ::jira::facts
