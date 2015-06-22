@@ -106,10 +106,10 @@ describe 'jira::config' do
             :tomcatAcceptCount => '200',
           }}
           it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
-            .with_content(/acceptCount="100"/) }
+            .with_content(/acceptCount="200"/) }
         end
 
-        context 'tomcat acceptCount' do
+        context 'tomcat maxThreads' do
           let(:params) {{
             :version => '6.3.4a',
             :javahome => '/opt/java',
@@ -182,6 +182,52 @@ describe 'jira::config' do
           it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh')
             .with_content(/^DISABLE_NOTIFICATIONS=/) }
         end
+
+        context 'native ssl support default params' do
+          let(:params) {{
+            :version => '6.3.4a',
+            :javahome => '/opt/java',
+            :tomcatNativeSsl => true,
+          }}
+          it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
+            .with_content(/redirectPort="8443"/)
+            .with_content(/port="8443"/)
+            .with_content(/keyAlias="jira"/)
+            .with_content(/keystoreFile="\/home\/jira\/jira\.jks"/)
+            .with_content(/keystorePass="changeit"/)
+            .with_content(/keystoreType="JKS"/)
+            .with_content(/port="8443".*acceptCount="100"/m)
+            .with_content(/port="8443".*maxThreads="150"/m)
+          }
+        end
+
+        context 'native ssl support custom params' do
+          let(:params) {{
+            :version => '6.3.4a',
+            :javahome => '/opt/java',
+            :tomcatNativeSsl => true,
+            :tomcatHttpsPort => '9443',
+            :tomcatAddress => '127.0.0.1',
+            :tomcatMaxThreads => '600',
+            :tomcatAcceptCount => '600',
+            :tomcatKeyAlias => 'keystorealias',
+            :tomcatKeystoreFile => '/tmp/keyfile.ks',
+            :tomcatKeystorePass => 'keystorepass',
+            :tomcatKeystoreType => 'PKCS12',
+          }}
+          it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
+            .with_content(/redirectPort="9443"/)
+            .with_content(/port="9443"/)
+            .with_content(/keyAlias="keystorealias"/)
+            .with_content(/keystoreFile="\/tmp\/keyfile\.ks\"/)
+            .with_content(/keystorePass="keystorepass"/)
+            .with_content(/keystoreType="PKCS12"/)
+            .with_content(/port="9443".*acceptCount="600"/m)
+            .with_content(/port="9443".*maxThreads="600"/m)
+            .with_content(/port="9443".*address="127\.0\.0\.1"/m)
+          }
+        end
+
       end
     end
   end

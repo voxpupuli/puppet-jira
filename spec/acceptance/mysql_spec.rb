@@ -31,9 +31,6 @@ describe 'jira mysql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily'
       class { '::mysql::server':
         root_password    => 'strongpassword',
       } ->
-      class { 'mysql::bindings':
-        java_enable => true,
-      } ->
       mysql::db { 'jira':
         user     => 'jiraadm',
         password => 'mypassword',
@@ -47,25 +44,45 @@ describe 'jira mysql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily'
         download_timout => 1800,
         strip           => true,
       } ->
+      file { "/bin/keytool":
+        ensure => link,
+        target => "/opt/java/bin/keytool",
+      } ->
+      exec { 'tmpkey':
+        command => "openssl req -x509 -nodes -days 1 -subj '/C=CA/ST=QC/L=Montreal/O=FOO/CN=${fqdn}' -newkey rsa:1024 -keyout /tmp/key.pem -out /tmp/cert.pem",
+        path => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ],
+        creates => '/tmp/cert.pem',
+      } ->
+      java_ks { 'jira':
+        ensure => present,
+        name        => 'jira',
+        certificate => '/tmp/cert.pem',
+        private_key => '/tmp/key.pem',
+        target      => '/tmp/jira.ks',
+        password    => 'changeit',
+      } ->
       class { 'jira':
-        installdir  => '/opt/atlassian-jira',
-        homedir     => '/opt/jira-home',
-        version     => '6.3.6',
-        downloadURL => #{download_url},
-        javahome    => $jh,
-        db          => 'mysql',
-        dbport      => '3306',
-        dbdriver    => 'com.mysql.jdbc.Driver',
-        dbtype      => 'mysql',
-        tomcatPort  => '8081',
+        installdir         => '/opt/atlassian-jira',
+        homedir            => '/opt/jira-home',
+        version            => '6.3.6',
+        downloadURL        => #{download_url},
+        javahome           => $jh,
+        db                 => 'mysql',
+        dbport             => '3306',
+        dbdriver           => 'com.mysql.jdbc.Driver',
+        dbtype             => 'mysql',
+        tomcatPort         => '8081',
+        tomcatNativeSsl    => true,
+        tomcatKeystoreFile => '/tmp/jira.ks',
       }
-      class { 'jira::facts': }
-   EOS
+
+      include ::jira::facts
+    EOS
     apply_manifest(pp, :catch_failures => true)
     sleep 60
-    shell 'wget -q --tries=240 --retry-connrefused --read-timeout=10 localhost:8081', :acceptable_exit_codes => [0,8]
+    shell 'wget -q --tries=240 --retry-connrefused --read-timeout=10 --no-check-certificate localhost:8081', :acceptable_exit_codes => [0,8]
     sleep 60
-    shell 'wget -q --tries=240 --retry-connrefused --read-timeout=10 localhost:8081', :acceptable_exit_codes => [0,8]
+    shell 'wget -q --tries=240 --retry-connrefused --read-timeout=10 --no-check-certificate localhost:8081', :acceptable_exit_codes => [0,8]
     sleep 60
     apply_manifest(pp, :catch_changes => true)
   end
@@ -95,7 +112,11 @@ describe 'jira mysql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily'
     it { should have_login_shell '/bin/true' }
   end
 
-  describe command('wget -q --tries=240 --retry-connrefused --read-timeout=10 -O- localhost:8081') do
+  describe command('wget -q --tries=240 --retry-connrefused --no-check-certificate --read-timeout=10 -O- localhost:8081') do
+    its(:stdout) { should match /6\.3\.6/ }
+  end
+
+  describe command('wget -q --tries=240 --retry-connrefused --no-check-certificate --read-timeout=10 -O- https://localhost:8443') do
     its(:stdout) { should match /6\.3\.6/ }
   end
 
