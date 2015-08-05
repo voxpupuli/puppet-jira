@@ -141,7 +141,7 @@ class jira (
   validate_absolute_path($tomcatKeystoreFile)
   validate_re($tomcatKeystoreType, '^(JKS|JCEKS|PKCS12)$')
 
-  if $::jira_version {
+  if defined('$::jira_version') {
     # If the running version of JIRA is less than the expected version of JIRA
     # Shut it down in preparation for upgrade.
     if versioncmp($version, $::jira_version) > 0 {
