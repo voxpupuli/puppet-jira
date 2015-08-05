@@ -2,12 +2,19 @@
 
 :warning: The jira::facts class will be included by default in next major release. You may get a Error: Duplicate declaration: Class[jira::facts] is already declared 
 
-##2014-04-25 - Release 1.2.1
+##2015-08-05 - Release 1.3.0
+###Summary
+- Add SSL Support #76
+- Resolve issue where rake lint tasks always exited with 0 status
+- added new parameter disable_notifications in relation to setenv.sh
+- Add examples
+ 
+##2015-04-25 - Release 1.2.1
 ###Summary
 - Update metadata, README, CHANGELOG to point to new namespace.
 - Update .travis.yml to auto deploy tagged versions
 
-##2014-04-16 - Release 1.2.0
+##2015-04-16 - Release 1.2.0
 - Issue #51 Make the jira users shell configurable
 - Add a notify and subscribe options to the jira service
 - Added oracle to db input validator
