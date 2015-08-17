@@ -391,7 +391,7 @@ Defaults to 'JKS'. Valid options are 'JKS', 'PKCS12', 'JCEKS'.
     }
 ```
 
-### A Hiera example 
+### Hiera examples 
 
 This example is used in production for 2000 users in an traditional enterprise environment. Your mileage may vary. The dbpassword can be stored using eyaml hiera extension.
 
@@ -426,6 +426,18 @@ jira::proxy:
   proxyName: 'jira.example.co.za'
   proxyPort: '443'
 jira::contextpath: '/jira'
+```
+
+These additional and substituted parameters are used in production in an traditional enterprise environment with an Oracle 11g remote database and Oracle 8 JDK. Your mileage may vary.
+
+```yaml
+jira::db:            'oracle'
+jira::dbname:        '<dbname>'
+jira::dbport:        '1526'
+jira::dbdriver:      'oracle.jdbc.OracleDriver'
+jira::dbtype:        'oracle10g'
+jira::dburl:         'jdbc:oracle:thin:@//dbvip.example.co.za:1526/<dbname>'
+jira::javahome:      '/usr/lib/jvm/jdk-8-oracle-x64'
 ```
 
 Reverse proxy can be configured as a hash as part of the JIRA resource
