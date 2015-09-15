@@ -72,7 +72,9 @@
                     enableLookups="false"
                     disableUploadTimeout="true"
                     acceptCount="<%= @tomcatAcceptCount %>"
+<%   if ! @proxy['scheme'] -%>
                     scheme="https"
+<%   end -%>
                     secure="true"
                     clientAuth="false"
                     sslProtocol="TLS"
