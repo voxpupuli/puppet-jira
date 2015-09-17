@@ -5,17 +5,17 @@ sudo: false
 matrix:
   include:
   - rvm: 1.9.3
-    env: PUPPET_GEM_VERSION="~> 3.3.0"
+    env: PUPPET_GEM_VERSION="~> 3.4.0"
   - rvm: 1.9.3
     env: PUPPET_GEM_VERSION="~> 3.7.0"
   - rvm: 2.0.0
-    env: PUPPET_GEM_VERSION="~> 3.0"
+    env: PUPPET_GEM_VERSION="~> 3.4.0"
   - rvm: 2.0.0
-    env: PUPPET_GEM_VERSION="~> 3.3.0" STRICT_VARIABLES=yes
+    env: PUPPET_GEM_VERSION="~> 3.4.0" STRICT_VARIABLES=yes
   - rvm: 2.0.0
-    env: PUPPET_GEM_VERSION="~> 3.0" FUTURE_PARSER="yes"
+    env: PUPPET_GEM_VERSION="~> 3.4.0" FUTURE_PARSER="yes"
   - rvm: 2.1.0
-    env: PUPPET_GEM_VERSION="~> 3.0" STRICT_VARIABLES=yes FUTURE_PARSER="yes"
+    env: PUPPET_GEM_VERSION="~> 3.4.0" STRICT_VARIABLES=yes FUTURE_PARSER="yes"
 notifications:
   email:
     - merritt@krakowitzer.com
