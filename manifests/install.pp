@@ -103,13 +103,14 @@ class jira::install {
 
   if $jira::db == 'mysql' and $jira::mysql_connector_manage {
     if $jira::staging_or_deploy == 'staging' {
-      class { 'jira::mysql_connector':
+      class { '::jira::mysql_connector':
         require => Staging::Extract[$file],
       }
     } elsif $jira::staging_or_deploy == 'deploy' {
-      class { 'jira::mysql_connector':
+      class { '::jira::mysql_connector':
         require => Deploy::File[$file],
       }
     }
+    contain ::jira::mysql_connector
   }
 }
