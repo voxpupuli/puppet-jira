@@ -8,4 +8,4 @@ HOSTS:
     hypervisor : vagrant
 CONFIG:
   log_level   : debug
-  type: foss
+  type: git
