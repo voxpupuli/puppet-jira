@@ -1,7 +1,7 @@
 #JIRA Module
 
-[![Puppet Forge](http://img.shields.io/puppetforge/v/puppet/jira.svg)](https://forge.puppetlabs.com/puppet/jira)
-[![Build Status](https://travis-ci.org/puppet-community/puppet-jira.svg?branch=master)](https://travis-ci.org/puppet-community/puppet-jira)
+FORKED CODE
+
 
 ####Table of Contents
 
@@ -20,6 +20,21 @@
 9. [Contributors](#contributors)
 
 ##Overview
+
+This code adds support for jira 7.0.0 and migration. 
+
+If you are upgrading from 6.4.X to 7.0 and using oracle please do the following steps
+
+Change the column  PARAMETERS from LONG RAW to BLOB in table CLUSTERED JOB
+
+Execute the following queries:
+
+alter index FGV_TIC_ESI_GI_JIRA.PK_CLUSTEREDJOB rebuild;
+
+UPDATE pluginstate 
+SET    pluginenabled = 'true' 
+WHERE  pluginkey LIKE 'com.atlassian.servicedesk%'; 
+
 
 This module allows you to install, upgrade and manage Atlassian JIRA.
 
