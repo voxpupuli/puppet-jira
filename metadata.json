@@ -8,29 +8,19 @@
   "project_page": "https://github.com/puppet-community/puppet-jira.git",
   "issues_url": "https://github.com/puppet-community/puppet-jira/issues",
   "description": "Module to install, configure and manage Atlassian Jira",
-  "tags": ["jira", "Atlassian", "puppet-community"],
-  "dependencies": [
-    {
-      "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 3.0.0"
-    },
-    {
-      "name": "mkrakowitzer/deploy",
-      "version_requirement": ">= 0.0.3"
-    },
-    {
-      "name": "nanliu/staging",
-      "version_requirement": ">= 1.0.0"
-    }
+  "tags": [
+    "jira",
+    "Atlassian",
+    "puppet-community"
   ],
   "requirements": [
     {
       "name": "pe",
-      "version_requirement": ">=3.2.0 <4.0.0"
+      "version_requirement": ">=3.2.0 <4.3.0"
     },
     {
       "name": "puppet",
-      "version_requirement": ">=3.4.0 <4.0.0"
+      "version_requirement": ">=3.4.0 <4.3.0"
     }
   ],
   "operatingsystem_support": [
@@ -75,5 +65,10 @@
         "7"
       ]
     }
+  ],
+  "dependencies": [
+    {"name":"puppetlabs/stdlib","version_requirement":">= 3.0.0"},
+    {"name":"mkrakowitzer/deploy","version_requirement":">= 0.0.3"},
+    {"name":"nanliu/staging","version_requirement":">= 1.0.0"}
   ]
 }
