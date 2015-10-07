@@ -35,7 +35,7 @@ class jira (
   # Jira Settings
   $version      = '6.4.1',
   $product      = 'jira',
-  $format       = 'tar.gz',
+  $format       = '.tar.gz',
   $installdir   = '/opt/jira',
   $homedir      = '/home/jira',
   $user         = 'jira',

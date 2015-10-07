@@ -40,7 +40,17 @@ class jira::install {
     }
   }
 
-  $file = "atlassian-${jira::product}-${jira::version}.${jira::format}"
+  # https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-7.0.0-jira-7.0.0-x64.bin
+
+  $arr_version = split($jira::version, '.')
+
+  $major = 0 + $arr_version[0]
+
+  if ($major == 7 ){
+    $file = "atlassian-jira-software-7.0.0-${jira::product}-${jira::version}${jira::format}"
+  }else {
+    $file = "atlassian-${jira::product}-${jira::version}${jira::format}"
+  }
   if $jira::staging_or_deploy == 'staging' {
 
     class{'staging':}
