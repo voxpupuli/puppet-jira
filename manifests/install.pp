@@ -15,8 +15,6 @@
 # -----------------------------------------------------------------------------
 class jira::install {
 
-  require 'jira'
-
   group { $jira::group:
     ensure => present,
     gid    => $jira::gid
