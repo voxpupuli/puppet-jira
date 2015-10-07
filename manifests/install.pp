@@ -121,6 +121,5 @@ class jira::install {
         require => Deploy::File[$file],
       }
     }
-    contain ::jira::mysql_connector
   }
 }
