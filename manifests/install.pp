@@ -32,7 +32,7 @@ class jira::install {
 
   }
 
-  if ! defined(File[$jira::installdir]) {
+  if (!defined(File[$jira::installdir])) {
     file { $jira::installdir:
       ensure => 'directory',
       owner  => $jira::user,
@@ -43,7 +43,7 @@ class jira::install {
   $file = "atlassian-${jira::product}-${jira::version}.${jira::format}"
   if $jira::staging_or_deploy == 'staging' {
 
-    require staging
+    class{'staging':}
 
     if ! defined(File[$jira::webappdir]) {
       file { $jira::webappdir:
@@ -103,11 +103,11 @@ class jira::install {
 
   if $jira::db == 'mysql' and $jira::mysql_connector_manage {
     if $jira::staging_or_deploy == 'staging' {
-      class { '::jira::mysql_connector':
+      class { 'jira::mysql_connector':
         require => Staging::Extract[$file],
       }
     } elsif $jira::staging_or_deploy == 'deploy' {
-      class { '::jira::mysql_connector':
+      class { 'jira::mysql_connector':
         require => Deploy::File[$file],
       }
     }
