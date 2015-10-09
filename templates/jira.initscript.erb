@@ -64,14 +64,13 @@ function status() {
 
   STATUS=$( ps aux | grep "[c]atalina.base=$CATALINA_HOME" | wc -l )
   if [ $STATUS -gt 0 ];then
-    ps -ef |grep $SERVICE |grep -v grep |awk '{ print $2 }' | <%= scope.lookupvar('jira::javahome') %>/bin/jps |grep -v Jps |grep -v grep > /dev/null
-    RETVAL=$?
-    if [ $RETVAL -eq 0 ];then
+    RETVAL=`ps -ef |grep $SERVICE |grep -v grep |grep atlassian-jira |grep ^<%= scope.lookupvar('jira::user')%> |wc -l`
+    if [ $RETVAL -ne 0 ];then
       echo "$SERVICE is running"
-      return $RETVAL
+      return 0
     else
       echo "$SERVICE is stopped"
-      return $RETVAL
+      return 1
     fi
   else
     echo "$SERVICE is stopped"
