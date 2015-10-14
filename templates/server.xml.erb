@@ -40,14 +40,14 @@
                    address="<%= @tomcatAddress %>"
                    <%- end -%>
                    maxThreads="<%= @tomcatMaxThreads %>"
-                   minSpareThreads="25"
-                   connectionTimeout="20000"
-                   enableLookups="false"
-                   maxHttpHeaderSize="8192"
-                   protocol="HTTP/1.1"
-                   useBodyEncodingForURI="true"
+                   minSpareThreads="<%= @tomcatMinSpareThreads %>"
+                   connectionTimeout="<%= @tomcatConnectionTimeout %>"
+                   enableLookups="<%= @tomcatEnableLookups %>"
+                   maxHttpHeaderSize="<%= @tomcatMaxHttpHeaderSize %>"
+                   protocol="<%= @tomcatProtocol %>"
+                   useBodyEncodingForURI="<%= @tomcatUseBodyEncodingForURI %>"
                    acceptCount="<%= @tomcatAcceptCount %>"
-                   disableUploadTimeout="true"
+                   disableUploadTimeout="<%= @tomcatDisableUploadTimeout %>"
 <% if @tomcatNativeSsl -%>
                    redirectPort="<%= @tomcatHttpsPort %>"
 <% end -%>
@@ -65,12 +65,12 @@
                     <%- if @tomcatAddress -%>
                     address="<%= @tomcatAddress %>"
                     <%- end -%>
-                    maxHttpHeaderSize="8192"
+                    maxHttpHeaderSize="<%= @tomcatMaxHttpHeaderSize %>"
                     SSLEnabled="true"
                     maxThreads="<%= @tomcatMaxThreads %>"
-                    minSpareThreads="25"
-                    enableLookups="false"
-                    disableUploadTimeout="true"
+                    minSpareThreads="<%= @tomcatMinSpareThreads %>"
+                    enableLookups="<%= @tomcatEnableLookups %>"
+                    disableUploadTimeout="<%= @tomcatDisableUploadTimeout %>"
                     acceptCount="<%= @tomcatAcceptCount %>"
 <%   if ! @proxy['scheme'] -%>
                     scheme="https"

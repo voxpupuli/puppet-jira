@@ -109,6 +109,86 @@ describe 'jira::config' do
             .with_content(/acceptCount="200"/) }
         end
 
+        context 'tomcat MaxHttpHeaderSize' do
+          let(:params) {{
+            :version => '6.3.4a',
+            :javahome => '/opt/java',
+            :tomcatMaxHttpHeaderSize => '4096',
+          }}
+          it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
+            .with_content(/maxHttpHeaderSize="4096"/) }
+        end
+
+        context 'tomcat MinSpareThreads' do
+          let(:params) {{
+            :version => '6.3.4a',
+            :javahome => '/opt/java',
+            :tomcatMinSpareThreads => '50',
+          }}
+          it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
+            .with_content(/minSpareThreads="50"/) }
+        end
+
+        context 'tomcat ConnectionTimeout' do
+          let(:params) {{
+            :version => '6.3.4a',
+            :javahome => '/opt/java',
+            :tomcatConnectionTimeout => '25000',
+          }}
+          it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
+            .with_content(/connectionTimeout="25000"/) }
+        end
+
+        context 'tomcat EnableLookups' do
+          let(:params) {{
+            :version => '6.3.4a',
+            :javahome => '/opt/java',
+            :tomcatEnableLookups => 'true',
+          }}
+          it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
+            .with_content(/enableLookups="true"/) }
+        end
+
+        context 'tomcat Protocol' do
+          let(:params) {{
+            :version => '6.3.4a',
+            :javahome => '/opt/java',
+            :tomcatProtocol => 'HTTP/1.1',
+          }}
+          it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
+            .with_content(/protocol="HTTP\/1.1"/) }
+        end
+
+        context 'tomcat UseBodyEncodingForURI' do
+          let(:params) {{
+            :version => '6.3.4a',
+            :javahome => '/opt/java',
+            :tomcatUseBodyEncodingForURI => 'false',
+          }}
+          it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
+            .with_content(/useBodyEncodingForURI="false"/) }
+        end
+
+        context 'tomcat DisableUploadTimeout' do
+          let(:params) {{
+            :version => '6.3.4a',
+            :javahome => '/opt/java',
+            :tomcatDisableUploadTimeout => 'false',
+          }}
+          it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
+            .with_content(/disableUploadTimeout="false"/) }
+        end
+
+        context 'tomcat EnableLookups' do
+          let(:params) {{
+            :version => '6.3.4a',
+            :javahome => '/opt/java',
+            :tomcatEnableLookups => 'true',
+          }}
+          it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
+            .with_content(/enableLookups="true"/) }
+        end
+
         context 'tomcat maxThreads' do
           let(:params) {{
             :version => '6.3.4a',
