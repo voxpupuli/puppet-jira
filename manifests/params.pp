@@ -8,13 +8,13 @@ class jira::params {
 
   case $::osfamily {
     /RedHat/: {
-      if $::operatingsystemmajrelease == '7' {
+      if versioncmp($::operatingsystemmajrelease, '7') >= 0 {
         $json_packages           = 'rubygem-json'
         $service_file_location   = '/usr/lib/systemd/system/jira.service'
         $service_file_template   = 'jira/jira.service.erb'
         $service_lockfile        = '/var/lock/subsys/jira'
         $service_provider        = 'systemd'
-      } elsif $::operatingsystemmajrelease == '6' or $::operatingsystem == 'Amazon'{
+      } elsif versioncmp($::operatingsystemmajrelease, '6') >= 0 or $::operatingsystem == 'Amazon'{
         $json_packages           = [ 'rubygem-json', 'ruby-json' ]
         $service_file_location   = '/etc/init.d/jira'
         $service_file_template   = 'jira/jira.initscript.erb'
@@ -25,7 +25,7 @@ class jira::params {
             for \"${::osfamily}\" - \"${::operatingsystemmajrelease}\"")
       }
     } /Debian/: {
-      if $::operatingsystemmajrelease == '8' {
+      if versioncmp($::operatingsystemmajrelease, '8') >= 0 {
         $json_packages           = 'ruby-json'
         $service_file_location   = '/lib/systemd/system/jira.service'
         $service_file_template   = 'jira/jira.service.erb'
