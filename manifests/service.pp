@@ -39,7 +39,7 @@ class jira::service(
     validate_string($service_ensure)
     validate_bool($service_enable)
 
-    if ($service_provider == 'systemd') {
+    if $service_provider == 'systemd' {
       exec { 'refresh_systemd':
         command     => 'systemctl daemon-reload',
         refreshonly => true,
