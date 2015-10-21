@@ -23,7 +23,7 @@ class jira::service(
   $service_file_location = $jira::params::service_file_location,
   $service_file_template = $jira::params::service_file_template,
   $service_lockfile      = $jira::params::service_lockfile,
-  $service_systemd       = $jira::params::service_systemd,
+  $service_provider      = $jira::params::service_provider,
 
 ) inherits jira::params {
   
@@ -39,7 +39,7 @@ class jira::service(
     validate_string($service_ensure)
     validate_bool($service_enable)
 
-    if $service_systemd {
+    if ($service_provider == 'systemd') {
       exec { 'refresh_systemd':
         command     => 'systemctl daemon-reload',
         refreshonly => true,
@@ -54,6 +54,7 @@ class jira::service(
       require   => File[$service_file_location],
       notify    => $service_notify,
       subscribe => $service_subscribe,
+      provider  => $service_provider,
     }
   }
 }
