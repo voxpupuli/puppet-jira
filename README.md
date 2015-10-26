@@ -456,7 +456,7 @@ Enable external facts for puppet version. These facts are required to be enabled
 
 ##Limitations
 
-* Puppet 3.4+
+* Puppet 3.7+
 * Puppet Enterprise
 
 The puppetlabs repositories can be found at:

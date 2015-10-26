@@ -26,11 +26,11 @@
   "requirements": [
     {
       "name": "pe",
-      "version_requirement": ">=3.2.0 <4.0.0"
+      "version_requirement": ">=3.7.0 <4.0.0"
     },
     {
       "name": "puppet",
-      "version_requirement": ">=3.4.0 <4.0.0"
+      "version_requirement": ">=3.7.0 <4.0.0"
     }
   ],
   "operatingsystem_support": [
