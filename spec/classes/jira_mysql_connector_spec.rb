@@ -24,7 +24,7 @@ describe 'jira::mysql_connector' do
           }
           it 'should deploy mysql connector 5.1.34 from tar.gz' do
             should contain_staging__file("mysql-connector-java-5.1.34.tar.gz").with({
-              'source' => 'http://cdn.mysql.com/Downloads/Connector-J/mysql-connector-java-5.1.34.tar.gz',
+              'source' => 'https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.34.tar.gz',
             })
             should contain_staging__extract("mysql-connector-java-5.1.34.tar.gz").with({
               'target' => '/opt/MySQL-connector',
