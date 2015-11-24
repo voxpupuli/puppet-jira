@@ -55,6 +55,7 @@ class jira (
   $dbtype                  = 'postgres72',
   $dburl                   = undef,
   $poolsize                = '20',
+  $dbschema                = 'public',
 
   # MySQL Connector Settings
   $mysql_connector_manage  = true,

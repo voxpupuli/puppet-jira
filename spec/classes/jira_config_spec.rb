@@ -18,7 +18,8 @@ describe 'jira::config' do
           it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/user.sh')}
           it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')}
           it { should contain_file('/home/jira/dbconfig.xml')
-            .with_content(/<url>jdbc:postgresql:\/\/localhost:5432\/jira<\/url>/) }
+            .with_content(/<url>jdbc:postgresql:\/\/localhost:5432\/jira<\/url>/)
+            .with_content(/<schema-name>public<\/schema-name>/) }
         end
 
         context 'mysql params' do
@@ -40,12 +41,13 @@ describe 'jira::config' do
             :javahome => '/opt/java',
             :db       => 'sqlserver',
             :dbport   => '1433',
+            :dbschema => 'public',
           }}
           it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh')}
           it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/user.sh')}
           it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')}
           it { should contain_file('/home/jira/dbconfig.xml')
-            .with_content(/<url>jdbc:jtds:sqlserver:\/\/localhost:1433\/jira<\/url>/) }
+            .with_content(/<schema-name>public<\/schema-name>/) }
         end
 
         context 'custom dburl' do

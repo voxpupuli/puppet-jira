@@ -4,7 +4,7 @@
   <name>defaultDS</name>
   <delegator-name>default</delegator-name>
   <database-type><%= scope.lookupvar('jira::dbtype') %></database-type>
-  <schema-name>dbo</schema-name>
+  <schema-name><%= scope.lookupvar('jira::dbschema') %></schema-name>
   <jdbc-datasource>
     <url><%= scope.lookupvar('jira::dburl_real') %></url>
     <driver-class><%= scope.lookupvar('jira::dbdriver') %></driver-class>
