@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Server port="8005" shutdown="SHUTDOWN">
+    <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
+    <!--APR library loader. Documentation at /docs/apr.html -->
+    <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on"/>
+    <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+    <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+    <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+
+
+    <Service name="Catalina">
+        <Connector port="<%= @tomcatPort %>"
+                   <%- if @tomcatAddress -%>
+                   address="<%= @tomcatAddress %>"
+                   <%- end -%>
+                   maxThreads="<%= @tomcatMaxThreads %>"
+                   minSpareThreads="25"
+                   connectionTimeout="20000"
+                   enableLookups="false"
+                   maxHttpHeaderSize="8192"
+                   protocol="HTTP/1.1"
+                   useBodyEncodingForURI="true"
+                   acceptCount="<%= @tomcatAcceptCount %>"
+                   disableUploadTimeout="true"
+<% if @tomcatNativeSsl -%>
+                   redirectPort="<%= @tomcatHttpsPort %>"
+<% end -%>
+<% if @proxy -%>
+<%   @proxy.sort.each do |key,value| -%>
+                   <%= key %> = <%= "\'#{value}\'" %>
+<%   end -%>
+<% end -%>
+        />
+
+<% if @tomcatNativeSsl -%>
+        <Connector
+                    port="<%= @tomcatHttpsPort %>"
+                    protocol="org.apache.coyote.http11.Http11Protocol"
+                    <%- if @tomcatAddress -%>
+                    address="<%= @tomcatAddress %>"
+                    <%- end -%>
+                    maxHttpHeaderSize="8192"
+                    SSLEnabled="true"
+                    maxThreads="<%= @tomcatMaxThreads %>"
+                    minSpareThreads="25"
+                    enableLookups="false"
+                    disableUploadTimeout="true"
+                    acceptCount="<%= @tomcatAcceptCount %>"
+<%   if ! @proxy['scheme'] -%>
+                    scheme="https"
+<%   end -%>
+                    secure="true"
+                    clientAuth="false"
+                    sslProtocol="TLS"
+                    useBodyEncodingForURI="true"
+                    keyAlias="<%= @tomcatKeyAlias %>"
+                    keystoreFile="<%= @tomcatKeystoreFile %>"
+                    keystorePass="<%= @tomcatKeystorePass %>"
+                    keystoreType="<%= @tomcatKeystoreType %>"
+<%   if @proxy -%>
+<%     @proxy.sort.each do |key,value| -%>
+                    <%= key %>=<%= "\'#{value}\'" %>
+<%     end -%>
+<%   end -%>
+        />
+<% end -%>
+
+<% if @ajp and ! @ajp.empty? -%>
+        <Connector enableLookups="false" URIEncoding="UTF-8"
+<%   @ajp.sort.each do |key, value| -%>
+                   <%= key %> = <%= "\"#{value}\"" %>
+<%   end -%>
+        />
+<% end -%>
+  
+<Engine name="Catalina" defaultHost="localhost">
+            <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true">
+
+                <Context path="<%= @contextpath %>" docBase="${catalina.home}/atlassian-jira" reloadable="false" useHttpOnly="true">
+
+                    <Resource name="UserTransaction" auth="Container" type="javax.transaction.UserTransaction"
+                              factory="org.objectweb.jotm.UserTransactionFactory" jotm.timeout="60"/>
+                    <Manager pathname=""/>
+                </Context>
+
+            </Host>
+
+            <Valve className="org.apache.catalina.valves.AccessLogValve" resolveHosts="false"
+                   pattern="%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;"/>
+
+        </Engine>
+    </Service>
+</Server>
