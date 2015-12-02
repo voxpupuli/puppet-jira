@@ -183,6 +183,12 @@ The database driver to use, defaults to 'org.postgresql.Driver'. Can be 'org.pos
 
 Database type, defaults to 'postgres72'. Can be 'postgres72', 'mysql', 'oracle10g', or 'mssql'. Atlassian only supports Oracle 11g, even so this value should be as documented here.
 
+#####`$dbschema`
+
+Set the schema 
+
+The Default value is 'public' 
+
 #####`$poolsize`
 
 The connection pool size to the database, defaults to 20

@@ -59,6 +59,12 @@ jira::dbport: 5432
 #jira::dbport: 1521
 #jira::dbport: 1433
 
+# Schema
+# Defauult for postgres
+jira::dbschema: 'public'
+# Default for mssql
+#jira::dbschema: 'dbo'
+
 # The connection pool size
 jira::poolsize: 20
 jira::enable_connection_pooling: false
