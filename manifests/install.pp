@@ -46,7 +46,7 @@ class jira::install {
   if (versioncmp($jira::version, '7.0.0') < 0  ){
     $file = "atlassian-jira-core-${jira::product}-${jira::version}${jira::format}"
   }else {
-    $file = "atlassian-${jira::version}${jira::format}"
+    $file = "atlassian-jira-core-${jira::version}${jira::format}"
   }
   if $jira::staging_or_deploy == 'staging' {
 
