@@ -198,6 +198,12 @@ The database driver to use, defaults to 'org.postgresql.Driver'. Can be 'org.pos
 
 Database type, defaults to 'postgres72'. Can be 'postgres72', 'mysql', 'oracle10g', or 'mssql'. Atlassian only supports Oracle 11g, even so this value should be as documented here.
 
+#####`$dbschema`
+
+Set the schema 
+
+The Default value is 'public' 
+
 #####`$poolsize`
 
 The connection pool size to the database, defaults to 20
@@ -471,7 +477,7 @@ Enable external facts for puppet version. These facts are required to be enabled
 
 ##Limitations
 
-* Puppet 3.4+
+* Puppet 3.7+
 * Puppet Enterprise
 
 The puppetlabs repositories can be found at:

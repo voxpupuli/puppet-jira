@@ -55,6 +55,7 @@ class jira (
   $dbtype                  = 'postgres72',
   $dburl                   = undef,
   $poolsize                = '20',
+  $dbschema                = 'public',
 
   # MySQL Connector Settings
   $mysql_connector_manage  = true,
@@ -62,7 +63,7 @@ class jira (
   $mysql_connector_product = 'mysql-connector-java',
   $mysql_connector_format  = 'tar.gz',
   $mysql_connector_install = '/opt/MySQL-connector',
-  $mysql_connector_URL     = 'http://cdn.mysql.com/Downloads/Connector-J',
+  $mysql_connector_URL     = 'https://dev.mysql.com/get/Downloads/Connector-J',
 
   # Configure database settings if you are pooling connections
   $enable_connection_pooling = false,
@@ -106,14 +107,21 @@ class jira (
   $stop_jira = 'service jira stop && sleep 15',
 
   # Tomcat
-  $tomcatAddress      = undef,
-  $tomcatPort         = 8080,
-  $tomcatNativeSsl    = false,
-  $tomcatHttpsPort    = 8443,
-  $tomcatKeyAlias     = 'jira',
-  $tomcatKeystoreFile = '/home/jira/jira.jks',
-  $tomcatKeystorePass = 'changeit',
-  $tomcatKeystoreType = 'JKS',
+  $tomcatAddress               = undef,
+  $tomcatPort                  = 8080,
+  $tomcatMaxHttpHeaderSize     = '8192',
+  $tomcatMinSpareThreads       = '25',
+  $tomcatConnectionTimeout     = '20000',
+  $tomcatEnableLookups         = false,
+  $tomcatNativeSsl             = false,
+  $tomcatHttpsPort             = 8443,
+  $tomcatProtocol              = 'HTTP/1.1',
+  $tomcatUseBodyEncodingForURI = true,
+  $tomcatDisableUploadTimeout  = true,
+  $tomcatKeyAlias              = 'jira',
+  $tomcatKeystoreFile          = '/home/jira/jira.jks',
+  $tomcatKeystorePass          = 'changeit',
+  $tomcatKeystoreType          = 'JKS',
 
   # Tomcat Tunables
   $tomcatMaxThreads  = '150',
