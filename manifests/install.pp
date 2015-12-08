@@ -32,7 +32,7 @@ class jira::install {
 
   }
 
-  if ! defined(File[$jira::installdir]) {
+  if (!defined(File[$jira::installdir])) {
     file { $jira::installdir:
       ensure => 'directory',
       owner  => $jira::user,
@@ -40,10 +40,17 @@ class jira::install {
     }
   }
 
-  $file = "atlassian-${jira::product}-${jira::version}.${jira::format}"
+  # https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-7.0.0-jira-7.0.0-x64.bin
+  # https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-7.0.3.tar.gz
+
+  if (versioncmp($jira::version, '7.0.0') < 0  ){
+    $file = "atlassian-jira-core-${jira::product}-${jira::version}${jira::format}"
+  }else {
+    $file = "atlassian-jira-core-${jira::version}${jira::format}"
+  }
   if $jira::staging_or_deploy == 'staging' {
 
-    require staging
+    class{'staging':}
 
     if ! defined(File[$jira::webappdir]) {
       file { $jira::webappdir:
@@ -103,14 +110,13 @@ class jira::install {
 
   if $jira::db == 'mysql' and $jira::mysql_connector_manage {
     if $jira::staging_or_deploy == 'staging' {
-      class { '::jira::mysql_connector':
+      class { 'jira::mysql_connector':
         require => Staging::Extract[$file],
       }
     } elsif $jira::staging_or_deploy == 'deploy' {
-      class { '::jira::mysql_connector':
+      class { 'jira::mysql_connector':
         require => Deploy::File[$file],
       }
     }
-    contain ::jira::mysql_connector
   }
 }

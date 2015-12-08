@@ -61,16 +61,32 @@ class jira::config inherits jira {
     notify  => Class['jira::service'],
   }
 
-  file { "${jira::webappdir}/conf/server.xml":
-    content => template('jira/server.xml.erb'),
-    mode    => '0600',
-    require => Class['jira::install'],
-    notify  => Class['jira::service'],
-  }->
+  if ($jira::version =~ /^7/ ){
+    file { "${jira::webappdir}/conf/server.xml":
+      content => template('jira/server7.xml.erb'),
+      mode    => '0600',
+      require => Class['jira::install'],
+      notify  => Class['jira::service'],
+    }
+  }else{
+    file { "${jira::webappdir}/conf/server.xml":
+      content => template('jira/server.xml.erb'),
+      mode    => '0600',
+      require => Class['jira::install'],
+      notify  => Class['jira::service'],
+    }
+  }
+
+
   file { "${jira::webappdir}/conf/context.xml":
     content => template('jira/context.xml.erb'),
     mode    => '0600',
-    require => Class['jira::install'],
+    require => [
+      Class['jira::install'],
+      File["${jira::webappdir}/conf/server.xml"]
+    ],
     notify  => Class['jira::service'],
   }
+
+
 }
