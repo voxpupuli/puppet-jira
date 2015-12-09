@@ -149,6 +149,13 @@ class jira (
   validate_absolute_path($tomcatKeystoreFile)
   validate_re($tomcatKeystoreType, '^(JKS|JCEKS|PKCS12)$')
 
+  # The default Jira product starting with version 7 is 'jira-software'
+  if ((versioncmp($version, '7.0.0') > 0) and ($product == 'jira')) {
+    $product_name = 'jira-software'
+  } else {
+    $product_name = $product
+  }
+
   if defined('$::jira_version') {
     # If the running version of JIRA is less than the expected version of JIRA
     # Shut it down in preparation for upgrade.
@@ -158,7 +165,7 @@ class jira (
     }
   }
 
-  $webappdir    = "${installdir}/atlassian-${product}-${version}-standalone"
+  $webappdir    = "${installdir}/atlassian-${product_name}-${version}-standalone"
   if $dburl {
     $dburl_real = $dburl
   }
