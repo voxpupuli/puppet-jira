@@ -1,0 +1,4 @@
+# This ID must be unique across the cluster
+jira.node.id = <%= scope.lookupvar("fqdn") %>
+# The location of the shared home directory for all JIRA nodes
+jira.shared.home = <%= scope.lookupvar("jira::shared_homedir") %>

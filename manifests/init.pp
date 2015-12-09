@@ -18,7 +18,7 @@
 # This module is used to install Jira.
 #
 # See README.md for more details
-# 
+#
 # === Authors
 #
 # Bryce Johnson
@@ -45,6 +45,9 @@ class jira (
   $shell        = '/bin/true',
 
   $enable_secure_admin_sessions = true,
+
+  $datacenter   = false,
+  $shared_homedir = '/var/jira',
 
   # Database Settings
   $db                      = 'postgresql',
@@ -128,7 +131,7 @@ class jira (
   # Tomcat Tunables
   $tomcatMaxThreads  = '150',
   $tomcatAcceptCount = '100',
-  
+
   # Reverse https proxy
   $proxy = {},
   # Options for the AJP connector
