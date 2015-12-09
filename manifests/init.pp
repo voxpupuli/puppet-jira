@@ -44,6 +44,8 @@ class jira (
   $gid          = undef,
   $shell        = '/bin/true',
 
+  $no_websudo   = false,
+
   # Database Settings
   $db                      = 'postgresql',
   $dbuser                  = 'jiraadm',
