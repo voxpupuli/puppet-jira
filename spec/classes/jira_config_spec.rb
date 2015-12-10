@@ -388,6 +388,27 @@ describe 'jira' do
             end
           end
 
+          context 'check-java override' do
+            context 'on pre 7 jira' do
+              let(:params) do
+                {
+                  version: '6.3.4a',
+                  javahome: '/opt/java'
+                }
+              end
+              it { is_expected.not_to contain_file('/opt/jira/atlassian-jira-7.0.4-standalone/bin/check-java.sh') }
+            end
+            context 'on jira 7 and later' do
+              let(:params) do
+                {
+                  version: '7.0.4',
+                  javahome: '/opt/java'
+                }
+              end
+              it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/bin/check-java.sh') }
+            end
+          end
+
           context 'context resources' do
             let(:params) do
               {

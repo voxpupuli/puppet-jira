@@ -52,12 +52,28 @@ class jira::config inherits jira {
     mode    => '0755',
     require => Class['jira::install'],
     notify  => Class['jira::service'],
-  } ->
+  }
+
+  if (versioncmp($jira::version, '7.0.0') >= 0) {
+    file { "${jira::webappdir}/bin/check-java.sh":
+      source  => "puppet:///modules/${module_name}/check-java.sh",
+      mode    => '0755',
+      require => [
+        Class['jira::install'],
+        File["${jira::webappdir}/bin/setenv.sh"],
+      ],
+      notify  => Class['jira::service'],
+    }
+  }
 
   file { "${jira::homedir}/dbconfig.xml":
     content => template("jira/dbconfig.${jira::db}.xml.erb"),
     mode    => '0600',
-    require => [ Class['jira::install'],File[$jira::homedir] ],
+    require => [
+      Class['jira::install'],
+      File["${jira::webappdir}/bin/setenv.sh"],
+      File[$jira::homedir],
+    ],
     notify  => Class['jira::service'],
   }
 
