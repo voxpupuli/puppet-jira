@@ -75,7 +75,7 @@ class jira::config inherits jira {
   }
 
   file { "${jira::homedir}/jira-config.properties":
-    content => template("jira/jira-config.properties.erb"),
+    content => template('jira/jira-config.properties.erb'),
     mode    => '0600',
     require => [ Class['jira::install'],File[$jira::homedir] ],
     notify  => Class['jira::service'],
