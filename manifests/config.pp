@@ -83,7 +83,7 @@ class jira::config inherits jira {
 
   if $jira::datacenter {
     file { "${jira::homedir}/cluster.properties":
-      content => template("jira/cluster.properties.erb"),
+      content => template('jira/cluster.properties.erb'),
       mode    => '0600',
       require => [ Class['jira::install'],File[$jira::homedir] ],
       notify  => Class['jira::service'],
