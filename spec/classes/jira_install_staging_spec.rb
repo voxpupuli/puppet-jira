@@ -19,13 +19,13 @@ describe 'jira::install' do
             :format      => 'tar.gz',
             :product     => 'jira',
             :version     => '6.4.3a',
-            :downloadURL => 'http://www.atlassian.com/software/jira/downloads/binary',
+            :downloadURL => 'https://downloads.atlassian.com/software/jira/downloads',
           }}
           it { should contain_group('jira') }
           it { should contain_user('jira').with_shell('/bin/true') }
           it 'should deploy jira 6.4.3a from tar.gz' do
             should contain_staging__file("atlassian-jira-6.4.3a.tar.gz").with({
-              'source' => 'http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.4.3a.tar.gz',
+              'source' => 'https://downloads.atlassian.com/software/jira/downloads/atlassian-jira-6.4.3a.tar.gz',
               })
             should contain_staging__extract("atlassian-jira-6.4.3a.tar.gz").with({
               'target' => '/opt/jira/atlassian-jira-6.4.3a-standalone',
