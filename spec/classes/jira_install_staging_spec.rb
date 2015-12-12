@@ -43,6 +43,45 @@ describe 'jira::install' do
             })
           end
         end
+
+        context 'jira 7' do
+          context 'default product' do
+            let(:params) {{
+              :javahome    => '/opt/java',
+              :installdir  => '/opt/jira',
+              :product     => 'jira',
+              :version     => '7.0.4',
+              :downloadURL => 'http://www.atlassian.com/software/jira/downloads/binary',
+            }}
+            it 'should deploy jira-software 7.0.4 from tar.gz' do
+              should contain_staging__file("atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz").with({
+                'source' => 'http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz',
+                })
+              should contain_staging__extract("atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz").with({
+                'target' => '/opt/jira/atlassian-jira-software-7.0.4-standalone',
+                'creates' => '/opt/jira/atlassian-jira-software-7.0.4-standalone/conf',
+                })
+            end
+          end
+          context 'core product' do
+            let(:params) {{
+              :javahome    => '/opt/java',
+              :installdir  => '/opt/jira',
+              :product     => 'jira-core',
+              :version     => '7.0.4',
+              :downloadURL => 'http://www.atlassian.com/software/jira/downloads/binary',
+            }}
+            it 'should deploy jira-core 7.0.4 from tar.gz' do
+              should contain_staging__file("atlassian-jira-core-7.0.4.tar.gz").with({
+                'source' => 'http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-7.0.4.tar.gz',
+                })
+              should contain_staging__extract("atlassian-jira-core-7.0.4.tar.gz").with({
+                'target' => '/opt/jira/atlassian-jira-core-7.0.4-standalone',
+                'creates' => '/opt/jira/atlassian-jira-core-7.0.4-standalone/conf',
+                })
+            end
+          end
+        end
     
         context 'overwriting params' do
           let(:params) {{

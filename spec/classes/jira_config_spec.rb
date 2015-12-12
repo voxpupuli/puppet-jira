@@ -70,6 +70,26 @@ describe 'jira::config' do
             .with_content(/<Connector port=\"9229\"\s+maxThreads=/m) }
         end
 
+        context 'server.xml listeners' do
+          context 'default version' do
+            let(:params) {{
+              :version  => '6.3.4a',
+              :javahome => '/opt/java',
+            }}
+            it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
+              .with_content(/<Listener className=\"org.apache.catalina.core.JasperListener\"/) }
+          end
+
+          context 'version greater than 7' do
+            let(:params) {{
+              :version  => '7.0.4',
+              :javahome => '/opt/java',
+            }}
+            it { should contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/conf/server.xml')
+              .with_content(/<Listener className=\"org.apache.catalina.core.JreMemoryLeakPreventionListener\"/) }
+          end
+        end
+
         context 'customise tomcat connector with a binding address' do
           let(:params) {{
             :version  => '6.3.4a',

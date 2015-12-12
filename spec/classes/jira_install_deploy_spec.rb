@@ -78,6 +78,35 @@ describe 'jira::install' do
     
           it { should_not contain_class('jira::mysql_connector')}
         end
+
+        context 'jira 7' do
+          context 'default product' do
+            let(:params) {{
+              :javahome    => '/opt/java',
+              :product     => 'jira',
+              :version     => '7.0.4',
+              :format      => 'tar.gz',
+              :installdir  => '/opt/jira',
+              :staging_or_deploy => 'deploy',
+            }}
+            it 'should deploy jira-software 7.0.4 from tar.gz' do
+              should contain_deploy__file("atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz")
+            end
+          end
+          context 'core product' do
+            let(:params) {{
+              :javahome    => '/opt/java',
+              :product     => 'jira-core',
+              :version     => '7.0.4',
+              :format      => 'tar.gz',
+              :installdir  => '/opt/jira',
+              :staging_or_deploy => 'deploy',
+            }}
+            it 'should deploy jira-core 7.0.4 from tar.gz' do
+              should contain_deploy__file("atlassian-jira-core-7.0.4.tar.gz")
+            end
+          end
+        end
       end
     end
   end
