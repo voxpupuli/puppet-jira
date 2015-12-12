@@ -88,7 +88,7 @@ class jira (
   $java_opts    = '',
 
   # Misc Settings
-  $downloadURL           = 'http://www.atlassian.com/software/jira/downloads/binary/',
+  $downloadURL           = 'https://downloads.atlassian.com/software/jira/downloads/',
   $disable_notifications = false,
 
   # Choose whether to use nanliu-staging, or mkrakowitzer-deploy

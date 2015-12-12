@@ -299,7 +299,7 @@ defaults to ''
 #####`$downloadURL`
 
 The URL used to download the JIRA installation file.
-Defaults to 'http://www.atlassian.com/software/jira/downloads/binary/'
+Defaults to 'https://downloads.atlassian.com/software/jira/downloads/'
 
 #####`$staging_or_deploy`
 
