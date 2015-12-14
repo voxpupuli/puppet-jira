@@ -18,11 +18,11 @@ PuppetLint.configuration.send('disable_class_parameter_defaults')
 # http://puppet-lint.com/checks/class_inherits_from_params_class/
 PuppetLint.configuration.send('disable_class_inherits_from_params_class')
 
-exclude_paths = [
-  'pkg/**/*',
-  'vendor/**/*',
-  'spec/**/*'
-]
+exclude_paths = %w(
+  pkg/**/*
+  vendor/**/*
+  spec/**/*
+)
 PuppetLint.configuration.ignore_paths = exclude_paths
 PuppetSyntax.exclude_paths = exclude_paths
 
