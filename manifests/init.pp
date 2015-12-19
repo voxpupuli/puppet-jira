@@ -47,7 +47,7 @@ class jira (
   $enable_secure_admin_sessions = true,
 
   $datacenter   = false,
-  $shared_homedir = '/var/jira',
+  $shared_homedir = undef,
 
   # Database Settings
   $db                      = 'postgresql',
@@ -153,6 +153,10 @@ class jira (
   validate_bool($tomcatNativeSsl)
   validate_absolute_path($tomcatKeystoreFile)
   validate_re($tomcatKeystoreType, '^(JKS|JCEKS|PKCS12)$')
+
+  if $datacenter and !$shared_homedir {
+    fail("\$shared_homedir must be set when \$datacenter is true")
+  }
 
   # The default Jira product starting with version 7 is 'jira-software'
   if ((versioncmp($version, '7.0.0') > 0) and ($product == 'jira')) {

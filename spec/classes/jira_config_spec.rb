@@ -20,6 +20,7 @@ describe 'jira::config' do
           it { should contain_file('/home/jira/dbconfig.xml')
             .with_content(/<url>jdbc:postgresql:\/\/localhost:5432\/jira<\/url>/)
             .with_content(/<schema-name>public<\/schema-name>/) }
+          it { should_not contain_file('/home/jira/cluster.properties') }
         end
 
         context 'mysql params' do
@@ -100,7 +101,7 @@ describe 'jira::config' do
           it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
             .with_content(/<Connector port=\"9229\"\s+address=\"127\.0\.0\.1\"\s+maxThreads=/m) }
         end
-        
+
         context 'tomcat context path' do
           let(:params) {{
             :version => '6.3.4a',
@@ -350,6 +351,18 @@ describe 'jira::config' do
             .with_content(/jira.websudo.is.disabled = true/) }
         end
 
+        context 'enable clustering' do
+          let(:params) {{
+            :version => '6.3.4a',
+            :javahome => '/opt/java',
+            :datacenter => true,
+            :shared_homedir => '/mnt/jira_shared_home_dir'
+          }}
+          it { should contain_file('/home/jira/cluster.properties')
+            .with_content(/jira.node.id = \S+/)
+            .with_content(/jira.shared.home = \/mnt\/jira_shared_home_dir/)
+          }
+        end
       end
     end
   end

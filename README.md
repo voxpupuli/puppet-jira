@@ -153,6 +153,14 @@ The shell of the JIRA user, defaults to '/bin/true'
 
 Enables or disables JIRA Secure Administrator Sessions, defaults to true
 
+#####`$datacenter`
+
+Enables or disables clustering, defaults to false
+
+#####`$shared_homedir`
+
+The directory of the shared home directory, defaults to undef. When clustering is enabled, this parameter is *required*. 
+
 ####database parameters####
 
 #####`$db`
@@ -189,9 +197,9 @@ Database type, defaults to 'postgres72'. Can be 'postgres72', 'mysql', 'oracle10
 
 #####`$dbschema`
 
-Set the schema 
+Set the schema
 
-The Default value is 'public' 
+The Default value is 'public'
 
 #####`$poolsize`
 
@@ -401,7 +409,7 @@ Defaults to 'JKS'. Valid options are 'JKS', 'PKCS12', 'JCEKS'.
     }
 ```
 
-### Hiera examples 
+### Hiera examples
 
 This example is used in production for 2000 users in an traditional enterprise environment. Your mileage may vary. The dbpassword can be stored using eyaml hiera extension.
 
@@ -531,4 +539,3 @@ export download_url="'http://my.local.server/'"
 ##Contributors
 
 The list of contributors can be found [here](https://github.com/brycejohnson/puppet-jira/graphs/contributors)
-
