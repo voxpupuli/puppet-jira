@@ -1,1 +1,1 @@
-jira.websudo.is.disabled = <%= scope.lookupvar('jira::no_websudo') %>
+jira.websudo.is.disabled = <%= !scope.lookupvar('jira::enable_secure_admin_sessions') %>

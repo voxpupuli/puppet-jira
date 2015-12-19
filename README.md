@@ -149,6 +149,10 @@ The gid of the JIRA user, defaults to next available (undef)
 
 The shell of the JIRA user, defaults to '/bin/true'
 
+#####`$enable_secure_admin_sessions`
+
+Enables or disables JIRA Secure Administrator Sessions, defaults to true
+
 ####database parameters####
 
 #####`$db`
