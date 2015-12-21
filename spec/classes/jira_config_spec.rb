@@ -330,6 +330,26 @@ describe 'jira::config' do
           }
         end
 
+        context 'enable secure admin sessions' do
+          let(:params) {{
+            :version  => '6.3.4a',
+            :javahome => '/opt/java',
+            :enable_secure_admin_sessions => true,
+          }}
+          it { should contain_file('/home/jira/jira-config.properties')
+            .with_content(/jira.websudo.is.disabled = false/) }
+        end
+
+        context 'disable secure admin sessions' do
+          let(:params) {{
+            :version  => '6.3.4a',
+            :javahome => '/opt/java',
+            :enable_secure_admin_sessions => false,
+          }}
+          it { should contain_file('/home/jira/jira-config.properties')
+            .with_content(/jira.websudo.is.disabled = true/) }
+        end
+
       end
     end
   end
