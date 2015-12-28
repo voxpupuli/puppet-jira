@@ -18,7 +18,7 @@
 # This module is used to install Jira.
 #
 # See README.md for more details
-# 
+#
 # === Authors
 #
 # Bryce Johnson
@@ -45,6 +45,9 @@ class jira (
   $shell        = '/bin/true',
 
   $enable_secure_admin_sessions = true,
+
+  $datacenter   = false,
+  $shared_homedir = undef,
 
   # Database Settings
   $db                      = 'postgresql',
@@ -128,7 +131,7 @@ class jira (
   # Tomcat Tunables
   $tomcatMaxThreads  = '150',
   $tomcatAcceptCount = '100',
-  
+
   # Reverse https proxy
   $proxy = {},
   # Options for the AJP connector
@@ -150,6 +153,10 @@ class jira (
   validate_bool($tomcatNativeSsl)
   validate_absolute_path($tomcatKeystoreFile)
   validate_re($tomcatKeystoreType, '^(JKS|JCEKS|PKCS12)$')
+
+  if $datacenter and !$shared_homedir {
+    fail("\$shared_homedir must be set when \$datacenter is true")
+  }
 
   # The default Jira product starting with version 7 is 'jira-software'
   if ((versioncmp($version, '7.0.0') > 0) and ($product == 'jira')) {
