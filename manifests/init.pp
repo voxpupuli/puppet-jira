@@ -18,7 +18,7 @@
 # This module is used to install Jira.
 #
 # See README.md for more details
-# 
+#
 # === Authors
 #
 # Bryce Johnson
@@ -118,7 +118,7 @@ class jira (
   # Tomcat Tunables
   $tomcatMaxThreads  = '150',
   $tomcatAcceptCount = '100',
-  
+
   # Reverse https proxy
   $proxy = {},
   # Options for the AJP connector
@@ -128,6 +128,19 @@ class jira (
 
   # Resources for context.xml
   $resources = {},
+
+  # Enable SingleSignOn via Crowd
+
+  $enable_sso = false,
+  $application_name = 'crowd',
+  $application_password = '1234',
+  $application_login_url = 'https://crowd.example.com/console/',
+  $crowd_server_url = 'https://crowd.example.com/services/',
+  $crowd_base_url = 'https://crowd.example.com/',
+  $session_isauthenticated = 'session.isauthenticated',
+  $session_tokenkey = 'session.tokenkey',
+  $session_validationinterval = 5,
+  $session_lastvalidation = 'session.lastvalidation',
 
 ) inherits jira::params {
 
@@ -186,4 +199,8 @@ class jira (
   } ->
   anchor { 'jira::end': }
 
+  if ($enable_sso) {
+    class { 'jira::sso':
+    }
+  }
 }

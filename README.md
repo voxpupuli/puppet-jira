@@ -374,6 +374,28 @@ Password to access java keystore. Defaults to 'changeit'
 
 Defaults to 'JKS'. Valid options are 'JKS', 'PKCS12', 'JCEKS'.
 
+####Crowd single sign on parameters####
+####`enable_sso`
+Enable crowd single sign on configuration as described in https://confluence.atlassian.com/display/CROWD/Integrating+Crowd+with+Atlassian+Confluence#IntegratingCrowdwithAtlassianConfluence-2.2EnableSSOintegrationwithCrowd(Optional)
+####`application_name`
+Set crowd application name
+####`application_password`
+Set crowd application password
+####`application_login_url`
+Set crowd application login url, where to login into crowd (e.g. https://crowd.example.com/console/)
+####`crowd_server_url`
+Set crowd application services url, e.g. https://crowd.example.com/services/
+####`crowd_base_url`
+Set crowd base url, e.g. https://crowd.example.com/
+####`session_isauthenticated`
+Some more crowd.properties for SSO, see atlassian documentation for details
+####`session_tokenkey`
+Some more crowd.properties for SSO, see atlassian documentation for details
+####`session_validationinterval`
+Some more crowd.properties for SSO, see atlassian documentation for details
+####`session_lastvalidation`
+Some more crowd.properties for SSO, see atlassian documentation for details
+
 ##Usage
 
 ####A more complex example
@@ -391,7 +413,7 @@ Defaults to 'JKS'. Valid options are 'JKS', 'PKCS12', 'JCEKS'.
     }
 ```
 
-### A Hiera example 
+### A Hiera example
 
 This example is used in production for 2000 users in an traditional enterprise environment. Your mileage may vary. The dbpassword can be stored using eyaml hiera extension.
 
@@ -509,4 +531,3 @@ export download_url="'http://my.local.server/'"
 ##Contributors
 
 The list of contributors can be found [here](https://github.com/brycejohnson/puppet-jira/graphs/contributors)
-
