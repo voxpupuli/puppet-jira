@@ -114,6 +114,7 @@ class jira (
   # Tomcat
   $tomcatAddress               = undef,
   $tomcatPort                  = 8080,
+  $tomcatShutdownPort          = 8005,
   $tomcatMaxHttpHeaderSize     = '8192',
   $tomcatMinSpareThreads       = '25',
   $tomcatConnectionTimeout     = '20000',
