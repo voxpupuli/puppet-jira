@@ -14,7 +14,7 @@
 #
 # class { 'jira::facts': }
 #
-class jira::facts(
+class jira::facts (
   $ensure        = 'present',
   $port          = $jira::tomcatPort,
   $uri           = $jira::tomcatAddress ? {
@@ -22,34 +22,30 @@ class jira::facts(
     default => $jira::tomcatAddress,
   },
   $contextpath   = $jira::contextpath,
-  $json_packages = $jira::params::json_packages,
-) inherits jira::params {
-
+  $json_packages = $jira::params::json_packages,) inherits jira::params {
   # Puppet Enterprise supplies its own ruby version if your using it.
   # A modern ruby version is required to run the executable fact
   if $::puppetversion =~ /Puppet Enterprise/ {
     $ruby_bin = '/opt/puppet/bin/ruby'
-    $dir      = 'puppetlabs/'
+    $dir = 'puppetlabs/'
+  } elsif $::pe_version =~ /2015\.3\.*[0-9]*/ {
+    $ruby_bin = '/opt/puppetlabs/puppet/bin'
+    $dir = 'puppetlabs/'
   } else {
     $ruby_bin = '/usr/bin/env ruby'
-    $dir      = ''
+    $dir = ''
   }
 
-  if ! defined(File["/etc/${dir}facter"]) {
-    file { "/etc/${dir}facter":
-      ensure  => directory,
-    }
-  }
-  if ! defined(File["/etc/${dir}facter/facts.d"]) {
-    file { "/etc/${dir}facter/facts.d":
-      ensure  => directory,
-    }
+  if !defined(File["/etc/${dir}facter"]) {
+    file { "/etc/${dir}facter": ensure => directory, }
   }
 
-  if $::osfamily == 'RedHat' and $::puppetversion !~ /Puppet Enterprise/ {
-    package { $json_packages:
-      ensure => present,
-    }
+  if !defined(File["/etc/${dir}facter/facts.d"]) {
+    file { "/etc/${dir}facter/facts.d": ensure => directory, }
+  }
+
+  if $::osfamily == 'RedHat' and $::puppetversion !~ /Puppet Enterprise|2015\.3\.*[0-9]*/ {
+    package { $json_packages: ensure => present, }
   }
 
   file { "/etc/${dir}facter/facts.d/jira_facts.rb":
