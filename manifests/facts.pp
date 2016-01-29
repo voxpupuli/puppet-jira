@@ -28,7 +28,7 @@ class jira::facts (
   if $::puppetversion =~ /Puppet Enterprise/ {
     $ruby_bin = '/opt/puppet/bin/ruby'
     $dir = 'puppetlabs/'
-  } elsif $::pe_version =~ /2015\.3\.*[0-9]*/ {
+  } elsif $::puppetversion =~ /4\.3\.*[0-9]*/ {
     $ruby_bin = '/opt/puppetlabs/puppet/bin'
     $dir = 'puppetlabs/'
   } else {
@@ -44,7 +44,7 @@ class jira::facts (
     file { "/etc/${dir}facter/facts.d": ensure => directory, }
   }
 
-  if $::osfamily == 'RedHat' and $::puppetversion !~ /Puppet Enterprise|2015\.3\.*[0-9]*/ {
+  if $::osfamily == 'RedHat' and $::puppetversion !~ /Puppet Enterprise|4\.3\.*[0-9]*/ {
     package { $json_packages: ensure => present, }
   }
 
