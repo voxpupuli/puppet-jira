@@ -44,7 +44,9 @@ class jira (
   $gid          = undef,
   $shell        = '/bin/true',
 
+  # Advanced configuration options
   $enable_secure_admin_sessions = true,
+  $jira_config_properties    = {},
 
   $datacenter   = false,
   $shared_homedir = undef,
@@ -199,6 +201,8 @@ class jira (
       validate_re($ajp['protocol'], ['^AJP/1.3$', '^org.apache.coyote.ajp'])
     }
   }
+  
+  $merged_jira_config_properties = merge({'jira.websudo.is.disabled' => !$enable_secure_admin_sessions}, $jira_config_properties)
 
   anchor { 'jira::start':
   } ->

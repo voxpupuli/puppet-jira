@@ -351,6 +351,20 @@ describe 'jira::config' do
             .with_content(/jira.websudo.is.disabled = true/) }
         end
 
+        context 'jira-config.properties' do
+          let(:params) {{
+            :version  => '6.3.4a',
+            :javahome => '/opt/java',
+            :jira_config_properties => {
+              'ops.bar.group.size.opsbar-transitions' => '4',
+            }
+          }}
+          it { should contain_file('/home/jira/jira-config.properties')
+            .with_content(/jira.websudo.is.disabled = false/)
+            .with_content(/ops.bar.group.size.opsbar-transitions = 4/)
+          }
+        end
+        
         context 'enable clustering' do
           let(:params) {{
             :version => '6.3.4a',

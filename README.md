@@ -153,6 +153,15 @@ The shell of the JIRA user, defaults to '/bin/true'
 
 Enables or disables JIRA Secure Administrator Sessions, defaults to true
 
+#####`$jira_config_properties = {}`
+
+Override default values for advanced configuration. Default values are defined in jpm.xml, see https://confluence.atlassian.com/jira/advanced-jira-configuration-126006.html for details. Specify key/value pairs as a hash. Example:
+```
+jira_config_properties => {
+      'ops.bar.group.size.opsbar-transitions' => '4',
+}
+```
+
 #####`$datacenter`
 
 Enables or disables clustering, defaults to false
