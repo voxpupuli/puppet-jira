@@ -16,7 +16,7 @@ class jira::mysql_connector (
       ensure => 'directory',
       owner  => root,
       group  => root,
-      before => Staging::File[$file]
+      before => Staging::File[$file],
     }
   }
 

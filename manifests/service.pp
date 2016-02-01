@@ -25,7 +25,7 @@ class jira::service(
   $service_lockfile      = $jira::params::service_lockfile,
 
 ) inherits jira::params {
-  
+
   validate_bool($service_manage)
 
   file { $service_file_location:

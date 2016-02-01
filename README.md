@@ -1,7 +1,7 @@
 #JIRA Module
 
 [![Puppet Forge](http://img.shields.io/puppetforge/v/puppet/jira.svg)](https://forge.puppetlabs.com/puppet/jira)
-[![Build Status](https://travis-ci.org/puppet-community/puppet-jira.svg?branch=master)](https://travis-ci.org/puppet-community/puppet-jira)
+[![Build Status](https://travis-ci.org/voxpupuli/puppet-jira.svg?branch=master)](https://travis-ci.org/voxpupuli/puppet-jira)
 
 ####Table of Contents
 
