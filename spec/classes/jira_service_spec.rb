@@ -36,6 +36,14 @@ describe 'jira::service' do
             .with_content(/\/var\/lock\/jira/) }
         end
         end
+        if os =~ /ubuntu/
+          context 'default params' do
+            let(:params) {{
+              :javahome => '/opt/java'
+            }}
+            it { should_not contain_file('/lib/systemd/system/jira.service') }
+          end
+        end
         context 'overwriting service_manage param' do
           let(:params) {{
             :service_manage => false,
