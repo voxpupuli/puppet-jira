@@ -60,7 +60,7 @@ jira::dbport: 5432
 #jira::dbport: 1433
 
 # Schema
-# Defauult for postgres
+# Default for postgres
 jira::dbschema: 'public'
 # Default for mssql
 #jira::dbschema: 'dbo'
