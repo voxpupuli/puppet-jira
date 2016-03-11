@@ -1,14 +1,14 @@
 {
   "name": "puppet-jira",
   "version": "1.3.0",
-  "author": "puppetcommunity",
+  "author": "puppet",
   "summary": "Module to install, configure and manage Atlassian Jira",
   "license": "Apache-2.0",
-  "source": "https://github.com/puppet-community/puppet-jira.git",
-  "project_page": "https://github.com/puppet-community/puppet-jira.git",
-  "issues_url": "https://github.com/puppet-community/puppet-jira/issues",
+  "source": "https://github.com/voxpupuli/puppet-jira.git",
+  "project_page": "https://github.com/voxpupuli/puppet-jira.git",
+  "issues_url": "https://github.com/voxpupuli/puppet-jira/issues",
   "description": "Module to install, configure and manage Atlassian Jira",
-  "tags": ["jira", "Atlassian", "puppet-community"],
+  "tags": ["jira"],
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",

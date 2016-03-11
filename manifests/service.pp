@@ -26,7 +26,7 @@ class jira::service(
   $service_provider      = $jira::params::service_provider,
 
 ) inherits jira::params {
-  
+
   validate_bool($service_manage)
 
   file { $service_file_location:

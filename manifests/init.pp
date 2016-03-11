@@ -215,16 +215,16 @@ class jira (
       validate_re($ajp['protocol'], ['^AJP/1.3$', '^org.apache.coyote.ajp'])
     }
   }
-  
+
   $merged_jira_config_properties = merge({'jira.websudo.is.disabled' => !$enable_secure_admin_sessions}, $jira_config_properties)
 
   anchor { 'jira::start':
   } ->
-  class { 'jira::install':
+  class { '::jira::install':
   } ->
-  class { 'jira::config':
+  class { '::jira::config':
   } ~>
-  class { 'jira::service':
+  class { '::jira::service':
   } ->
   anchor { 'jira::end': }
 

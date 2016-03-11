@@ -4,19 +4,18 @@ require 'spec_helper_acceptance'
 # Set environment variable download_url to use local webserver
 # export download_url = 'http://10.0.0.XXX/'
 download_url = ENV['download_url'] if ENV['download_url']
-if ENV['download_url'] then
-  download_url = ENV['download_url']
-else 
-  download_url = 'undef'
-end
-if download_url == 'undef' then
-  java_url = "'http://download.oracle.com/otn-pub/java/jdk/7u71-b14/'"
-else 
-  java_url = download_url
-end
+download_url = if ENV['download_url']
+                 ENV['download_url']
+               else
+                 'undef'
+               end
+java_url = if download_url == 'undef'
+             'http://download.oracle.com/otn-pub/java/jdk/7u71-b14/'
+           else
+             download_url
+           end
 
 describe 'jira postgresql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
-
   it 'installs with defaults' do
     pp = <<-EOS
       $jh = $osfamily ? {
@@ -59,7 +58,7 @@ describe 'jira postgresql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfa
     apply_manifest(pp, :catch_changes => true)
   end
 
-  describe process("java") do
+  describe process('java') do
     it { should be_running }
   end
 
@@ -85,15 +84,14 @@ describe 'jira postgresql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfa
   end
 
   describe command('wget -q --tries=240 --retry-connrefused --read-timeout=10 -O- localhost:8080') do
-    its(:stdout) { should match /6\.2\.7/ }
+    its(:stdout) { should match(/6\.2\.7/) }
   end
 
   describe 'shutdown' do
-    it { shell("service jira stop", :acceptable_exit_codes => [0,1]) }
-    it { shell("pkill -f postgres", :acceptable_exit_codes => [0,1]) }
-    it { shell("pkill -f postgres", :acceptable_exit_codes => [0,1]) }
-    it { shell("pkill -f jira", :acceptable_exit_codes => [0,1]) }
-    it { shell("pkill -f jira", :acceptable_exit_codes => [0,1]) }
+    it { shell('service jira stop', :acceptable_exit_codes => [0, 1]) }
+    it { shell('pkill -f postgres', :acceptable_exit_codes => [0, 1]) }
+    it { shell('pkill -f postgres', :acceptable_exit_codes => [0, 1]) }
+    it { shell('pkill -f jira', :acceptable_exit_codes => [0, 1]) }
+    it { shell('pkill -f jira', :acceptable_exit_codes => [0, 1]) }
   end
-
 end

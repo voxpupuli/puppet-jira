@@ -1,8 +1,11 @@
-*kate-swp
 pkg/
-*.swp
-*.settings
-*.project
-spec/fixtures/modules
 Gemfile.lock
-.vagrant
+vendor/
+spec/fixtures/
+.vagrant/
+.bundle/
+coverage/
+log/
+.idea/
+*.iml
+.*.sw
