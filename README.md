@@ -168,7 +168,7 @@ Enables or disables clustering, defaults to false
 
 #####`$shared_homedir`
 
-The directory of the shared home directory, defaults to undef. When clustering is enabled, this parameter is *required*. 
+The directory of the shared home directory, defaults to undef. When clustering is enabled, this parameter is *required*.
 
 ####database parameters####
 
@@ -400,6 +400,28 @@ Password to access java keystore. Defaults to 'changeit'
 #####`$tomcatKeystoreType`
 
 Defaults to 'JKS'. Valid options are 'JKS', 'PKCS12', 'JCEKS'.
+
+####Crowd single sign on parameters####
+####`enable_sso`
+Enable crowd single sign on configuration as described in https://confluence.atlassian.com/display/CROWD/Integrating+Crowd+with+Atlassian+Confluence#IntegratingCrowdwithAtlassianConfluence-2.2EnableSSOintegrationwithCrowd(Optional)
+####`application_name`
+Set crowd application name
+####`application_password`
+Set crowd application password
+####`application_login_url`
+Set crowd application login url, where to login into crowd (e.g. https://crowd.example.com/console/)
+####`crowd_server_url`
+Set crowd application services url, e.g. https://crowd.example.com/services/
+####`crowd_base_url`
+Set crowd base url, e.g. https://crowd.example.com/
+####`session_isauthenticated`
+Some more crowd.properties for SSO, see atlassian documentation for details
+####`session_tokenkey`
+Some more crowd.properties for SSO, see atlassian documentation for details
+####`session_validationinterval`
+Some more crowd.properties for SSO, see atlassian documentation for details
+####`session_lastvalidation`
+Some more crowd.properties for SSO, see atlassian documentation for details
 
 ##Usage
 
