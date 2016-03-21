@@ -17,7 +17,7 @@ class jira::install {
 
   group { $jira::group:
     ensure => present,
-    gid    => $jira::gid
+    gid    => $jira::gid,
   } ->
   user { $jira::user:
     comment          => 'Jira daemon account',
@@ -108,7 +108,7 @@ class jira::install {
   exec { "chown_${jira::webappdir}":
     command     => "/bin/chown -R ${jira::user}:${jira::group} ${jira::webappdir}",
     refreshonly => true,
-    subscribe   => User[$jira::user]
+    subscribe   => User[$jira::user],
   }
 
   if $jira::db == 'mysql' and $jira::mysql_connector_manage {

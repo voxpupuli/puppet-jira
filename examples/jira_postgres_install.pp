@@ -1,11 +1,11 @@
 node default {
 
-  class { 'postgresql::globals':
+  class { '::postgresql::globals':
     manage_package_repo => true,
     version             => '9.3',
   } ->
 
-  class { 'postgresql::server': } ->
+  class { '::postgresql::server': } ->
 
   postgresql::server::db { 'jira':
     user     => 'jiraadm',

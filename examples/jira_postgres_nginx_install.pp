@@ -1,13 +1,13 @@
 node default {
 
-  class { 'nginx': } ->
+  class { '::nginx': } ->
 
-  class { 'postgresql::globals':
+  class { '::postgresql::globals':
     manage_package_repo => true,
     version             => '9.3',
   } ->
 
-  class { 'postgresql::server': } ->
+  class { '::postgresql::server': } ->
 
   postgresql::server::db { 'jira':
     user     => 'jiraadm',
@@ -42,7 +42,7 @@ node default {
       'proxy_set_header X-Forwarded-For'    => '$proxy_add_x_forwarded_for',
       'proxy_set_header Host'               => '$host',
       'proxy_redirect'                      => 'off',
-    }
+    },
   }
 
 }
