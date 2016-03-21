@@ -229,7 +229,6 @@ class jira (
   anchor { 'jira::end': }
 
   if ($enable_sso) {
-    class { 'jira::sso':
-    }
+    class { '::jira::sso': }
   }
 }
