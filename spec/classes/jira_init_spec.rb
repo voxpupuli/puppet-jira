@@ -8,6 +8,11 @@ describe 'jira' do
           let(:facts) do
             facts
           end
+          context 'with javahome not set' do
+            it('should fail') {
+              should raise_error(Puppet::Error, /You need to specify a value for javahome/)
+            }
+          end
           context 'ajp proxy' do
             context 'without port' do
               let(:params) do

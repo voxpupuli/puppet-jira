@@ -87,7 +87,7 @@ class jira (
   $poolTestOnBorrow          = true,
 
   # JVM Settings
-  $javahome,
+  $javahome     = undef,
   $jvm_xms      = '256m',
   $jvm_xmx      = '1024m',
   $jvm_permgen  = '256m',
@@ -218,14 +218,14 @@ class jira (
 
   $merged_jira_config_properties = merge({'jira.websudo.is.disabled' => !$enable_secure_admin_sessions}, $jira_config_properties)
 
-  anchor { 'jira::start':
-  } ->
-  class { '::jira::install':
-  } ->
-  class { '::jira::config':
-  } ~>
-  class { '::jira::service':
-  } ->
+  if $javahome == undef {
+    fail('You need to specify a value for javahome')
+  }
+
+  anchor { 'jira::start': } ->
+  class { '::jira::install': } ->
+  class { '::jira::config': } ~>
+  class { '::jira::service': } ->
   anchor { 'jira::end': }
 
   if ($enable_sso) {
