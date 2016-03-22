@@ -96,11 +96,11 @@ class jira (
 
   # Misc Settings
   $download_url          = 'https://downloads.atlassian.com/software/jira/downloads/',
+  $checksum              = undef,
   $disable_notifications = false,
 
-  # Choose whether to use nanliu-staging, or mkrakowitzer-deploy
-  # Defaults to nanliu-staging as it is puppetlabs approved.
-  $staging_or_deploy = 'staging',
+  # Choose whether to use puppet-staging, or puppet-archive
+  $deploy_module = 'archive',
 
   # Manage service
   $service_manage = true,
