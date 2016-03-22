@@ -80,12 +80,12 @@ Jira can be upgraded by incrementing this version number. This will *STOP* the r
 ```
 
 ######Upgrades to the JIRA puppet Module
-mkrakowitzer-deploy has been replaced with nanliu-staging as the default module for deploying the JIRA binaries. You can still use mkrakowitzer-deploy with the *staging_or_deploy => 'deploy'*
+mkrakowitzer-deploy has been replaced with nanliu-staging as the default module for deploying the JIRA binaries. You can still use mkrakowitzer-deploy with the *deploy_module => 'archive'*
 
 ```puppet
   class { 'jira':
-    javahome    => '/opt/java',
-    staging_or_deploy => 'deploy',
+    javahome      => '/opt/java',
+    deploy_module => 'archive',
   }
 ```
 
@@ -322,11 +322,12 @@ defaults to ''
 The URL used to download the JIRA installation file.
 Defaults to 'https://downloads.atlassian.com/software/jira/downloads/'
 
-#####`$staging_or_deploy`
+#####`checksum`
+The md5 checksum of the archive file. Only supported with `deploy_module => archive`. Defaults to 'undef'
 
-Choose whether to use nanliu-staging, or mkrakowitzer-deploy.
-Defaults to 'staging' to use nanliu-staging as it is puppetlabs approved.
-Alternative option is 'deploy' to use mkrakowitzer-deploy.
+#####`$deploy_module`
+
+Module to use for downloading and extracting archive file. Supports puppet-archive and puppet-staging. Defaults to 'archive'. Archive supports md5 hash checking and Staging supports S3 buckets.
 
 #####`$service_manage`
 
