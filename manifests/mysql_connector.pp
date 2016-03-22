@@ -4,7 +4,7 @@ class jira::mysql_connector (
   $product      = $jira::mysql_connector_product,
   $format       = $jira::mysql_connector_format,
   $installdir   = $jira::mysql_connector_install,
-  $downloadURL  = $jira::mysql_connector_URL,
+  $download_url = $jira::mysql_connector_url,
 ) {
 
   require staging
@@ -21,7 +21,7 @@ class jira::mysql_connector (
   }
 
   staging::file { $file:
-    source  => "${downloadURL}/${file}",
+    source  => "${download_url}/${file}",
     timeout => 300,
   } ->
 

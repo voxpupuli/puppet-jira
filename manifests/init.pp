@@ -70,21 +70,21 @@ class jira (
   $mysql_connector_product = 'mysql-connector-java',
   $mysql_connector_format  = 'tar.gz',
   $mysql_connector_install = '/opt/MySQL-connector',
-  $mysql_connector_URL     = 'https://dev.mysql.com/get/Downloads/Connector-J',
+  $mysql_connector_url     = 'https://dev.mysql.com/get/Downloads/Connector-J',
 
   # Configure database settings if you are pooling connections
-  $enable_connection_pooling = false,
-  $poolMinSize               = 20,
-  $poolMaxSize               = 20,
-  $poolMaxWait               = 30000,
-  $validationQuery           = undef,
-  $minEvictableIdleTime      = 60000,
-  $timeBetweenEvictionRuns   = undef,
-  $poolMaxIdle               = 20,
-  $poolRemoveAbandoned       = true,
-  $poolRemoveAbandonedTimout = 300,
-  $poolTestWhileIdle         = true,
-  $poolTestOnBorrow          = true,
+  $enable_connection_pooling     = false,
+  $pool_min_size                 = 20,
+  $pool_max_size                 = 20,
+  $pool_max_wait                 = 30000,
+  $validation_query              = undef,
+  $min_evictable_idle_time       = 60000,
+  $time_between_eviction_runs    = undef,
+  $pool_max_idle                 = 20,
+  $pool_remove_abandoned         = true,
+  $pool_remove_abandoned_timeout = 300,
+  $pool_test_while_idle          = true,
+  $pool_test_on_borrow           = true,
 
   # JVM Settings
   $javahome     = undef,
@@ -95,7 +95,7 @@ class jira (
   $java_opts    = '',
 
   # Misc Settings
-  $downloadURL           = 'https://downloads.atlassian.com/software/jira/downloads/',
+  $download_url          = 'https://downloads.atlassian.com/software/jira/downloads/',
   $disable_notifications = false,
 
   # Choose whether to use nanliu-staging, or mkrakowitzer-deploy
@@ -114,26 +114,26 @@ class jira (
   $stop_jira = 'service jira stop && sleep 15',
 
   # Tomcat
-  $tomcatAddress               = undef,
-  $tomcatPort                  = 8080,
-  $tomcatShutdownPort          = 8005,
-  $tomcatMaxHttpHeaderSize     = '8192',
-  $tomcatMinSpareThreads       = '25',
-  $tomcatConnectionTimeout     = '20000',
-  $tomcatEnableLookups         = false,
-  $tomcatNativeSsl             = false,
-  $tomcatHttpsPort             = 8443,
-  $tomcatProtocol              = 'HTTP/1.1',
-  $tomcatUseBodyEncodingForURI = true,
-  $tomcatDisableUploadTimeout  = true,
-  $tomcatKeyAlias              = 'jira',
-  $tomcatKeystoreFile          = '/home/jira/jira.jks',
-  $tomcatKeystorePass          = 'changeit',
-  $tomcatKeystoreType          = 'JKS',
+  $tomcat_address                   = undef,
+  $tomcat_port                      = 8080,
+  $tomcat_shutdown_port             = 8005,
+  $tomcat_max_http_header_size      = '8192',
+  $tomcat_min_spare_threads         = '25',
+  $tomcat_connection_timeout        = '20000',
+  $tomcat_enable_lookups            = false,
+  $tomcat_native_ssl                = false,
+  $tomcat_https_port                = 8443,
+  $tomcat_protocol                  = 'HTTP/1.1',
+  $tomcat_use_body_encoding_for_uri = true,
+  $tomcat_disable_upload_timeout    = true,
+  $tomcat_key_alias                 = 'jira',
+  $tomcat_keystore_file             = '/home/jira/jira.jks',
+  $tomcat_keystore_pass             = 'changeit',
+  $tomcat_keystore_type             = 'JKS',
 
   # Tomcat Tunables
-  $tomcatMaxThreads  = '150',
-  $tomcatAcceptCount = '100',
+  $tomcat_max_threads  = '150',
+  $tomcat_accept_count = '100',
 
   # Reverse https proxy
   $proxy = {},
@@ -166,9 +166,9 @@ class jira (
   validate_re($contextpath, ['^$', '^/.*'])
   validate_hash($resources)
   validate_hash($ajp)
-  validate_bool($tomcatNativeSsl)
-  validate_absolute_path($tomcatKeystoreFile)
-  validate_re($tomcatKeystoreType, '^(JKS|JCEKS|PKCS12)$')
+  validate_bool($tomcat_native_ssl)
+  validate_absolute_path($tomcat_keystore_file)
+  validate_re($tomcat_keystore_type, '^(JKS|JCEKS|PKCS12)$')
 
   if $datacenter and !$shared_homedir {
     fail("\$shared_homedir must be set when \$datacenter is true")

@@ -39,7 +39,7 @@ describe 'jira' do
                 :mysql_connector_version => '5.1.15',
                 :mysql_connector_format  => 'zip',
                 :mysql_connector_install => '/opt/foo',
-                :mysql_connector_URL     => 'http://example.co.za/foo',
+                :mysql_connector_url     => 'http://example.co.za/foo',
               }
             end
             it { should contain_file('/opt/foo').with_ensure('directory') }

@@ -16,10 +16,10 @@
 #
 class jira::facts(
   $ensure        = 'present',
-  $port          = $jira::tomcatPort,
-  $uri           = $jira::tomcatAddress ? {
+  $port          = $jira::tomcat_port,
+  $uri           = $jira::tomcat_address ? {
     undef   => '127.0.0.1',
-    default => $jira::tomcatAddress,
+    default => $jira::tomcat_address,
   },
   $contextpath   = $jira::contextpath,
   $json_packages = $jira::params::json_packages,

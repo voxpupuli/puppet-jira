@@ -77,9 +77,9 @@ describe 'jira' do
           context 'customise tomcat connector' do
             let(:params) do
               {
-                :version    => '6.3.4a',
-                :javahome   => '/opt/java',
-                :tomcatPort => '9229',
+                :version     => '6.3.4a',
+                :javahome    => '/opt/java',
+                :tomcat_port => '9229',
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -116,10 +116,10 @@ describe 'jira' do
           context 'customise tomcat connector with a binding address' do
             let(:params) do
               {
-                :version       => '6.3.4a',
-                :javahome      => '/opt/java',
-                :tomcatPort    => '9229',
-                :tomcatAddress => '127.0.0.1'
+                :version        => '6.3.4a',
+                :javahome       => '/opt/java',
+                :tomcat_port    => '9229',
+                :tomcat_address => '127.0.0.1'
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -143,9 +143,9 @@ describe 'jira' do
           context 'tomcat port' do
             let(:params) do
               {
-                :version    => '6.3.4a',
-                :javahome   => '/opt/java',
-                :tomcatPort => '8888',
+                :version     => '6.3.4a',
+                :javahome    => '/opt/java',
+                :tomcat_port => '8888',
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -156,9 +156,9 @@ describe 'jira' do
           context 'tomcat acceptCount' do
             let(:params) do
               {
-                :version           => '6.3.4a',
-                :javahome          => '/opt/java',
-                :tomcatAcceptCount => '200',
+                :version             => '6.3.4a',
+                :javahome            => '/opt/java',
+                :tomcat_accept_count => '200',
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -169,9 +169,9 @@ describe 'jira' do
           context 'tomcat MaxHttpHeaderSize' do
             let(:params) do
               {
-                :version                 => '6.3.4a',
-                :javahome                => '/opt/java',
-                :tomcatMaxHttpHeaderSize => '4096',
+                :version                     => '6.3.4a',
+                :javahome                    => '/opt/java',
+                :tomcat_max_http_header_size => '4096',
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -182,9 +182,9 @@ describe 'jira' do
           context 'tomcat MinSpareThreads' do
             let(:params) do
               {
-                :version               => '6.3.4a',
-                :javahome              => '/opt/java',
-                :tomcatMinSpareThreads => '50',
+                :version                  => '6.3.4a',
+                :javahome                 => '/opt/java',
+                :tomcat_min_spare_threads => '50',
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -195,9 +195,9 @@ describe 'jira' do
           context 'tomcat ConnectionTimeout' do
             let(:params) do
               {
-                :version                 => '6.3.4a',
-                :javahome                => '/opt/java',
-                :tomcatConnectionTimeout => '25000',
+                :version                   => '6.3.4a',
+                :javahome                  => '/opt/java',
+                :tomcat_connection_timeout => '25000',
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -208,9 +208,9 @@ describe 'jira' do
           context 'tomcat EnableLookups' do
             let(:params) do
               {
-                :version             => '6.3.4a',
-                :javahome            => '/opt/java',
-                :tomcatEnableLookups => 'true',
+                :version               => '6.3.4a',
+                :javahome              => '/opt/java',
+                :tomcat_enable_lookups => 'true',
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -221,9 +221,9 @@ describe 'jira' do
           context 'tomcat Protocol' do
             let(:params) do
               {
-                :version        => '6.3.4a',
-                :javahome       => '/opt/java',
-                :tomcatProtocol => 'HTTP/1.1',
+                :version         => '6.3.4a',
+                :javahome        => '/opt/java',
+                :tomcat_protocol => 'HTTP/1.1',
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -234,9 +234,9 @@ describe 'jira' do
           context 'tomcat UseBodyEncodingForURI' do
             let(:params) do
               {
-                :version                     => '6.3.4a',
-                :javahome                    => '/opt/java',
-                :tomcatUseBodyEncodingForURI => 'false',
+                :version                          => '6.3.4a',
+                :javahome                         => '/opt/java',
+                :tomcat_use_body_encoding_for_uri => 'false',
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -247,9 +247,9 @@ describe 'jira' do
           context 'tomcat DisableUploadTimeout' do
             let(:params) do
               {
-                :version                    => '6.3.4a',
-                :javahome                   => '/opt/java',
-                :tomcatDisableUploadTimeout => 'false',
+                :version                       => '6.3.4a',
+                :javahome                      => '/opt/java',
+                :tomcat_disable_upload_timeout => 'false',
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -260,9 +260,9 @@ describe 'jira' do
           context 'tomcat EnableLookups' do
             let(:params) do
               {
-                :version             => '6.3.4a',
-                :javahome            => '/opt/java',
-                :tomcatEnableLookups => 'true',
+                :version               => '6.3.4a',
+                :javahome              => '/opt/java',
+                :tomcat_enable_lookups => 'true',
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -273,9 +273,9 @@ describe 'jira' do
           context 'tomcat maxThreads' do
             let(:params) do
               {
-                :version          => '6.3.4a',
-                :javahome         => '/opt/java',
-                :tomcatMaxThreads => '300',
+                :version            => '6.3.4a',
+                :javahome           => '/opt/java',
+                :tomcat_max_threads => '300',
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -364,9 +364,9 @@ describe 'jira' do
           context 'native ssl support default params' do
             let(:params) do
               {
-                :version         => '6.3.4a',
-                :javahome        => '/opt/java',
-                :tomcatNativeSsl => true,
+                :version           => '6.3.4a',
+                :javahome          => '/opt/java',
+                :tomcat_native_ssl => true,
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -384,17 +384,17 @@ describe 'jira' do
           context 'native ssl support custom params' do
             let(:params) do
               {
-                :version            => '6.3.4a',
-                :javahome           => '/opt/java',
-                :tomcatNativeSsl    => true,
-                :tomcatHttpsPort    => '9443',
-                :tomcatAddress      => '127.0.0.1',
-                :tomcatMaxThreads   => '600',
-                :tomcatAcceptCount  => '600',
-                :tomcatKeyAlias     => 'keystorealias',
-                :tomcatKeystoreFile => '/tmp/keyfile.ks',
-                :tomcatKeystorePass => 'keystorepass',
-                :tomcatKeystoreType => 'PKCS12',
+                :version              => '6.3.4a',
+                :javahome             => '/opt/java',
+                :tomcat_native_ssl    => true,
+                :tomcat_https_port    => '9443',
+                :tomcat_address       => '127.0.0.1',
+                :tomcat_max_threads   => '600',
+                :tomcat_accept_count  => '600',
+                :tomcat_key_alias     => 'keystorealias',
+                :tomcat_keystore_file => '/tmp/keyfile.ks',
+                :tomcat_keystore_pass => 'keystorepass',
+                :tomcat_keystore_type => 'PKCS12',
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
