@@ -221,47 +221,47 @@ This parameter is not required nor do we recommend setting it. However it can be
 
 Configure database settings if you are pooling connections, defaults to 'false'
 
-#####`$poolMinSize`
+#####`$pool_min_size`
 
 defaults to 20
 
-#####`$poolMaxSize`
+#####`$pool_max_size`
 
 defaults to 20
 
-#####`$poolMaxWait`
+#####`$pool_max_wait`
 
 defaults to 30000
 
-#####`$validationQuery`
+#####`$validation_query`
 
 defaults to undef
 
-#####`$minEvictableIdleTime`
+#####`$min_evictable_idle_time`
 
 defaults to 60000
 
-#####`$timeBetweenEvictionRuns`
+#####`$time_between_eviction_runs`
 
 defaults to undef
 
-#####`$poolMaxIdle`
+#####`$pool_max_idle`
 
 defaults to 20
 
-#####`$poolRemoveAbandoned`
+#####`$pool_remove_abandoned`
 
 defaults to true
 
-#####`$poolRemoveAbandonedTimout`
+#####`$pool_remove_abandoned_timeout`
 
 defaults to 300
 
-#####`$poolTestWhileIdle`
+#####`$pool_test_while_idle`
 
 defaults to true
 
-#####`$poolTestOnBorrow`
+#####`$pool_test_on_borrow`
 
 defaults to true
 
@@ -282,7 +282,7 @@ The default file format of the MySQL Java Connector install file, defaults to ta
 #####`$mysql_connector_install`
 Installation directory of the MySQL connector. Defaults to '/opt/MySQL-connector'
 
-#####`$mysql_connector_URL`
+#####`$mysql_connector_url`
 The URL used to download the MySQL Java Connector installation file.
 Defaults to 'http://cdn.mysql.com/Downloads/Connector-J'
 
@@ -317,7 +317,7 @@ defaults to ''
 
 ####Miscellaneous  parameters####
 
-#####`$downloadURL`
+#####`$download_url`
 
 The URL used to download the JIRA installation file.
 Defaults to 'https://downloads.atlassian.com/software/jira/downloads/'
@@ -361,43 +361,43 @@ Defaults to an empty string (""). Will add a path to the Tomcat Server Context.
 
 ####Tomcat parameters####
 
-#####`$tomcatAddress`
+#####`$tomcat_address`
 
 IP address to listen on. Defaults to all addresses.
 
-#####`$tomcatPort`
+#####`$tomcat_port`
 
 Port to listen on, defaults to '8080'
 
-#####`$tomcatMaxThreads`
+#####`$tomcat_max_threads`
 
 Defaults to '150'
 
-#####`$tomcatAcceptCount`
+#####`$tomcat_accept_count`
 
 Defaults to '100'
 
-#####`$tomcatNativeSsl`
+#####`$tomcat_native_ssl`
 
 Enable https/ssl support. Defaults to 'false'. See https://confluence.atlassian.com/display/JIRA/Running+JIRA+over+SSL+or+HTTPS for additional info. The java keystore can be managed with the puppetlabs-java\_ks module or manually with `keytool -genkey -alias jira -keyalg RSA -sigalg SHA256withRSA -keystore /home/jira/jira.ks`
 
-#####`$tomcatHttpsPort`
+#####`$tomcat_https_port`
 
 https/ssl Port to listen on, defaults to 8443.
 
-#####`$tomcatKeyAlias`
+#####`$tomcat_key_alias`
 
 The alias name of the java keystore entry. Defaults to 'jira'.
 
-#####`$tomcatKeystoreFile`
+#####`$tomcat_keystore_file`
 
 Location of java keystore file. Defaults to '/home/jira/jira.jks'
 
-#####`$tomcatKeystorePass`
+#####`$tomcat_keystore_pass`
 
 Password to access java keystore. Defaults to 'changeit'
 
-#####`$tomcatKeystoreType`
+#####`$tomcat_keystore_type`
 
 Defaults to 'JKS'. Valid options are 'JKS', 'PKCS12', 'JCEKS'.
 
@@ -428,15 +428,15 @@ Some more crowd.properties for SSO, see atlassian documentation for details
 ####A more complex example
 ```puppet
     class { 'jira':
-      version     => '6.0.1',
-      installdir  => '/opt/atlassian-jira',
-      homedir     => '/opt/atlassian-jira/jira-home',
-      user        => 'jira',
-      group       => 'jira',
-      dbpassword  => 'secret',
-      dbserver    => 'localhost',
-      javahome    => '/opt/java/jdk1.7.0_21/',
-      downloadURL  => 'http://myserver/pub/development-tools/atlassian/',
+      version      => '6.0.1',
+      installdir   => '/opt/atlassian-jira',
+      homedir      => '/opt/atlassian-jira/jira-home',
+      user         => 'jira',
+      group        => 'jira',
+      dbpassword   => 'secret',
+      dbserver     => 'localhost',
+      javahome     => '/opt/java/jdk1.7.0_21/',
+      download_url => 'http://myserver/pub/development-tools/atlassian/',
     }
 ```
 

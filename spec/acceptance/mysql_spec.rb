@@ -61,18 +61,18 @@ describe 'jira mysql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily'
         password    => 'changeit',
       } ->
       class { 'jira':
-        installdir         => '/opt/atlassian-jira',
-        homedir            => '/opt/jira-home',
-        version            => '6.3.6',
-        downloadURL        => #{download_url},
-        javahome           => $jh,
-        db                 => 'mysql',
-        dbport             => '3306',
-        dbdriver           => 'com.mysql.jdbc.Driver',
-        dbtype             => 'mysql',
-        tomcatPort         => '8081',
-        tomcatNativeSsl    => true,
-        tomcatKeystoreFile => '/tmp/jira.ks',
+        installdir           => '/opt/atlassian-jira',
+        homedir              => '/opt/jira-home',
+        version              => '6.3.6',
+        download_url         => #{download_url},
+        javahome             => $jh,
+        db                   => 'mysql',
+        dbport               => '3306',
+        dbdriver             => 'com.mysql.jdbc.Driver',
+        dbtype               => 'mysql',
+        tomcat_port          => '8081',
+        tomcat_native_ssl    => true,
+        tomcat_keystore_file => '/tmp/jira.ks',
       }
 
       include ::jira::facts

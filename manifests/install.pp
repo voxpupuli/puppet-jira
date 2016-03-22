@@ -64,7 +64,7 @@ class jira::install {
     }
 
     staging::file { $file:
-      source  => "${jira::downloadURL}/${file}",
+      source  => "${jira::download_url}/${file}",
       timeout => 1800,
     } ->
 
@@ -85,7 +85,7 @@ class jira::install {
 
     deploy::file { $file:
       target          => $jira::webappdir,
-      url             => $jira::downloadURL,
+      url             => $jira::download_url,
       strip           => true,
       download_timout => 1800,
       owner           => $jira::user,

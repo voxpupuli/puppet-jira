@@ -20,16 +20,16 @@ class jira::config inherits jira {
     group => $jira::group,
   }
 
-  if $jira::validationQuery == undef {
-    $validationQuery = $jira::db ? {
+  if $jira::validation_query == undef {
+    $validation_query = $jira::db ? {
       'postgresql' => 'select version();',
       'mysql'      => 'select 1',
       'oracle'     => 'select 1 from dual',
       'sqlserver'  => 'select 1',
     }
   }
-  if $jira::timeBetweenEvictionRuns == undef {
-    $timeBetweenEvictionRuns = $jira::db ? {
+  if $jira::time_between_eviction_runs == undef {
+    $time_between_eviction_runs = $jira::db ? {
       'postgresql' => '30000',
       'mysql'      => '300000',
       'oracle'     => '300000',

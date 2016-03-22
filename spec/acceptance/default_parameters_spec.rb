@@ -40,9 +40,9 @@ describe 'jira postgresql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfa
         strip           => true,
       } ->
       class { 'jira':
-        version     => '6.2.7',
-        downloadURL => #{download_url},
-        javahome    => $jh,
+        version      => '6.2.7',
+        download_url => #{download_url},
+        javahome     => $jh,
       }
       class { 'jira::facts': }
       postgresql::server::db { 'jira':

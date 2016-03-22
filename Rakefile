@@ -15,7 +15,6 @@ PuppetLint.configuration.send('disable_80chars')
 PuppetLint.configuration.send('disable_class_inherits_from_params_class')
 PuppetLint.configuration.send('disable_documentation')
 PuppetLint.configuration.send('disable_single_quote_string_with_variables')
-PuppetLint.configuration.send('disable_variable_contains_upcase')
 
 exclude_paths = %w(
   pkg/**/*
