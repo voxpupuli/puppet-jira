@@ -123,6 +123,7 @@ class jira (
   $tomcat_enable_lookups            = false,
   $tomcat_native_ssl                = false,
   $tomcat_https_port                = 8443,
+  $tomcat_redirect_https_port       = undef,
   $tomcat_protocol                  = 'HTTP/1.1',
   $tomcat_use_body_encoding_for_uri = true,
   $tomcat_disable_upload_timeout    = true,

@@ -58,8 +58,10 @@
                    useBodyEncodingForURI="<%= @tomcat_use_body_encoding_for_uri %>"
                    acceptCount="<%= @tomcat_accept_count %>"
                    disableUploadTimeout="<%= @tomcat_disable_upload_timeout %>"
-<% if @tomcat_native_ssl -%>
-                   redirectPort="<%= @tomcat_https_port %>"
+<% if @tomcat_native_ssl && @tomcat_redirect_https_port -%>
+                   redirectPort="<%= @tomcat_redirect_https_port %>"
+<% else -%>
+                   redirectPort="<%= @tomcat_https_port%>"
 <% end -%>
 <% if @proxy -%>
 <%   @proxy.sort.each do |key,value| -%>
