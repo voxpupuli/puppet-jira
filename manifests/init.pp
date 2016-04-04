@@ -174,11 +174,11 @@ class jira (
   if $datacenter and !$shared_homedir {
     fail("\$shared_homedir must be set when \$datacenter is true")
   }
-  
+
   if $tomcat_redirect_https_port {
-    validate_integer($tomcat_redirects_port)
-    unless ($native_ssl) {
-        fail("You need to set native_ssl to true when using tomcat_redirect_https_port")
+    validate_integer($tomcat_redirect_https_port)
+    unless ($tomcat_native_ssl) {
+        fail('You need to set native_ssl to true when using tomcat_redirect_https_port')
     }
   }
 
