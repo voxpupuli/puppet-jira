@@ -386,6 +386,10 @@ Enable https/ssl support. Defaults to 'false'. See https://confluence.atlassian.
 
 https/ssl Port to listen on, defaults to 8443.
 
+#####`$tomcat_redirect_https_port`
+
+Specifiy Jira redirect https port when using port redirection 80->8080 and 443->8443 or proxy server in front, defaults to $tomcat_https_port. To be used with tomcat_native_ssl.
+
 #####`$tomcat_key_alias`
 
 The alias name of the java keystore entry. Defaults to 'jira'.

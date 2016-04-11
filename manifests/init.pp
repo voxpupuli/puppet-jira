@@ -123,6 +123,7 @@ class jira (
   $tomcat_enable_lookups            = false,
   $tomcat_native_ssl                = false,
   $tomcat_https_port                = 8443,
+  $tomcat_redirect_https_port       = undef,
   $tomcat_protocol                  = 'HTTP/1.1',
   $tomcat_use_body_encoding_for_uri = true,
   $tomcat_disable_upload_timeout    = true,
@@ -172,6 +173,13 @@ class jira (
 
   if $datacenter and !$shared_homedir {
     fail("\$shared_homedir must be set when \$datacenter is true")
+  }
+
+  if $tomcat_redirect_https_port {
+    validate_integer($tomcat_redirect_https_port)
+    unless ($tomcat_native_ssl) {
+        fail('You need to set native_ssl to true when using tomcat_redirect_https_port')
+    }
   }
 
   # The default Jira product starting with version 7 is 'jira-software'
