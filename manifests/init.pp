@@ -198,7 +198,13 @@ class jira (
     }
   }
 
-  $webappdir    = "${installdir}/atlassian-${product_name}-${version}-standalone"
+  $extractdir = "${installdir}/atlassian-${product_name}-${version}-standalone"
+  if $format == zip {
+    $webappdir = "${extractdir}/atlassian-${product_name}-${version}-standalone"
+  } else {
+    $webappdir = $extractdir
+  }
+
   if $dburl {
     $dburl_real = $dburl
   }

@@ -53,6 +53,14 @@ class jira::install {
     $file = "atlassian-${jira::product_name}-${jira::version}-jira-${jira::version}.${jira::format}"
   }
 
+  if ! defined(File[$jira::extractdir]) {
+    file { $jira::extractdir:
+      ensure => 'directory',
+      owner  => $jira::user,
+      group  => $jira::group,
+    }
+  }
+
   if ! defined(File[$jira::webappdir]) {
     file { $jira::webappdir:
       ensure => 'directory',
@@ -69,17 +77,17 @@ class jira::install {
         timeout => 1800,
       } ->
       staging::extract { $file:
-        target  => $jira::webappdir,
+        target  => $jira::extractdir,
         creates => "${jira::webappdir}/conf",
         strip   => 1,
         user    => $jira::user,
         group   => $jira::group,
-        notify  => Exec["chown_${jira::webappdir}"],
+        notify  => Exec["chown_${jira::extractdir}"],
         before  => File[$jira::homedir],
         require => [
           File[$jira::installdir],
           User[$jira::user],
-          File[$jira::webappdir] ],
+          File[$jira::extractdir] ],
       }
     }
     'archive': {
@@ -114,8 +122,8 @@ class jira::install {
     group  => $jira::group,
   } ->
 
-  exec { "chown_${jira::webappdir}":
-    command     => "/bin/chown -R ${jira::user}:${jira::group} ${jira::webappdir}",
+  exec { "chown_${jira::extractdir}":
+    command     => "/bin/chown -R ${jira::user}:${jira::group} ${jira::extractdir}",
     refreshonly => true,
     subscribe   => User[$jira::user],
   }
