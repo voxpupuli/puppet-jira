@@ -95,9 +95,6 @@ describe 'jira' do
                   :javahome => '/opt/java',
                 }
               end
-              it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
-                .with_content(/<Listener className=\"org.apache.catalina.core.JasperListener\"/)
-              }
             end
 
             context 'version greater than 7' do
