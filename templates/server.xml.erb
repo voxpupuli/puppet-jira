@@ -32,10 +32,7 @@
     <!--APR library loader. Documentation at /docs/apr.html -->
     <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
     <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
-  <%- if (scope.function_versioncmp([@version, '7.0.0']) < 0) -%>
-    <!--Initialize Jasper prior to webapps are loaded. Documentation at /docs/jasper-howto.html -->
-    <Listener className="org.apache.catalina.core.JasperListener"/>
-  <%- else -%>
+
     <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
     <!-- Security listener. Documentation at /docs/config/listeners.html
     <Listener className="org.apache.catalina.security.SecurityListener" />
@@ -43,7 +40,7 @@
     <!-- Prevent memory leaks due to use of particular java/javax APIs-->
     <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
     <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
-  <%- end -%>
+
     <Service name="Catalina">
         <Connector port="<%= @tomcat_port %>"
                    <%- if @tomcat_address -%>
@@ -110,7 +107,7 @@
 <%   end -%>
         />
 <% end -%>
-  
+
         <Engine name="Catalina" defaultHost="localhost">
             <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true">
 
