@@ -15,7 +15,7 @@ java_url = if download_url == 'undef'
              download_url
            end
 
-describe 'jira postgresql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe 'jira postgresql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
   it 'installs with defaults' do
     pp = <<-EOS
       $jh = $osfamily ? {
@@ -50,12 +50,12 @@ describe 'jira postgresql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfa
         password => postgresql_password('jiraadm', 'mypassword'),
       }
     EOS
-    apply_manifest(pp, :catch_failures => true)
-    shell 'wget -q --tries=240 --retry-connrefused --read-timeout=10 localhost:8080', :acceptable_exit_codes => [0]
+    apply_manifest(pp, catch_failures: true)
+    shell 'wget -q --tries=240 --retry-connrefused --read-timeout=10 localhost:8080', acceptable_exit_codes: [0]
     sleep 120
-    shell 'wget -q --tries=240 --retry-connrefused --read-timeout=10 localhost:8080', :acceptable_exit_codes => [0]
+    shell 'wget -q --tries=240 --retry-connrefused --read-timeout=10 localhost:8080', acceptable_exit_codes: [0]
     sleep 60
-    apply_manifest(pp, :catch_changes => true)
+    apply_manifest(pp, catch_changes: true)
   end
 
   describe process('java') do
@@ -88,10 +88,10 @@ describe 'jira postgresql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfa
   end
 
   describe 'shutdown' do
-    it { shell('service jira stop', :acceptable_exit_codes => [0, 1]) }
-    it { shell('pkill -f postgres', :acceptable_exit_codes => [0, 1]) }
-    it { shell('pkill -f postgres', :acceptable_exit_codes => [0, 1]) }
-    it { shell('pkill -f jira', :acceptable_exit_codes => [0, 1]) }
-    it { shell('pkill -f jira', :acceptable_exit_codes => [0, 1]) }
+    it { shell('service jira stop', acceptable_exit_codes: [0, 1]) }
+    it { shell('pkill -f postgres', acceptable_exit_codes: [0, 1]) }
+    it { shell('pkill -f postgres', acceptable_exit_codes: [0, 1]) }
+    it { shell('pkill -f jira', acceptable_exit_codes: [0, 1]) }
+    it { shell('pkill -f jira', acceptable_exit_codes: [0, 1]) }
   end
 end

@@ -15,7 +15,7 @@ java_url = if download_url == 'undef'
              download_url
            end
 
-describe 'jira mysql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe 'jira mysql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
   it 'installs with mysql database' do
     pp = <<-EOS
       $jh = $osfamily ? {
@@ -77,13 +77,13 @@ describe 'jira mysql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily'
 
       include ::jira::facts
     EOS
-    apply_manifest(pp, :catch_failures => true)
+    apply_manifest(pp, catch_failures: true)
     sleep 60
-    shell 'wget -q --tries=240 --retry-connrefused --read-timeout=10 --no-check-certificate localhost:8081', :acceptable_exit_codes => [0, 8]
+    shell 'wget -q --tries=240 --retry-connrefused --read-timeout=10 --no-check-certificate localhost:8081', acceptable_exit_codes: [0, 8]
     sleep 60
-    shell 'wget -q --tries=240 --retry-connrefused --read-timeout=10 --no-check-certificate localhost:8081', :acceptable_exit_codes => [0, 8]
+    shell 'wget -q --tries=240 --retry-connrefused --read-timeout=10 --no-check-certificate localhost:8081', acceptable_exit_codes: [0, 8]
     sleep 60
-    apply_manifest(pp, :catch_changes => true)
+    apply_manifest(pp, catch_changes: true)
   end
 
   describe process('java') do
@@ -120,10 +120,10 @@ describe 'jira mysql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily'
   end
 
   describe 'shutdown' do
-    it { shell('service jira stop', :acceptable_exit_codes => [0, 1]) }
-    it { shell('pkill -f mysql', :acceptable_exit_codes => [0, 1]) }
-    it { shell('pkill -f mysql', :acceptable_exit_codes => [0, 1]) }
-    it { shell('pkill -f jira', :acceptable_exit_codes => [0, 1]) }
-    it { shell('pkill -f jira', :acceptable_exit_codes => [0, 1]) }
+    it { shell('service jira stop', acceptable_exit_codes: [0, 1]) }
+    it { shell('pkill -f mysql', acceptable_exit_codes: [0, 1]) }
+    it { shell('pkill -f mysql', acceptable_exit_codes: [0, 1]) }
+    it { shell('pkill -f jira', acceptable_exit_codes: [0, 1]) }
+    it { shell('pkill -f jira', acceptable_exit_codes: [0, 1]) }
   end
 end

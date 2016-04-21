@@ -12,7 +12,7 @@ describe 'jira' do
           if os == 'RedHat'
             context 'default params' do
               let(:params) do
-                { :javahome => '/opt/java' }
+                { javahome: '/opt/java' }
               end
               it { should contain_service('jira') }
               it { should contain_file('/etc/init.d/jira')
@@ -28,10 +28,10 @@ describe 'jira' do
           if os == 'Debian'
             context 'lockfile on Debian' do
               let(:params) do
-                { :javahome => '/opt/java' }
+                { javahome: '/opt/java' }
               end
               let(:facts) do
-                { :osfamily => 'Debian' }
+                { osfamily: 'Debian' }
               end
               it { should contain_file('/etc/init.d/jira')
                 .with_content(%r{/var/lock/jira})
@@ -41,7 +41,7 @@ describe 'jira' do
           if os =~ /ubuntu/
             context 'default params' do
               let(:params) do
-                { :javahome => '/opt/java' }
+                { javahome: '/opt/java' }
               end
               it { should_not contain_file('/lib/systemd/system/jira.service') }
             end
@@ -49,8 +49,8 @@ describe 'jira' do
           context 'overwriting service_manage param' do
             let(:params) do
               {
-                :service_manage => false,
-                :javahome       => '/opt/java',
+                service_manage: false,
+                javahome: '/opt/java',
               }
             end
             it { should_not contain_service('jira') }
@@ -58,8 +58,8 @@ describe 'jira' do
           context 'overwriting service_manage param with bad boolean' do
             let(:params) do
               {
-                :service_manage => 'false',
-                :javahome       => '/opt/java',
+                service_manage: 'false',
+                javahome: '/opt/java',
               }
             end
             it { should raise_error(Puppet::Error, /is not a boolean/) }
@@ -67,10 +67,10 @@ describe 'jira' do
           context 'overwriting service params' do
             let(:params) do
               {
-                :javahome       => '/opt/java',
-                :service_ensure => 'stopped',
-                :service_enable => false,
-                :service_subscribe => 'Package[jdk]',
+                javahome: '/opt/java',
+                service_ensure: 'stopped',
+                service_enable: false,
+                service_subscribe: 'Package[jdk]',
               }
             end
             it { should contain_service('jira').with('ensure' => 'stopped',
@@ -82,8 +82,8 @@ describe 'jira' do
           context 'it notifies properly' do
             let(:params) do
               {
-                :javahome       => '/opt/java',
-                :service_notify => 'Package[jdk]',
+                javahome: '/opt/java',
+                service_notify: 'Package[jdk]',
               }
             end
             # it { should contain_service('jira').that_notifies('Package[jdk]') }
@@ -91,20 +91,20 @@ describe 'jira' do
           context 'it subscribes properly' do
             let(:params) do
               {
-                :javahome          => '/opt/java',
-                :service_subscribe => 'Package[jdk]',
+                javahome: '/opt/java',
+                service_subscribe: 'Package[jdk]',
               }
             end
             # it { should contain_service('jira').that_subscribes_to('Package[jdk]') }
           end
           context 'RedHat/CentOS 7 systemd init script' do
             let(:params) do
-              { :javahome => '/opt/java' }
+              { javahome: '/opt/java' }
             end
             let(:facts) do
               {
-                :osfamily                  => 'RedHat',
-                :operatingsystemmajrelease => '7',
+                osfamily: 'RedHat',
+                operatingsystemmajrelease: '7',
               }
             end
             it { should contain_file('/usr/lib/systemd/system/jira.service')

@@ -18,7 +18,7 @@ describe 'jira::facts' do
         # Test puppet enterprise shebang generated correctly
         context 'with puppet enterprise' do
           let(:facts) do
-            facts.merge(:puppetversion => '3.4.3 (Puppet Enterprise 3.2.1)')
+            facts.merge(puppetversion: '3.4.3 (Puppet Enterprise 3.2.1)')
           end
           it do
             should contain_file(pe_external_fact_file) \
@@ -29,7 +29,7 @@ describe 'jira::facts' do
         # Test puppet oss shebang generated correctly
         context 'with puppet oss' do
           let(:facts) do
-            facts.merge(:puppetversion => 'all other versions')
+            facts.merge(puppetversion: 'all other versions')
           end
           it do
             should contain_file(external_fact_file) \
@@ -40,7 +40,7 @@ describe 'jira::facts' do
 
         context 'tomcat context path' do
           let(:params) do
-            { :contextpath => '/jira' }
+            { contextpath: '/jira' }
           end
           it do
             should contain_file(external_fact_file) \
