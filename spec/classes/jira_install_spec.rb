@@ -12,15 +12,15 @@ describe 'jira' do
           context 'default params' do
             let(:params) do
               {
-                :javahome     => '/opt/java',
-                :user         => 'jira',
-                :group        => 'jira',
-                :installdir   => '/opt/jira',
-                :homedir      => '/home/jira',
-                :format       => 'tar.gz',
-                :product      => 'jira',
-                :version      => '6.3.4a',
-                :download_url => 'https://downloads.atlassian.com/software/jira/downloads',
+                javahome: '/opt/java',
+                user: 'jira',
+                group: 'jira',
+                installdir: '/opt/jira',
+                homedir: '/home/jira',
+                format: 'tar.gz',
+                product: 'jira',
+                version: '6.3.4a',
+                download_url: 'https://downloads.atlassian.com/software/jira/downloads',
               }
             end
             it { should contain_group('jira') }
@@ -46,11 +46,11 @@ describe 'jira' do
             context 'default product' do
               let(:params) do
                 {
-                  :javahome     => '/opt/java',
-                  :installdir   => '/opt/jira',
-                  :product      => 'jira',
-                  :version      => '7.0.4',
-                  :download_url => 'http://www.atlassian.com/software/jira/downloads/binary',
+                  javahome: '/opt/java',
+                  installdir: '/opt/jira',
+                  product: 'jira',
+                  version: '7.0.4',
+                  download_url: 'http://www.atlassian.com/software/jira/downloads/binary',
                 }
               end
               it 'should deploy jira 7.0.4 from tar.gz' do
@@ -66,11 +66,11 @@ describe 'jira' do
             context 'core product' do
               let(:params) do
                 {
-                  :javahome     => '/opt/java',
-                  :installdir   => '/opt/jira',
-                  :product      => 'jira-core',
-                  :version      => '7.0.4',
-                  :download_url => 'http://www.atlassian.com/software/jira/downloads/binary',
+                  javahome: '/opt/java',
+                  installdir: '/opt/jira',
+                  product: 'jira-core',
+                  version: '7.0.4',
+                  download_url: 'http://www.atlassian.com/software/jira/downloads/binary',
                 }
               end
               it 'should deploy jira 7.0.4 from tar.gz' do
@@ -88,17 +88,17 @@ describe 'jira' do
           context 'overwriting params' do
             let(:params) do
               {
-                :javahome     => '/opt/java',
-                :version      => '6.0.0',
-                :format       => 'tar.gz',
-                :installdir   => '/opt/jira',
-                :homedir      => '/random/homedir',
-                :user         => 'foo',
-                :group        => 'bar',
-                :uid          => 333,
-                :gid          => 444,
-                :shell        => '/bin/bash',
-                :download_url => 'http://downloads.atlassian.com',
+                javahome: '/opt/java',
+                version: '6.0.0',
+                format: 'tar.gz',
+                installdir: '/opt/jira',
+                homedir: '/random/homedir',
+                user: 'foo',
+                group: 'bar',
+                uid: 333,
+                gid: 444,
+                shell: '/bin/bash',
+                download_url: 'http://downloads.atlassian.com',
               }
             end
 

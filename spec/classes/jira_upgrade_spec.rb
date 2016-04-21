@@ -11,22 +11,22 @@ describe 'jira' do
 
           context 'default params' do
             let(:params) do
-              { :javahome => '/opt/java' }
+              { javahome: '/opt/java' }
             end
             let(:facts) {
-              facts.merge(:jira_version => '6.3.4a')
+              facts.merge(jira_version: '6.3.4a')
             }
             it { should contain_exec('service jira stop && sleep 15') }
           end
           context 'custom params' do
             let(:params) do
               {
-                :javahome  => '/opt/java',
-                :stop_jira => 'stop service please'
+                javahome: '/opt/java',
+                stop_jira: 'stop service please'
               }
             end
             let(:facts) {
-              facts.merge(:jira_version => '6.3.4a')
+              facts.merge(jira_version: '6.3.4a')
             }
             it { should contain_exec('stop service please') }
           end

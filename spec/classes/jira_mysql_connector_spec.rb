@@ -11,10 +11,10 @@ describe 'jira' do
           context 'mysql connector defaults' do
             let(:params) do
               {
-                :version                 => '6.3.4a',
-                :javahome                => '/opt/java',
-                :db                      => 'mysql',
-                :mysql_connector_version => '5.1.34',
+                version: '6.3.4a',
+                javahome: '/opt/java',
+                db: 'mysql',
+                mysql_connector_version: '5.1.34',
               }
             end
             it { should contain_file('/opt/MySQL-connector').with_ensure('directory') }
@@ -33,13 +33,13 @@ describe 'jira' do
           context 'mysql connector overwrite params' do
             let(:params) do
               {
-                :version                 => '6.3.4a',
-                :javahome                => '/opt/java',
-                :db                      => 'mysql',
-                :mysql_connector_version => '5.1.15',
-                :mysql_connector_format  => 'zip',
-                :mysql_connector_install => '/opt/foo',
-                :mysql_connector_url     => 'http://example.co.za/foo',
+                version: '6.3.4a',
+                javahome: '/opt/java',
+                db: 'mysql',
+                mysql_connector_version: '5.1.15',
+                mysql_connector_format: 'zip',
+                mysql_connector_install: '/opt/foo',
+                mysql_connector_url: 'http://example.co.za/foo',
               }
             end
             it { should contain_file('/opt/foo').with_ensure('directory') }
@@ -58,10 +58,10 @@ describe 'jira' do
           context 'mysql_connector_mangage equals false' do
             let(:params) do
               {
-                :version                => '6.3.4a',
-                :javahome               => '/opt/java',
-                :db                     => 'mysql',
-                :mysql_connector_manage => false,
+                version: '6.3.4a',
+                javahome: '/opt/java',
+                db: 'mysql',
+                mysql_connector_manage: false,
               }
             end
             it { should_not contain_class('jira::mysql_connector') }
