@@ -24,7 +24,7 @@ describe 'jira' do
                 'target' => '/opt/MySQL-connector/mysql-connector-java-5.1.34/mysql-connector-java-5.1.34-bin.jar',
                )
             }
-            it 'should deploy mysql connector 5.1.34 from tar.gz' do
+            it 'deploys mysql connector 5.1.34 from tar.gz' do
               should contain_staging__file('mysql-connector-java-5.1.34.tar.gz').with('source' => 'https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.34.tar.gz')
               should contain_staging__extract('mysql-connector-java-5.1.34.tar.gz').with('target' => '/opt/MySQL-connector',
                                                                                          'creates' => '/opt/MySQL-connector/mysql-connector-java-5.1.34')
@@ -49,7 +49,7 @@ describe 'jira' do
                 'target' => '/opt/foo/mysql-connector-java-5.1.15/mysql-connector-java-5.1.15-bin.jar',
                )
             }
-            it 'should deploy mysql connector 5.1.15 from zip' do
+            it 'deploys mysql connector 5.1.15 from zip' do
               should contain_staging__file('mysql-connector-java-5.1.15.zip').with('source' => 'http://example.co.za/foo/mysql-connector-java-5.1.15.zip')
               should contain_staging__extract('mysql-connector-java-5.1.15.zip').with('target' => '/opt/foo',
                                                                                       'creates' => '/opt/foo/mysql-connector-java-5.1.15')
