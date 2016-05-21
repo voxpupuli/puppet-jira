@@ -25,7 +25,7 @@ describe 'jira' do
             end
             it { should contain_group('jira') }
             it { should contain_user('jira').with_shell('/bin/true') }
-            it 'should deploy jira 6.3.4a from tar.gz' do
+            it 'deploys jira 6.3.4a from tar.gz' do
               should contain_archive('/tmp/atlassian-jira-6.3.4a.tar.gz')
                 .with('extract_path'  => '/opt/jira/atlassian-jira-6.3.4a-standalone',
                       'source'        => 'https://downloads.atlassian.com/software/jira/downloads/atlassian-jira-6.3.4a.tar.gz',
@@ -35,7 +35,7 @@ describe 'jira' do
                       'checksum_type' => 'md5',)
             end
 
-            it 'should manage the jira home directory' do
+            it 'manages the jira home directory' do
               should contain_file('/home/jira').with('ensure' => 'directory',
                                                      'owner' => 'jira',
                                                      'group' => 'jira')
@@ -53,7 +53,7 @@ describe 'jira' do
                   download_url: 'http://www.atlassian.com/software/jira/downloads/binary',
                 }
               end
-              it 'should deploy jira 7.0.4 from tar.gz' do
+              it 'deploys jira 7.0.4 from tar.gz' do
                 should contain_archive('/tmp/atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz')
                   .with('extract_path'  => '/opt/jira/atlassian-jira-software-7.0.4-standalone',
                         'source'        => 'http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz',
@@ -73,7 +73,7 @@ describe 'jira' do
                   download_url: 'http://www.atlassian.com/software/jira/downloads/binary',
                 }
               end
-              it 'should deploy jira 7.0.4 from tar.gz' do
+              it 'deploys jira 7.0.4 from tar.gz' do
                 should contain_archive('/tmp/atlassian-jira-core-7.0.4.tar.gz')
                   .with('extract_path'  => '/opt/jira/atlassian-jira-core-7.0.4-standalone',
                         'source'        => 'http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-7.0.4.tar.gz',
@@ -109,7 +109,7 @@ describe 'jira' do
             }
             it { should contain_group('bar') }
 
-            it 'should deploy jira 6.0.0 from tar.gz' do
+            it 'deploys jira 6.0.0 from tar.gz' do
               should contain_archive('/tmp/atlassian-jira-6.0.0.tar.gz')
                 .with('extract_path'  => '/opt/jira/atlassian-jira-6.0.0-standalone',
                       'source'        => 'http://downloads.atlassian.com/atlassian-jira-6.0.0.tar.gz',
@@ -119,7 +119,7 @@ describe 'jira' do
                       'checksum_type' => 'md5',)
             end
 
-            it 'should manage the jira home directory' do
+            it 'manages the jira home directory' do
               should contain_file('/random/homedir').with('ensure' => 'directory',
                                                           'owner' => 'foo',
                                                           'group' => 'bar')

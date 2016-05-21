@@ -9,7 +9,7 @@ describe 'jira' do
             facts
           end
           context 'with javahome not set' do
-            it('should fail') {
+            it('fails') {
               should raise_error(Puppet::Error, /You need to specify a value for javahome/)
             }
           end
