@@ -1,6 +1,27 @@
-:warning: mkrakowitzer-deploy support will be dropped next major release. It will be replaced by puppet-archive.
+## 2016-05-26 - Release 2.0.0
+### Summary
+- We dropped ruby1.8 support!
+- mkrakowitzer-deploy got replaced by puppet-archive.
+- The jira::facts class is included by default. You may get a Error: Duplicate declaration: Class[jira::facts] is already declared
+- We added JIRA 7 Support
 
-:warning: The jira::facts class will be included by default in next major release. You may get a Error: Duplicate declaration: Class[jira::facts] is already declared 
+### Improvements
+- Use defined function to test for the existence of the fact ::jira_ver
+- Added hieradata examples for Oracle DB backend
+- Added containment for mysql_connector class
+- Support STRICT_VARIABLES=yes
+- Paramaterizing more tomcat settings
+- Added schema parameter for dbconfig
+- Added configuration option to enable or disable websudo.
+- Added tests and updated README.md
+- Support configuration of all properties in jira-config.properties
+- Added crowd single sign-on functions as described by atlassian wiki
+- Added ability to change tomcatShutdownPort
+
+### Fixes
+- Fix to address Amazon Ami configuration
+- Avoid duplicate scheme declaration when using proxy with SSL
+- Fix jira::mysql_connector_url
 
 ##2015-08-05 - Release 1.3.0
 ###Summary
@@ -8,7 +29,7 @@
 - Resolve issue where rake lint tasks always exited with 0 status
 - added new parameter disable_notifications in relation to setenv.sh
 - Add examples
- 
+
 ##2015-04-25 - Release 1.2.1
 ###Summary
 - Update metadata, README, CHANGELOG to point to new namespace.
@@ -32,7 +53,7 @@ Thanks to Scott Searcy, Oliver Bertuch, Paul Geringer, Eric Shamow, William Lieu
 - Add beaker tests for MySQL
 - Added support for Oracle and Scientific Linux
 - Bump jira version to 6.3.13
-- Add support for parameter 'contextpath' 
+- Add support for parameter 'contextpath'
 - Add class to install MySQL Java connector from mysql.com
 - Add support for oracle database
 
