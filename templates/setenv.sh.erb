@@ -7,6 +7,10 @@ JIRA_HOME="<%= scope.lookupvar('jira::homedir') %>"
 # Additional JAVA_OPTS
 #
 JAVA_OPTS="<%= scope.lookupvar('jira::java_opts') %> $JAVA_OPTS"
+#
+# Additional CATALINA_OPTS
+#
+CATALINA_OPTS="<%= scope.lookupvar('jira::catalina_opts') %> $CATALINA_OPTS"
 
 #
 #  Occasionally Atlassian Support may recommend that you set some specific JVM arguments.  You can use this variable below to do that.
@@ -76,7 +80,7 @@ if [ -f "${PRGDIR}/permgen.sh" ]; then
     fi
 fi
 
-export JAVA_OPTS
+export JAVA_OPTS CATALINA_OPTS
 
 echo ""
 echo "If you encounter issues starting or stopping JIRA, please see the Troubleshooting guide at http://confluence.atlassian.com/display/JIRA/Installation+Troubleshooting+Guide"

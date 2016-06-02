@@ -315,6 +315,10 @@ defaults to '-XX:-HeapDumpOnOutOfMemoryError'
 
 defaults to ''
 
+#####`$catalina_opts`
+
+defaults to ''
+
 ####Miscellaneous  parameters####
 
 #####`$download_url`
