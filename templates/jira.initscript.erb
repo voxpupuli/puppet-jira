@@ -73,7 +73,7 @@ STATUS=$( pgrep -u <%= scope.lookupvar('jira::user')%> -f atlassian-jira ) || ST
   
 }
 
-fuction execute() {
+function execute() {
   case "$ACTION" in
     start)
       start
