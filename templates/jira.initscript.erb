@@ -62,24 +62,18 @@ function start() {
 
 function status() {
 
-  STATUS=$( ps aux | grep "[c]atalina.base=$CATALINA_HOME" | wc -l )
-  if [ $STATUS -gt 0 ];then
-    RETVAL=`ps -ef |grep $SERVICE |grep -v grep |grep atlassian-jira |grep ^<%= scope.lookupvar('jira::user')%> |wc -l`
-    if [ $RETVAL -ne 0 ];then
-      echo "$SERVICE is running"
-      return 0
-    else
-      echo "$SERVICE is stopped"
-      return 1
-    fi
-  else
-    echo "$SERVICE is stopped"
-    return 1
+STATUS=$( pgrep -u <%= scope.lookupvar('jira::user')%> -f atlassian-jira ) || STATUS=0
+ if [ $STATUS -ne 0 ];then
+   echo "$SERVICE is running"
+   return 0
+ else
+   echo "$SERVICE is stopped"
+   return 1
  fi
   
 }
 
-function execute() {
+fuction execute() {
   case "$ACTION" in
     start)
       start
