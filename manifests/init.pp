@@ -93,6 +93,7 @@ class jira (
   $jvm_permgen  = '256m',
   $jvm_optional = '-XX:-HeapDumpOnOutOfMemoryError',
   $java_opts    = '',
+  $catalina_opts    = '',
 
   # Misc Settings
   $download_url          = 'https://downloads.atlassian.com/software/jira/downloads/',
