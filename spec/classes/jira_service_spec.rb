@@ -50,7 +50,7 @@ describe 'jira' do
             let(:params) do
               {
                 service_manage: false,
-                javahome: '/opt/java',
+                javahome: '/opt/java'
               }
             end
             it { should_not contain_service('jira') }
@@ -59,7 +59,7 @@ describe 'jira' do
             let(:params) do
               {
                 service_manage: 'false',
-                javahome: '/opt/java',
+                javahome: '/opt/java'
               }
             end
             it { should raise_error(Puppet::Error, /is not a boolean/) }
@@ -70,7 +70,7 @@ describe 'jira' do
                 javahome: '/opt/java',
                 service_ensure: 'stopped',
                 service_enable: false,
-                service_subscribe: 'Package[jdk]',
+                service_subscribe: 'Package[jdk]'
               }
             end
             it { should contain_service('jira').with('ensure' => 'stopped',
@@ -83,7 +83,7 @@ describe 'jira' do
             let(:params) do
               {
                 javahome: '/opt/java',
-                service_notify: 'Package[jdk]',
+                service_notify: 'Package[jdk]'
               }
             end
             # it { should contain_service('jira').that_notifies('Package[jdk]') }
@@ -92,7 +92,7 @@ describe 'jira' do
             let(:params) do
               {
                 javahome: '/opt/java',
-                service_subscribe: 'Package[jdk]',
+                service_subscribe: 'Package[jdk]'
               }
             end
             # it { should contain_service('jira').that_subscribes_to('Package[jdk]') }
@@ -104,7 +104,7 @@ describe 'jira' do
             let(:facts) do
               {
                 osfamily: 'RedHat',
-                operatingsystemmajrelease: '7',
+                operatingsystemmajrelease: '7'
               }
             end
             it { should contain_file('/usr/lib/systemd/system/jira.service')

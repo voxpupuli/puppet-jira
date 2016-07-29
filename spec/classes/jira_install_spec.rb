@@ -20,7 +20,7 @@ describe 'jira' do
                 format: 'tar.gz',
                 product: 'jira',
                 version: '6.3.4a',
-                download_url: 'https://downloads.atlassian.com/software/jira/downloads',
+                download_url: 'https://downloads.atlassian.com/software/jira/downloads'
               }
             end
             it { should contain_group('jira') }
@@ -50,7 +50,7 @@ describe 'jira' do
                   installdir: '/opt/jira',
                   product: 'jira',
                   version: '7.0.4',
-                  download_url: 'http://www.atlassian.com/software/jira/downloads/binary',
+                  download_url: 'http://www.atlassian.com/software/jira/downloads/binary'
                 }
               end
               it 'deploys jira 7.0.4 from tar.gz' do
@@ -70,7 +70,7 @@ describe 'jira' do
                   installdir: '/opt/jira',
                   product: 'jira-core',
                   version: '7.0.4',
-                  download_url: 'http://www.atlassian.com/software/jira/downloads/binary',
+                  download_url: 'http://www.atlassian.com/software/jira/downloads/binary'
                 }
               end
               it 'deploys jira 7.0.4 from tar.gz' do
@@ -98,7 +98,7 @@ describe 'jira' do
                 uid: 333,
                 gid: 444,
                 shell: '/bin/bash',
-                download_url: 'http://downloads.atlassian.com',
+                download_url: 'http://downloads.atlassian.com'
               }
             end
 

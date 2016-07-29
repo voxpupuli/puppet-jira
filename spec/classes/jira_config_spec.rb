@@ -12,7 +12,7 @@ describe 'jira' do
             let(:params) do
               {
                 version: '6.3.4a',
-                javahome: '/opt/java',
+                javahome: '/opt/java'
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh')
@@ -32,7 +32,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                db: 'mysql',
+                db: 'mysql'
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh') }
@@ -50,7 +50,7 @@ describe 'jira' do
                 javahome: '/opt/java',
                 db: 'sqlserver',
                 dbport: '1433',
-                dbschema: 'public',
+                dbschema: 'public'
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh') }
@@ -66,7 +66,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                dburl: 'my custom dburl',
+                dburl: 'my custom dburl'
               }
             end
             it { should contain_file('/home/jira/dbconfig.xml')
@@ -79,7 +79,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_port: '9229',
+                tomcat_port: '9229'
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -92,7 +92,7 @@ describe 'jira' do
               let(:params) do
                 {
                   version: '6.3.4a',
-                  javahome: '/opt/java',
+                  javahome: '/opt/java'
                 }
               end
             end
@@ -101,7 +101,7 @@ describe 'jira' do
               let(:params) do
                 {
                   version: '7.0.4',
-                  javahome: '/opt/java',
+                  javahome: '/opt/java'
                 }
               end
               it { should contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/conf/server.xml')
@@ -129,7 +129,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                contextpath: '/jira',
+                contextpath: '/jira'
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -142,7 +142,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_port: '8888',
+                tomcat_port: '8888'
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -155,7 +155,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_accept_count: '200',
+                tomcat_accept_count: '200'
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -168,7 +168,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_max_http_header_size: '4096',
+                tomcat_max_http_header_size: '4096'
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -181,7 +181,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_min_spare_threads: '50',
+                tomcat_min_spare_threads: '50'
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -194,7 +194,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_connection_timeout: '25000',
+                tomcat_connection_timeout: '25000'
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -207,7 +207,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_enable_lookups: 'true',
+                tomcat_enable_lookups: 'true'
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -220,7 +220,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_protocol: 'HTTP/1.1',
+                tomcat_protocol: 'HTTP/1.1'
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -233,7 +233,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_use_body_encoding_for_uri: 'false',
+                tomcat_use_body_encoding_for_uri: 'false'
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -246,7 +246,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_disable_upload_timeout: 'false',
+                tomcat_disable_upload_timeout: 'false'
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -259,7 +259,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_enable_lookups: 'true',
+                tomcat_enable_lookups: 'true'
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -272,7 +272,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_max_threads: '300',
+                tomcat_max_threads: '300'
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -288,8 +288,8 @@ describe 'jira' do
                 proxy: {
                   'scheme'    => 'https',
                   'proxyName' => 'www.example.com',
-                  'proxyPort' => '9999',
-                },
+                  'proxyPort' => '9999'
+                }
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -307,8 +307,8 @@ describe 'jira' do
                   javahome: '/opt/java',
                   ajp: {
                     'port'     => '8009',
-                    'protocol' => 'AJP/1.3',
-                  },
+                    'protocol' => 'AJP/1.3'
+                  }
                 }
               end
               it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -322,8 +322,8 @@ describe 'jira' do
                   javahome: '/opt/java',
                   ajp: {
                     'port'     => '8009',
-                    'protocol' => 'org.apache.coyote.ajp.AjpNioProtocol',
-                  },
+                    'protocol' => 'org.apache.coyote.ajp.AjpNioProtocol'
+                  }
                 }
               end
               it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -337,7 +337,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                resources: { 'testdb' => { 'auth' => 'Container' } },
+                resources: { 'testdb' => { 'auth' => 'Container' } }
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/context.xml')
@@ -350,7 +350,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                disable_notifications: true,
+                disable_notifications: true
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh')
@@ -363,7 +363,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_native_ssl: true,
+                tomcat_native_ssl: true
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -391,7 +391,7 @@ describe 'jira' do
                 tomcat_key_alias: 'keystorealias',
                 tomcat_keystore_file: '/tmp/keyfile.ks',
                 tomcat_keystore_pass: 'keystorepass',
-                tomcat_keystore_type: 'PKCS12',
+                tomcat_keystore_type: 'PKCS12'
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
@@ -412,7 +412,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                enable_secure_admin_sessions: true,
+                enable_secure_admin_sessions: true
               }
             end
             it { should contain_file('/home/jira/jira-config.properties')
@@ -425,7 +425,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                enable_secure_admin_sessions: false,
+                enable_secure_admin_sessions: false
               }
             end
             it { should contain_file('/home/jira/jira-config.properties')
@@ -439,7 +439,7 @@ describe 'jira' do
                 version: '6.3.4a',
                 javahome: '/opt/java',
                 jira_config_properties: {
-                  'ops.bar.group.size.opsbar-transitions' => '4',
+                  'ops.bar.group.size.opsbar-transitions' => '4'
                 }
               }
             end

@@ -20,8 +20,8 @@ describe 'jira' do
                   version: '6.3.4a',
                   javahome: '/opt/java',
                   ajp: {
-                    'protocol' => 'AJP/1.3',
-                  },
+                    'protocol' => 'AJP/1.3'
+                  }
                 }
               end
               it { should raise_error(Puppet::Error, /You need to specify a valid port for the AJP connector\./) }
@@ -33,8 +33,8 @@ describe 'jira' do
                   javahome: '/opt/java',
                   ajp: {
                     'port'     => '80zeronine',
-                    'protocol' => 'AJP/1.3',
-                  },
+                    'protocol' => 'AJP/1.3'
+                  }
                 }
               end
               it { should raise_error(Puppet::Error, /validate_re\(\): "80zeronine" does not match/) }
@@ -45,8 +45,8 @@ describe 'jira' do
                   version: '6.3.4a',
                   javahome: '/opt/java',
                   ajp: {
-                    'port' => '8009',
-                  },
+                    'port' => '8009'
+                  }
                 }
               end
               it { should raise_error(Puppet::Error, /You need to specify a valid protocol for the AJP connector\./) }
@@ -58,8 +58,8 @@ describe 'jira' do
                   javahome: '/opt/java',
                   ajp: {
                     'port'     => '8009',
-                    'protocol' => 'AJP',
-                  },
+                    'protocol' => 'AJP'
+                  }
                 }
               end
               it { should raise_error(Puppet::Error, /validate_re\(\): "AJP" does not match/) }
