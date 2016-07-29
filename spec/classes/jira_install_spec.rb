@@ -32,7 +32,7 @@ describe 'jira' do
                       'creates'       => '/opt/jira/atlassian-jira-6.3.4a-standalone/conf',
                       'user'          => 'jira',
                       'group'         => 'jira',
-                      'checksum_type' => 'md5',)
+                      'checksum_type' => 'md5')
             end
 
             it 'manages the jira home directory' do
@@ -60,7 +60,7 @@ describe 'jira' do
                         'creates'       => '/opt/jira/atlassian-jira-software-7.0.4-standalone/conf',
                         'user'          => 'jira',
                         'group'         => 'jira',
-                        'checksum_type' => 'md5',)
+                        'checksum_type' => 'md5')
               end
             end
             context 'core product' do
@@ -80,7 +80,7 @@ describe 'jira' do
                         'creates'       => '/opt/jira/atlassian-jira-core-7.0.4-standalone/conf',
                         'user'          => 'jira',
                         'group'         => 'jira',
-                        'checksum_type' => 'md5',)
+                        'checksum_type' => 'md5')
               end
             end
           end
@@ -116,7 +116,7 @@ describe 'jira' do
                       'creates'       => '/opt/jira/atlassian-jira-6.0.0-standalone/conf',
                       'user'          => 'foo',
                       'group'         => 'bar',
-                      'checksum_type' => 'md5',)
+                      'checksum_type' => 'md5')
             end
 
             it 'manages the jira home directory' do

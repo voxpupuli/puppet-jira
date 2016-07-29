@@ -21,7 +21,7 @@ describe 'jira' do
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/lib/mysql-connector-java.jar')
               .with(
                 'ensure' => 'link',
-                'target' => '/opt/MySQL-connector/mysql-connector-java-5.1.34/mysql-connector-java-5.1.34-bin.jar',
+                'target' => '/opt/MySQL-connector/mysql-connector-java-5.1.34/mysql-connector-java-5.1.34-bin.jar'
                )
             }
             it 'deploys mysql connector 5.1.34 from tar.gz' do
@@ -46,7 +46,7 @@ describe 'jira' do
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/lib/mysql-connector-java.jar')
               .with(
                 'ensure' => 'link',
-                'target' => '/opt/foo/mysql-connector-java-5.1.15/mysql-connector-java-5.1.15-bin.jar',
+                'target' => '/opt/foo/mysql-connector-java-5.1.15/mysql-connector-java-5.1.15-bin.jar'
                )
             }
             it 'deploys mysql connector 5.1.15 from zip' do

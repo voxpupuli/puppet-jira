@@ -25,7 +25,7 @@ RSpec.configure do |c|
     puppet_module_install(
       source: proj_root,
       module_name: 'jira',
-      ignore_list: %w(spec/fixtures/* .git/* .vagrant/*),
+      ignore_list: %w(spec/fixtures/* .git/* .vagrant/*)
     )
     hosts.each do |host|
       on host, "/bin/touch #{default['puppetpath']}/hiera.yaml"
