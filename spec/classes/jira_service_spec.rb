@@ -15,13 +15,15 @@ describe 'jira' do
                 { javahome: '/opt/java' }
               end
               it { should contain_service('jira') }
-              it { should contain_file('/etc/init.d/jira').
-                with_content(%r{Short-Description: Start up JIRA}).
-                with_content(%r{lockfile=/var/lock/subsys/jira})
-              }
-              it { should_not contain_file('/usr/lib/systemd/system/jira.service').
-                with_content(%r{Atlassian Systemd Jira Service})
-              }
+              it do
+                should contain_file('/etc/init.d/jira').
+                  with_content(%r{Short-Description: Start up JIRA}).
+                  with_content(%r{lockfile=/var/lock/subsys/jira})
+              end
+              it do
+                should_not contain_file('/usr/lib/systemd/system/jira.service').
+                  with_content(%r{Atlassian Systemd Jira Service})
+              end
               it { should_not contain_exec('refresh_systemd') }
             end
           end
@@ -33,9 +35,10 @@ describe 'jira' do
               let(:facts) do
                 { osfamily: 'Debian' }
               end
-              it { should contain_file('/etc/init.d/jira').
-                with_content(%r{/var/lock/jira})
-              }
+              it do
+                should contain_file('/etc/init.d/jira').
+                  with_content(%r{/var/lock/jira})
+              end
             end
           end
           if os =~ %r{ubuntu}
@@ -73,11 +76,12 @@ describe 'jira' do
                 service_subscribe: 'Package[jdk]'
               }
             end
-            it { should contain_service('jira').with('ensure' => 'stopped',
-                                                     'enable' => 'false',
-                                                     'notify' => nil,
-                                                     'subscribe' => 'Package[jdk]')
-            }
+            it do
+              should contain_service('jira').with('ensure' => 'stopped',
+                                                  'enable' => 'false',
+                                                  'notify' => nil,
+                                                  'subscribe' => 'Package[jdk]')
+            end
           end
           context 'it notifies properly' do
             let(:params) do
@@ -107,9 +111,10 @@ describe 'jira' do
                 operatingsystemmajrelease: '7'
               }
             end
-            it { should contain_file('/usr/lib/systemd/system/jira.service').
-              with_content(%r{Atlassian Systemd Jira Service})
-            }
+            it do
+              should contain_file('/usr/lib/systemd/system/jira.service').
+                with_content(%r{Atlassian Systemd Jira Service})
+            end
             it { should contain_exec('refresh_systemd') }
           end
         end
