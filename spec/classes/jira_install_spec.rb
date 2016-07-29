@@ -26,8 +26,8 @@ describe 'jira' do
             it { should contain_group('jira') }
             it { should contain_user('jira').with_shell('/bin/true') }
             it 'deploys jira 6.3.4a from tar.gz' do
-              should contain_archive('/tmp/atlassian-jira-6.3.4a.tar.gz')
-                .with('extract_path'  => '/opt/jira/atlassian-jira-6.3.4a-standalone',
+              should contain_archive('/tmp/atlassian-jira-6.3.4a.tar.gz').
+                with('extract_path'  => '/opt/jira/atlassian-jira-6.3.4a-standalone',
                       'source'        => 'https://downloads.atlassian.com/software/jira/downloads/atlassian-jira-6.3.4a.tar.gz',
                       'creates'       => '/opt/jira/atlassian-jira-6.3.4a-standalone/conf',
                       'user'          => 'jira',
@@ -54,8 +54,8 @@ describe 'jira' do
                 }
               end
               it 'deploys jira 7.0.4 from tar.gz' do
-                should contain_archive('/tmp/atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz')
-                  .with('extract_path'  => '/opt/jira/atlassian-jira-software-7.0.4-standalone',
+                should contain_archive('/tmp/atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz').
+                  with('extract_path'  => '/opt/jira/atlassian-jira-software-7.0.4-standalone',
                         'source'        => 'http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz',
                         'creates'       => '/opt/jira/atlassian-jira-software-7.0.4-standalone/conf',
                         'user'          => 'jira',
@@ -74,8 +74,8 @@ describe 'jira' do
                 }
               end
               it 'deploys jira 7.0.4 from tar.gz' do
-                should contain_archive('/tmp/atlassian-jira-core-7.0.4.tar.gz')
-                  .with('extract_path'  => '/opt/jira/atlassian-jira-core-7.0.4-standalone',
+                should contain_archive('/tmp/atlassian-jira-core-7.0.4.tar.gz').
+                  with('extract_path'  => '/opt/jira/atlassian-jira-core-7.0.4-standalone',
                         'source'        => 'http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-7.0.4.tar.gz',
                         'creates'       => '/opt/jira/atlassian-jira-core-7.0.4-standalone/conf',
                         'user'          => 'jira',
@@ -110,8 +110,8 @@ describe 'jira' do
             it { should contain_group('bar') }
 
             it 'deploys jira 6.0.0 from tar.gz' do
-              should contain_archive('/tmp/atlassian-jira-6.0.0.tar.gz')
-                .with('extract_path'  => '/opt/jira/atlassian-jira-6.0.0-standalone',
+              should contain_archive('/tmp/atlassian-jira-6.0.0.tar.gz').
+                with('extract_path'  => '/opt/jira/atlassian-jira-6.0.0-standalone',
                       'source'        => 'http://downloads.atlassian.com/atlassian-jira-6.0.0.tar.gz',
                       'creates'       => '/opt/jira/atlassian-jira-6.0.0-standalone/conf',
                       'user'          => 'foo',

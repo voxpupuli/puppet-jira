@@ -15,12 +15,12 @@ describe 'jira' do
                 { javahome: '/opt/java' }
               end
               it { should contain_service('jira') }
-              it { should contain_file('/etc/init.d/jira')
-                .with_content(%r{Short-Description: Start up JIRA})
-                .with_content(%r{lockfile=/var/lock/subsys/jira})
+              it { should contain_file('/etc/init.d/jira').
+                with_content(%r{Short-Description: Start up JIRA}).
+                with_content(%r{lockfile=/var/lock/subsys/jira})
               }
-              it { should_not contain_file('/usr/lib/systemd/system/jira.service')
-                .with_content(%r{Atlassian Systemd Jira Service})
+              it { should_not contain_file('/usr/lib/systemd/system/jira.service').
+                with_content(%r{Atlassian Systemd Jira Service})
               }
               it { should_not contain_exec('refresh_systemd') }
             end
@@ -33,8 +33,8 @@ describe 'jira' do
               let(:facts) do
                 { osfamily: 'Debian' }
               end
-              it { should contain_file('/etc/init.d/jira')
-                .with_content(%r{/var/lock/jira})
+              it { should contain_file('/etc/init.d/jira').
+                with_content(%r{/var/lock/jira})
               }
             end
           end
@@ -107,8 +107,8 @@ describe 'jira' do
                 operatingsystemmajrelease: '7'
               }
             end
-            it { should contain_file('/usr/lib/systemd/system/jira.service')
-              .with_content(%r{Atlassian Systemd Jira Service})
+            it { should contain_file('/usr/lib/systemd/system/jira.service').
+              with_content(%r{Atlassian Systemd Jira Service})
             }
             it { should contain_exec('refresh_systemd') }
           end

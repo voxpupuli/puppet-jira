@@ -18,8 +18,8 @@ describe 'jira' do
               }
             end
             it { should contain_file('/opt/MySQL-connector').with_ensure('directory') }
-            it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/lib/mysql-connector-java.jar')
-              .with(
+            it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/lib/mysql-connector-java.jar').
+              with(
                 'ensure' => 'link',
                 'target' => '/opt/MySQL-connector/mysql-connector-java-5.1.34/mysql-connector-java-5.1.34-bin.jar'
                )
@@ -43,8 +43,8 @@ describe 'jira' do
               }
             end
             it { should contain_file('/opt/foo').with_ensure('directory') }
-            it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/lib/mysql-connector-java.jar')
-              .with(
+            it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/lib/mysql-connector-java.jar').
+              with(
                 'ensure' => 'link',
                 'target' => '/opt/foo/mysql-connector-java-5.1.15/mysql-connector-java-5.1.15-bin.jar'
                )

@@ -21,9 +21,9 @@ describe 'jira::facts' do
             facts.merge(puppetversion: '3.4.3 (Puppet Enterprise 3.2.1)')
           end
           it do
-            should contain_file(pe_external_fact_file) \
-              .with_content(regexp_pe)
-              .with_content(regexp_url)
+            should contain_file(pe_external_fact_file). \
+              with_content(regexp_pe).
+              with_content(regexp_url)
           end
         end
         # Test puppet oss shebang generated correctly
@@ -32,9 +32,9 @@ describe 'jira::facts' do
             facts.merge(puppetversion: 'all other versions')
           end
           it do
-            should contain_file(external_fact_file) \
-              .with_content(regexp_oss) \
-              .with_content(regexp_url)
+            should contain_file(external_fact_file). \
+              with_content(regexp_oss). \
+              with_content(regexp_url)
           end
         end
 
@@ -43,8 +43,8 @@ describe 'jira::facts' do
             { contextpath: '/jira' }
           end
           it do
-            should contain_file(external_fact_file) \
-              .with_content(%r{  url = 'http://127.0.0.1:8080/jira})
+            should contain_file(external_fact_file). \
+              with_content(%r{  url = 'http://127.0.0.1:8080/jira})
           end
         end
       end
