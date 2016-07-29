@@ -16,7 +16,7 @@ describe 'jira' do
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh')
-              .with_content(/#DISABLE_NOTIFICATIONS=/)
+              .with_content(%r{#DISABLE_NOTIFICATIONS=})
             }
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/user.sh') }
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml') }
@@ -83,7 +83,7 @@ describe 'jira' do
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
-              .with_content(/<Connector port=\"9229\"\s+maxThreads=/m)
+              .with_content(%r{<Connector port=\"9229\"\s+maxThreads=}m)
             }
           end
 
@@ -105,7 +105,7 @@ describe 'jira' do
                 }
               end
               it { should contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/conf/server.xml')
-                .with_content(/<Listener className=\"org.apache.catalina.core.JreMemoryLeakPreventionListener\"/)
+                .with_content(%r{<Listener className=\"org.apache.catalina.core.JreMemoryLeakPreventionListener\"})
               }
             end
           end
@@ -120,7 +120,7 @@ describe 'jira' do
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
-              .with_content(/<Connector port=\"9229\"\s+address=\"127\.0\.0\.1\"\s+maxThreads=/m)
+              .with_content(%r{<Connector port=\"9229\"\s+address=\"127\.0\.0\.1\"\s+maxThreads=}m)
             }
           end
 
@@ -146,7 +146,7 @@ describe 'jira' do
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
-              .with_content(/port="8888"/)
+              .with_content(%r{port="8888"})
             }
           end
 
@@ -159,7 +159,7 @@ describe 'jira' do
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
-              .with_content(/acceptCount="200"/)
+              .with_content(%r{acceptCount="200"})
             }
           end
 
@@ -172,7 +172,7 @@ describe 'jira' do
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
-              .with_content(/maxHttpHeaderSize="4096"/)
+              .with_content(%r{maxHttpHeaderSize="4096"})
             }
           end
 
@@ -185,7 +185,7 @@ describe 'jira' do
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
-              .with_content(/minSpareThreads="50"/)
+              .with_content(%r{minSpareThreads="50"})
             }
           end
 
@@ -198,7 +198,7 @@ describe 'jira' do
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
-              .with_content(/connectionTimeout="25000"/)
+              .with_content(%r{connectionTimeout="25000"})
             }
           end
 
@@ -211,7 +211,7 @@ describe 'jira' do
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
-              .with_content(/enableLookups="true"/)
+              .with_content(%r{enableLookups="true"})
             }
           end
 
@@ -237,7 +237,7 @@ describe 'jira' do
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
-              .with_content(/useBodyEncodingForURI="false"/)
+              .with_content(%r{useBodyEncodingForURI="false"})
             }
           end
 
@@ -250,7 +250,7 @@ describe 'jira' do
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
-              .with_content(/disableUploadTimeout="false"/)
+              .with_content(%r{disableUploadTimeout="false"})
             }
           end
 
@@ -263,7 +263,7 @@ describe 'jira' do
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
-              .with_content(/enableLookups="true"/)
+              .with_content(%r{enableLookups="true"})
             }
           end
 
@@ -276,7 +276,7 @@ describe 'jira' do
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
-              .with_content(/maxThreads="300"/)
+              .with_content(%r{maxThreads="300"})
             }
           end
 
@@ -293,9 +293,9 @@ describe 'jira' do
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
-              .with_content(/proxyName = 'www\.example\.com'/)
-              .with_content(/scheme = 'https'/)
-              .with_content(/proxyPort = '9999'/)
+              .with_content(%r{proxyName = 'www\.example\.com'})
+              .with_content(%r{scheme = 'https'})
+              .with_content(%r{proxyPort = '9999'})
             }
           end
 
@@ -354,7 +354,7 @@ describe 'jira' do
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh')
-              .with_content(/^DISABLE_NOTIFICATIONS=/)
+              .with_content(%r{^DISABLE_NOTIFICATIONS=})
             }
           end
 
@@ -367,14 +367,14 @@ describe 'jira' do
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
-              .with_content(/redirectPort="8443"/)
-              .with_content(/port="8443"/)
-              .with_content(/keyAlias="jira"/)
+              .with_content(%r{redirectPort="8443"})
+              .with_content(%r{port="8443"})
+              .with_content(%r{keyAlias="jira"})
               .with_content(%r{keystoreFile="/home/jira/jira.jks"})
-              .with_content(/keystorePass="changeit"/)
-              .with_content(/keystoreType="JKS"/)
-              .with_content(/port="8443".*acceptCount="100"/m)
-              .with_content(/port="8443".*maxThreads="150"/m)
+              .with_content(%r{keystorePass="changeit"})
+              .with_content(%r{keystoreType="JKS"})
+              .with_content(%r{port="8443".*acceptCount="100"}m)
+              .with_content(%r{port="8443".*maxThreads="150"}m)
             }
           end
 
@@ -395,15 +395,15 @@ describe 'jira' do
               }
             end
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml')
-              .with_content(/redirectPort="9443"/)
-              .with_content(/port="9443"/)
-              .with_content(/keyAlias="keystorealias"/)
+              .with_content(%r{redirectPort="9443"})
+              .with_content(%r{port="9443"})
+              .with_content(%r{keyAlias="keystorealias"})
               .with_content(%r{keystoreFile="/tmp/keyfile.ks"})
-              .with_content(/keystorePass="keystorepass"/)
-              .with_content(/keystoreType="PKCS12"/)
-              .with_content(/port="9443".*acceptCount="600"/m)
-              .with_content(/port="9443".*maxThreads="600"/m)
-              .with_content(/port="9443".*address="127\.0\.0\.1"/m)
+              .with_content(%r{keystorePass="keystorepass"})
+              .with_content(%r{keystoreType="PKCS12"})
+              .with_content(%r{port="9443".*acceptCount="600"}m)
+              .with_content(%r{port="9443".*maxThreads="600"}m)
+              .with_content(%r{port="9443".*address="127\.0\.0\.1"}m)
             }
           end
 
@@ -416,7 +416,7 @@ describe 'jira' do
               }
             end
             it { should contain_file('/home/jira/jira-config.properties')
-              .with_content(/jira.websudo.is.disabled = false/)
+              .with_content(%r{jira.websudo.is.disabled = false})
             }
           end
 
@@ -429,7 +429,7 @@ describe 'jira' do
               }
             end
             it { should contain_file('/home/jira/jira-config.properties')
-              .with_content(/jira.websudo.is.disabled = true/)
+              .with_content(%r{jira.websudo.is.disabled = true})
             }
           end
 
@@ -444,8 +444,8 @@ describe 'jira' do
               }
             end
             it { should contain_file('/home/jira/jira-config.properties')
-              .with_content(/jira.websudo.is.disabled = false/)
-              .with_content(/ops.bar.group.size.opsbar-transitions = 4/)
+              .with_content(%r{jira.websudo.is.disabled = false})
+              .with_content(%r{ops.bar.group.size.opsbar-transitions = 4})
             }
           end
 
@@ -459,7 +459,7 @@ describe 'jira' do
               }
             end
             it { should contain_file('/home/jira/cluster.properties')
-              .with_content(/jira.node.id = \S+/)
+              .with_content(%r{jira.node.id = \S+})
               .with_content(%r{jira.shared.home = /mnt/jira_shared_home_dir})
             }
           end

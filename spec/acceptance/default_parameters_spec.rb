@@ -84,7 +84,7 @@ describe 'jira postgresql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamil
   end
 
   describe command('wget -q --tries=240 --retry-connrefused --read-timeout=10 -O- localhost:8080') do
-    its(:stdout) { should match(/6\.2\.7/) }
+    its(:stdout) { should match(%r{6\.2\.7}) }
   end
 
   describe 'shutdown' do

@@ -112,11 +112,11 @@ describe 'jira mysql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) 
   end
 
   describe command('wget -q --tries=240 --retry-connrefused --no-check-certificate --read-timeout=10 -O- localhost:8081') do
-    its(:stdout) { should match(/6\.3\.6/) }
+    its(:stdout) { should match(%r{6\.3\.6}) }
   end
 
   describe command('wget -q --tries=240 --retry-connrefused --no-check-certificate --read-timeout=10 -O- https://localhost:8443') do
-    its(:stdout) { should match(/6\.3\.6/) }
+    its(:stdout) { should match(%r{6\.3\.6}) }
   end
 
   describe 'shutdown' do

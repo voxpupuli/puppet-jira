@@ -16,11 +16,11 @@ describe 'jira' do
               end
               it { should contain_service('jira') }
               it { should contain_file('/etc/init.d/jira')
-                .with_content(/Short-Description: Start up JIRA/)
+                .with_content(%r{Short-Description: Start up JIRA})
                 .with_content(%r{lockfile=/var/lock/subsys/jira})
               }
               it { should_not contain_file('/usr/lib/systemd/system/jira.service')
-                .with_content(/Atlassian Systemd Jira Service/)
+                .with_content(%r{Atlassian Systemd Jira Service})
               }
               it { should_not contain_exec('refresh_systemd') }
             end
@@ -38,7 +38,7 @@ describe 'jira' do
               }
             end
           end
-          if os =~ /ubuntu/
+          if os =~ %r{ubuntu}
             context 'default params' do
               let(:params) do
                 { javahome: '/opt/java' }
@@ -62,7 +62,7 @@ describe 'jira' do
                 javahome: '/opt/java'
               }
             end
-            it { should raise_error(Puppet::Error, /is not a boolean/) }
+            it { should raise_error(Puppet::Error, %r{is not a boolean}) }
           end
           context 'overwriting service params' do
             let(:params) do
@@ -108,7 +108,7 @@ describe 'jira' do
               }
             end
             it { should contain_file('/usr/lib/systemd/system/jira.service')
-              .with_content(/Atlassian Systemd Jira Service/)
+              .with_content(%r{Atlassian Systemd Jira Service})
             }
             it { should contain_exec('refresh_systemd') }
           end

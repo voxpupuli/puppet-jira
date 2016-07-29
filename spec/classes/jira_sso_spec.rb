@@ -25,7 +25,7 @@ describe 'jira' do
               application_name: 'appname'
             }}
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/atlassian-jira/WEB-INF/classes/crowd.properties')
-              .with_content(/application.name                        appname/)
+              .with_content(%r{application.name                        appname})
             }
           end
           context 'with param application_login_url set to ERROR' do
@@ -36,7 +36,7 @@ describe 'jira' do
               application_login_url: 'ERROR'
             }}
             it('fails') {
-              should raise_error(Puppet::Error, /does not match/)
+              should raise_error(Puppet::Error, %r{does not match})
             }
           end
           context 'with non default params' do
@@ -52,8 +52,8 @@ describe 'jira' do
             }}
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/atlassian-jira/WEB-INF/classes/seraph-config.xml') }
             it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/atlassian-jira/WEB-INF/classes/crowd.properties')
-              .with_content(/application.name                        app/)
-              .with_content(/application.password                    password/)
+              .with_content(%r{application.name                        app})
+              .with_content(%r{application.password                    password})
               .with_content(%r{application.login.url                   https://login.url/})
               .with_content(%r{crowd.server.url                        https://crowd.url/})
               .with_content(%r{crowd.base.url                          http://crowdbase.url})
