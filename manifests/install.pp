@@ -71,7 +71,7 @@ class jira::install {
 
   case $jira::deploy_module {
     'staging': {
-      require staging
+      require ::staging
       staging::file { $file:
         source  => "${jira::download_url}/${file}",
         timeout => 1800,

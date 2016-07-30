@@ -16,6 +16,6 @@ RSpec.configure do |c|
     #:os_maj_version   => '6',
 
     operatingsystemmajrelease: '6',
-    puppetversion: '3.7.4',
+    puppetversion: '3.7.4'
   }
 end

@@ -7,7 +7,7 @@ class jira::mysql_connector (
   $download_url = $jira::mysql_connector_url,
 ) {
 
-  require staging
+  require ::staging
 
   $file = "${product}-${version}.${format}"
 
