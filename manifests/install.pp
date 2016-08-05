@@ -44,13 +44,34 @@ class jira::install {
 
   # Examples of product tarballs from Atlassian
   # Core                - atlassian-jira-core-7.0.3.tar.gz
+  # Service Desk        - atlassian-servicedesk-3.1.9.tar.gz
   # Software (pre-7)    - atlassian-jira-6.4.12.tar.gz
-  # Software (7 and up) - atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz
+  # Software latest     - atlassian-jira-software-7.1.9.tar.gz
+  # Software (7 and up) - atlassian-jira-software-7.1.8-jira-7.1.8.tar.gz
 
-  if ((versioncmp($jira::version, '7.0.0') < 0) or ($jira::product_name == 'jira-core')) {
-    $file = "atlassian-${jira::product_name}-${jira::version}.${jira::format}"
-  } else {
-    $file = "atlassian-${jira::product_name}-${jira::version}-jira-${jira::version}.${jira::format}"
+  # https://downloads.atlassian.com/software/jira/downloads/atlassian-jira-7.1.9.tar.gz
+  # https://downloads.atlassian.com/software/jira/downloads/atlassian-jira-software-7.1.9.tar.gz
+
+  if $jira::product_type {
+
+    case $jira::product_type {
+
+      'servicedesk':{
+          $file = "atlassian-${jira::product_type}-${jira::version}.${jira::format}"
+      }
+      'core','software':{
+        if ! $jira::latest_version{
+          $file = "atlassian-${jira::product}-${jira::product_type}-${jira::version}-${jira::product}-${jira::version}.${jira::format}"
+        }
+        else {
+          $file = "atlassian-${jira::product}-${jira::product_type}-${jira::version}.${jira::format}"
+        }
+      }
+    }
+  }
+
+  else {
+    $file = "atlassian-${jira::product}-${jira::version}.${jira::format}"
   }
 
   if ! defined(File[$jira::extractdir]) {

@@ -451,6 +451,45 @@ Some more crowd.properties for SSO, see atlassian documentation for details
 
 ### Hiera examples
 
+#### JIRA 7 examples
+This example is relevant for jira software or core from version 7
+
+```yaml
+jira::version:       '7.1.8'
+jira::product_type:  'software'
+jira::installdir:    '/opt/atlassian/atlassian-jira'
+jira::homedir:       '/opt/atlassian/application-data/jira-home'
+jira::user:          'jira'
+jira::group:         'jira'
+jira::shell:         '/bin/bash'
+jira::dbserver:      'dbvip.example.co.za'
+jira::javahome:      '/opt/java'
+jira::java_opts: >
+  -Dhttp.proxyHost=proxy.example.co.za
+  -Dhttp.proxyPort=8080
+  -Dhttps.proxyHost=proxy.example.co.za
+  -Dhttps.proxyPort=8080
+  -Dhttp.nonProxyHosts=localhost\|127.0.0.1\|172.*.*.*\|10.*.*.*
+  -XX:+UseLargePages'
+jira::dbport:        '5439'
+jira::dbuser:        'jira'
+jira::jvm_xms:       '1G'
+jira::jvm_xmx:       '3G'
+jira::jvm_permgen:   '384m'
+jira::service_manage: false
+jira::enable_connection_pooling: 'true'
+jira::env:
+  - 'http_proxy=proxy.example.co.za:8080'
+  - 'https_proxy=proxy.example.co.za:8080'
+jira::proxy:
+  scheme:    'https'
+  proxyName: 'jira.example.co.za'
+  proxyPort: '443'
+jira::contextpath: '/jira'
+```
+If you are installing the latest jira version for example 7.1.9 @ 12.07.2016 set als the parameter jira::latest_version: true.
+Atlassian offers the latest version under an different path the older versions.
+
 This example is used in production for 2000 users in an traditional enterprise environment. Your mileage may vary. The dbpassword can be stored using eyaml hiera extension.
 
 ```yaml

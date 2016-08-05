@@ -33,8 +33,10 @@
 class jira (
 
   # Jira Settings
-  $version      = '6.4.1',
+  $version      = '7.1.8',
+  $latest_version = undef,
   $product      = 'jira',
+  $product_type = 'software',
   $format       = 'tar.gz',
   $installdir   = '/opt/jira',
   $homedir      = '/home/jira',
@@ -96,12 +98,12 @@ class jira (
   $catalina_opts    = '',
 
   # Misc Settings
-  $download_url          = 'https://downloads.atlassian.com/software/jira/downloads/',
+  $download_url          = 'https://downloads.atlassian.com/software/jira/downloads',
   $checksum              = undef,
   $disable_notifications = false,
 
   # Choose whether to use puppet-staging, or puppet-archive
-  $deploy_module = 'archive',
+  $deploy_module = 'staging',
 
   # Manage service
   $service_manage = true,
