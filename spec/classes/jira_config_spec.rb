@@ -94,15 +94,6 @@ describe 'jira' do
           end
 
           context 'server.xml listeners' do
-            context 'default version' do
-              let(:params) do
-                {
-                  version: '6.3.4a',
-                  javahome: '/opt/java'
-                }
-              end
-            end
-
             context 'version greater than 7' do
               let(:params) do
                 {
