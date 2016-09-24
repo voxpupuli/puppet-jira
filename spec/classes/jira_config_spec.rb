@@ -94,6 +94,34 @@ describe 'jira' do
           end
 
           context 'server.xml listeners' do
+            context 'version less than 7' do
+              let(:params) do
+                {
+                  version: '6.3.4a',
+                  javahome: '/opt/java'
+                }
+              end
+              it do
+                should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+                  with_content(%r{<Listener className=\"org.apache.catalina.core.JasperListener\"})
+              end
+            end
+          end
+
+          context 'server.xml 7 listeners' do
+            let(:params) do
+              {
+                version: '7.0.4',
+                javahome: '/opt/java'
+              }
+            end
+            it do
+              should contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/conf/server.xml').
+                with_content(%r{<Listener className=\"org.apache.catalina.startup.VersionLoggerListener\"})
+            end
+          end
+
+          context 'server.xml listeners' do
             context 'version greater than 7' do
               let(:params) do
                 {
