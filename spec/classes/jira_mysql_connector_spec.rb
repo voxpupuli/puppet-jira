@@ -23,7 +23,7 @@ describe 'jira' do
                 with(
                   'ensure' => 'link',
                   'target' => '/opt/MySQL-connector/mysql-connector-java-5.1.34/mysql-connector-java-5.1.34-bin.jar'
-               )
+                )
             end
             it 'deploys mysql connector 5.1.34 from tar.gz' do
               should contain_staging__file('mysql-connector-java-5.1.34.tar.gz').with('source' => 'https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.34.tar.gz')
@@ -49,7 +49,7 @@ describe 'jira' do
                 with(
                   'ensure' => 'link',
                   'target' => '/opt/foo/mysql-connector-java-5.1.15/mysql-connector-java-5.1.15-bin.jar'
-               )
+                )
             end
             it 'deploys mysql connector 5.1.15 from zip' do
               should contain_staging__file('mysql-connector-java-5.1.15.zip').with('source' => 'http://example.co.za/foo/mysql-connector-java-5.1.15.zip')

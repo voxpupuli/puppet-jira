@@ -32,8 +32,11 @@
     <!--APR library loader. Documentation at /docs/apr.html -->
     <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
     <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
-
+<%- if scope.function_versioncmp([@version, '6.4.14']) <= 0 -%>
+    <Listener className="org.apache.catalina.core.JasperListener"/>
+<% else -%>
     <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
+<%- end -%>
     <!-- Security listener. Documentation at /docs/config/listeners.html
     <Listener className="org.apache.catalina.security.SecurityListener" />
     -->

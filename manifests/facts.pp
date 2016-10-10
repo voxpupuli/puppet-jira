@@ -17,12 +17,14 @@
 class jira::facts(
   $ensure        = 'present',
   $port          = $jira::tomcat_port,
+  $contextpath   = $jira::contextpath,
+  $json_packages = $jira::params::json_packages,
+  # lint:ignore:parameter_order
   $uri           = $jira::tomcat_address ? {
     undef   => '127.0.0.1',
     default => $jira::tomcat_address,
   },
-  $contextpath   = $jira::contextpath,
-  $json_packages = $jira::params::json_packages,
+  # lint:endignore
 ) inherits jira::params {
 
   # Puppet Enterprise supplies its own ruby version if your using it.
