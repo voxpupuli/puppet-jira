@@ -45,13 +45,17 @@ class jira::install {
   # Examples of product tarballs from Atlassian
   # Core                - atlassian-jira-core-7.0.3.tar.gz
   # Software (pre-7)    - atlassian-jira-6.4.12.tar.gz
-  # Software (7 and up) - atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz
-  # Software (7.2+)     - atlassian-jira-software-7.2.1.tar.gz
+  # Software (7 to 7.1.8 ) - atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz
+  # Software (7.1.9 and up) - atlassian-jira-software-7.1.9.tar.gz
 
-  if ((versioncmp($jira::version, '7.0.0') < 0) or ($jira::product_name == 'jira-core') or (versioncmp($jira::version, '7.2.0') >= 0)) {
-    $file = "atlassian-${jira::product_name}-${jira::version}.${jira::format}"
+  if (versioncmp($jira::version, '7.1.9') < 0) {
+    if ((versioncmp($jira::version, '7.0.0') < 0) or ($jira::product_name == 'jira-core')) {
+      $file = "atlassian-${jira::product_name}-${jira::version}.${jira::format}"
+    } else {
+      $file = "atlassian-${jira::product_name}-${jira::version}-jira-${jira::version}.${jira::format}"
+    }
   } else {
-    $file = "atlassian-${jira::product_name}-${jira::version}-jira-${jira::version}.${jira::format}"
+    $file = "atlassian-${jira::product_name}-${jira::version}.${jira::format}"
   }
 
   if ! defined(File[$jira::extractdir]) {
