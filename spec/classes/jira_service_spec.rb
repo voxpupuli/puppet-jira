@@ -83,24 +83,6 @@ describe 'jira' do
                                                   'subscribe' => 'Package[jdk]')
             end
           end
-          context 'it notifies properly' do
-            let(:params) do
-              {
-                javahome: '/opt/java',
-                service_notify: 'Package[jdk]'
-              }
-            end
-            # it { should contain_service('jira').that_notifies('Package[jdk]') }
-          end
-          context 'it subscribes properly' do
-            let(:params) do
-              {
-                javahome: '/opt/java',
-                service_subscribe: 'Package[jdk]'
-              }
-            end
-            # it { should contain_service('jira').that_subscribes_to('Package[jdk]') }
-          end
           context 'RedHat/CentOS 7 systemd init script' do
             let(:params) do
               { javahome: '/opt/java' }
