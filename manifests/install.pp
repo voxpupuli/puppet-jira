@@ -55,7 +55,7 @@ class jira::install {
       $file = "atlassian-${jira::product_name}-${jira::version}-jira-${jira::version}.${jira::format}"
     }
   } else {
-      $file = "atlassian-${jira::product_name}-${jira::version}.${jira::format}"
+    $file = "atlassian-${jira::product_name}-${jira::version}.${jira::format}"
   }
 
   if ! defined(File[$jira::extractdir]) {
