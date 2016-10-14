@@ -15,6 +15,13 @@
 # -----------------------------------------------------------------------------
 class jira::config inherits jira {
 
+  if defined(File[$jira::data_dir]) {
+    $data_dir = $jira::data_dir
+  }
+  else {
+    $data_dir = $jira::home
+  }
+
   File {
     owner => $jira::user,
     group => $jira::group,
@@ -54,7 +61,7 @@ class jira::config inherits jira {
     notify  => Class['jira::service'],
   } ->
 
-  file { "${jira::homedir}/dbconfig.xml":
+  file { "${data_dir}/dbconfig.xml":
     content => template("jira/dbconfig.${jira::db}.xml.erb"),
     mode    => '0600',
     require => [ Class['jira::install'],File[$jira::homedir] ],
@@ -74,7 +81,7 @@ class jira::config inherits jira {
     notify  => Class['jira::service'],
   }
 
-  file { "${jira::homedir}/jira-config.properties":
+  file { "${data_dir}/jira-config.properties":
     content => template('jira/jira-config.properties.erb'),
     mode    => '0600',
     require => [ Class['jira::install'],File[$jira::homedir] ],
@@ -82,7 +89,7 @@ class jira::config inherits jira {
   }
 
   if $jira::datacenter {
-    file { "${jira::homedir}/cluster.properties":
+    file { "${data_dir}/cluster.properties":
       content => template('jira/cluster.properties.erb'),
       mode    => '0600',
       require => [ Class['jira::install'],File[$jira::homedir] ],
