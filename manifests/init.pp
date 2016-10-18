@@ -132,6 +132,7 @@ class jira (
   $tomcat_keystore_file             = '/home/jira/jira.jks',
   $tomcat_keystore_pass             = 'changeit',
   $tomcat_keystore_type             = 'JKS',
+  $tomcat_accesslog_format          = '%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;'
 
   # Tomcat Tunables
   $tomcat_max_threads  = '150',
