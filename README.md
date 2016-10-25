@@ -1,7 +1,11 @@
 # JIRA module for Puppet
 
-[![Puppet Forge](http://img.shields.io/puppetforge/v/puppet/jira.svg)](https://forge.puppetlabs.com/puppet/jira)
-[![Build Status](https://travis-ci.org/voxpupuli/puppet-jira.svg?branch=master)](https://travis-ci.org/voxpupuli/puppet-jira)
+[![Build Status](https://travis-ci.org/voxpupuli/puppet-jira.png?branch=master)](https://travis-ci.org/voxpupuli/puppet-jira)
+[![Code Coverage](https://coveralls.io/repos/github/voxpupuli/puppet-jira/badge.svg?branch=master)](https://coveralls.io/github/voxpupuli/puppet-jira)
+[![Puppet Forge](https://img.shields.io/puppetforge/v/puppet/jira.svg)](https://forge.puppetlabs.com/puppet/jira)
+[![Puppet Forge - downloads](https://img.shields.io/puppetforge/dt/puppet/jira.svg)](https://forge.puppetlabs.com/puppet/jira)
+[![Puppet Forge - endorsement](https://img.shields.io/puppetforge/e/puppet/jira.svg)](https://forge.puppetlabs.com/puppet/jira)
+[![Puppet Forge - scores](https://img.shields.io/puppetforge/f/puppet/jira.svg)](https://forge.puppetlabs.com/puppet/jira)
 
 #### Table of Contents
 
