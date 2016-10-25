@@ -1,8 +1,11 @@
 #
 # One way to set the JIRA HOME path is here via this variable.  Simply uncomment it and set a valid path like /jira/home.  You can of course set it outside in the command terminal.  That will also work.
 #
-JIRA_HOME="<%= scope.lookupvar('jira::homedir') %>"
-
+<% if scope.lookupvar('jira::data_dir') -%>
+  JIRA_HOME="<%= scope.lookupvar('jira::data_dir') %>"
+<% else %>
+  JIRA_HOME="<%= scope.lookupvar('jira::home_dir') %>"
+<% end -%>
 #
 # Additional JAVA_OPTS
 #
@@ -120,4 +123,3 @@ cd $PUSHED_DIR
 
 echo ""
 echo "Server startup logs are located in $LOGBASEABS/logs/catalina.out"
-
