@@ -31,7 +31,7 @@ class jira::facts(
   if $::puppetversion =~ /Puppet Enterprise/ {
     $ruby_bin = '/opt/puppet/bin/ruby'
     $dir      = 'puppetlabs/'
-  } elsif $::aio_agent_version =~ /1\.3\.*[0-9]*/ {
+  } elsif $::aio_agent_version =~ /1\.*[0-9]*\.*[0-9]*/ {
     $ruby_bin = '/opt/puppetlabs/puppet/bin/ruby'
     $dir = 'puppetlabs/'
    } else {
