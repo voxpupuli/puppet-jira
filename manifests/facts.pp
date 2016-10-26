@@ -51,7 +51,7 @@ class jira::facts(
   }
 
   # Install $json_packages only if osfamily is RedHat and agent is version PE 3.8 and less or not an AIO version 1.3.x
-  if $::osfamily == 'RedHat' and (($::puppetversion !~ /Puppet Enterprise/) and ($::aio_agent_version !~ /1\.3\.*[0-9]*/)) {
+  if $::osfamily == 'RedHat' and (($::puppetversion !~ /Puppet Enterprise/) and ($::aio_agent_version !~ /1\.*[0-9]*\.*[0-9]*/)) {
     package { $json_packages:
       ensure => present,
     }
