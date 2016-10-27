@@ -374,6 +374,20 @@ describe 'jira' do
             end
           end
 
+          context 'tomcat access log format' do
+            let(:params) do
+              {
+                version: '6.3.4a',
+                javahome: '/opt/java',
+                tomcat_accesslog_format: '%a %{jira.request.id}r %{jira.request.username}r %t %I'
+              }
+            end
+            it do
+              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+                with_content(%r{pattern="%a %{jira.request.id}r %{jira.request.username}r %t %I"/>})
+            end
+          end
+
           context 'context resources' do
             let(:params) do
               {
