@@ -124,7 +124,7 @@
             </Host>
 
             <Valve className="org.apache.catalina.valves.AccessLogValve" resolveHosts="false"
-                   pattern="%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;"/>
+                   pattern="<%= @tomcat_accesslog_format %>"/>
 
         </Engine>
     </Service>
