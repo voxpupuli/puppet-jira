@@ -19,7 +19,7 @@ class jira::config inherits jira {
     $data_dir = $jira::data_dir
   }
   else {
-    $data_dir = $jira::home
+    $data_dir = ${jira::home}
   }
 
   File {
