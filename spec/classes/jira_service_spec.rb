@@ -14,17 +14,17 @@ describe 'jira' do
               let(:params) do
                 { javahome: '/opt/java' }
               end
-              it { should contain_service('jira') }
+              it { is_expected.to contain_service('jira') }
               it do
-                should contain_file('/etc/init.d/jira').
+                is_expected.to contain_file('/etc/init.d/jira').
                   with_content(%r{Short-Description: Start up JIRA}).
                   with_content(%r{lockfile=/var/lock/subsys/jira})
               end
               it do
-                should_not contain_file('/usr/lib/systemd/system/jira.service').
+                is_expected.not_to contain_file('/usr/lib/systemd/system/jira.service').
                   with_content(%r{Atlassian Systemd Jira Service})
               end
-              it { should_not contain_exec('refresh_systemd') }
+              it { is_expected.not_to contain_exec('refresh_systemd') }
             end
           end
           if os == 'Debian'
@@ -36,7 +36,7 @@ describe 'jira' do
                 { osfamily: 'Debian' }
               end
               it do
-                should contain_file('/etc/init.d/jira').
+                is_expected.to contain_file('/etc/init.d/jira').
                   with_content(%r{/var/lock/jira})
               end
             end
@@ -46,7 +46,7 @@ describe 'jira' do
               let(:params) do
                 { javahome: '/opt/java' }
               end
-              it { should_not contain_file('/lib/systemd/system/jira.service') }
+              it { is_expected.not_to contain_file('/lib/systemd/system/jira.service') }
             end
           end
           context 'overwriting service_manage param' do
@@ -56,7 +56,7 @@ describe 'jira' do
                 javahome: '/opt/java'
               }
             end
-            it { should_not contain_service('jira') }
+            it { is_expected.not_to contain_service('jira') }
           end
           context 'overwriting service_manage param with bad boolean' do
             let(:params) do
@@ -65,7 +65,7 @@ describe 'jira' do
                 javahome: '/opt/java'
               }
             end
-            it { should raise_error(Puppet::Error, %r{is not a boolean}) }
+            it { is_expected.to raise_error(Puppet::Error, %r{is not a boolean}) }
           end
           context 'overwriting service params' do
             let(:params) do
@@ -77,10 +77,10 @@ describe 'jira' do
               }
             end
             it do
-              should contain_service('jira').with('ensure' => 'stopped',
-                                                  'enable' => 'false',
-                                                  'notify' => nil,
-                                                  'subscribe' => 'Package[jdk]')
+              is_expected.to contain_service('jira').with('ensure' => 'stopped',
+                                                          'enable' => 'false',
+                                                          'notify' => nil,
+                                                          'subscribe' => 'Package[jdk]')
             end
           end
           context 'RedHat/CentOS 7 systemd init script' do
@@ -94,10 +94,10 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/usr/lib/systemd/system/jira.service').
+              is_expected.to contain_file('/usr/lib/systemd/system/jira.service').
                 with_content(%r{Atlassian Systemd Jira Service})
             end
-            it { should contain_exec('refresh_systemd') }
+            it { is_expected.to contain_exec('refresh_systemd') }
           end
         end
       end

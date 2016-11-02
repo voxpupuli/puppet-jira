@@ -16,17 +16,17 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh').
                 with_content(%r{#DISABLE_NOTIFICATIONS=})
             end
-            it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/user.sh') }
-            it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/user.sh') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml') }
             it do
-              should contain_file('/home/jira/dbconfig.xml').
+              is_expected.to contain_file('/home/jira/dbconfig.xml').
                 with_content(%r{jdbc:postgresql://localhost:5432/jira}).
                 with_content(%r{<schema-name>public</schema-name>})
             end
-            it { should_not contain_file('/home/jira/cluster.properties') }
+            it { is_expected.not_to contain_file('/home/jira/cluster.properties') }
           end
 
           context 'mysql params' do
@@ -37,11 +37,11 @@ describe 'jira' do
                 db: 'mysql'
               }
             end
-            it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh') }
-            it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/user.sh') }
-            it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/user.sh') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml') }
             it do
-              should contain_file('/home/jira/dbconfig.xml').
+              is_expected.to contain_file('/home/jira/dbconfig.xml').
                 with_content(%r{jdbc:mysql://localhost:5432/jira})
             end
           end
@@ -56,11 +56,11 @@ describe 'jira' do
                 dbschema: 'public'
               }
             end
-            it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh') }
-            it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/user.sh') }
-            it { should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/user.sh') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml') }
             it do
-              should contain_file('/home/jira/dbconfig.xml').
+              is_expected.to contain_file('/home/jira/dbconfig.xml').
                 with_content(%r{<schema-name>public</schema-name>})
             end
           end
@@ -74,7 +74,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/home/jira/dbconfig.xml').
+              is_expected.to contain_file('/home/jira/dbconfig.xml').
                 with_content(%r{<url>my custom dburl</url>})
             end
           end
@@ -88,7 +88,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{<Connector port=\"9229\"\s+maxThreads=}m)
             end
           end
@@ -102,7 +102,7 @@ describe 'jira' do
                 }
               end
               it do
-                should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+                is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                   with_content(%r{<Listener className=\"org.apache.catalina.core.JasperListener\"})
               end
             end
@@ -116,7 +116,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/conf/server.xml').
                 with_content(%r{<Listener className=\"org.apache.catalina.startup.VersionLoggerListener\"})
             end
           end
@@ -130,7 +130,7 @@ describe 'jira' do
                 }
               end
               it do
-                should contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/conf/server.xml').
+                is_expected.to contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/conf/server.xml').
                   with_content(%r{<Listener className=\"org.apache.catalina.core.JreMemoryLeakPreventionListener\"})
               end
             end
@@ -146,7 +146,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{<Connector port=\"9229\"\s+address=\"127\.0\.0\.1\"\s+maxThreads=}m)
             end
           end
@@ -160,7 +160,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{path="/jira"})
             end
           end
@@ -174,7 +174,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{port="8888"})
             end
           end
@@ -188,7 +188,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{acceptCount="200"})
             end
           end
@@ -202,7 +202,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{maxHttpHeaderSize="4096"})
             end
           end
@@ -216,7 +216,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{minSpareThreads="50"})
             end
           end
@@ -230,7 +230,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{connectionTimeout="25000"})
             end
           end
@@ -244,7 +244,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{enableLookups="true"})
             end
           end
@@ -258,7 +258,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{protocol="HTTP/1.1"})
             end
           end
@@ -272,7 +272,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{useBodyEncodingForURI="false"})
             end
           end
@@ -286,7 +286,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{disableUploadTimeout="false"})
             end
           end
@@ -300,7 +300,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{enableLookups="true"})
             end
           end
@@ -314,7 +314,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{maxThreads="300"})
             end
           end
@@ -332,7 +332,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{proxyName = 'www\.example\.com'}).
                 with_content(%r{scheme = 'https'}).
                 with_content(%r{proxyPort = '9999'})
@@ -352,7 +352,7 @@ describe 'jira' do
                 }
               end
               it do
-                should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+                is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                   with_content(%r{<Connector enableLookups="false" URIEncoding="UTF-8"\s+port = "8009"\s+protocol = "AJP/1.3"\s+/>})
               end
             end
@@ -368,7 +368,7 @@ describe 'jira' do
                 }
               end
               it do
-                should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+                is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                   with_content(%r{<Connector enableLookups="false" URIEncoding="UTF-8"\s+port = "8009"\s+protocol = "org.apache.coyote.ajp.AjpNioProtocol"\s+/>})
               end
             end
@@ -383,7 +383,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/context.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/context.xml').
                 with_content(%r{<Resource name = "testdb"\n        auth = "Container"\n    />})
             end
           end
@@ -397,7 +397,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh').
                 with_content(%r{^DISABLE_NOTIFICATIONS=})
             end
           end
@@ -411,7 +411,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{redirectPort="8443"}).
                 with_content(%r{port="8443"}).
                 with_content(%r{keyAlias="jira"}).
@@ -440,7 +440,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{redirectPort="9443"}).
                 with_content(%r{port="9443"}).
                 with_content(%r{keyAlias="keystorealias"}).
@@ -462,7 +462,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/home/jira/jira-config.properties').
+              is_expected.to contain_file('/home/jira/jira-config.properties').
                 with_content(%r{jira.websudo.is.disabled = false})
             end
           end
@@ -476,7 +476,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/home/jira/jira-config.properties').
+              is_expected.to contain_file('/home/jira/jira-config.properties').
                 with_content(%r{jira.websudo.is.disabled = true})
             end
           end
@@ -492,7 +492,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/home/jira/jira-config.properties').
+              is_expected.to contain_file('/home/jira/jira-config.properties').
                 with_content(%r{jira.websudo.is.disabled = false}).
                 with_content(%r{ops.bar.group.size.opsbar-transitions = 4})
             end
@@ -508,7 +508,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/home/jira/cluster.properties').
+              is_expected.to contain_file('/home/jira/cluster.properties').
                 with_content(%r{jira.node.id = \S+}).
                 with_content(%r{jira.shared.home = /mnt/jira_shared_home_dir})
             end
