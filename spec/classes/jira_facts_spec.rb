@@ -13,7 +13,7 @@ describe 'jira::facts' do
         pe_external_fact_file = '/etc/puppetlabs/facter/facts.d/jira_facts.rb'
         external_fact_file = '/etc/facter/facts.d/jira_facts.rb'
 
-        it { should contain_file(external_fact_file) }
+        it { is_expected.to contain_file(external_fact_file) }
 
         # Test puppet enterprise shebang generated correctly
         context 'with puppet enterprise' do
@@ -21,7 +21,7 @@ describe 'jira::facts' do
             facts.merge(puppetversion: '3.4.3 (Puppet Enterprise 3.2.1)')
           end
           it do
-            should contain_file(pe_external_fact_file). \
+            is_expected.to contain_file(pe_external_fact_file). \
               with_content(regexp_pe).
               with_content(regexp_url)
           end
@@ -32,7 +32,7 @@ describe 'jira::facts' do
             facts.merge(puppetversion: 'all other versions')
           end
           it do
-            should contain_file(external_fact_file). \
+            is_expected.to contain_file(external_fact_file). \
               with_content(regexp_oss). \
               with_content(regexp_url)
           end
@@ -43,7 +43,7 @@ describe 'jira::facts' do
             { contextpath: '/jira' }
           end
           it do
-            should contain_file(external_fact_file). \
+            is_expected.to contain_file(external_fact_file). \
               with_content(%r{  url = 'http://127.0.0.1:8080/jira})
           end
         end

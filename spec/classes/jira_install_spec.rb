@@ -23,10 +23,10 @@ describe 'jira' do
                 download_url: 'https://downloads.atlassian.com/software/jira/downloads'
               }
             end
-            it { should contain_group('jira') }
-            it { should contain_user('jira').with_shell('/bin/true') }
+            it { is_expected.to contain_group('jira') }
+            it { is_expected.to contain_user('jira').with_shell('/bin/true') }
             it 'deploys jira 6.3.4a from tar.gz' do
-              should contain_archive('/tmp/atlassian-jira-6.3.4a.tar.gz').
+              is_expected.to contain_archive('/tmp/atlassian-jira-6.3.4a.tar.gz').
                 with('extract_path' => '/opt/jira/atlassian-jira-6.3.4a-standalone',
                      'source'        => 'https://downloads.atlassian.com/software/jira/downloads/atlassian-jira-6.3.4a.tar.gz',
                      'creates'       => '/opt/jira/atlassian-jira-6.3.4a-standalone/conf',
@@ -36,9 +36,9 @@ describe 'jira' do
             end
 
             it 'manages the jira home directory' do
-              should contain_file('/home/jira').with('ensure' => 'directory',
-                                                     'owner' => 'jira',
-                                                     'group' => 'jira')
+              is_expected.to contain_file('/home/jira').with('ensure' => 'directory',
+                                                             'owner' => 'jira',
+                                                             'group' => 'jira')
             end
           end
 
@@ -54,7 +54,7 @@ describe 'jira' do
                 }
               end
               it 'deploys jira 7.0.4 from tar.gz' do
-                should contain_archive('/tmp/atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz').
+                is_expected.to contain_archive('/tmp/atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz').
                   with('extract_path' => '/opt/jira/atlassian-jira-software-7.0.4-standalone',
                        'source'        => 'http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz',
                        'creates'       => '/opt/jira/atlassian-jira-software-7.0.4-standalone/conf',
@@ -74,7 +74,7 @@ describe 'jira' do
                 }
               end
               it 'deploys jira 7.0.4 from tar.gz' do
-                should contain_archive('/tmp/atlassian-jira-core-7.0.4.tar.gz').
+                is_expected.to contain_archive('/tmp/atlassian-jira-core-7.0.4.tar.gz').
                   with('extract_path' => '/opt/jira/atlassian-jira-core-7.0.4-standalone',
                        'source'        => 'http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-7.0.4.tar.gz',
                        'creates'       => '/opt/jira/atlassian-jira-core-7.0.4-standalone/conf',
@@ -103,15 +103,15 @@ describe 'jira' do
             end
 
             it do
-              should contain_user('foo').with('home' => '/random/homedir',
-                                              'shell' => '/bin/bash',
-                                              'uid'   => 333,
-                                              'gid'   => 444)
+              is_expected.to contain_user('foo').with('home' => '/random/homedir',
+                                                      'shell' => '/bin/bash',
+                                                      'uid'   => 333,
+                                                      'gid'   => 444)
             end
-            it { should contain_group('bar') }
+            it { is_expected.to contain_group('bar') }
 
             it 'deploys jira 6.0.0 from tar.gz' do
-              should contain_archive('/tmp/atlassian-jira-6.0.0.tar.gz').
+              is_expected.to contain_archive('/tmp/atlassian-jira-6.0.0.tar.gz').
                 with('extract_path' => '/opt/jira/atlassian-jira-6.0.0-standalone',
                      'source'        => 'http://downloads.atlassian.com/atlassian-jira-6.0.0.tar.gz',
                      'creates'       => '/opt/jira/atlassian-jira-6.0.0-standalone/conf',
@@ -121,9 +121,9 @@ describe 'jira' do
             end
 
             it 'manages the jira home directory' do
-              should contain_file('/random/homedir').with('ensure' => 'directory',
-                                                          'owner' => 'foo',
-                                                          'group' => 'bar')
+              is_expected.to contain_file('/random/homedir').with('ensure' => 'directory',
+                                                                  'owner' => 'foo',
+                                                                  'group' => 'bar')
             end
           end
         end

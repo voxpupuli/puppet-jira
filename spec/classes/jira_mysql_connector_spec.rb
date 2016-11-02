@@ -17,18 +17,18 @@ describe 'jira' do
                 mysql_connector_version: '5.1.34'
               }
             end
-            it { should contain_file('/opt/MySQL-connector').with_ensure('directory') }
+            it { is_expected.to contain_file('/opt/MySQL-connector').with_ensure('directory') }
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/lib/mysql-connector-java.jar').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/lib/mysql-connector-java.jar').
                 with(
                   'ensure' => 'link',
                   'target' => '/opt/MySQL-connector/mysql-connector-java-5.1.34/mysql-connector-java-5.1.34-bin.jar'
                 )
             end
             it 'deploys mysql connector 5.1.34 from tar.gz' do
-              should contain_staging__file('mysql-connector-java-5.1.34.tar.gz').with('source' => 'https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.34.tar.gz')
-              should contain_staging__extract('mysql-connector-java-5.1.34.tar.gz').with('target' => '/opt/MySQL-connector',
-                                                                                         'creates' => '/opt/MySQL-connector/mysql-connector-java-5.1.34')
+              is_expected.to contain_staging__file('mysql-connector-java-5.1.34.tar.gz').with('source' => 'https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.34.tar.gz')
+              is_expected.to contain_staging__extract('mysql-connector-java-5.1.34.tar.gz').with('target' => '/opt/MySQL-connector',
+                                                                                                 'creates' => '/opt/MySQL-connector/mysql-connector-java-5.1.34')
             end
           end
           context 'mysql connector overwrite params' do
@@ -43,18 +43,18 @@ describe 'jira' do
                 mysql_connector_url: 'http://example.co.za/foo'
               }
             end
-            it { should contain_file('/opt/foo').with_ensure('directory') }
+            it { is_expected.to contain_file('/opt/foo').with_ensure('directory') }
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/lib/mysql-connector-java.jar').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/lib/mysql-connector-java.jar').
                 with(
                   'ensure' => 'link',
                   'target' => '/opt/foo/mysql-connector-java-5.1.15/mysql-connector-java-5.1.15-bin.jar'
                 )
             end
             it 'deploys mysql connector 5.1.15 from zip' do
-              should contain_staging__file('mysql-connector-java-5.1.15.zip').with('source' => 'http://example.co.za/foo/mysql-connector-java-5.1.15.zip')
-              should contain_staging__extract('mysql-connector-java-5.1.15.zip').with('target' => '/opt/foo',
-                                                                                      'creates' => '/opt/foo/mysql-connector-java-5.1.15')
+              is_expected.to contain_staging__file('mysql-connector-java-5.1.15.zip').with('source' => 'http://example.co.za/foo/mysql-connector-java-5.1.15.zip')
+              is_expected.to contain_staging__extract('mysql-connector-java-5.1.15.zip').with('target' => '/opt/foo',
+                                                                                              'creates' => '/opt/foo/mysql-connector-java-5.1.15')
             end
           end
           context 'mysql_connector_mangage equals false' do
@@ -66,7 +66,7 @@ describe 'jira' do
                 mysql_connector_manage: false
               }
             end
-            it { should_not contain_class('jira::mysql_connector') }
+            it { is_expected.not_to contain_class('jira::mysql_connector') }
           end
         end
       end
