@@ -383,7 +383,7 @@ describe 'jira' do
               }
             end
             it do
-              should contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{pattern="%a %{jira.request.id}r %{jira.request.username}r %t %I"/>})
             end
           end
