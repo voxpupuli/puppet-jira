@@ -4,23 +4,24 @@ include RspecPuppetFacts
 
 unless RUBY_VERSION =~ %r{^1.9}
   require 'coveralls'
-  Coveralls.wear!
-end
-
-RSpec.configure do |c|
-  c.before do
-    # avoid "Only root can execute commands as other users"
-    Puppet.features.stubs(root?: true)
+  require 'simplecov'
+  require 'simplecov-console'
+  SimpleCov.formatters = [
+    SimpleCov::Formatter::HTMLFormatter,
+    SimpleCov::Formatter::Console,
+    Coveralls::SimpleCov::Formatter
+  ]
+  SimpleCov.start do
+    add_filter '/spec'
   end
 end
 
 RSpec.configure do |c|
-  c.default_facts = {
-    jira_version: '6.4',
-    staging_http_get: 'curl',
-    #:os_maj_version   => '6',
-
-    operatingsystemmajrelease: '6',
-    puppetversion: '3.7.4'
+  default_facts = {
+    puppetversion: Puppet.version,
+    facterversion: Facter.version
   }
+  default_facts.merge!(YAML.load(File.read(File.expand_path('../default_facts.yml', __FILE__)))) if File.exist?(File.expand_path('../default_facts.yml', __FILE__))
+  default_facts.merge!(YAML.load(File.read(File.expand_path('../default_module_facts.yml', __FILE__)))) if File.exist?(File.expand_path('../default_module_facts.yml', __FILE__))
+  c.default_facts = default_facts
 end
