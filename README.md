@@ -303,7 +303,7 @@ defaults to true
 
 ##### `$pool_test_on_borrow`
 
-defaults to true
+defaults to false
 
 #### MySQL Java Connector parameters
 
