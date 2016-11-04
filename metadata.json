@@ -1,6 +1,6 @@
 {
   "name": "puppet-jira",
-  "version": "2.1.1-rc0",
+  "version": "3.0.0",
   "author": "Vox Pupuli",
   "summary": "Module to install, configure and manage Atlassian Jira",
   "license": "Apache-2.0",

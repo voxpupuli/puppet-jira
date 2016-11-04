@@ -1,3 +1,14 @@
+## 2016-10-04 - Release 3.0.0
+### Summary
+- Change pool_test_on_borrow default to false in init
+- Add access log format variable to init
+- Update README
+
+### Fixes
+- Fix Download - version 7.1.9 and up
+- Incompatible listeners server.xml > version 7
+- Fix missing pool_test_on_borrow in dbconfig.mysql.xml.erb
+
 ## 2016-09-08 - Release 2.1.0
 ### Summary
 - modulesync with latest Vox Pupuli defaults
