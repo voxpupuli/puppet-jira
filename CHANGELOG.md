@@ -1,7 +1,7 @@
 ## 2016-10-04 - Release 3.0.0
 ### Summary
-- Change pool_test_on_borrow default to false in init
-- Add access log format variable to init
+- Change pool_test_on_borrow default to false in init class :: As this alters init class, requires MAJOR release
+- Add access log format variable to init :: as this also hits init class, MAJOR release
 - Update README
 
 ### Fixes
