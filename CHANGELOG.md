@@ -9,6 +9,9 @@
 - Incompatible listeners server.xml > version 7
 - Fix missing pool_test_on_borrow in dbconfig.mysql.xml.erb
 
+### Improvements
+- modulesync with latest Vox Pupuli defaults
+
 ## 2016-09-08 - Release 2.1.0
 ### Summary
 - modulesync with latest Vox Pupuli defaults
