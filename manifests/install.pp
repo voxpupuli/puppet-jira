@@ -16,6 +16,7 @@
 class jira::install {
 
   include '::archive'
+  include '::staging'
 
   group { $jira::group:
     ensure => present,
