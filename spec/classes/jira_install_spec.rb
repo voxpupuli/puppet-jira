@@ -89,7 +89,7 @@ describe 'jira' do
             let(:params) do
               {
                 javahome: '/opt/java',
-                version: '6.0.0',
+                version: '6.1',
                 format: 'tar.gz',
                 installdir: '/opt/jira',
                 homedir: '/random/homedir',
@@ -98,7 +98,7 @@ describe 'jira' do
                 uid: 333,
                 gid: 444,
                 shell: '/bin/bash',
-                download_url: 'http://downloads.atlassian.com'
+                download_url: 'https://www.atlassian.com/software/jira/downloads/binary'
               }
             end
 
@@ -110,11 +110,11 @@ describe 'jira' do
             end
             it { is_expected.to contain_group('bar') }
 
-            it 'deploys jira 6.0.0 from tar.gz' do
-              is_expected.to contain_archive('/tmp/atlassian-jira-6.0.0.tar.gz').
-                with('extract_path' => '/opt/jira/atlassian-jira-6.0.0-standalone',
-                     'source'        => 'http://downloads.atlassian.com/atlassian-jira-6.0.0.tar.gz',
-                     'creates'       => '/opt/jira/atlassian-jira-6.0.0-standalone/conf',
+            it 'deploys jira 6.1 from tar.gz' do
+              is_expected.to contain_archive('/tmp/atlassian-jira-6.1.tar.gz').
+                with('extract_path' => '/opt/jira/atlassian-jira-6.1-standalone',
+                     'source'        => 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.1.tar.gz',
+                     'creates'       => '/opt/jira/atlassian-jira-6.1-standalone/conf',
                      'user'          => 'foo',
                      'group'         => 'bar',
                      'checksum_type' => 'md5')
