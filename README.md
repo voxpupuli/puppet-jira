@@ -101,9 +101,8 @@ The jira::facts class is required for upgrades.
 
 ##### Upgrades to the JIRA puppet Module
 
-mkrakowitzer-deploy has been replaced with nanliu-staging as the default module for
-deploying the JIRA binaries. You can still use mkrakowitzer-deploy with the
-*deploy_module => 'archive'*
+puppet-archive is the default module for
+deploying the JIRA binaries.
 
 ```puppet
   class { 'jira':
