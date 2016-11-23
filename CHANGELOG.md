@@ -1,3 +1,16 @@
+## 2016-11-23 - Release 3.0.1
+### Summary
+- Atlassian doesn't provide checksums, add checksum_verify false.
+- Update README
+
+### Fixes
+- Fix checksum verification as Atlassian doesn't provide checksums
+- Fix Atlassian End of Support for versions < 6.1 , amend jira_install_spec.rb to reflect that
+
+### Improvements
+- Amend README to clarify default deploy module
+- modulesync with latest Vox Pupuli defaults
+
 ## 2016-10-04 - Release 3.0.0
 ### Summary
 - Change pool_test_on_borrow default to false in init class :: As this alters init class, requires MAJOR release
