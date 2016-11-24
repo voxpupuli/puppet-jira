@@ -15,7 +15,7 @@
 # -----------------------------------------------------------------------------
 class jira::config inherits jira {
 
-  if defined(File[$jira::data_dir]) {
+  if $jira::data_dir {
     $data_dir = $jira::data_dir
   }
   else {
