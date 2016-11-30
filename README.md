@@ -375,7 +375,7 @@ Defaults to `https://downloads.atlassian.com/software/jira/downloads/`
 ##### `checksum`
 
 The md5 checksum of the archive file. Only supported with
-`deploy_module => archive`. Defaults to 'undef'
+`deploy_module => archive`. Defaults to '0e4eef936f1956cd2e12407cf0d8f577'
 
 ##### `$deploy_module`
 
