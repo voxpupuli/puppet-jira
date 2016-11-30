@@ -96,7 +96,7 @@ class jira (
   $catalina_opts    = '',
 
   # Misc Settings
-  $download_url          = 'https://downloads.atlassian.com/software/jira/downloads/',
+  $download_url          = 'https://www.atlassian.com/software/jira/downloads/binary',
   $checksum              = undef,
   $disable_notifications = false,
 
