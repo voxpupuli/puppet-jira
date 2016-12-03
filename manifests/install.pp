@@ -104,7 +104,7 @@ class jira::install {
         source          => "${jira::download_url}/${file}",
         creates         => "${jira::webappdir}/conf",
         cleanup         => true,
-        checksum_verify => false,
+        checksum_verify => $jira::checksum_verify,
         checksum_type   => 'md5',
         checksum        => $jira::checksum,
         user            => $jira::user,
