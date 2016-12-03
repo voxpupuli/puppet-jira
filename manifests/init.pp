@@ -97,7 +97,7 @@ class jira (
 
   # Misc Settings
   $download_url          = 'https://downloads.atlassian.com/software/jira/downloads/',
-  $checksum              = undef,
+  $checksum              = '0e4eef936f1956cd2e12407cf0d8f577',
   $disable_notifications = false,
 
   # Choose whether to use puppet-staging, or puppet-archive
