@@ -87,13 +87,13 @@ class jira (
   $pool_test_on_borrow           = false,
 
   # JVM Settings
-  $javahome     = undef,
-  $jvm_xms      = '256m',
-  $jvm_xmx      = '1024m',
-  $jvm_permgen  = '256m',
-  $jvm_optional = '-XX:-HeapDumpOnOutOfMemoryError',
-  $java_opts    = '',
-  $catalina_opts    = '',
+  $javahome      = undef,
+  $jvm_xms       = '256m',
+  $jvm_xmx       = '1024m',
+  $jvm_permgen   = '256m',
+  $jvm_optional  = '-XX:-HeapDumpOnOutOfMemoryError',
+  $java_opts     = '',
+  $catalina_opts = '',
 
   # Misc Settings
   $download_url          = 'https://downloads.atlassian.com/software/jira/downloads/',
@@ -104,10 +104,10 @@ class jira (
   $deploy_module = 'archive',
 
   # Manage service
-  $service_manage = true,
-  $service_ensure = running,
-  $service_enable = true,
-  $service_notify = undef,
+  $service_manage    = true,
+  $service_ensure    = running,
+  $service_enable    = true,
+  $service_notify    = undef,
   $service_subscribe = undef,
   # Command to stop jira in preparation to updgrade. This is configurable
   # incase the jira service is managed outside of puppet. eg: using the
@@ -237,6 +237,14 @@ class jira (
   if $javahome == undef {
     fail('You need to specify a value for javahome')
   }
+
+  # Archive module checksum_verify = true; this verifies checksum if provided, doesn't if not.
+  if $checksum == undef {
+    $checksum_verify = false
+  } else {
+    $checksum_verify = true
+  }
+
 
   anchor { 'jira::start': } ->
   class { '::jira::install': } ->
