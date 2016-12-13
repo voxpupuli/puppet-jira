@@ -416,6 +416,22 @@ Defaults to {}, See examples on how to use.
 
 Defaults to an empty string (""). Will add a path to the Tomcat Server Context.
 
+##### `$script_check_java_manage`
+
+Manages a modified version of the 'check-java.sh' script provided by
+JIRA in order to use OpenJDK. (Requires JIRA > 7.0.0)
+
+Note: JIRA does not officially support OpenJDK.
+
+Defaults to 'false'.
+
+##### `$script_check_java_template`
+
+Alternate location to find the 'check-java.sh' script. Requires
+`$manage_script_check_java = true`.
+
+Defaults to undef.
+
 #### Tomcat parameters
 
 ##### `$tomcat_address`

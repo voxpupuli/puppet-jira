@@ -113,6 +113,10 @@ class jira (
   # incase the jira service is managed outside of puppet. eg: using the
   # puppetlabs-corosync module: 'crm resource stop jira && sleep 15'
   $stop_jira = 'service jira stop && sleep 15',
+  # Whether to manage the 'check-java.sh' script, and where to retrieve
+  # the script from.
+  $script_check_java_manage = false,
+  $script_check_java_template = undef,
 
   # Tomcat
   $tomcat_address                   = undef,

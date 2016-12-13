@@ -399,13 +399,30 @@ describe 'jira' do
               it { is_expected.not_to contain_file('/opt/jira/atlassian-jira-7.0.4-standalone/bin/check-java.sh') }
             end
             context 'on jira 7 and later' do
-              let(:params) do
-                {
-                  version: '7.0.4',
-                  javahome: '/opt/java'
-                }
+              context 'with script_check_java_managed enabled' do
+                let(:params) do
+                  {
+                    script_check_java_manage: true,
+                    version: '7.0.4',
+                    javahome: '/opt/java'
+                  }
+                end
+                it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/bin/check-java.sh') }
               end
-              it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/bin/check-java.sh') }
+              context 'with script_check_java_template set' do
+                let(:params) do
+                  {
+                    script_check_java_manage: true,
+                    script_check_java_template: 'puppet::///modules/private/my-check-java.sh',
+                    version: '7.0.4',
+                    javahome: '/opt/java'
+                  }
+                end
+                it do
+                  is_expected.to contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/bin/check-java.sh').
+                    with('source' => 'puppet::///modules/private/my-check-java.sh')
+                end
+              end
             end
           end
 

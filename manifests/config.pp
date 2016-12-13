@@ -54,15 +54,22 @@ class jira::config inherits jira {
     notify  => Class['jira::service'],
   }
 
-  if (versioncmp($jira::version, '7.0.0') >= 0) {
-    file { "${jira::webappdir}/bin/check-java.sh":
-      source  => "puppet:///modules/${module_name}/check-java.sh",
-      mode    => '0755',
-      require => [
-        Class['jira::install'],
-        File["${jira::webappdir}/bin/setenv.sh"],
-      ],
-      notify  => Class['jira::service'],
+  if $jira::script_check_java_manage {
+    if $jira::script_check_java_template == undef {
+      $script_check_java_location = "puppet:///modules/${module_name}/check-java.sh"
+    } else {
+      $script_check_java_location = $jira::script_check_java_template
+    }
+    if (versioncmp($jira::version, '7.0.0') >= 0) {
+      file { "${jira::webappdir}/bin/check-java.sh":
+        source  => $script_check_java_location,
+        mode    => '0755',
+        require => [
+          Class['jira::install'],
+          File["${jira::webappdir}/bin/setenv.sh"],
+        ],
+        notify  => Class['jira::service'],
+      }
     }
   }
 
