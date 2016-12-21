@@ -398,8 +398,8 @@ describe 'jira' do
               }
             end
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/bin/check-java.sh')
-                .with_content(%r{Wrong JVM version})
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/bin/check-java.sh').
+                with_content(%r{Wrong JVM version})
             end
           end
 
