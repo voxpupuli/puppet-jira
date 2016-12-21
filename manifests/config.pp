@@ -52,36 +52,25 @@ class jira::config inherits jira {
     mode    => '0755',
     require => Class['jira::install'],
     notify  => Class['jira::service'],
-  }
-
-  if $jira::script_check_java_manage {
-    if $jira::script_check_java_template == undef {
-      $script_check_java_location = "puppet:///modules/${module_name}/check-java.sh"
-    } else {
-      $script_check_java_location = $jira::script_check_java_template
-    }
-    if (versioncmp($jira::version, '7.0.0') >= 0) {
-      file { "${jira::webappdir}/bin/check-java.sh":
-        source  => $script_check_java_location,
-        mode    => '0755',
-        require => [
-          Class['jira::install'],
-          File["${jira::webappdir}/bin/setenv.sh"],
-        ],
-        notify  => Class['jira::service'],
-      }
-    }
-  }
+  } ->
 
   file { "${jira::homedir}/dbconfig.xml":
     content => template("jira/dbconfig.${jira::db}.xml.erb"),
     mode    => '0600',
-    require => [
-      Class['jira::install'],
-      File["${jira::webappdir}/bin/setenv.sh"],
-      File[$jira::homedir],
-    ],
+    require => [ Class['jira::install'],File[$jira::homedir], ],
     notify  => Class['jira::service'],
+  }
+
+  if $jira::script_check_java_manage {
+    file { "${jira::webappdir}/bin/check-java.sh":
+      content => template($jira::script_check_java_template),
+      mode    => '0755',
+      require => [
+        Class['jira::install'],
+        File["${jira::webappdir}/bin/setenv.sh"],
+      ],
+      notify  => Class['jira::service'],
+    }
   }
 
   file { "${jira::webappdir}/conf/server.xml":

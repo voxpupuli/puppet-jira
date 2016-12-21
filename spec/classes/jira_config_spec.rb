@@ -27,6 +27,7 @@ describe 'jira' do
                 with_content(%r{<schema-name>public</schema-name>})
             end
             it { is_expected.not_to contain_file('/home/jira/cluster.properties') }
+            it { is_expected.not_to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/check-java.sh') }
           end
 
           context 'mysql params' do
@@ -388,41 +389,17 @@ describe 'jira' do
             end
           end
 
-          context 'check-java override' do
-            context 'on pre 7 jira' do
-              let(:params) do
-                {
-                  version: '6.3.4a',
-                  javahome: '/opt/java'
-                }
-              end
-              it { is_expected.not_to contain_file('/opt/jira/atlassian-jira-7.0.4-standalone/bin/check-java.sh') }
+          context 'with script_check_java_managed enabled' do
+            let(:params) do
+              {
+                script_check_java_manage: true,
+                version: '7.0.4',
+                javahome: '/opt/java'
+              }
             end
-            context 'on jira 7 and later' do
-              context 'with script_check_java_managed enabled' do
-                let(:params) do
-                  {
-                    script_check_java_manage: true,
-                    version: '7.0.4',
-                    javahome: '/opt/java'
-                  }
-                end
-                it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/bin/check-java.sh') }
-              end
-              context 'with script_check_java_template set' do
-                let(:params) do
-                  {
-                    script_check_java_manage: true,
-                    script_check_java_template: 'puppet::///modules/private/my-check-java.sh',
-                    version: '7.0.4',
-                    javahome: '/opt/java'
-                  }
-                end
-                it do
-                  is_expected.to contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/bin/check-java.sh').
-                    with('source' => 'puppet::///modules/private/my-check-java.sh')
-                end
-              end
+            it do
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/bin/check-java.sh')
+                .with_content(%r{Wrong JVM version})
             end
           end
 

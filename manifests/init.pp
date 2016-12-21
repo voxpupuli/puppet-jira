@@ -116,7 +116,7 @@ class jira (
   # Whether to manage the 'check-java.sh' script, and where to retrieve
   # the script from.
   $script_check_java_manage = false,
-  $script_check_java_template = undef,
+  $script_check_java_template = 'jira/check-java.sh.erb',
 
   # Tomcat
   $tomcat_address                   = undef,
