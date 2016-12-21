@@ -599,7 +599,7 @@ enabled in order to upgrade to new JIRA versions smoothly.
 
 ## Limitations
 
-* Puppet 3.7+
+* Puppet 3.8.7+
 * Puppet Enterprise
 
 The puppetlabs repositories can be found at:
