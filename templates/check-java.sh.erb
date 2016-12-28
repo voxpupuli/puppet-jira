@@ -1,10 +1,8 @@
 #!/bin/sh
 # This file is managed by Puppet
-#
+
 # This file should be identical to 'check-java.sh' in the Jira 7.0.4 standalone
-# tarball, with 2 exceptions: 'grep "java version"' has been changed
-# to 'grep "version"' in order to allow JIRA to run on OpenJDK, and the
-# 'managed by Puppet' header was added along with this comment.
+# tarball.
 
 _EXPECTED_JAVA_VERSION="8"
 
@@ -13,7 +11,7 @@ _EXPECTED_JAVA_VERSION="8"
 # we expect first line to be in format 'java version "1.8.0_40"' and assert that minor version number will be 8 or higher
 #
 
-"$_RUNJAVA" -version 2>&1 | grep "version" | (
+"$_RUNJAVA" -version 2>&1 | grep "java version" | (
         IFS=. read ignore1 version ignore2
         if [ ! ${version:-0} -ge "$_EXPECTED_JAVA_VERSION" ]
         then
