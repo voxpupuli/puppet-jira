@@ -61,6 +61,18 @@ class jira::config inherits jira {
     notify  => Class['jira::service'],
   }
 
+  if $jira::script_check_java_manage {
+    file { "${jira::webappdir}/bin/check-java.sh":
+      content => template($jira::script_check_java_template),
+      mode    => '0755',
+      require => [
+        Class['jira::install'],
+        File["${jira::webappdir}/bin/setenv.sh"],
+      ],
+      notify  => Class['jira::service'],
+    }
+  }
+
   file { "${jira::webappdir}/conf/server.xml":
     content => template('jira/server.xml.erb'),
     mode    => '0600',

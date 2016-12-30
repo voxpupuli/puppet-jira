@@ -416,6 +416,20 @@ Defaults to {}, See examples on how to use.
 
 Defaults to an empty string (""). Will add a path to the Tomcat Server Context.
 
+##### `$script_check_java_manage`
+
+Manages a the 'check-java.sh' script provided by
+JIRA.
+
+Defaults to 'false'.
+
+##### `$script_check_java_template`
+
+Alternate location to find the 'check-java.sh' script. Requires
+`$script_check_java_manage = true`.
+
+Defaults to 'jira/check-java.sh.erb'.
+
 #### Tomcat parameters
 
 ##### `$tomcat_address`

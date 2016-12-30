@@ -27,6 +27,7 @@ describe 'jira' do
                 with_content(%r{<schema-name>public</schema-name>})
             end
             it { is_expected.not_to contain_file('/home/jira/cluster.properties') }
+            it { is_expected.not_to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/check-java.sh') }
           end
 
           context 'mysql params' do
@@ -385,6 +386,20 @@ describe 'jira' do
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{pattern="%a %{jira.request.id}r %{jira.request.username}r %t %I"/>})
+            end
+          end
+
+          context 'with script_check_java_managed enabled' do
+            let(:params) do
+              {
+                script_check_java_manage: true,
+                version: '7.0.4',
+                javahome: '/opt/java'
+              }
+            end
+            it do
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/bin/check-java.sh').
+                with_content(%r{Wrong JVM version})
             end
           end
 
