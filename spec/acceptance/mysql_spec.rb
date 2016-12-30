@@ -10,7 +10,7 @@ download_url = if ENV['download_url']
                  'undef'
                end
 java_url = if download_url == 'undef'
-             'http://download.oracle.com/otn-pub/java/jdk/7u71-b14/'
+             'http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-x64.tar.gz'
            else
              download_url
            end
@@ -19,7 +19,7 @@ describe 'jira mysql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) 
   it 'installs with mysql database' do
     pp = <<-EOS
       $jh = $osfamily ? {
-        default   => '/opt/java',
+        default => '/opt/java',
       }
       if versioncmp($::puppetversion,'3.6.1') >= 0 {
         $allow_virtual_packages = hiera('allow_virtual_packages',false)
@@ -28,20 +28,26 @@ describe 'jira mysql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) 
         }
       }
       class { '::mysql::server':
-        root_password    => 'strongpassword',
+        root_password => 'strongpassword',
       } ->
       mysql::db { 'jira':
         user     => 'jiraadm',
         password => 'mypassword',
         host     => 'localhost',
         grant    => ['ALL'],
-      }->
-      deploy::file { 'jdk-7u71-linux-x64.tar.gz':
-        target          => $jh,
-        fetch_options   => '-q -c --header "Cookie: oraclelicense=accept-securebackup-cookie"',
-        url             => #{java_url},
-        download_timout => 1800,
-        strip           => true,
+      } ->
+      file { $jh:
+        ensure => 'directory',
+      } ->
+      archive { '/tmp/jdk-8u112-linux-x64.tar.gz':
+        ensure          => present,
+        extract         => true,
+        extract_command => 'tar xfz %s --strip-components=1',
+        extract_path    => $jh,
+        source          => "#{java_url}",
+        creates         => "${jh}/bin",
+        cleanup         => true,
+        cookie          => 'oraclelicense=accept-securebackup-cookie',
       } ->
       file { "/bin/keytool":
         ensure => link,
@@ -49,18 +55,18 @@ describe 'jira mysql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) 
       } ->
       exec { 'tmpkey':
         command => "openssl req -x509 -nodes -days 1 -subj '/C=CA/ST=QC/L=Montreal/O=FOO/CN=${fqdn}' -newkey rsa:1024 -keyout /tmp/key.pem -out /tmp/cert.pem",
-        path => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ],
+        path    => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ],
         creates => '/tmp/cert.pem',
       } ->
       java_ks { 'jira':
-        ensure => present,
+        ensure      => present,
         name        => 'jira',
         certificate => '/tmp/cert.pem',
         private_key => '/tmp/key.pem',
         target      => '/tmp/jira.ks',
         password    => 'changeit',
       } ->
-      class { 'jira':
+      class { '::jira':
         installdir           => '/opt/atlassian-jira',
         homedir              => '/opt/jira-home',
         version              => '6.3.6',
