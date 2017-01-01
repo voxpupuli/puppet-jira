@@ -10,7 +10,7 @@ download_url = if ENV['download_url']
                  'undef'
                end
 java_url = if download_url == 'undef'
-             'http://download.oracle.com/otn-pub/java/jdk/7u71-b14/'
+             'http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-x64.tar.gz'
            else
              download_url
            end
@@ -19,7 +19,7 @@ describe 'jira postgresql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamil
   it 'installs with defaults' do
     pp = <<-EOS
       $jh = $osfamily ? {
-        default   => '/opt/java',
+        default => '/opt/java',
       }
       if versioncmp($::puppetversion,'3.6.1') >= 0 {
         $allow_virtual_packages = hiera('allow_virtual_packages',false)
@@ -27,24 +27,30 @@ describe 'jira postgresql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamil
           allow_virtual => $allow_virtual_packages,
         }
       }
-      class { 'postgresql::globals':
+      class { '::postgresql::globals':
         manage_package_repo => true,
         version             => '9.3',
       }->
-      class { 'postgresql::server': } ->
-      deploy::file { 'jdk-7u71-linux-x64.tar.gz':
-        target          => $jh,
-        fetch_options   => '-q -c --header "Cookie: oraclelicense=accept-securebackup-cookie"',
-        url             => #{java_url},
-        download_timout => 1800,
-        strip           => true,
+      class { '::postgresql::server': } ->
+      file { $jh:
+        ensure => 'directory',
       } ->
-      class { 'jira':
-        version      => '6.2.7',
+      archive { '/tmp/jdk-8u112-linux-x64.tar.gz':
+        ensure          => present,
+        extract         => true,
+        extract_command => 'tar xfz %s --strip-components=1',
+        extract_path    => $jh,
+        source          => "#{java_url}",
+        creates         => "${jh}/bin",
+        cleanup         => true,
+        cookie          => 'oraclelicense=accept-securebackup-cookie',
+      } ->
+      class { '::jira':
+        version      => '6.3.4a',
         download_url => #{download_url},
         javahome     => $jh,
       }
-      class { 'jira::facts': }
+      class { '::jira::facts': }
       postgresql::server::db { 'jira':
         user     => 'jiraadm',
         password => postgresql_password('jiraadm', 'mypassword'),
