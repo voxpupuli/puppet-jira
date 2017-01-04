@@ -1,14 +1,8 @@
+require 'beaker-rspec'
 require 'beaker-rspec/spec_helper'
 require 'beaker-rspec/helpers/serverspec'
-
-unless ENV['RS_PROVISION'] == 'no' || ENV['BEAKER_provision'] == 'no'
-  hosts.each do |host|
-    foss_opts = { default_action: 'gem_install' }
-    install_puppet(foss_opts)
-    on host, "mkdir -p #{host['distmoduledir']}"
-    on host, "sed -i '/templatedir/d' #{host['puppetpath']}/puppet.conf"
-  end
-end
+require 'beaker/puppet_install_helper'
+install_puppet_agent_on hosts, {} unless ENV['BEAKER_provision'] == 'no'
 
 UNSUPPORTED_PLATFORMS = %w(AIX windows Solaris).freeze
 
@@ -21,16 +15,10 @@ RSpec.configure do |c|
 
   # Configure all nodes in nodeset
   c.before :suite do
-    # Install module
-    puppet_module_install(
-      source: proj_root,
-      module_name: 'jira',
-      ignore_list: %w(spec/fixtures/* .git/* .vagrant/*)
-    )
+    puppet_module_install(source: proj_root, module_name: 'jira')
     hosts.each do |host|
-      on host, "/bin/touch #{default['puppetpath']}/hiera.yaml"
-      on host, 'chmod 755 /root'
       if fact('osfamily') == 'Debian'
+        on host, 'apt-get install -y locales'
         on host, "echo \"en_US ISO-8859-1\nen_NG.UTF-8 UTF-8\nen_US.UTF-8 UTF-8\n\" > /etc/locale.gen"
         on host, '/usr/sbin/locale-gen'
         on host, '/usr/sbin/update-locale'
