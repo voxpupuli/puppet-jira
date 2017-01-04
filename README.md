@@ -418,8 +418,7 @@ Defaults to an empty string (""). Will add a path to the Tomcat Server Context.
 
 ##### `$script_check_java_manage`
 
-Manages a the 'check-java.sh' script provided by
-JIRA.
+Manages the 'check-java.sh' script provided by JIRA.
 
 Defaults to 'false'.
 
