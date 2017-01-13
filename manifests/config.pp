@@ -72,14 +72,18 @@ class jira::config inherits jira {
       notify  => Class['jira::service'],
     }
   }
-  if $jira::tomcat_redirect_https_port and $jira::tomcat_native_ssl {
-    file { "${jira::webappdir}/atlassian-jira/WEB-INF/web.xml":
-      content => template('web.xml.erb'),
-      mode    => '0644',
-      require => Class['jira::install'],
-      notify  => Class['jira::service'],
-    }->
+  
+  if (versioncmp($jira::version, '7.1.0') > 0) {
+    if $jira::tomcat_redirect_https_port and $jira::tomcat_native_ssl {
+      file { "${jira::webappdir}/atlassian-jira/WEB-INF/web.xml":
+        content => template('jira/web.xml.erb'),
+        mode    => '0644',
+        require => Class['jira::install'],
+        notify  => Class['jira::service'],
+      }
+    }
   }
+
   file { "${jira::webappdir}/conf/server.xml":
     content => template('jira/server.xml.erb'),
     mode    => '0600',
