@@ -15,7 +15,7 @@
 # -----------------------------------------------------------------------------
 class jira::config inherits jira {
 
-  $_data_dir = pick($jira::data_dir, $jira::home)
+  $_data_dir = pick($jira::data_dir, $jira::homedir)
 
   File {
     owner => $jira::user,
