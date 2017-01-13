@@ -1,3 +1,20 @@
+# Changelog
+
+## 2017-01-13 - Release 3.1.0
+
+This is the last release with Puppet 3 support!
+- modulesync with latest Vox Pupuli defaults
+- Exposes checksum_verify in init.pp w/ conditional
+- Allow JIRA to run in OpenJDK
+- Make 'check-java.sh' Management Optional
+- Bump puppet minimum version_requirement to 3.8.7
+- Move 'check-java.sh' to Templates
+- Fix rubocop issue in config_spec test.
+- Bump minimum version dependencies (for Puppet 4)
+- Remove OpenJDK Comments, use vanilla check-java.sh
+- Remove extraneous comma in config.pp.
+- Add Docker acceptance tests for travis
+
 ## 2016-11-23 - Release 3.0.1
 ### Summary
 - Atlassian doesn't provide checksums, add checksum_verify false.
