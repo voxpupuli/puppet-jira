@@ -72,7 +72,7 @@ class jira::config inherits jira {
       notify  => Class['jira::service'],
     }
   }
-  
+
   if (versioncmp($jira::version, '7.1.0') > 0) {
     if $jira::tomcat_redirect_https_port and $jira::tomcat_native_ssl {
       file { "${jira::webappdir}/atlassian-jira/WEB-INF/web.xml":
