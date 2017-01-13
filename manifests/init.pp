@@ -38,7 +38,7 @@ class jira (
   $format       = 'tar.gz',
   $installdir   = '/opt/jira',
   $homedir      = '/home/jira',
-  $data_dir     = '',
+  $data_dir     = undef,
   $user         = 'jira',
   $group        = 'jira',
   $uid          = undef,
