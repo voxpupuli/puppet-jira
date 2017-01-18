@@ -33,13 +33,11 @@ matrix:
     services: docker
     sudo: required
     bundler_args: --without development
-    dist: trusty
   - rvm: 2.4.0
     env: PUPPET_INSTALL_TYPE=agent PUPPET_VERSION="~> 4.0" CHECK=acceptance BEAKER_debug=true BEAKER_set=docker/centos-7
     services: docker
     sudo: required
     bundler_args: --without development
-    dist: trusty
 branches:
   only:
   - master
