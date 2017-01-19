@@ -95,9 +95,7 @@ describe 'jira postgresql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamil
 
   describe 'shutdown' do
     it { shell('service jira stop', acceptable_exit_codes: [0, 1]) }
-    it { shell('pkill -f postgres', acceptable_exit_codes: [0, 1]) }
-    it { shell('pkill -f postgres', acceptable_exit_codes: [0, 1]) }
-    it { shell('pkill -f jira', acceptable_exit_codes: [0, 1]) }
-    it { shell('pkill -f jira', acceptable_exit_codes: [0, 1]) }
+    it { shell('pkill -9 -f postgres', acceptable_exit_codes: [0, 1]) }
+    it { shell('pkill -9 -f jira', acceptable_exit_codes: [0, 1]) }
   end
 end
