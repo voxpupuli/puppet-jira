@@ -127,9 +127,7 @@ describe 'jira mysql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) 
 
   describe 'shutdown' do
     it { shell('service jira stop', acceptable_exit_codes: [0, 1]) }
-    it { shell('pkill -f mysql', acceptable_exit_codes: [0, 1]) }
-    it { shell('pkill -f mysql', acceptable_exit_codes: [0, 1]) }
-    it { shell('pkill -f jira', acceptable_exit_codes: [0, 1]) }
-    it { shell('pkill -f jira', acceptable_exit_codes: [0, 1]) }
+    it { shell('pkill -9 -f mysql', acceptable_exit_codes: [0, 1]) }
+    it { shell('pkill -9 -f jira', acceptable_exit_codes: [0, 1]) }
   end
 end
