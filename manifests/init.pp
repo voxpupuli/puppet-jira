@@ -101,7 +101,7 @@ class jira (
   $disable_notifications = false,
 
   # Choose whether to use puppet-staging, or puppet-archive
-  $deploy_module = 'archive',
+  $deploy_module = 'staging',
 
   # Manage service
   $service_manage    = true,
