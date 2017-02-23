@@ -370,7 +370,7 @@ defaults to ''
 ##### `$download_url`
 
 The URL used to download the JIRA installation file.
-Defaults to `https://downloads.atlassian.com/software/jira/downloads/`
+Defaults to '<https://www.atlassian.com/software/jira/downloads/binary>'
 
 ##### `checksum`
 

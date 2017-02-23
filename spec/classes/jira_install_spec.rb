@@ -20,15 +20,15 @@ describe 'jira' do
                 format: 'tar.gz',
                 product: 'jira',
                 version: '6.3.4a',
-                download_url: 'https://downloads.atlassian.com/software/jira/downloads'
+                download_url: 'https://www.atlassian.com/software/jira/downloads/binary'
               }
             end
             it { is_expected.to contain_group('jira') }
             it { is_expected.to contain_user('jira').with_shell('/bin/true') }
             it 'deploys jira 6.3.4a from tar.gz' do
               is_expected.to contain_archive('/tmp/atlassian-jira-6.3.4a.tar.gz').
-                with('extract_path' => '/opt/jira/atlassian-jira-6.3.4a-standalone',
-                     'source'        => 'https://downloads.atlassian.com/software/jira/downloads/atlassian-jira-6.3.4a.tar.gz',
+                with('extract_path'  => '/opt/jira/atlassian-jira-6.3.4a-standalone',
+                     'source'        => 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.3.4a.tar.gz',
                      'creates'       => '/opt/jira/atlassian-jira-6.3.4a-standalone/conf',
                      'user'          => 'jira',
                      'group'         => 'jira',
@@ -50,13 +50,13 @@ describe 'jira' do
                   installdir: '/opt/jira',
                   product: 'jira',
                   version: '7.0.4',
-                  download_url: 'http://www.atlassian.com/software/jira/downloads/binary'
+                  download_url: 'https://www.atlassian.com/software/jira/downloads/binary'
                 }
               end
               it 'deploys jira 7.0.4 from tar.gz' do
                 is_expected.to contain_archive('/tmp/atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz').
-                  with('extract_path' => '/opt/jira/atlassian-jira-software-7.0.4-standalone',
-                       'source'        => 'http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz',
+                  with('extract_path'  => '/opt/jira/atlassian-jira-software-7.0.4-standalone',
+                       'source'        => 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz',
                        'creates'       => '/opt/jira/atlassian-jira-software-7.0.4-standalone/conf',
                        'user'          => 'jira',
                        'group'         => 'jira',
@@ -70,13 +70,13 @@ describe 'jira' do
                   installdir: '/opt/jira',
                   product: 'jira-core',
                   version: '7.0.4',
-                  download_url: 'http://www.atlassian.com/software/jira/downloads/binary'
+                  download_url: 'https://www.atlassian.com/software/jira/downloads/binary'
                 }
               end
               it 'deploys jira 7.0.4 from tar.gz' do
                 is_expected.to contain_archive('/tmp/atlassian-jira-core-7.0.4.tar.gz').
-                  with('extract_path' => '/opt/jira/atlassian-jira-core-7.0.4-standalone',
-                       'source'        => 'http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-7.0.4.tar.gz',
+                  with('extract_path'  => '/opt/jira/atlassian-jira-core-7.0.4-standalone',
+                       'source'        => 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-7.0.4.tar.gz',
                        'creates'       => '/opt/jira/atlassian-jira-core-7.0.4-standalone/conf',
                        'user'          => 'jira',
                        'group'         => 'jira',
@@ -112,7 +112,7 @@ describe 'jira' do
 
             it 'deploys jira 6.1 from tar.gz' do
               is_expected.to contain_archive('/tmp/atlassian-jira-6.1.tar.gz').
-                with('extract_path' => '/opt/jira/atlassian-jira-6.1-standalone',
+                with('extract_path'  => '/opt/jira/atlassian-jira-6.1-standalone',
                      'source'        => 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.1.tar.gz',
                      'creates'       => '/opt/jira/atlassian-jira-6.1-standalone/conf',
                      'user'          => 'foo',
