@@ -17,6 +17,7 @@ describe 'jira' do
                 mysql_connector_version: '5.1.34'
               }
             end
+            it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_file('/opt/MySQL-connector').with_ensure('directory') }
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/lib/mysql-connector-java.jar').

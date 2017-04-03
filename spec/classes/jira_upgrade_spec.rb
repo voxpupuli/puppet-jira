@@ -16,6 +16,7 @@ describe 'jira' do
             let(:facts) do
               facts.merge(jira_version: '6.3.4a')
             end
+            it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_exec('service jira stop && sleep 15') }
           end
           context 'custom params' do

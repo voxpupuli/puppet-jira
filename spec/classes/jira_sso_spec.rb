@@ -16,6 +16,7 @@ describe 'jira' do
                 enable_sso: true
               }
             end
+            it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/atlassian-jira/WEB-INF/classes/seraph-config.xml') }
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/atlassian-jira/WEB-INF/classes/crowd.properties') }
           end
