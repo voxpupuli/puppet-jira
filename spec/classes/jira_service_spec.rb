@@ -6,7 +6,7 @@ describe 'jira' do
       on_supported_os.each do |os, facts|
         context "on #{os}" do
           let(:facts) do
-            facts.merge
+            facts.merge(os: { family: facts['osfamily'] })
           end
 
           if os == 'RedHat'
@@ -90,7 +90,8 @@ describe 'jira' do
             let(:facts) do
               {
                 osfamily: 'RedHat',
-                operatingsystemmajrelease: '7'
+                operatingsystemmajrelease: '7',
+                os: { family: 'RedHat' }
               }
             end
             it do
