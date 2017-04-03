@@ -34,19 +34,6 @@ describe 'jira' do
                 with_content(%r{application.name                        appname})
             end
           end
-          context 'with param application_login_url set to ERROR' do
-            let(:params) do
-              {
-                javahome: '/opt/java',
-                version: '6.3.4a',
-                enable_sso: true,
-                application_login_url: 'ERROR'
-              }
-            end
-            it('fails') do
-              is_expected.to raise_error(Puppet::Error, %r{does not match})
-            end
-          end
           context 'with non default params' do
             let(:params) do
               {

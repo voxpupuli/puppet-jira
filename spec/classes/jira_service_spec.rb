@@ -61,15 +61,6 @@ describe 'jira' do
             end
             it { is_expected.not_to contain_service('jira') }
           end
-          context 'overwriting service_manage param with bad boolean' do
-            let(:params) do
-              {
-                service_manage: 'false',
-                javahome: '/opt/java'
-              }
-            end
-            it { is_expected.to raise_error(Puppet::Error, %r{is not a boolean}) }
-          end
           context 'overwriting service params' do
             let(:params) do
               {
