@@ -23,14 +23,14 @@ class jira::mysql_connector (
   staging::file { $file:
     source  => "${download_url}/${file}",
     timeout => 300,
-  } ->
+  }
 
-  staging::extract { $file:
+  -> staging::extract { $file:
     target  => $installdir,
     creates => "${installdir}/${product}-${version}",
-  } ->
+  }
 
-  file { "${jira::webappdir}/lib/mysql-connector-java.jar":
+  -> file { "${jira::webappdir}/lib/mysql-connector-java.jar":
     ensure => link,
     target => "${installdir}/${product}-${version}/${product}-${version}-bin.jar",
   }

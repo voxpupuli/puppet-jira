@@ -250,11 +250,11 @@ class jira (
   }
 
 
-  anchor { 'jira::start': } ->
-  class { '::jira::install': } ->
-  class { '::jira::config': } ~>
-  class { '::jira::service': } ->
-  anchor { 'jira::end': }
+  anchor { 'jira::start': }
+  -> class { '::jira::install': }
+  -> class { '::jira::config': }
+  ~> class { '::jira::service': }
+  -> anchor { 'jira::end': }
 
   if ($enable_sso) {
     class { '::jira::sso': }

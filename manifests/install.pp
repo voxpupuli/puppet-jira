@@ -20,8 +20,8 @@ class jira::install {
   group { $jira::group:
     ensure => present,
     gid    => $jira::gid,
-  } ->
-  user { $jira::user:
+  }
+  -> user { $jira::user:
     comment          => 'Jira daemon account',
     shell            => $jira::shell,
     home             => $jira::homedir,
@@ -80,8 +80,8 @@ class jira::install {
       staging::file { $file:
         source  => "${jira::download_url}/${file}",
         timeout => 1800,
-      } ->
-      staging::extract { $file:
+      }
+      -> staging::extract { $file:
         target  => $jira::extractdir,
         creates => "${jira::webappdir}/conf",
         strip   => 1,
@@ -126,9 +126,9 @@ class jira::install {
     ensure => 'directory',
     owner  => $jira::user,
     group  => $jira::group,
-  } ->
+  }
 
-  exec { "chown_${jira::extractdir}":
+  -> exec { "chown_${jira::extractdir}":
     command     => "/bin/chown -R ${jira::user}:${jira::group} ${jira::extractdir}",
     refreshonly => true,
     subscribe   => User[$jira::user],

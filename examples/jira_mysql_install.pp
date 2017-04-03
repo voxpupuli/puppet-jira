@@ -2,16 +2,16 @@ node default {
 
   class { '::mysql::server':
     root_password    => 'strongpassword',
-  } ->
+  }
 
-  mysql::db { 'jira':
+  -> mysql::db { 'jira':
     user     => 'jiraadm',
     password => 'mypassword',
     host     => 'localhost',
     grant    => ['ALL'],
-  } ->
+  }
 
-  class { '::jira':
+  -> class { '::jira':
     javahome => '/opt/java/latest',
     db       => 'mysql',
     dbport   => '3306',
