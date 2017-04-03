@@ -4,7 +4,7 @@ describe 'jira' do
   describe 'jira::config' do
     context 'supported operating systems' do
       on_supported_os.each do |os, facts|
-        context "on #{os} #{facts}" do
+        context "on #{os}" do
           let(:facts) do
             facts
           end
@@ -15,6 +15,7 @@ describe 'jira' do
                 javahome: '/opt/java'
               }
             end
+            it { is_expected.to compile.with_all_deps }
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh').
                 with_content(%r{#DISABLE_NOTIFICATIONS=})

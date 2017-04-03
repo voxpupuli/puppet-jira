@@ -4,7 +4,7 @@ describe 'jira' do
   describe 'jira::install' do
     context 'supported operating systems' do
       on_supported_os.each do |os, facts|
-        context "on #{os} #{facts}" do
+        context "on #{os}" do
           let(:facts) do
             facts
           end
@@ -23,6 +23,7 @@ describe 'jira' do
                 download_url: 'https://downloads.atlassian.com/software/jira/downloads'
               }
             end
+            it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_group('jira') }
             it { is_expected.to contain_user('jira').with_shell('/bin/true') }
             it 'deploys jira 6.3.4a from tar.gz' do

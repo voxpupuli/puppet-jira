@@ -45,16 +45,16 @@ class jira::config inherits jira {
       File[$jira::webappdir],
       File[$jira::homedir],
     ],
-  } ->
+  }
 
-  file { "${jira::webappdir}/bin/setenv.sh":
+  -> file { "${jira::webappdir}/bin/setenv.sh":
     content => template('jira/setenv.sh.erb'),
     mode    => '0755',
     require => Class['jira::install'],
     notify  => Class['jira::service'],
-  } ->
+  }
 
-  file { "${jira::homedir}/dbconfig.xml":
+  -> file { "${jira::homedir}/dbconfig.xml":
     content => template("jira/dbconfig.${jira::db}.xml.erb"),
     mode    => '0600',
     require => [ Class['jira::install'],File[$jira::homedir] ],
@@ -78,8 +78,8 @@ class jira::config inherits jira {
     mode    => '0600',
     require => Class['jira::install'],
     notify  => Class['jira::service'],
-  }->
-  file { "${jira::webappdir}/conf/context.xml":
+  }
+  -> file { "${jira::webappdir}/conf/context.xml":
     content => template('jira/context.xml.erb'),
     mode    => '0600',
     require => Class['jira::install'],

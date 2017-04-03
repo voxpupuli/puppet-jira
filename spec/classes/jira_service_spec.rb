@@ -4,9 +4,9 @@ describe 'jira' do
   describe 'jira::service' do
     context 'supported operating systems' do
       on_supported_os.each do |os, facts|
-        context "on #{os} #{facts}" do
+        context "on #{os}" do
           let(:facts) do
-            facts
+            facts.merge(os: { family: facts['osfamily'] })
           end
 
           if os == 'RedHat'
@@ -15,6 +15,7 @@ describe 'jira' do
                 { javahome: '/opt/java' }
               end
               it { is_expected.to contain_service('jira') }
+              it { is_expected.to compile.with_all_deps }
               it do
                 is_expected.to contain_file('/etc/init.d/jira').
                   with_content(%r{Short-Description: Start up JIRA}).
@@ -35,6 +36,7 @@ describe 'jira' do
               let(:facts) do
                 { osfamily: 'Debian' }
               end
+              it { is_expected.to compile.with_all_deps }
               it do
                 is_expected.to contain_file('/etc/init.d/jira').
                   with_content(%r{/var/lock/jira})
@@ -46,6 +48,7 @@ describe 'jira' do
               let(:params) do
                 { javahome: '/opt/java' }
               end
+              it { is_expected.to compile.with_all_deps }
               it { is_expected.not_to contain_file('/lib/systemd/system/jira.service') }
             end
           end
@@ -90,7 +93,8 @@ describe 'jira' do
             let(:facts) do
               {
                 osfamily: 'RedHat',
-                operatingsystemmajrelease: '7'
+                operatingsystemmajrelease: '7',
+                os: { family: 'RedHat' }
               }
             end
             it do

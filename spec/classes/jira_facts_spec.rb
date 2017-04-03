@@ -2,7 +2,7 @@ require 'spec_helper.rb'
 describe 'jira::facts' do
   context 'supported operating systems' do
     on_supported_os.each do |os, facts|
-      context "on #{os} #{facts}" do
+      context "on #{os}" do
         let(:facts) do
           facts
         end
@@ -14,6 +14,7 @@ describe 'jira::facts' do
         external_fact_file = '/etc/facter/facts.d/jira_facts.rb'
 
         it { is_expected.to contain_file(external_fact_file) }
+        it { is_expected.to compile.with_all_deps }
 
         # Test puppet enterprise shebang generated correctly
         context 'with puppet enterprise' do
