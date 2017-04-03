@@ -4,9 +4,9 @@ describe 'jira' do
   describe 'jira::service' do
     context 'supported operating systems' do
       on_supported_os.each do |os, facts|
-        context "on #{os} #{facts}" do
+        context "on #{os}" do
           let(:facts) do
-            facts
+            facts.merge
           end
 
           if os == 'RedHat'
