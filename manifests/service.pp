@@ -15,19 +15,17 @@
 #-----------------------------------------------------------------------------
 class jira::service(
 
-  $service_manage        = $jira::service_manage,
-  $service_ensure        = $jira::service_ensure,
-  $service_enable        = $jira::service_enable,
-  $service_notify        = $jira::service_notify,
-  $service_subscribe     = $jira::service_subscribe,
-  $service_file_location = $jira::params::service_file_location,
-  $service_file_template = $jira::params::service_file_template,
-  $service_lockfile      = $jira::params::service_lockfile,
-  $service_provider      = $jira::params::service_provider,
+  Boolean $service_manage = $jira::service_manage,
+  String $service_ensure  = $jira::service_ensure,
+  Boolean $service_enable = $jira::service_enable,
+  $service_notify         = $jira::service_notify,
+  $service_subscribe      = $jira::service_subscribe,
+  $service_file_location  = $jira::params::service_file_location,
+  $service_file_template  = $jira::params::service_file_template,
+  $service_lockfile       = $jira::params::service_lockfile,
+  $service_provider       = $jira::params::service_provider,
 
 ) inherits jira::params {
-
-  validate_bool($service_manage)
 
   file { $service_file_location:
     content => template($service_file_template),
@@ -35,10 +33,6 @@ class jira::service(
   }
 
   if $service_manage {
-
-    validate_string($service_ensure)
-    validate_bool($service_enable)
-
     if $service_provider == 'systemd' {
       exec { 'refresh_systemd':
         command     => 'systemctl daemon-reload',
