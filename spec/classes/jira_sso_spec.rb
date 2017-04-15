@@ -8,6 +8,7 @@ describe 'jira' do
           let(:facts) do
             facts
           end
+
           context 'default params' do
             let(:params) do
               {
@@ -16,6 +17,7 @@ describe 'jira' do
                 enable_sso: true
               }
             end
+
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/atlassian-jira/WEB-INF/classes/seraph-config.xml') }
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/atlassian-jira/WEB-INF/classes/crowd.properties') }
@@ -29,6 +31,7 @@ describe 'jira' do
                 application_name: 'appname'
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/atlassian-jira/WEB-INF/classes/crowd.properties').
                 with_content(%r{application.name                        appname})
@@ -47,6 +50,7 @@ describe 'jira' do
                 crowd_base_url: 'http://crowdbase.url'
               }
             end
+
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/atlassian-jira/WEB-INF/classes/seraph-config.xml') }
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/atlassian-jira/WEB-INF/classes/crowd.properties').

@@ -7,6 +7,7 @@ describe 'jira::facts' do
           facts
         end
         let(:pre_condition) { "class{'::jira': javahome => '/opt/java'}" }
+
         regexp_pe = %r{^#\!/opt/puppet/bin/ruby$}
         regexp_oss = %r{^#\!/usr/bin/env ruby$}
         regexp_url = %r{http://127.0.0.1\:8080/rest/api/2/serverInfo}
@@ -21,6 +22,7 @@ describe 'jira::facts' do
           let(:facts) do
             facts.merge(puppetversion: '3.4.3 (Puppet Enterprise 3.2.1)')
           end
+
           it do
             is_expected.to contain_file(pe_external_fact_file). \
               with_content(regexp_pe).
@@ -32,6 +34,7 @@ describe 'jira::facts' do
           let(:facts) do
             facts.merge(puppetversion: 'all other versions')
           end
+
           it do
             is_expected.to contain_file(external_fact_file). \
               with_content(regexp_oss). \
@@ -43,6 +46,7 @@ describe 'jira::facts' do
           let(:params) do
             { contextpath: '/jira' }
           end
+
           it do
             is_expected.to contain_file(external_fact_file). \
               with_content(%r{  url = 'http://127.0.0.1:8080/jira})

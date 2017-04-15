@@ -4,7 +4,7 @@ require 'beaker-rspec/helpers/serverspec'
 require 'beaker/puppet_install_helper'
 install_puppet_agent_on hosts, {} unless ENV['BEAKER_provision'] == 'no'
 
-UNSUPPORTED_PLATFORMS = %w(AIX windows Solaris).freeze
+UNSUPPORTED_PLATFORMS = %w[AIX windows Solaris].freeze
 
 RSpec.configure do |c|
   # Project root

@@ -23,6 +23,7 @@ describe 'jira' do
                 download_url: 'https://downloads.atlassian.com/software/jira/downloads'
               }
             end
+
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_group('jira') }
             it { is_expected.to contain_user('jira').with_shell('/bin/true') }
@@ -54,6 +55,7 @@ describe 'jira' do
                   download_url: 'http://www.atlassian.com/software/jira/downloads/binary'
                 }
               end
+
               it 'deploys jira 7.0.4 from tar.gz' do
                 is_expected.to contain_archive('/tmp/atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz').
                   with('extract_path' => '/opt/jira/atlassian-jira-software-7.0.4-standalone',
@@ -74,6 +76,7 @@ describe 'jira' do
                   download_url: 'http://www.atlassian.com/software/jira/downloads/binary'
                 }
               end
+
               it 'deploys jira 7.0.4 from tar.gz' do
                 is_expected.to contain_archive('/tmp/atlassian-jira-core-7.0.4.tar.gz').
                   with('extract_path' => '/opt/jira/atlassian-jira-core-7.0.4-standalone',
