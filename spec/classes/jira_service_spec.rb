@@ -14,6 +14,7 @@ describe 'jira' do
               let(:params) do
                 { javahome: '/opt/java' }
               end
+
               it { is_expected.to contain_service('jira') }
               it { is_expected.to compile.with_all_deps }
               it do
@@ -36,6 +37,7 @@ describe 'jira' do
               let(:facts) do
                 { osfamily: 'Debian' }
               end
+
               it { is_expected.to compile.with_all_deps }
               it do
                 is_expected.to contain_file('/etc/init.d/jira').
@@ -48,6 +50,7 @@ describe 'jira' do
               let(:params) do
                 { javahome: '/opt/java' }
               end
+
               it { is_expected.to compile.with_all_deps }
               it { is_expected.not_to contain_file('/lib/systemd/system/jira.service') }
             end
@@ -59,6 +62,7 @@ describe 'jira' do
                 javahome: '/opt/java'
               }
             end
+
             it { is_expected.not_to contain_service('jira') }
           end
           context 'overwriting service params' do
@@ -70,6 +74,7 @@ describe 'jira' do
                 service_subscribe: 'Package[jdk]'
               }
             end
+
             it do
               is_expected.to contain_service('jira').with('ensure' => 'stopped',
                                                           'enable' => 'false',
@@ -88,6 +93,7 @@ describe 'jira' do
                 os: { family: 'RedHat' }
               }
             end
+
             it do
               is_expected.to contain_file('/usr/lib/systemd/system/jira.service').
                 with_content(%r{Atlassian Systemd Jira Service})

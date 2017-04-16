@@ -8,6 +8,7 @@ describe 'jira' do
           let(:facts) do
             facts
           end
+
           context 'with javahome not set' do
             it('fails') do
               is_expected.to raise_error(Puppet::Error, %r{You need to specify a value for javahome})
@@ -24,6 +25,7 @@ describe 'jira' do
                   }
                 }
               end
+
               it { is_expected.to raise_error(Puppet::Error, %r{You need to specify a valid port for the AJP connector\.}) }
             end
             context 'with invalid port' do
@@ -37,6 +39,7 @@ describe 'jira' do
                   }
                 }
               end
+
               it { is_expected.to raise_error(Puppet::Error, %r{validate_re\(\): "80zeronine" does not match}) }
             end
             context 'without protocol' do
@@ -49,6 +52,7 @@ describe 'jira' do
                   }
                 }
               end
+
               it { is_expected.to raise_error(Puppet::Error, %r{You need to specify a valid protocol for the AJP connector\.}) }
             end
             context 'with invalid protocol' do
@@ -62,6 +66,7 @@ describe 'jira' do
                   }
                 }
               end
+
               it { is_expected.to raise_error(Puppet::Error, %r{validate_re\(\): "AJP" does not match}) }
             end
           end

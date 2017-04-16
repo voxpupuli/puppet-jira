@@ -8,6 +8,7 @@ describe 'jira' do
           let(:facts) do
             facts
           end
+
           context 'default params' do
             let(:params) do
               {
@@ -15,6 +16,7 @@ describe 'jira' do
                 javahome: '/opt/java'
               }
             end
+
             it { is_expected.to compile.with_all_deps }
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh').
@@ -39,6 +41,7 @@ describe 'jira' do
                 db: 'mysql'
               }
             end
+
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh') }
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/user.sh') }
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml') }
@@ -58,6 +61,7 @@ describe 'jira' do
                 dbschema: 'public'
               }
             end
+
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh') }
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/user.sh') }
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml') }
@@ -75,6 +79,7 @@ describe 'jira' do
                 dburl: 'my custom dburl'
               }
             end
+
             it do
               is_expected.to contain_file('/home/jira/dbconfig.xml').
                 with_content(%r{<url>my custom dburl</url>})
@@ -89,6 +94,7 @@ describe 'jira' do
                 tomcat_port: '9229'
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{<Connector port=\"9229\"\s+maxThreads=}m)
@@ -103,6 +109,7 @@ describe 'jira' do
                   javahome: '/opt/java'
                 }
               end
+
               it do
                 is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                   with_content(%r{<Listener className=\"org.apache.catalina.core.JasperListener\"})
@@ -117,6 +124,7 @@ describe 'jira' do
                 javahome: '/opt/java'
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/conf/server.xml').
                 with_content(%r{<Listener className=\"org.apache.catalina.startup.VersionLoggerListener\"})
@@ -131,6 +139,7 @@ describe 'jira' do
                   javahome: '/opt/java'
                 }
               end
+
               it do
                 is_expected.to contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/conf/server.xml').
                   with_content(%r{<Listener className=\"org.apache.catalina.core.JreMemoryLeakPreventionListener\"})
@@ -147,6 +156,7 @@ describe 'jira' do
                 tomcat_address: '127.0.0.1'
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{<Connector port=\"9229\"\s+address=\"127\.0\.0\.1\"\s+maxThreads=}m)
@@ -161,6 +171,7 @@ describe 'jira' do
                 contextpath: '/jira'
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{path="/jira"})
@@ -175,6 +186,7 @@ describe 'jira' do
                 tomcat_port: '8888'
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{port="8888"})
@@ -189,6 +201,7 @@ describe 'jira' do
                 tomcat_accept_count: '200'
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{acceptCount="200"})
@@ -203,6 +216,7 @@ describe 'jira' do
                 tomcat_max_http_header_size: '4096'
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{maxHttpHeaderSize="4096"})
@@ -217,6 +231,7 @@ describe 'jira' do
                 tomcat_min_spare_threads: '50'
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{minSpareThreads="50"})
@@ -231,6 +246,7 @@ describe 'jira' do
                 tomcat_connection_timeout: '25000'
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{connectionTimeout="25000"})
@@ -245,6 +261,7 @@ describe 'jira' do
                 tomcat_enable_lookups: 'true'
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{enableLookups="true"})
@@ -259,6 +276,7 @@ describe 'jira' do
                 tomcat_protocol: 'HTTP/1.1'
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{protocol="HTTP/1.1"})
@@ -273,6 +291,7 @@ describe 'jira' do
                 tomcat_use_body_encoding_for_uri: 'false'
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{useBodyEncodingForURI="false"})
@@ -287,6 +306,7 @@ describe 'jira' do
                 tomcat_disable_upload_timeout: 'false'
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{disableUploadTimeout="false"})
@@ -301,6 +321,7 @@ describe 'jira' do
                 tomcat_enable_lookups: 'true'
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{enableLookups="true"})
@@ -315,6 +336,7 @@ describe 'jira' do
                 tomcat_max_threads: '300'
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{maxThreads="300"})
@@ -333,6 +355,7 @@ describe 'jira' do
                 }
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{proxyName = 'www\.example\.com'}).
@@ -353,6 +376,7 @@ describe 'jira' do
                   }
                 }
               end
+
               it do
                 is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                   with_content(%r{<Connector enableLookups="false" URIEncoding="UTF-8"\s+port = "8009"\s+protocol = "AJP/1.3"\s+/>})
@@ -369,6 +393,7 @@ describe 'jira' do
                   }
                 }
               end
+
               it do
                 is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                   with_content(%r{<Connector enableLookups="false" URIEncoding="UTF-8"\s+port = "8009"\s+protocol = "org.apache.coyote.ajp.AjpNioProtocol"\s+/>})
@@ -384,6 +409,7 @@ describe 'jira' do
                 tomcat_accesslog_format: '%a %{jira.request.id}r %{jira.request.username}r %t %I'
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{pattern="%a %{jira.request.id}r %{jira.request.username}r %t %I"/>})
@@ -398,6 +424,7 @@ describe 'jira' do
                 javahome: '/opt/java'
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/bin/check-java.sh').
                 with_content(%r{Wrong JVM version})
@@ -412,6 +439,7 @@ describe 'jira' do
                 resources: { 'testdb' => { 'auth' => 'Container' } }
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/context.xml').
                 with_content(%r{<Resource name = "testdb"\n        auth = "Container"\n    />})
@@ -426,6 +454,7 @@ describe 'jira' do
                 disable_notifications: true
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh').
                 with_content(%r{^DISABLE_NOTIFICATIONS=})
@@ -440,6 +469,7 @@ describe 'jira' do
                 tomcat_native_ssl: true
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{redirectPort="8443"}).
@@ -469,6 +499,7 @@ describe 'jira' do
                 tomcat_keystore_type: 'PKCS12'
               }
             end
+
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
                 with_content(%r{redirectPort="9443"}).
@@ -491,6 +522,7 @@ describe 'jira' do
                 enable_secure_admin_sessions: true
               }
             end
+
             it do
               is_expected.to contain_file('/home/jira/jira-config.properties').
                 with_content(%r{jira.websudo.is.disabled = false})
@@ -505,6 +537,7 @@ describe 'jira' do
                 enable_secure_admin_sessions: false
               }
             end
+
             it do
               is_expected.to contain_file('/home/jira/jira-config.properties').
                 with_content(%r{jira.websudo.is.disabled = true})
@@ -521,6 +554,7 @@ describe 'jira' do
                 }
               }
             end
+
             it do
               is_expected.to contain_file('/home/jira/jira-config.properties').
                 with_content(%r{jira.websudo.is.disabled = false}).
@@ -537,6 +571,7 @@ describe 'jira' do
                 shared_homedir: '/mnt/jira_shared_home_dir'
               }
             end
+
             it do
               is_expected.to contain_file('/home/jira/cluster.properties').
                 with_content(%r{jira.node.id = \S+}).
