@@ -16,13 +16,16 @@
 #
 class jira::facts (
   $ensure        = 'present',
-  $port          = $jira::tomcatPort,
-  $uri           = $jira::tomcatAddress ? {
-    undef   => '127.0.0.1',
-    default => $jira::tomcatAddress,
-  },
+  $port          = $jira::tomcat_port,
   $contextpath   = $jira::contextpath,
-  $json_packages = $jira::params::json_packages,) inherits jira::params {
+  $json_packages = $jira::params::json_packages,
+  # lint:ignore:parameter_order
+  $uri           = $jira::tomcat_address ? {
+    undef   => '127.0.0.1',
+    default => $jira::tomcat_address,
+  },
+  # lint:endignore
+  ) inherits jira::params {
   # Puppet Enterprise supplies its own ruby version if your using it.
   # A modern ruby version is required to run the executable fact
   # Since PE 2015.2 the agents are All in One (AIO) wich also include it's own ruby version
