@@ -1,1 +1,3 @@
-jira.websudo.is.disabled = <%= !scope.lookupvar('jira::enable_secure_admin_sessions') %>
+<% @merged_jira_config_properties.sort.each do |key,value| -%>
+<%= key %> = <%= value %>
+<% end -%>

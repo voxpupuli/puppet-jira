@@ -1,7 +1,0 @@
---fail-fast
--format
-s
---colour
---loadby
-mtime
---backtrace

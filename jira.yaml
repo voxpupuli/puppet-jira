@@ -60,7 +60,7 @@ jira::dbport: 5432
 #jira::dbport: 1433
 
 # Schema
-# Defauult for postgres
+# Default for postgres
 jira::dbschema: 'public'
 # Default for mssql
 #jira::dbschema: 'dbo'
@@ -68,15 +68,15 @@ jira::dbschema: 'public'
 # The connection pool size
 jira::poolsize: 20
 jira::enable_connection_pooling: false
-jira::poolMinSize: 20
-jira::poolMaxSize: 20
-jira::poolMaxWait: 30000
-jira::minEvictableIdleTime: 60000
-jira::poolMaxIdle: 20
-jira::poolRemoveAbandoned: true
-jira::poolRemoveAbandonedTimout: 300
-jira::poolTestWhileIdle: true
-jira::poolTestOnBorrow: true
+jira::pool_min_size: 20
+jira::pool_max_size: 20
+jira::pool_max_wait: 30000
+jira::min_evictable_idle_time: 60000
+jira::pool_max_idle: 20
+jira::pool_remove_abandoned: true
+jira::pool_remove_abandoned_timeout: 300
+jira::pool_test_while_idle: true
+jira::pool_test_on_borrow: true
 
 # Change if your database isn't on localhost.  This module will only check
 # to make sure that the service is running and start it if it is not on
@@ -93,7 +93,7 @@ jira::jvm_optional: -XX:-HeapDumpOnOutOfMemoryError
 # the New and SR figures are purely optional
 # for heap dumps add -XX:-HeapDumpOnOutOfMemoryError
 # by default jira has 256m permgen which is a good setting to go with
-jira::downloadURL: 'https://downloads.atlassian.com/software/jira/downloads/'
+jira::download_url: 'https://downloads.atlassian.com/software/jira/downloads/'
 
 # Should puppet manage this service
 #  Boolean dictating if puppet should manage the service
@@ -102,8 +102,8 @@ jira::service_ensure: running
 jira::service_enable: true
 
 # Tomcat settings
-jira::tomcatMaxThreads:  '150'
-jira::tomcatAcceptCount: '100'
+jira::tomcat_max_threads:  '150'
+jira::tomcat_accept_count: '100'
 
 # Configure reverse ssl proxy
 jira::proxy:

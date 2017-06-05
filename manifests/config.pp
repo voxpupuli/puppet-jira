@@ -20,16 +20,16 @@ class jira::config inherits jira {
     group => $jira::group,
   }
 
-  if $jira::validationQuery == undef {
-    $validationQuery = $jira::db ? {
+  if $jira::validation_query == undef {
+    $validation_query = $jira::db ? {
       'postgresql' => 'select version();',
       'mysql'      => 'select 1',
       'oracle'     => 'select 1 from dual',
       'sqlserver'  => 'select 1',
     }
   }
-  if $jira::timeBetweenEvictionRuns == undef {
-    $timeBetweenEvictionRuns = $jira::db ? {
+  if $jira::time_between_eviction_runs == undef {
+    $time_between_eviction_runs = $jira::db ? {
       'postgresql' => '30000',
       'mysql'      => '300000',
       'oracle'     => '300000',
@@ -45,20 +45,32 @@ class jira::config inherits jira {
       File[$jira::webappdir],
       File[$jira::homedir],
     ],
-  } ->
+  }
 
-  file { "${jira::webappdir}/bin/setenv.sh":
+  -> file { "${jira::webappdir}/bin/setenv.sh":
     content => template('jira/setenv.sh.erb'),
     mode    => '0755',
     require => Class['jira::install'],
     notify  => Class['jira::service'],
-  } ->
+  }
 
-  file { "${jira::homedir}/dbconfig.xml":
+  -> file { "${jira::homedir}/dbconfig.xml":
     content => template("jira/dbconfig.${jira::db}.xml.erb"),
     mode    => '0600',
     require => [ Class['jira::install'],File[$jira::homedir] ],
     notify  => Class['jira::service'],
+  }
+
+  if $jira::script_check_java_manage {
+    file { "${jira::webappdir}/bin/check-java.sh":
+      content => template($jira::script_check_java_template),
+      mode    => '0755',
+      require => [
+        Class['jira::install'],
+        File["${jira::webappdir}/bin/setenv.sh"],
+      ],
+      notify  => Class['jira::service'],
+    }
   }
 
   file { "${jira::webappdir}/conf/server.xml":
@@ -66,8 +78,8 @@ class jira::config inherits jira {
     mode    => '0600',
     require => Class['jira::install'],
     notify  => Class['jira::service'],
-  }->
-  file { "${jira::webappdir}/conf/context.xml":
+  }
+  -> file { "${jira::webappdir}/conf/context.xml":
     content => template('jira/context.xml.erb'),
     mode    => '0600',
     require => Class['jira::install'],

@@ -46,14 +46,14 @@ node default {
   }
 
   class { '::jira':
-    javahome           => '/opt/java/latest',
-    db                 => 'mysql',
-    dbport             => '3306',
-    dbdriver           => 'com.mysql.jdbc.Driver',
-    dbtype             => 'mysql',
-    tomcatNativeSsl    => true,
-    tomcatKeystoreFile => '/home/jira/jira.ks',
-    require            => Mysql::Db['jira'],
+    javahome             => '/opt/java/latest',
+    db                   => 'mysql',
+    dbport               => '3306',
+    dbdriver             => 'com.mysql.jdbc.Driver',
+    dbtype               => 'mysql',
+    tomcat_native_ssl    => true,
+    tomcat_keystore_file => '/home/jira/jira.ks',
+    require              => Mysql::Db['jira'],
   }
 
   include ::jira::facts

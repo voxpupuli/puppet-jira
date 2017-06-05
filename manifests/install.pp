@@ -15,11 +15,13 @@
 # -----------------------------------------------------------------------------
 class jira::install {
 
+  include '::archive'
+
   group { $jira::group:
     ensure => present,
-    gid    => $jira::gid
-  } ->
-  user { $jira::user:
+    gid    => $jira::gid,
+  }
+  -> user { $jira::user:
     comment          => 'Jira daemon account',
     shell            => $jira::shell,
     home             => $jira::homedir,
@@ -43,82 +45,103 @@ class jira::install {
   # Examples of product tarballs from Atlassian
   # Core                - atlassian-jira-core-7.0.3.tar.gz
   # Software (pre-7)    - atlassian-jira-6.4.12.tar.gz
-  # Software (7 and up) - atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz
+  # Software (7 to 7.1.8 ) - atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz
+  # Software (7.1.9 and up) - atlassian-jira-software-7.1.9.tar.gz
 
-  if ((versioncmp($jira::version, '7.0.0') < 0) or ($jira::product_name == 'jira-core')) {
-    $file = "atlassian-${jira::product_name}-${jira::version}.${jira::format}"
+  if (versioncmp($jira::version, '7.1.9') < 0) {
+    if ((versioncmp($jira::version, '7.0.0') < 0) or ($jira::product_name == 'jira-core')) {
+      $file = "atlassian-${jira::product_name}-${jira::version}.${jira::format}"
+    } else {
+      $file = "atlassian-${jira::product_name}-${jira::version}-jira-${jira::version}.${jira::format}"
+    }
   } else {
-    $file = "atlassian-${jira::product_name}-${jira::version}-jira-${jira::version}.${jira::format}"
+    $file = "atlassian-${jira::product_name}-${jira::version}.${jira::format}"
   }
 
-  if $jira::staging_or_deploy == 'staging' {
+  if ! defined(File[$jira::extractdir]) {
+    file { $jira::extractdir:
+      ensure => 'directory',
+      owner  => $jira::user,
+      group  => $jira::group,
+    }
+  }
 
-    require staging
+  if ! defined(File[$jira::webappdir]) {
+    file { $jira::webappdir:
+      ensure => 'directory',
+      owner  => $jira::user,
+      group  => $jira::group,
+    }
+  }
 
-    if ! defined(File[$jira::webappdir]) {
-      file { $jira::webappdir:
-        ensure => 'directory',
-        owner  => $jira::user,
-        group  => $jira::group,
+  case $jira::deploy_module {
+    'staging': {
+      require ::staging
+      staging::file { $file:
+        source  => "${jira::download_url}/${file}",
+        timeout => 1800,
+      }
+      -> staging::extract { $file:
+        target  => $jira::extractdir,
+        creates => "${jira::webappdir}/conf",
+        strip   => 1,
+        user    => $jira::user,
+        group   => $jira::group,
+        notify  => Exec["chown_${jira::extractdir}"],
+        before  => File[$jira::homedir],
+        require => [
+          File[$jira::installdir],
+          User[$jira::user],
+          File[$jira::extractdir] ],
       }
     }
-
-    staging::file { $file:
-      source  => "${jira::downloadURL}/${file}",
-      timeout => 1800,
-    } ->
-
-    staging::extract { $file:
-      target  => $jira::webappdir,
-      creates => "${jira::webappdir}/conf",
-      strip   => 1,
-      user    => $jira::user,
-      group   => $jira::group,
-      notify  => Exec["chown_${jira::webappdir}"],
-      before  => File[$jira::homedir],
-      require => [
-        File[$jira::installdir],
-        User[$jira::user],
-        File[$jira::webappdir] ],
+    'archive': {
+      archive { "/tmp/${file}":
+        ensure          => present,
+        extract         => true,
+        extract_command => 'tar xfz %s --strip-components=1',
+        extract_path    => $jira::webappdir,
+        source          => "${jira::download_url}/${file}",
+        creates         => "${jira::webappdir}/conf",
+        cleanup         => true,
+        checksum_verify => $jira::checksum_verify,
+        checksum_type   => 'md5',
+        checksum        => $jira::checksum,
+        user            => $jira::user,
+        group           => $jira::group,
+        before          => File[$jira::homedir],
+        require         => [
+          File[$jira::installdir],
+          File[$jira::webappdir],
+          User[$jira::user],
+        ],
+      }
     }
-  } elsif $jira::staging_or_deploy == 'deploy' {
-
-    deploy::file { $file:
-      target          => $jira::webappdir,
-      url             => $jira::downloadURL,
-      strip           => true,
-      download_timout => 1800,
-      owner           => $jira::user,
-      group           => $jira::group,
-      notify          => Exec["chown_${jira::webappdir}"],
-      before          => File[$jira::homedir],
-      require         => [ File[$jira::installdir], User[$jira::user] ],
+    default: {
+      fail('deploy_module parameter must equal "archive" or staging""')
     }
-
-  } else {
-    fail('staging_or_deploy must equal "staging" or "deploy"')
   }
 
   file { $jira::homedir:
     ensure => 'directory',
     owner  => $jira::user,
     group  => $jira::group,
-  } ->
+  }
 
-  exec { "chown_${jira::webappdir}":
-    command     => "/bin/chown -R ${jira::user}:${jira::group} ${jira::webappdir}",
+  -> exec { "chown_${jira::extractdir}":
+    command     => "/bin/chown -R ${jira::user}:${jira::group} ${jira::extractdir}",
     refreshonly => true,
-    subscribe   => User[$jira::user]
+    subscribe   => User[$jira::user],
   }
 
   if $jira::db == 'mysql' and $jira::mysql_connector_manage {
-    if $jira::staging_or_deploy == 'staging' {
+    if $jira::deploy_module == 'archive' {
+      class { '::jira::mysql_connector':
+        require => Archive["/tmp/${file}"],
+      }
+    } elsif $jira::deploy_module == 'deploy' {
       class { '::jira::mysql_connector':
         require => Staging::Extract[$file],
-      }
-    } elsif $jira::staging_or_deploy == 'deploy' {
-      class { '::jira::mysql_connector':
-        require => Deploy::File[$file],
       }
     }
     contain ::jira::mysql_connector

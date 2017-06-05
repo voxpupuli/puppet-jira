@@ -1,25 +1,56 @@
-language: ruby
-bundler_args: --without development system_tests
-before_install: rm Gemfile.lock || true
+---
 sudo: false
+dist: trusty
+language: ruby
+cache: bundler
+before_install:
+  - bundle -v
+  - rm Gemfile.lock || true
+  - gem update --system
+  - gem update bundler
+  - gem --version
+  - bundle -v
+script:
+  - 'bundle exec rake $CHECK'
 matrix:
+  fast_finish: true
   include:
-  - rvm: 1.9.3
-    env: PUPPET_GEM_VERSION="~> 3.4.0"
-  - rvm: 1.9.3
-    env: PUPPET_GEM_VERSION="~> 3.7.0"
-  - rvm: 2.0.0
-    env: PUPPET_GEM_VERSION="~> 3.4.0"
-  - rvm: 2.0.0
-    env: PUPPET_GEM_VERSION="~> 3.4.0" STRICT_VARIABLES=yes
-  - rvm: 2.0.0
-    env: PUPPET_GEM_VERSION="~> 3.4.0" FUTURE_PARSER="yes"
-  - rvm: 2.1.0
-    env: PUPPET_GEM_VERSION="~> 3.4.0" STRICT_VARIABLES=yes FUTURE_PARSER="yes"
+  - rvm: 2.1.9
+    bundler_args: --without system_tests development
+    env: PUPPET_VERSION="~> 4.0" CHECK=test
+  - rvm: 2.2.7
+    bundler_args: --without system_tests development
+    env: PUPPET_VERSION="~> 4.0" CHECK=test
+  - rvm: 2.3.4
+    bundler_args: --without system_tests development
+    env: PUPPET_VERSION="~> 4.0" CHECK=test
+  - rvm: 2.4.1
+    bundler_args: --without system_tests development
+    env: PUPPET_VERSION="~> 4.0" CHECK=test
+  - rvm: 2.4.1
+    bundler_args: --without system_tests development
+    env: PUPPET_VERSION="~> 4.0" CHECK=rubocop
+  - rvm: 2.4.1
+    bundler_args: --without system_tests development
+    env: PUPPET_VERSION="~> 4.0" CHECK=build DEPLOY_TO_FORGE=yes
+  - rvm: 2.4.0
+    bundler_args: --without development
+    dist: trusty
+    env: PUPPET_INSTALL_TYPE=agent PUPPET_VERSION="~> 4.0" CHECK=acceptance BEAKER_debug=true BEAKER_set=docker/debian-8
+    services: docker
+    sudo: required
+  - rvm: 2.4.0
+    bundler_args: --without development
+    dist: trusty
+    env: PUPPET_INSTALL_TYPE=agent PUPPET_VERSION="~> 4.0" CHECK=acceptance BEAKER_debug=true BEAKER_set=docker/centos-7
+    services: docker
+    sudo: required
+branches:
+  only:
+  - master
+  - /^v\d/
 notifications:
-  email:
-    - merritt@krakowitzer.com
-script: bundle exec rake test
+  email: false
 deploy:
   provider: puppetforge
   user: puppet
@@ -29,6 +60,5 @@ deploy:
     tags: true
     # all_branches is required to use tags
     all_branches: true
-    # Only publish if our main Ruby target builds
-    rvm: 1.9.3
-
+    # Only publish the build marked with "DEPLOY_TO_FORGE"
+    condition: "$DEPLOY_TO_FORGE = yes"

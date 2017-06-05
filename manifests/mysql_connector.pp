@@ -4,10 +4,10 @@ class jira::mysql_connector (
   $product      = $jira::mysql_connector_product,
   $format       = $jira::mysql_connector_format,
   $installdir   = $jira::mysql_connector_install,
-  $downloadURL  = $jira::mysql_connector_URL,
+  $download_url = $jira::mysql_connector_url,
 ) {
 
-  require staging
+  require ::staging
 
   $file = "${product}-${version}.${format}"
 
@@ -16,21 +16,21 @@ class jira::mysql_connector (
       ensure => 'directory',
       owner  => root,
       group  => root,
-      before => Staging::File[$file]
+      before => Staging::File[$file],
     }
   }
 
   staging::file { $file:
-    source  => "${downloadURL}/${file}",
+    source  => "${download_url}/${file}",
     timeout => 300,
-  } ->
+  }
 
-  staging::extract { $file:
+  -> staging::extract { $file:
     target  => $installdir,
     creates => "${installdir}/${product}-${version}",
-  } ->
+  }
 
-  file { "${jira::webappdir}/lib/mysql-connector-java.jar":
+  -> file { "${jira::webappdir}/lib/mysql-connector-java.jar":
     ensure => link,
     target => "${installdir}/${product}-${version}/${product}-${version}-bin.jar",
   }

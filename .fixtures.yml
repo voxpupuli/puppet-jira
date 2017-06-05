@@ -2,6 +2,6 @@ fixtures:
   symlinks:
     jira: "#{source_dir}"
   repositories:
-    deploy: "https://github.com/mkrakowitzer/puppet-deploy"
-    staging: "https://github.com/nanliu/puppet-staging"
-    stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib"
+    archive: "https://github.com/voxpupuli/puppet-archive.git"
+    staging: "https://github.com/voxpupuli/puppet-staging.git"
+    stdlib:  "https://github.com/puppetlabs/puppetlabs-stdlib.git"

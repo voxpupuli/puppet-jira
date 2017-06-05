@@ -27,39 +27,41 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<Server port="8005" shutdown="SHUTDOWN">
+<Server port="<%= @tomcat_shutdown_port %>" shutdown="SHUTDOWN">
 
     <!--APR library loader. Documentation at /docs/apr.html -->
     <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
     <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
-  <%- if (scope.function_versioncmp([@version, '7.0.0']) < 0) -%>
-    <!--Initialize Jasper prior to webapps are loaded. Documentation at /docs/jasper-howto.html -->
+<%- if scope.function_versioncmp([@version, '6.4.14']) <= 0 -%>
     <Listener className="org.apache.catalina.core.JasperListener"/>
-  <%- else -%>
+<% else -%>
     <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
+<%- end -%>
     <!-- Security listener. Documentation at /docs/config/listeners.html
     <Listener className="org.apache.catalina.security.SecurityListener" />
     -->
     <!-- Prevent memory leaks due to use of particular java/javax APIs-->
     <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
     <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
-  <%- end -%>
+
     <Service name="Catalina">
-        <Connector port="<%= @tomcatPort %>"
-                   <%- if @tomcatAddress -%>
-                   address="<%= @tomcatAddress %>"
+        <Connector port="<%= @tomcat_port %>"
+                   <%- if @tomcat_address -%>
+                   address="<%= @tomcat_address %>"
                    <%- end -%>
-                   maxThreads="<%= @tomcatMaxThreads %>"
-                   minSpareThreads="<%= @tomcatMinSpareThreads %>"
-                   connectionTimeout="<%= @tomcatConnectionTimeout %>"
-                   enableLookups="<%= @tomcatEnableLookups %>"
-                   maxHttpHeaderSize="<%= @tomcatMaxHttpHeaderSize %>"
-                   protocol="<%= @tomcatProtocol %>"
-                   useBodyEncodingForURI="<%= @tomcatUseBodyEncodingForURI %>"
-                   acceptCount="<%= @tomcatAcceptCount %>"
-                   disableUploadTimeout="<%= @tomcatDisableUploadTimeout %>"
-<% if @tomcatNativeSsl -%>
-                   redirectPort="<%= @tomcatHttpsPort %>"
+                   maxThreads="<%= @tomcat_max_threads %>"
+                   minSpareThreads="<%= @tomcat_min_spare_threads %>"
+                   connectionTimeout="<%= @tomcat_connection_timeout %>"
+                   enableLookups="<%= @tomcat_enable_lookups %>"
+                   maxHttpHeaderSize="<%= @tomcat_max_http_header_size %>"
+                   protocol="<%= @tomcat_protocol %>"
+                   useBodyEncodingForURI="<%= @tomcat_use_body_encoding_for_uri %>"
+                   acceptCount="<%= @tomcat_accept_count %>"
+                   disableUploadTimeout="<%= @tomcat_disable_upload_timeout %>"
+<% if @tomcat_native_ssl && @tomcat_redirect_https_port -%>
+                   redirectPort="<%= @tomcat_redirect_https_port %>"
+<% else -%>
+                   redirectPort="<%= @tomcat_https_port%>"
 <% end -%>
 <% if @proxy -%>
 <%   @proxy.sort.each do |key,value| -%>
@@ -68,20 +70,20 @@
 <% end -%>
         />
 
-<% if @tomcatNativeSsl -%>
+<% if @tomcat_native_ssl -%>
         <Connector
-                    port="<%= @tomcatHttpsPort %>"
+                    port="<%= @tomcat_https_port %>"
                     protocol="org.apache.coyote.http11.Http11Protocol"
-                    <%- if @tomcatAddress -%>
-                    address="<%= @tomcatAddress %>"
+                    <%- if @tomcat_address -%>
+                    address="<%= @tomcat_address %>"
                     <%- end -%>
-                    maxHttpHeaderSize="<%= @tomcatMaxHttpHeaderSize %>"
+                    maxHttpHeaderSize="<%= @tomcat_max_http_header_size %>"
                     SSLEnabled="true"
-                    maxThreads="<%= @tomcatMaxThreads %>"
-                    minSpareThreads="<%= @tomcatMinSpareThreads %>"
-                    enableLookups="<%= @tomcatEnableLookups %>"
-                    disableUploadTimeout="<%= @tomcatDisableUploadTimeout %>"
-                    acceptCount="<%= @tomcatAcceptCount %>"
+                    maxThreads="<%= @tomcat_max_threads %>"
+                    minSpareThreads="<%= @tomcat_min_spare_threads %>"
+                    enableLookups="<%= @tomcat_enable_lookups %>"
+                    disableUploadTimeout="<%= @tomcat_disable_upload_timeout %>"
+                    acceptCount="<%= @tomcat_accept_count %>"
 <%   if ! @proxy['scheme'] -%>
                     scheme="https"
 <%   end -%>
@@ -89,10 +91,10 @@
                     clientAuth="false"
                     sslProtocol="TLS"
                     useBodyEncodingForURI="true"
-                    keyAlias="<%= @tomcatKeyAlias %>"
-                    keystoreFile="<%= @tomcatKeystoreFile %>"
-                    keystorePass="<%= @tomcatKeystorePass %>"
-                    keystoreType="<%= @tomcatKeystoreType %>"
+                    keyAlias="<%= @tomcat_key_alias %>"
+                    keystoreFile="<%= @tomcat_keystore_file %>"
+                    keystorePass="<%= @tomcat_keystore_pass %>"
+                    keystoreType="<%= @tomcat_keystore_type %>"
 <%   if @proxy -%>
 <%     @proxy.sort.each do |key,value| -%>
                     <%= key %>=<%= "\'#{value}\'" %>
@@ -108,7 +110,7 @@
 <%   end -%>
         />
 <% end -%>
-  
+
         <Engine name="Catalina" defaultHost="localhost">
             <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true">
 
@@ -122,7 +124,7 @@
             </Host>
 
             <Valve className="org.apache.catalina.valves.AccessLogValve" resolveHosts="false"
-                   pattern="%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;"/>
+                   pattern="<%= @tomcat_accesslog_format %>"/>
 
         </Engine>
     </Service>

@@ -8,30 +8,52 @@ class jira::params {
 
   case $::osfamily {
     /RedHat/: {
-      if $::operatingsystemmajrelease == '7' {
+      if versioncmp($::operatingsystemmajrelease, '7') >= 0 {
         $json_packages           = 'rubygem-json'
         $service_file_location   = '/usr/lib/systemd/system/jira.service'
         $service_file_template   = 'jira/jira.service.erb'
         $service_lockfile        = '/var/lock/subsys/jira'
-      } elsif $::operatingsystemmajrelease == '6' or $::operatingsystem == 'Amazon'{
+        $service_provider        = 'systemd'
+      } elsif versioncmp($::operatingsystemmajrelease, '6') >= 0 or $::operatingsystem == 'Amazon'{
         $json_packages           = [ 'rubygem-json', 'ruby-json' ]
         $service_file_location   = '/etc/init.d/jira'
         $service_file_template   = 'jira/jira.initscript.erb'
         $service_lockfile        = '/var/lock/subsys/jira'
+        $service_provider        = undef
       } else {
         fail("\"${module_name}\" provides no service parameters
             for \"${::osfamily}\" - \"${::operatingsystemmajrelease}\"")
       }
     } /Debian/: {
-        $json_packages           = [ 'rubygem-json', 'ruby-json' ]
-        $service_file_location   = '/etc/init.d/jira'
-        $service_file_template   = 'jira/jira.initscript.erb'
-        $service_lockfile        = '/var/lock/jira'
+      case $::operatingsystem {
+        'Ubuntu': {
+          $json_packages           = [ 'rubygem-json', 'ruby-json' ]
+          $service_file_location   = '/etc/init.d/jira'
+          $service_file_template   = 'jira/jira.initscript.erb'
+          $service_lockfile        = '/var/lock/jira'
+          $service_provider        = 'debian'
+        } default: {
+          if versioncmp($::operatingsystemmajrelease, '8') >= 0 {
+            $json_packages           = 'ruby-json'
+            $service_file_location   = '/lib/systemd/system/jira.service'
+            $service_file_template   = 'jira/jira.service.erb'
+            $service_lockfile        = '/var/lock/subsys/jira'
+            $service_provider        = 'systemd'
+          } else {
+            $json_packages           = [ 'rubygem-json', 'ruby-json' ]
+            $service_file_location   = '/etc/init.d/jira'
+            $service_file_template   = 'jira/jira.initscript.erb'
+            $service_lockfile        = '/var/lock/jira'
+            $service_provider        = 'debian'
+          }
+        }
+      }
     } default: {
         $json_packages           = [ 'rubygem-json', 'ruby-json' ]
         $service_file_location   = '/etc/init.d/jira'
         $service_file_template   = 'jira/jira.initscript.erb'
         $service_lockfile        = '/var/lock/subsys/jira'
+        $service_provider        = undef
     }
   }
 }
