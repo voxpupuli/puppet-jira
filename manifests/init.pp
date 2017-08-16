@@ -120,6 +120,7 @@ class jira (
   $tomcat_https_port                                                = 8443,
   Optional[Integer] $tomcat_redirect_https_port                     = undef,
   $tomcat_protocol                                                  = 'HTTP/1.1',
+  $tomcat_protocol_ssl                                              = 'org.apache.coyote.http11.Http11Protocol',
   $tomcat_use_body_encoding_for_uri                                 = true,
   $tomcat_disable_upload_timeout                                    = true,
   $tomcat_key_alias                                                 = 'jira',
