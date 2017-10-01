@@ -173,7 +173,7 @@ class jira (
     # Shut it down in preparation for upgrade.
     if versioncmp($version, $::jira_version) > 0 {
       notify { 'Attempting to upgrade JIRA': }
-      exec { $stop_jira: before => Anchor['jira::start'] }
+      exec { $stop_jira: before => Class['jira::install'] }
     }
   }
 
@@ -222,12 +222,13 @@ class jira (
     $checksum_verify = true
   }
 
+  contain jira::install
+  contain jira::config
+  contain jira::service
 
-  anchor { 'jira::start': }
-  -> class { '::jira::install': }
-  -> class { '::jira::config': }
-  ~> class { '::jira::service': }
-  -> anchor { 'jira::end': }
+  Class['jira::install']
+  -> Class['jira::config']
+  ~> Class['jira::service']
 
   if ($enable_sso) {
     class { '::jira::sso': }
