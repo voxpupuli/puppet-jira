@@ -8,13 +8,15 @@ describe 'jira' do
           let(:facts) do
             facts.merge(os: { family: facts['osfamily'] })
           end
+          let(:params) do
+            { javahome: '/opt/java' }
+          end
+          let(:pre_condition) do
+            'package { "jdk": }'
+          end
 
           if os == 'RedHat'
             context 'default params' do
-              let(:params) do
-                { javahome: '/opt/java' }
-              end
-
               it { is_expected.to contain_service('jira') }
               it { is_expected.to compile.with_all_deps }
               it do
@@ -31,9 +33,6 @@ describe 'jira' do
           end
           if os == 'Debian'
             context 'lockfile on Debian' do
-              let(:params) do
-                { javahome: '/opt/java' }
-              end
               let(:facts) do
                 { osfamily: 'Debian' }
               end
@@ -47,32 +46,24 @@ describe 'jira' do
           end
           if os =~ %r{ubuntu}
             context 'default params' do
-              let(:params) do
-                { javahome: '/opt/java' }
-              end
-
               it { is_expected.to compile.with_all_deps }
               it { is_expected.not_to contain_file('/lib/systemd/system/jira.service') }
             end
           end
           context 'overwriting service_manage param' do
             let(:params) do
-              {
-                service_manage: false,
-                javahome: '/opt/java'
-              }
+              super().merge(service_manage: false)
             end
 
             it { is_expected.not_to contain_service('jira') }
           end
           context 'overwriting service params' do
             let(:params) do
-              {
-                javahome: '/opt/java',
+              super().merge(
                 service_ensure: 'stopped',
                 service_enable: false,
                 service_subscribe: 'Package[jdk]'
-              }
+              )
             end
 
             it do
@@ -83,9 +74,6 @@ describe 'jira' do
             end
           end
           context 'RedHat/CentOS 7 systemd init script' do
-            let(:params) do
-              { javahome: '/opt/java' }
-            end
             let(:facts) do
               {
                 osfamily: 'RedHat',
