@@ -4,3 +4,4 @@
   docker_sets:
     - set: docker/centos-7
     - set: docker/debian-8
+    - set: docker/ubuntu-14.04
