@@ -17,21 +17,23 @@ class jira::install {
 
   include '::archive'
 
-  group { $jira::group:
-    ensure => present,
-    gid    => $jira::gid,
-  }
-  -> user { $jira::user:
-    comment          => 'Jira daemon account',
-    shell            => $jira::shell,
-    home             => $jira::homedir,
-    password         => '*',
-    password_min_age => '0',
-    password_max_age => '99999',
-    managehome       => true,
-    uid              => $jira::uid,
-    gid              => $jira::gid,
+  if $jira::manage_user {
+    group { $jira::group:
+      ensure => present,
+      gid    => $jira::gid,
+    }
+    -> user { $jira::user:
+      comment          => 'Jira daemon account',
+      shell            => $jira::shell,
+      home             => $jira::homedir,
+      password         => '*',
+      password_min_age => '0',
+      password_max_age => '99999',
+      managehome       => true,
+      uid              => $jira::uid,
+      gid              => $jira::gid,
 
+    }
   }
 
   if ! defined(File[$jira::installdir]) {
