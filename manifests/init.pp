@@ -38,6 +38,7 @@ class jira (
   String $format                                                    = 'tar.gz',
   Stdlib::Absolutepath $installdir                                  = '/opt/jira',
   Stdlib::Absolutepath $homedir                                     = '/home/jira',
+  Boolean $manage_user                                              = true,
   String $user                                                      = 'jira',
   String $group                                                     = 'jira',
   $uid                                                              = undef,
@@ -94,6 +95,8 @@ class jira (
   $disable_notifications                                            = false,
   # Choose whether to use puppet-staging, or puppet-archive
   $deploy_module                                                    = 'archive',
+  $proxy_server                                                     = undef,
+  $proxy_type                                                       = undef,
   # Manage service
   $service_manage                                                   = true,
   $service_ensure                                                   = running,
