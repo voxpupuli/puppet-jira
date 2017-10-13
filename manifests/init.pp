@@ -203,7 +203,7 @@ class jira (
     if versioncmp($version, '7.3.0') >= 0 {
       $tomcat_protocol_ssl_real = 'org.apache.coyote.http11.Http11NioProtocol'
     } else {
-      $tomcat_protocol_ssl_real = 'org.apache.coyote.http11.Http11Protocol',
+      $tomcat_protocol_ssl_real = 'org.apache.coyote.http11.Http11Protocol'
     }
   }
 
