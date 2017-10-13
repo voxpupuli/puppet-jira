@@ -120,7 +120,7 @@ class jira (
   $tomcat_https_port                                                = 8443,
   Optional[Integer] $tomcat_redirect_https_port                     = undef,
   $tomcat_protocol                                                  = 'HTTP/1.1',
-  $tomcat_protocol_ssl                                              = 'org.apache.coyote.http11.Http11Protocol',
+  $tomcat_protocol_ssl                                              = undef,
   $tomcat_use_body_encoding_for_uri                                 = true,
   $tomcat_disable_upload_timeout                                    = true,
   $tomcat_key_alias                                                 = 'jira',
@@ -194,6 +194,16 @@ class jira (
       'mysql'      => "jdbc:${db}://${dbserver}:${dbport}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=storage_engine=InnoDB",
       'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport}:${dbname}",
       'sqlserver'  => "jdbc:jtds:${db}://${dbserver}:${dbport}/${dbname}"
+    }
+  }
+
+  if $tomcat_protocol_ssl {
+    $tomcat_protocol_ssl_real = $tomcat_protocol_ssl
+  } else {
+    if versioncmp($version, '7.3.0') >= 0 {
+      $tomcat_protocol_ssl_real = 'org.apache.coyote.http11.Http11NioProtocol'
+    } else {
+      $tomcat_protocol_ssl_real = 'org.apache.coyote.http11.Http11Protocol',
     }
   }
 

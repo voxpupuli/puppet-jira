@@ -73,7 +73,7 @@
 <% if @tomcat_native_ssl -%>
         <Connector
                     port="<%= @tomcat_https_port %>"
-                    protocol="<%= @tomcat_protocol_ssl %>"
+                    protocol="<%= @tomcat_protocol_ssl_real %>"
                     <%- if @tomcat_address -%>
                     address="<%= @tomcat_address %>"
                     <%- end -%>
