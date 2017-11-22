@@ -68,7 +68,7 @@ describe 'jira' do
               let(:facts) do
                 facts.merge(operatingsystem: 'Ubuntu', operatingsystemmajrelease: '16.04')
               end
-              
+
               it { is_expected.to contain_file('/lib/systemd/system/jira.service') }
             end
           end
