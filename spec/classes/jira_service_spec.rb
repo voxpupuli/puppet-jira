@@ -48,7 +48,7 @@ describe 'jira' do
           if os =~ %r{ubuntu-12}
             context 'default params' do
               let(:facts) do
-                facts.merge( operatingsystem: 'Ubuntu', operatingsystemmajrelease: '12.04')
+                facts.merge(operatingsystem: 'Ubuntu', operatingsystemmajrelease: '12.04')
               end
 
               it { is_expected.not_to contain_file('/lib/systemd/system/jira.service') }
@@ -57,7 +57,7 @@ describe 'jira' do
           if os =~ %r{ubuntu-14}
             context 'default params' do
               let(:facts) do
-                facts.merge( operatingsystem: 'Ubuntu', operatingsystemmajrelease: '14.04')
+                facts.merge(operatingsystem: 'Ubuntu', operatingsystemmajrelease: '14.04')
               end
 
               it { is_expected.not_to contain_file('/lib/systemd/system/jira.service') }
@@ -66,7 +66,7 @@ describe 'jira' do
           if os =~ %r{ubuntu-16}
             context 'default params' do
               let(:facts) do
-                facts.merge( operatingsystem: 'Ubuntu', operatingsystemmajrelease: '16.04')
+                facts.merge(operatingsystem: 'Ubuntu', operatingsystemmajrelease: '16.04')
               end
               
               it { is_expected.to contain_file('/lib/systemd/system/jira.service') }
