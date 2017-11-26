@@ -14,7 +14,7 @@
   "dependencies": [
     {
       "name": "puppet/archive",
-      "version_requirement": ">= 1.0.0 < 2.0.0"
+      "version_requirement": ">= 1.0.0 < 3.0.0"
     },
     {
       "name": "puppet/staging",
