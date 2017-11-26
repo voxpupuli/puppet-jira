@@ -33,10 +33,6 @@ describe 'jira' do
           end
           if os == 'Debian'
             context 'lockfile on Debian' do
-              let(:facts) do
-                { osfamily: 'Debian' }
-              end
-
               it { is_expected.to compile.with_all_deps }
               it do
                 is_expected.to contain_file('/etc/init.d/jira').
@@ -47,7 +43,33 @@ describe 'jira' do
           if os =~ %r{ubuntu}
             context 'default params' do
               it { is_expected.to compile.with_all_deps }
+            end
+          end
+          if os =~ %r{ubuntu-12}
+            context 'default params' do
+              let(:facts) do
+                facts.merge(operatingsystem: 'Ubuntu', operatingsystemmajrelease: '12.04')
+              end
+
               it { is_expected.not_to contain_file('/lib/systemd/system/jira.service') }
+            end
+          end
+          if os =~ %r{ubuntu-14}
+            context 'default params' do
+              let(:facts) do
+                facts.merge(operatingsystem: 'Ubuntu', operatingsystemmajrelease: '14.04')
+              end
+
+              it { is_expected.not_to contain_file('/lib/systemd/system/jira.service') }
+            end
+          end
+          if os =~ %r{ubuntu-16}
+            context 'default params' do
+              let(:facts) do
+                facts.merge(operatingsystem: 'Ubuntu', operatingsystemmajrelease: '16.04')
+              end
+
+              it { is_expected.to contain_file('/lib/systemd/system/jira.service') }
             end
           end
           context 'overwriting service_manage param' do
