@@ -4,14 +4,37 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v3.2.1](https://github.com/voxpupuli/puppet-jira/tree/v3.2.1) (2017-10-12)
+## [v3.3.0](https://github.com/voxpupuli/puppet-jira/tree/v3.3.0) (2017-12-09)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v3.2.1...v3.3.0)
+
+**Implemented enhancements:**
+
+- Add official Ubuntu 16.04 support [\#229](https://github.com/voxpupuli/puppet-jira/pull/229) ([KoenDierckx](https://github.com/KoenDierckx))
+
+**Fixed bugs:**
+
+- Update download URL logic [\#218](https://github.com/voxpupuli/puppet-jira/issues/218)
+
+**Merged pull requests:**
+
+- release 3.2.1 [\#226](https://github.com/voxpupuli/puppet-jira/pull/226) ([bastelfreak](https://github.com/bastelfreak))
+- bump archive dep to allow latest version [\#221](https://github.com/voxpupuli/puppet-jira/pull/221) ([bastelfreak](https://github.com/bastelfreak))
+
+## [v3.2.1](https://github.com/voxpupuli/puppet-jira/tree/v3.2.1) (2017-10-13)
+
 [Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v3.2.0...v3.2.1)
 
 **Fixed bugs:**
 
 - Set tomcat\_protocol\_ssl based on jira version if undef [\#225](https://github.com/voxpupuli/puppet-jira/pull/225) ([markleary](https://github.com/markleary))
 
+**Merged pull requests:**
+
+- Release 3.2.0 [\#224](https://github.com/voxpupuli/puppet-jira/pull/224) ([dhollinger](https://github.com/dhollinger))
+
 ## [v3.2.0](https://github.com/voxpupuli/puppet-jira/tree/v3.2.0) (2017-10-10)
+
 [Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v3.1.0...v3.2.0)
 
 **Implemented enhancements:**
@@ -27,8 +50,8 @@ These should not affect the functionality of the module.
 
 **Merged pull requests:**
 
-- Release 3.2.0 [\#224](https://github.com/voxpupuli/puppet-jira/pull/224) ([dhollinger](https://github.com/dhollinger))
 - Fix \#206 rubocop failures [\#207](https://github.com/voxpupuli/puppet-jira/pull/207) ([sacres](https://github.com/sacres))
+- release 3.1.0 [\#203](https://github.com/voxpupuli/puppet-jira/pull/203) ([bastelfreak](https://github.com/bastelfreak))
 
 ## v3.1.0 (2017-01-13)
 
