@@ -95,6 +95,8 @@ class jira (
   $disable_notifications                                            = false,
   # Choose whether to use puppet-staging, or puppet-archive
   $deploy_module                                                    = 'archive',
+  $proxy_server                                                     = undef,
+  Optional[Enum['none','http','https','ftp']] $proxy_type           = undef,
   # Manage service
   $service_manage                                                   = true,
   $service_ensure                                                   = running,

@@ -383,6 +383,16 @@ Module to use for downloading and extracting archive file. Supports puppet-archi
 and puppet-staging. Defaults to 'archive'. Archive supports md5 hash checking and
 Staging supports S3 buckets.
 
+##### `$proxy_server`
+
+Specify a proxy server, with port number if needed. ie: https://example.com:8080.
+Only supported with `deploy_module => archive` (the default).  Defaults to 'undef'.
+
+##### `$proxy_type`
+ 
+Proxy server type (none|http|https|ftp)
+Only supported with `deploy_module => archive` (the default).  Defaults to 'undef'.
+
 ##### `$service_manage`
 
 Manage the JIRA service, defaults to 'true'
