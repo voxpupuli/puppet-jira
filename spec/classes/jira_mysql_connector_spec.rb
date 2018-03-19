@@ -12,7 +12,7 @@ describe 'jira' do
           context 'mysql connector defaults' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '7.7.0',
                 javahome: '/opt/java',
                 db: 'mysql',
                 mysql_connector_version: '5.1.34'
@@ -22,16 +22,17 @@ describe 'jira' do
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_file('/opt/MySQL-connector').with_ensure('directory') }
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/lib/mysql-connector-java.jar').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-7.7.0-standalone/lib/mysql-connector-java.jar').
                 with(
                   'ensure' => 'link',
-                  'target' => '/opt/MySQL-connector/mysql-connector-java-5.1.34/mysql-connector-java-5.1.34-bin.jar'
+                  'target' => '/opt/MySQL-connector/mysql-connector-java-5.1.34-bin.jar'
                 )
             end
-            it 'deploys mysql connector 5.1.34 from tar.gz' do
-              is_expected.to contain_staging__file('mysql-connector-java-5.1.34.tar.gz').with('source' => 'https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.34.tar.gz')
-              is_expected.to contain_staging__extract('mysql-connector-java-5.1.34.tar.gz').with('target' => '/opt/MySQL-connector',
-                                                                                                 'creates' => '/opt/MySQL-connector/mysql-connector-java-5.1.34')
+            it 'archive deploys mysql-connector-java from tar.gz' do
+              is_expected.to contain_archive('/tmp/mysql-connector-java-5.1.34.tar.gz').
+                with('extract_path'  => '/opt/MySQL-connector',
+                     'source'        => 'https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.34.tar.gz',
+                     'creates'       => '/opt/MySQL-connector/mysql-connector-java-5.1.34-bin.jar')
             end
           end
           context 'mysql connector overwrite params' do
@@ -42,6 +43,7 @@ describe 'jira' do
                 db: 'mysql',
                 mysql_connector_version: '5.1.15',
                 mysql_connector_format: 'zip',
+                deploy_module: 'staging',
                 mysql_connector_install: '/opt/foo',
                 mysql_connector_url: 'http://example.co.za/foo'
               }
