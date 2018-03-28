@@ -10,7 +10,7 @@ install_module_dependencies
 install_module_from_forge('puppetlabs-apt', '>= 4.1.0 < 5.0.0')
 install_module_from_forge('puppetlabs-java', '>= 2.1.0 < 3.0.0')
 install_module_from_forge('puppetlabs-java_ks', '>= 1.6.0 < 2.0.0')
-install_module_from_forge('puppetlabs-mysql', '>= 4.0.1 < 5.0.0')
+install_module_from_forge('puppetlabs-mysql', '>= 4.0.1 < 6.0.0')
 install_module_from_forge('puppetlabs-postgresql', '>= 5.1.0 < 6.0.0')
 
 UNSUPPORTED_PLATFORMS = %w[AIX windows Solaris].freeze
