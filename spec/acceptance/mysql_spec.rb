@@ -3,7 +3,7 @@ require 'spec_helper_acceptance'
 describe 'jira mysql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
   it 'installs with mysql database' do
     pp = <<-EOS
-      if versioncmp($::puppetversion,'3.6.1') >= 0 {
+      if versioncmp($facts['puppetversion'],'3.6.1') >= 0 {
         $allow_virtual_packages = hiera('allow_virtual_packages',false)
         Package {
           allow_virtual => $allow_virtual_packages,

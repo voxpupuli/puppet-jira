@@ -111,6 +111,8 @@ class jira::install {
         checksum        => $jira::checksum,
         user            => $jira::user,
         group           => $jira::group,
+        proxy_server    => $jira::proxy_server,
+        proxy_type      => $jira::proxy_type,
         before          => File[$jira::homedir],
         require         => [
           File[$jira::installdir],
