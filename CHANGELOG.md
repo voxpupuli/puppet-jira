@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v3.4.1](https://github.com/voxpupuli/puppet-jira/tree/v3.4.1) (2018-03-30)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v3.4.0...v3.4.1)
+
+**Fixed bugs:**
+
+- MySQL storage\_engine problem [\#239](https://github.com/voxpupuli/puppet-jira/issues/239)
+- Correct jdbc storage engine parameter. [\#216](https://github.com/voxpupuli/puppet-jira/pull/216) ([chrisperelstein](https://github.com/chrisperelstein))
+
 ## [v3.4.0](https://github.com/voxpupuli/puppet-jira/tree/v3.4.0) (2018-03-28)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v3.3.0...v3.4.0)
