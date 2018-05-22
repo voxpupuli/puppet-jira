@@ -28,7 +28,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">=4.10.0 <6.0.0"
+      "version_requirement": ">= 4.10.0 < 6.0.0"
     }
   ],
   "operatingsystem_support": [
@@ -63,15 +63,8 @@
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "12.04",
         "14.04",
         "16.04"
-      ]
-    },
-    {
-      "operatingsystem": "Debian",
-      "operatingsystemrelease": [
-        "7"
       ]
     }
   ]
