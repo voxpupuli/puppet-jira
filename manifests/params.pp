@@ -9,7 +9,7 @@ class jira::params {
   case $facts['osfamily'] {
     /RedHat/: {
       if versioncmp($facts['operatingsystemmajrelease'], '7') >= 0 {
-        $json_packages = 'rubygem-json'
+        $json_packages = [ 'rubygem-json' ]
         $service_file_location = '/usr/lib/systemd/system/jira.service'
         $service_file_template = 'jira/jira.service.erb'
         $service_lockfile = '/var/lock/subsys/jira'
@@ -29,7 +29,7 @@ class jira::params {
       case $::operatingsystem {
         'Ubuntu': {
           if versioncmp($facts['operatingsystemmajrelease'], '15.04') >= 0 {
-            $json_packages = 'ruby-json'
+            $json_packages = [ 'ruby-json' ]
             $service_file_location = '/lib/systemd/system/jira.service'
             $service_file_template = 'jira/jira.service.erb'
             $service_lockfile = '/var/lock/subsys/jira'
@@ -44,7 +44,7 @@ class jira::params {
         }
         default: {
           if versioncmp($facts['operatingsystemmajrelease'], '8') >= 0 {
-            $json_packages = 'ruby-json'
+            $json_packages = [ 'ruby-json' ]
             $service_file_location = '/lib/systemd/system/jira.service'
             $service_file_template = 'jira/jira.service.erb'
             $service_lockfile = '/var/lock/subsys/jira'
