@@ -262,47 +262,47 @@ Configure database settings if you are pooling connections, defaults to 'false'
 
 ##### `$pool_min_size`
 
-defaults to 20
+defaults to 20 (requires `enable_connection_pooling => true`)
 
 ##### `$pool_max_size`
 
-defaults to 20
+defaults to 20 (requires `enable_connection_pooling => true`)
 
 ##### `$pool_max_wait`
 
-defaults to 30000
+defaults to 30000 (requires `enable_connection_pooling => true`)
 
 ##### `$validation_query`
 
-defaults to undef
+defaults to undef (requires `enable_connection_pooling => true`)
 
 ##### `$min_evictable_idle_time`
 
-defaults to 60000
+defaults to 60000 (requires `enable_connection_pooling => true`)
 
 ##### `$time_between_eviction_runs`
 
-defaults to undef
+defaults to undef (requires `enable_connection_pooling => true`)
 
 ##### `$pool_max_idle`
 
-defaults to 20
+defaults to 20 (requires `enable_connection_pooling => true`)
 
 ##### `$pool_remove_abandoned`
 
-defaults to true
+defaults to true (requires `enable_connection_pooling => true`)
 
 ##### `$pool_remove_abandoned_timeout`
 
-defaults to 300
+defaults to 300 (requires `enable_connection_pooling => true`)
 
 ##### `$pool_test_while_idle`
 
-defaults to true
+defaults to true (requires `enable_connection_pooling => true`)
 
 ##### `$pool_test_on_borrow`
 
-defaults to false
+defaults to false (requires `enable_connection_pooling => true`)
 
 #### MySQL Java Connector parameters
 
