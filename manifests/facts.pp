@@ -49,9 +49,7 @@ class jira::facts (
   }
 
   if $facts['osfamily'] == 'RedHat' and $facts['puppetversion'] !~ /Puppet Enterprise/ {
-    package { $json_packages:
-      ensure => present,
-    }
+    ensure_packages ($json_packages, { ensure => present })
   }
 
   file { "/etc/${dir}facter/facts.d/jira_facts.rb":
