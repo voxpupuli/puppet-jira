@@ -3,11 +3,11 @@
 <jira-database-config>
   <name>defaultDS</name>
   <delegator-name>default</delegator-name>
-  <database-type><%= scope.lookupvar('jira::dbtype') %></database-type>
+  <database-type><%= scope.lookupvar('jira::dbtype_real') %></database-type>
   <schema-name><%= scope.lookupvar('jira::dbschema') %></schema-name>
   <jdbc-datasource>
     <url><%= scope.lookupvar('jira::dburl_real') %></url>
-    <driver-class><%= scope.lookupvar('jira::dbdriver') %></driver-class>
+    <driver-class><%= scope.lookupvar('jira::dbdriver_real') %></driver-class>
     <username><%= scope.lookupvar('jira::dbuser') %></username>
     <password><%= scope.lookupvar('jira::dbpassword') %></password>
     <pool-size><%= scope.lookupvar('jira::poolsize') %></pool-size>

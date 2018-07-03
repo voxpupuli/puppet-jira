@@ -50,15 +50,15 @@ class jira (
   Boolean $datacenter                                               = false,
   $shared_homedir                                                   = undef,
   # Database Settings
-  Enum['postgresql','mysql','sqlserver','oracle'] $db               = 'postgresql',
+  Enum['postgresql','mysql','sqlserver','oracle','h2'] $db          = 'postgresql',
   $dbuser                                                           = 'jiraadm',
   $dbpassword                                                       = 'mypassword',
   $dbserver                                                         = 'localhost',
   $dbname                                                           = 'jira',
-  $dbport                                                           = '5432',
-  $dbdriver                                                         = 'org.postgresql.Driver',
-  $dbtype                                                           = 'postgres72',
-  $dburl                                                            = undef,
+  Optional[Variant[Integer,String]] $dbport                         = undef,
+  Optional[String] $dbdriver                                        = undef,
+  Optional[String] $dbtype                                          = undef,
+  Optional[String] $dburl                                           = undef,
   $poolsize                                                         = '20',
   $dbschema                                                         = 'public',
   # MySQL Connector Settings
@@ -188,15 +188,52 @@ class jira (
     $webappdir = $extractdir
   }
 
+  if $dbport {
+    $dbport_real = $dbport
+  } else {
+    $dbport_real = $db ? {
+      'postgresql' => '5432',
+      'mysql'      => '3306',
+      'oracle'     => '1521',
+      'sqlserver'  => '1433',
+      'h2'         => '',
+    }
+  }
+
+  if $dbdriver {
+    $dbdriver_real = $dbdriver
+  } else {
+    $dbdriver_real = $db ? {
+      'postgresql' => 'org.postgresql.Driver',
+      'mysql'      => 'com.mysql.jdbc.Driver',
+      'oracle'     => 'oracle.jdbc.OracleDriver',
+      'sqlserver'  => 'net.sourceforge.jtds.jdbc.Driver',
+      'h2'         => 'org.h2.Driver',
+    }
+  }
+
+  if $dbtype {
+    $dbtype_real = $dbtype
+  } else {
+    $dbtype_real = $db ? {
+      'postgresql' => 'postgres72',
+      'mysql'      => 'mysql',
+      'oracle'     => 'oracle10g',
+      'sqlserver'  => 'mssql',
+      'h2'         => 'h2',
+    }
+  }
+
   if $dburl {
     $dburl_real = $dburl
   }
   else {
     $dburl_real = $db ? {
-      'postgresql' => "jdbc:${db}://${dbserver}:${dbport}/${dbname}",
-      'mysql'      => "jdbc:${db}://${dbserver}:${dbport}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB",
-      'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport}:${dbname}",
-      'sqlserver'  => "jdbc:jtds:${db}://${dbserver}:${dbport}/${dbname}"
+      'postgresql' => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}",
+      'mysql'      => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB",
+      'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport_real}:${dbname}",
+      'sqlserver'  => "jdbc:jtds:${db}://${dbserver}:${dbport_real}/${dbname}",
+      'h2'         => "jdbc:h2:file:/${jira::homedir}/database/${dbname}",
     }
   }
 
