@@ -46,7 +46,7 @@ jira::dbtype: postgres72
 
 jira::dbdriver: org.postgresql.Driver
 #jira::dbdriver: com.mysql.jdbc.Driver
-#jira::dbdriver: net.sourceforge.jtds.jdbc.Driver
+#jira::dbdriver: com.microsoft.sqlserver.jdbc.SQLServerDriver
 
 # Change these values to your jira database credentials
 jira::dbuser: jiraadm

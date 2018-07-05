@@ -232,6 +232,7 @@ The port of the database, defaults to an appropriate port for the $db:
 |------|--------|
 | postgresql | 5432 |
 | mysql | 3306 |
+| oracle | 1521 |
 | sqlserver | 1443 |
 | h2 | N/A |
 
@@ -243,9 +244,12 @@ The database driver to use, defaults to an appropriate value for $db:
 |------|--------|
 | postgresql | org.postgresql.Driver |
 | mysql | com.mysql.jdbc.Driver |
-| sqlserver | net.sourceforge.jtds.jdbc.Driver |
+| oracle | oracle.jdbc.OracleDriver (*) |
+| sqlserver | com.microsoft.sqlserver.jdbc.SQLServerDriver |
 | h2 | org.h2.Driver |
 
+(*) NOTE: You must add the Oracle JDBC Driver manually with recent versions of JIRA (for now).
+See: https://confluence.atlassian.com/doc/database-jdbc-drivers-171742.html
 
 ##### `$dbtype`
 
@@ -255,6 +259,7 @@ Database type, defaults to an appropriate value for $db:
 |------|--------|
 | postgresql | postgresql72 |
 | mysql | mysql |
+| oracle | oracle10g |
 | sqlserver | mssql |
 | h2 | h2 |
 

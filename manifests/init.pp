@@ -207,7 +207,7 @@ class jira (
       'postgresql' => 'org.postgresql.Driver',
       'mysql'      => 'com.mysql.jdbc.Driver',
       'oracle'     => 'oracle.jdbc.OracleDriver',
-      'sqlserver'  => 'net.sourceforge.jtds.jdbc.Driver',
+      'sqlserver'  => 'com.microsoft.sqlserver.jdbc.SQLServerDriver',
       'h2'         => 'org.h2.Driver',
     }
   }
