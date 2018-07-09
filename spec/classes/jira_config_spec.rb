@@ -47,7 +47,7 @@ describe 'jira' do
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml') }
             it do
               is_expected.to contain_file('/home/jira/dbconfig.xml').
-                with_content(%r{jdbc:mysql://localhost:5432/jira})
+                with_content(%r{jdbc:mysql://localhost:3306/jira})
             end
           end
 

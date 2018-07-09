@@ -26,6 +26,7 @@ class jira::config inherits jira {
       'mysql'      => 'select 1',
       'oracle'     => 'select 1 from dual',
       'sqlserver'  => 'select 1',
+      'h2'         => 'select 1',
     }
   }
   if $jira::time_between_eviction_runs == undef {
@@ -34,6 +35,7 @@ class jira::config inherits jira {
       'mysql'      => '300000',
       'oracle'     => '300000',
       'sqlserver'  => '300000',
+      'h2'         => '5000',
     }
   }
 

@@ -204,8 +204,8 @@ is enabled, this parameter is *required*.
 
 ##### `$db`
 
-Which database to use for JIRA, defaults to 'postgresql'. Can be 'postgresql',
-'mysql', 'oracle' or 'sqlserver'.
+Which database to use for JIRA, defaults to 'postgresql'. Can be:
+'postgresql', 'mysql', 'oracle', 'sqlserver', or 'h2'.
 
 ##### `$dbuser`
 
@@ -226,20 +226,44 @@ SID.
 
 ##### `$dbport`
 
-The port of the database, defaults to '5432'. MySQL runs on '3306'. Oracle runs on
-'1521'. SQL Server runs on '1433'.
+The port of the database, defaults to an appropriate port for the $db:
+
+| $db | DEFAULT |
+|------|--------|
+| postgresql | 5432 |
+| mysql | 3306 |
+| oracle | 1521 |
+| sqlserver | 1443 |
+| h2 | N/A |
 
 ##### `$dbdriver`
 
-The database driver to use, defaults to 'org.postgresql.Driver'. Can be
-'org.postgresql.Driver', 'com.mysql.jdbc.Driver', 'oracle.jdbc.OracleDriver' or
-'net.sourceforge.jtds.jdbc.Driver'.
+The database driver to use, defaults to an appropriate value for $db:
+
+| $db | DEFAULT |
+|------|--------|
+| postgresql | org.postgresql.Driver |
+| mysql | com.mysql.jdbc.Driver |
+| oracle | oracle.jdbc.OracleDriver (*) |
+| sqlserver | com.microsoft.sqlserver.jdbc.SQLServerDriver |
+| h2 | org.h2.Driver |
+
+(*) NOTE: You must add the Oracle JDBC Driver manually with recent versions of JIRA (for now).
+See: https://confluence.atlassian.com/doc/database-jdbc-drivers-171742.html
 
 ##### `$dbtype`
 
-Database type, defaults to 'postgres72'. Can be 'postgres72', 'mysql', 'oracle10g',
-or 'mssql'. Atlassian only supports Oracle 11g, even so this value should be as
-documented here.
+Database type, defaults to an appropriate value for $db:
+
+| $db | DEFAULT |
+|------|--------|
+| postgresql | postgresql72 |
+| mysql | mysql |
+| oracle | oracle10g |
+| sqlserver | mssql |
+| h2 | h2 |
+
+NOTE: Atlassian only supports Oracle 11g/12g, even so this value should be as documented here.
 
 ##### `$dbschema`
 
@@ -389,7 +413,7 @@ Specify a proxy server, with port number if needed. ie: https://example.com:8080
 Only supported with `deploy_module => archive` (the default).  Defaults to 'undef'.
 
 ##### `$proxy_type`
- 
+
 Proxy server type (none|http|https|ftp)
 Only supported with `deploy_module => archive` (the default).  Defaults to 'undef'.
 
