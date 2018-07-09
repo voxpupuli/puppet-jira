@@ -4,6 +4,32 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v3.5.0](https://github.com/voxpupuli/puppet-jira/tree/v3.5.0) (2018-07-09)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v3.4.1...v3.5.0)
+
+**Implemented enhancements:**
+
+- Add Support for H2 Database and Fix \#73  [\#256](https://github.com/voxpupuli/puppet-jira/pull/256) ([TJM](https://github.com/TJM))
+
+**Fixed bugs:**
+
+- certain `dbconfig.xml` settings require `enable\_connection\_pooling =\> true` [\#242](https://github.com/voxpupuli/puppet-jira/issues/242)
+
+**Closed issues:**
+
+- Add H2 database support [\#254](https://github.com/voxpupuli/puppet-jira/issues/254)
+- Not compatible with JIRA 7.5+ and MS SQL Server [\#244](https://github.com/voxpupuli/puppet-jira/issues/244)
+- consolidate db, dbtype, and dbdriver [\#73](https://github.com/voxpupuli/puppet-jira/issues/73)
+
+**Merged pull requests:**
+
+- Update README.md for clarity [\#253](https://github.com/voxpupuli/puppet-jira/pull/253) ([ronech](https://github.com/ronech))
+- Update server.xml.erb to account for weird Service Desk versioning [\#252](https://github.com/voxpupuli/puppet-jira/pull/252) ([ronech](https://github.com/ronech))
+- switch to using ensure\_packages to avoid conflicts [\#250](https://github.com/voxpupuli/puppet-jira/pull/250) ([bmagistro](https://github.com/bmagistro))
+- drop EOL OSs; fix puppet version range [\#249](https://github.com/voxpupuli/puppet-jira/pull/249) ([bastelfreak](https://github.com/bastelfreak))
+- Rely on beaker-hostgenerator for docker nodesets [\#246](https://github.com/voxpupuli/puppet-jira/pull/246) ([ekohl](https://github.com/ekohl))
+
 ## [v3.4.1](https://github.com/voxpupuli/puppet-jira/tree/v3.4.1) (2018-03-30)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v3.4.0...v3.4.1)
@@ -50,10 +76,6 @@ These should not affect the functionality of the module.
 **Fixed bugs:**
 
 - Set tomcat\_protocol\_ssl based on jira version if undef [\#225](https://github.com/voxpupuli/puppet-jira/pull/225) ([markleary](https://github.com/markleary))
-
-**Merged pull requests:**
-
-- Release 3.2.0 [\#224](https://github.com/voxpupuli/puppet-jira/pull/224) ([dhollinger](https://github.com/dhollinger))
 
 ## [v3.2.0](https://github.com/voxpupuli/puppet-jira/tree/v3.2.0) (2017-10-10)
 
