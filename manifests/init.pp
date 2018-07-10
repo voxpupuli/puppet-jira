@@ -38,6 +38,7 @@ class jira (
   String $format                                                    = 'tar.gz',
   Stdlib::Absolutepath $installdir                                  = '/opt/jira',
   Stdlib::Absolutepath $homedir                                     = '/home/jira',
+  Boolean $manage_user                                              = true,
   String $user                                                      = 'jira',
   String $group                                                     = 'jira',
   $uid                                                              = undef,
@@ -49,15 +50,15 @@ class jira (
   Boolean $datacenter                                               = false,
   $shared_homedir                                                   = undef,
   # Database Settings
-  Enum['postgresql','mysql','sqlserver','oracle'] $db               = 'postgresql',
+  Enum['postgresql','mysql','sqlserver','oracle','h2'] $db          = 'postgresql',
   $dbuser                                                           = 'jiraadm',
   $dbpassword                                                       = 'mypassword',
   $dbserver                                                         = 'localhost',
   $dbname                                                           = 'jira',
-  $dbport                                                           = '5432',
-  $dbdriver                                                         = 'org.postgresql.Driver',
-  $dbtype                                                           = 'postgres72',
-  $dburl                                                            = undef,
+  Optional[Variant[Integer,String]] $dbport                         = undef,
+  Optional[String] $dbdriver                                        = undef,
+  Optional[String] $dbtype                                          = undef,
+  Optional[String] $dburl                                           = undef,
   $poolsize                                                         = '20',
   $dbschema                                                         = 'public',
   # MySQL Connector Settings
@@ -94,6 +95,8 @@ class jira (
   $disable_notifications                                            = false,
   # Choose whether to use puppet-staging, or puppet-archive
   $deploy_module                                                    = 'archive',
+  $proxy_server                                                     = undef,
+  Optional[Enum['none','http','https','ftp']] $proxy_type           = undef,
   # Manage service
   $service_manage                                                   = true,
   $service_ensure                                                   = running,
@@ -120,6 +123,7 @@ class jira (
   $tomcat_https_port                                                = 8443,
   Optional[Integer] $tomcat_redirect_https_port                     = undef,
   $tomcat_protocol                                                  = 'HTTP/1.1',
+  $tomcat_protocol_ssl                                              = undef,
   $tomcat_use_body_encoding_for_uri                                 = true,
   $tomcat_disable_upload_timeout                                    = true,
   $tomcat_key_alias                                                 = 'jira',
@@ -173,7 +177,7 @@ class jira (
     # Shut it down in preparation for upgrade.
     if versioncmp($version, $::jira_version) > 0 {
       notify { 'Attempting to upgrade JIRA': }
-      exec { $stop_jira: before => Anchor['jira::start'] }
+      exec { $stop_jira: before => Class['jira::install'] }
     }
   }
 
@@ -184,15 +188,62 @@ class jira (
     $webappdir = $extractdir
   }
 
+  if $dbport {
+    $dbport_real = $dbport
+  } else {
+    $dbport_real = $db ? {
+      'postgresql' => '5432',
+      'mysql'      => '3306',
+      'oracle'     => '1521',
+      'sqlserver'  => '1433',
+      'h2'         => '',
+    }
+  }
+
+  if $dbdriver {
+    $dbdriver_real = $dbdriver
+  } else {
+    $dbdriver_real = $db ? {
+      'postgresql' => 'org.postgresql.Driver',
+      'mysql'      => 'com.mysql.jdbc.Driver',
+      'oracle'     => 'oracle.jdbc.OracleDriver',
+      'sqlserver'  => 'com.microsoft.sqlserver.jdbc.SQLServerDriver',
+      'h2'         => 'org.h2.Driver',
+    }
+  }
+
+  if $dbtype {
+    $dbtype_real = $dbtype
+  } else {
+    $dbtype_real = $db ? {
+      'postgresql' => 'postgres72',
+      'mysql'      => 'mysql',
+      'oracle'     => 'oracle10g',
+      'sqlserver'  => 'mssql',
+      'h2'         => 'h2',
+    }
+  }
+
   if $dburl {
     $dburl_real = $dburl
   }
   else {
     $dburl_real = $db ? {
-      'postgresql' => "jdbc:${db}://${dbserver}:${dbport}/${dbname}",
-      'mysql'      => "jdbc:${db}://${dbserver}:${dbport}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=storage_engine=InnoDB",
-      'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport}:${dbname}",
-      'sqlserver'  => "jdbc:jtds:${db}://${dbserver}:${dbport}/${dbname}"
+      'postgresql' => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}",
+      'mysql'      => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB",
+      'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport_real}:${dbname}",
+      'sqlserver'  => "jdbc:jtds:${db}://${dbserver}:${dbport_real}/${dbname}",
+      'h2'         => "jdbc:h2:file:/${jira::homedir}/database/${dbname}",
+    }
+  }
+
+  if $tomcat_protocol_ssl {
+    $tomcat_protocol_ssl_real = $tomcat_protocol_ssl
+  } else {
+    if versioncmp($version, '7.3.0') >= 0 {
+      $tomcat_protocol_ssl_real = 'org.apache.coyote.http11.Http11NioProtocol'
+    } else {
+      $tomcat_protocol_ssl_real = 'org.apache.coyote.http11.Http11Protocol'
     }
   }
 
@@ -222,12 +273,13 @@ class jira (
     $checksum_verify = true
   }
 
+  contain jira::install
+  contain jira::config
+  contain jira::service
 
-  anchor { 'jira::start': }
-  -> class { '::jira::install': }
-  -> class { '::jira::config': }
-  ~> class { '::jira::service': }
-  -> anchor { 'jira::end': }
+  Class['jira::install']
+  -> Class['jira::config']
+  ~> Class['jira::service']
 
   if ($enable_sso) {
     class { '::jira::sso': }

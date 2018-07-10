@@ -18,7 +18,7 @@ node default {
     javahome => '/opt/java/latest',
     proxy    => {
       scheme    => 'https',
-      proxyName => $::fqdn,
+      proxyName => $facts['fqdn'],
       proxyPort => '443',
     },
   }
@@ -32,7 +32,7 @@ node default {
 
   nginx::resource::vhost { 'jira_vhost':
     ensure               => present,
-    server_name          => [ $::ipaddress, $::fqdn, $hostname ],
+    server_name          => [ $facts['ipaddress'], $facts['fqdn'], $facts['hostname'] ],
     proxy                => 'http://jira',
     proxy_read_timeout   => '300',
     rewrite_to_https     => true,

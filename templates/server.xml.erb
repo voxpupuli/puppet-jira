@@ -32,7 +32,7 @@
     <!--APR library loader. Documentation at /docs/apr.html -->
     <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
     <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
-<%- if scope.function_versioncmp([@version, '6.4.14']) <= 0 -%>
+<%- if scope.function_versioncmp([@version, '6.4.14']) <= 0 && @product =~ /^jira/ -%>
     <Listener className="org.apache.catalina.core.JasperListener"/>
 <% else -%>
     <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
@@ -73,7 +73,7 @@
 <% if @tomcat_native_ssl -%>
         <Connector
                     port="<%= @tomcat_https_port %>"
-                    protocol="org.apache.coyote.http11.Http11Protocol"
+                    protocol="<%= @tomcat_protocol_ssl_real %>"
                     <%- if @tomcat_address -%>
                     address="<%= @tomcat_address %>"
                     <%- end -%>
