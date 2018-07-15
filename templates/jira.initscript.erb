@@ -62,7 +62,7 @@ function start() {
 
 function status() {
 
-STATUS=$( pgrep -u <%= scope.lookupvar('jira::user')%> -f atlassian-jira ) || STATUS=0
+STATUS=$( pgrep -F <%= scope.lookupvar('jira::webappdir') %>/work/catalina.pid ) || STATUS=0
  if [ $STATUS -ne 0 ];then
    echo "$SERVICE is running"
    return 0
