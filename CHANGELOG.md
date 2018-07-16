@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v3.5.1](https://github.com/voxpupuli/puppet-jira/tree/v3.5.1) (2018-07-15)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v3.5.0...v3.5.1)
+
+**Fixed bugs:**
+
+- Update server.xml.erb to allow for jsd [\#260](https://github.com/voxpupuli/puppet-jira/pull/260) ([cpepe](https://github.com/cpepe))
+- Check `ps` for a process with the jira pid, not a the jira user [\#258](https://github.com/voxpupuli/puppet-jira/pull/258) ([rigareau](https://github.com/rigareau))
+
+**Closed issues:**
+
+- This logic does not allow Jira Service Desk to operate [\#259](https://github.com/voxpupuli/puppet-jira/issues/259)
+- RedHat 6 Service Manifest problem [\#243](https://github.com/voxpupuli/puppet-jira/issues/243)
+
 ## [v3.5.0](https://github.com/voxpupuli/puppet-jira/tree/v3.5.0) (2018-07-09)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v3.4.1...v3.5.0)
