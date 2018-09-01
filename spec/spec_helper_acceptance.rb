@@ -29,15 +29,4 @@ UNSUPPORTED_PLATFORMS = %w[AIX windows Solaris].freeze
 RSpec.configure do |c|
   # Readable test descriptions
   c.formatter = :documentation
-
-  c.before :suite do
-    hosts.each do |host|
-      # Not sure if this should move into the spec itself; leaving here for now
-      next unless fact('osfamily') == 'Debian'
-      on host, 'apt-get install -y locales apt-transport-https'
-      on host, "echo \"en_US ISO-8859-1\nen_NG.UTF-8 UTF-8\nen_US.UTF-8 UTF-8\n\" > /etc/locale.gen"
-      on host, '/usr/sbin/locale-gen'
-      on host, '/usr/sbin/update-locale'
-    end
-  end
 end
