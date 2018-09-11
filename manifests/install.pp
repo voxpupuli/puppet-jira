@@ -126,7 +126,7 @@ class jira::install {
     }
   }
 
-  file { $jira::homedir:
+  if ! defined(File[$jira::homedir]) {
     ensure => 'directory',
     owner  => $jira::user,
     group  => $jira::group,
