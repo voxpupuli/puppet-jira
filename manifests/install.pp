@@ -127,9 +127,11 @@ class jira::install {
   }
 
   if ! defined(File[$jira::homedir]) {
-    ensure => 'directory',
-    owner  => $jira::user,
-    group  => $jira::group,
+    file { $jira::homedir:
+      ensure => 'directory',
+      owner  => $jira::user,
+      group  => $jira::group,
+    }
   }
 
   -> exec { "chown_${jira::extractdir}":
