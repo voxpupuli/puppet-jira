@@ -29,7 +29,7 @@ class jira::install {
       password         => '*',
       password_min_age => '0',
       password_max_age => '99999',
-      managehome       => true,
+      managehome       => false,
       uid              => $jira::uid,
       gid              => $jira::gid,
 
