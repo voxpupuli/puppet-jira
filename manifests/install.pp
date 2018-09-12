@@ -134,10 +134,11 @@ class jira::install {
     }
   }
 
-  -> exec { "chown_${jira::extractdir}":
+  exec { "chown_${jira::extractdir}":
     command     => "/bin/chown -R ${jira::user}:${jira::group} ${jira::extractdir}",
     refreshonly => true,
     subscribe   => User[$jira::user],
+    require     => File[$jira::homedir],
   }
 
   if $jira::db == 'mysql' and $jira::mysql_connector_manage {
