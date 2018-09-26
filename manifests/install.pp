@@ -29,7 +29,10 @@ class jira::install {
       password         => '*',
       password_min_age => '0',
       password_max_age => '99999',
-      managehome       => false,
+      managehome       => defined(File[$jira::homedir]) ? {
+        true    => false,
+        default => true,
+      },
       uid              => $jira::uid,
       gid              => $jira::gid,
 
