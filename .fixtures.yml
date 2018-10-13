@@ -1,6 +1,4 @@
 fixtures:
-  symlinks:
-    jira: "#{source_dir}"
   repositories:
     archive: "https://github.com/voxpupuli/puppet-archive.git"
     staging: "https://github.com/voxpupuli/puppet-staging.git"
