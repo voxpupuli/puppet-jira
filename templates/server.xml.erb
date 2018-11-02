@@ -119,6 +119,7 @@
                     <Resource name="UserTransaction" auth="Container" type="javax.transaction.UserTransaction"
                               factory="org.objectweb.jotm.UserTransactionFactory" jotm.timeout="60"/>
                     <Manager pathname=""/>
+                    <JarScanner scanManifest="false"/>
                 </Context>
 
             </Host>
