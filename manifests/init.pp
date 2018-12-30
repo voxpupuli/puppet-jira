@@ -248,12 +248,12 @@ class jira (
   }
 
   if ! empty($ajp) {
-    if ! has_key($ajp, 'port') {
+    if ! ('port' in $ajp) {
       fail('You need to specify a valid port for the AJP connector.')
     } else {
       assert_type(Variant[Pattern[/^\d+$/], Stdlib::Port], $ajp['port'])
     }
-    if ! has_key($ajp, 'protocol') {
+    if ! ('protocol' in $ajp) {
       fail('You need to specify a valid protocol for the AJP connector.')
     } else {
       assert_type(Enum['AJP/1.3', 'org.apache.coyote.ajp', 'org.apache.coyote.ajp.AjpNioProtocol'], $ajp['protocol'])
