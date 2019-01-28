@@ -46,7 +46,7 @@
 
     <Service name="Catalina">
         <Connector port="<%= @tomcat_port %>"
-                   <% if @version >= 7.12 -%>
+                   <%- if Gem::Version.new(@version) >= Gem::Version.new('7.12.0') -%>
                    relaxedPathChars="[]|" 
                    relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
                    <%- end -%>
@@ -76,7 +76,7 @@
 
 <% if @tomcat_native_ssl -%>
         <Connector port="<%= @tomcat_https_port %>"
-                   <% if @version >= 7.12 -%>
+                   <%- if Gem::Version.new(@version) >= Gem::Version.new('7.12.0') -%>
                    relaxedPathChars="[]|" 
                    relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
                    <%- end -%>
