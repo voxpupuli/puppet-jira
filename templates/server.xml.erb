@@ -46,6 +46,10 @@
 
     <Service name="Catalina">
         <Connector port="<%= @tomcat_port %>"
+                   <% if @version >= 7.12 -%>
+                   relaxedPathChars="[]|" 
+                   relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
+                   <%- end -%>
                    <%- if @tomcat_address -%>
                    address="<%= @tomcat_address %>"
                    <%- end -%>
@@ -71,19 +75,22 @@
         />
 
 <% if @tomcat_native_ssl -%>
-        <Connector
-                    port="<%= @tomcat_https_port %>"
-                    protocol="<%= @tomcat_protocol_ssl_real %>"
-                    <%- if @tomcat_address -%>
-                    address="<%= @tomcat_address %>"
-                    <%- end -%>
-                    maxHttpHeaderSize="<%= @tomcat_max_http_header_size %>"
-                    SSLEnabled="true"
-                    maxThreads="<%= @tomcat_max_threads %>"
-                    minSpareThreads="<%= @tomcat_min_spare_threads %>"
-                    enableLookups="<%= @tomcat_enable_lookups %>"
-                    disableUploadTimeout="<%= @tomcat_disable_upload_timeout %>"
-                    acceptCount="<%= @tomcat_accept_count %>"
+        <Connector port="<%= @tomcat_https_port %>"
+                   <% if @version >= 7.12 -%>
+                   relaxedPathChars="[]|" 
+                   relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
+                   <%- end -%>
+                   protocol="<%= @tomcat_protocol_ssl_real %>"
+                   <%- if @tomcat_address -%>
+                   address="<%= @tomcat_address %>"
+                   <%- end -%>
+                   maxHttpHeaderSize="<%= @tomcat_max_http_header_size %>"
+                   SSLEnabled="true"
+                   maxThreads="<%= @tomcat_max_threads %>"
+                   minSpareThreads="<%= @tomcat_min_spare_threads %>"
+                   enableLookups="<%= @tomcat_enable_lookups %>"
+                   disableUploadTimeout="<%= @tomcat_disable_upload_timeout %>"
+                   acceptCount="<%= @tomcat_accept_count %>"
 <%   if ! @proxy['scheme'] -%>
                     scheme="https"
 <%   end -%>
