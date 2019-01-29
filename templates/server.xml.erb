@@ -49,6 +49,10 @@
                    <%- if @tomcat_address -%>
                    address="<%= @tomcat_address %>"
                    <%- end -%>
+                    <% if @version >= 7.12 -%>
+                   relaxedPathChars="[]|"
+                   relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
+                    <% end -%>
                    maxThreads="<%= @tomcat_max_threads %>"
                    minSpareThreads="<%= @tomcat_min_spare_threads %>"
                    connectionTimeout="<%= @tomcat_connection_timeout %>"
@@ -77,6 +81,10 @@
                     <%- if @tomcat_address -%>
                     address="<%= @tomcat_address %>"
                     <%- end -%>
+                    <% if @version >= 7.12 -%>
+                   relaxedPathChars="[]|"
+                   relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
+                    <% end -%>
                     maxHttpHeaderSize="<%= @tomcat_max_http_header_size %>"
                     SSLEnabled="true"
                     maxThreads="<%= @tomcat_max_threads %>"
