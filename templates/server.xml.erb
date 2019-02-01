@@ -46,6 +46,8 @@
 
     <Service name="Catalina">
         <Connector port="<%= @tomcat_port %>"
+                   relaxedPathChars="[]|" 
+                   relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
                    <%- if @tomcat_address -%>
                    address="<%= @tomcat_address %>"
                    <%- end -%>
@@ -73,6 +75,8 @@
 <% if @tomcat_native_ssl -%>
         <Connector
                     port="<%= @tomcat_https_port %>"
+                    relaxedPathChars="[]|" 
+                    relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
                     protocol="<%= @tomcat_protocol_ssl_real %>"
                     <%- if @tomcat_address -%>
                     address="<%= @tomcat_address %>"
