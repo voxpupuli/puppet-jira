@@ -90,7 +90,7 @@ class jira (
   $java_opts                                                        = '',
   $catalina_opts                                                    = '',
   # Misc Settings
-  Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $download_url          = 'https://downloads.atlassian.com/software/jira/downloads/',
+  Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $download_url          = 'https://product-downloads.atlassian.com/software/jira/downloads/',
   $checksum                                                         = undef,
   $disable_notifications                                            = false,
   # Choose whether to use puppet-staging, or puppet-archive
