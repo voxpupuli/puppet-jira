@@ -578,6 +578,27 @@ describe 'jira' do
                 with_content(%r{jira.shared.home = /mnt/jira_shared_home_dir})
             end
           end
+
+          context 'enable clustering with ehcache options' do
+            let(:params) do
+              {
+                version: '6.3.4a',
+                javahome: '/opt/java',
+                datacenter: true,
+                shared_homedir: '/mnt/jira_shared_home_dir',
+                ehcache_host: 'jira.foo.net',
+                ehcache_port: 42
+              }
+            end
+
+            it do
+              is_expected.to contain_file('/home/jira/cluster.properties').
+                with_content(%r{jira.node.id = \S+}).
+                with_content(%r{jira.shared.home = /mnt/jira_shared_home_dir}).
+                with_content(%r{ehcache.listener.hostName = jira.foo.net}).
+                with_content(%r{ehcache.listener.port = 42})
+            end
+          end
         end
       end
     end

@@ -2,3 +2,9 @@
 jira.node.id = <%= scope.lookupvar("fqdn") %>
 # The location of the shared home directory for all JIRA nodes
 jira.shared.home = <%= scope.lookupvar("jira::shared_homedir") %>
+<% if @ehcache_host -%>
+ehcache.listener.hostName = <%= @ehcache_host %>
+<% end -%>
+<% if @ehcache_port -%>
+ehcache.listener.port = <%= @ehcache_port %>
+<% end -%>
