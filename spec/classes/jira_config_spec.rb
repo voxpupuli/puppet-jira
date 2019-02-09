@@ -587,7 +587,7 @@ describe 'jira' do
                 datacenter: true,
                 shared_homedir: '/mnt/jira_shared_home_dir',
                 ehcache_listener_host: 'jira.foo.net',
-                ehcache_listener_port: 42
+                ehcache_listener_port: 42,
                 ehcache_object_port: 40011
               }
             end
@@ -597,7 +597,7 @@ describe 'jira' do
                 with_content(%r{jira.node.id = \S+}).
                 with_content(%r{jira.shared.home = /mnt/jira_shared_home_dir}).
                 with_content(%r{ehcache.listener.hostName = jira.foo.net}).
-                with_content(%r{ehcache.listener.port = 42})
+                with_content(%r{ehcache.listener.port = 42}).
                 with_content(%r{ehcache.object.port = 40011})
             end
           end
