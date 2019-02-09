@@ -49,8 +49,9 @@ class jira (
   Hash $jira_config_properties                                      = {},
   Boolean $datacenter                                               = false,
   $shared_homedir                                                   = undef,
-  $ehcache_host                                                     = undef,
-  $ehcache_port                                                     = undef,
+  $ehcache_listener_host                                            = undef,
+  $ehcache_listener_port                                            = undef,
+  $ehcache_object_port                                              = undef,
   # Database Settings
   Enum['postgresql','mysql','sqlserver','oracle','h2'] $db          = 'postgresql',
   $dbuser                                                           = 'jiraadm',
