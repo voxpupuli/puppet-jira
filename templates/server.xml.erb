@@ -46,8 +46,6 @@
 
     <Service name="Catalina">
         <Connector port="<%= @tomcat_port %>"
-                   relaxedPathChars="[]|" 
-                   relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
                    <%- if @tomcat_address -%>
                    address="<%= @tomcat_address %>"
                    <%- end -%>
@@ -60,6 +58,8 @@
                    useBodyEncodingForURI="<%= @tomcat_use_body_encoding_for_uri %>"
                    acceptCount="<%= @tomcat_accept_count %>"
                    disableUploadTimeout="<%= @tomcat_disable_upload_timeout %>"
+                   relaxedPathChars="[]|" 
+                   relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
 <% if @tomcat_native_ssl && @tomcat_redirect_https_port -%>
                    redirectPort="<%= @tomcat_redirect_https_port %>"
 <% else -%>
@@ -75,8 +75,6 @@
 <% if @tomcat_native_ssl -%>
         <Connector
                     port="<%= @tomcat_https_port %>"
-                    relaxedPathChars="[]|" 
-                    relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
                     protocol="<%= @tomcat_protocol_ssl_real %>"
                     <%- if @tomcat_address -%>
                     address="<%= @tomcat_address %>"
@@ -88,6 +86,8 @@
                     enableLookups="<%= @tomcat_enable_lookups %>"
                     disableUploadTimeout="<%= @tomcat_disable_upload_timeout %>"
                     acceptCount="<%= @tomcat_accept_count %>"
+                    relaxedPathChars="[]|" 
+                    relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
 <%   if ! @proxy['scheme'] -%>
                     scheme="https"
 <%   end -%>
