@@ -234,7 +234,7 @@ class jira (
     $dburl_real = $db ? {
       'postgresql' => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}",
       'mysql'      => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB",
-      'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport_real}:${dbname}",
+      'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport_real}/${dbname}",
       'sqlserver'  => "jdbc:jtds:${db}://${dbserver}:${dbport_real}/${dbname}",
       'h2'         => "jdbc:h2:file:/${jira::homedir}/database/${dbname}",
     }
