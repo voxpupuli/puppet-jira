@@ -58,7 +58,7 @@ class jira (
   $dbpassword                                                       = 'mypassword',
   $dbserver                                                         = 'localhost',
   $dbname                                                           = 'jira',
-  bool $oracle_sid                                                  = true,
+  Boolean $oracle_sid                                                  = true,
   Optional[Variant[Integer,String]] $dbport                         = undef,
   Optional[String] $dbdriver                                        = undef,
   Optional[String] $dbtype                                          = undef,
