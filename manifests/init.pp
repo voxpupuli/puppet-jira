@@ -232,17 +232,24 @@ class jira (
     $dburl_real = $dburl
   }
   else {
-    $dburl_real = $db ? {
+    if oracle_sid {
+      $dburl_real = $db ? {
       'postgresql' => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}",
       'mysql'      => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB",
-      if oracle_sid {
-        'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport_real}:${dbname}",
-      } else {
-        'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport_real}/${dbname}",
-      }
+      'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport_real}:${dbname}",
       'sqlserver'  => "jdbc:jtds:${db}://${dbserver}:${dbport_real}/${dbname}",
       'h2'         => "jdbc:h2:file:/${jira::homedir}/database/${dbname}",
+      }
+    } else {
+$     dburl_real = $db ? {
+      'postgresql' => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}",
+      'mysql'      => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB",
+      'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport_real}/${dbname}",
+      'sqlserver'  => "jdbc:jtds:${db}://${dbserver}:${dbport_real}/${dbname}",
+      'h2'         => "jdbc:h2:file:/${jira::homedir}/database/${dbname}",
+      }
     }
+
   }
 
   if $tomcat_protocol_ssl {
