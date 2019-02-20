@@ -271,6 +271,12 @@ Set the schema
 
 The Default value is 'public'
 
+##### `$oracle_SID`
+
+If set to false module will use an oracle service syntax rather than the SID notation. Changes jdbc:${db}:thin:@${dbserver}:${dbport_real}:${dbname} to jdbc:${db}:thin:@${dbserver}:${dbport_real}/${dbname}
+
+The Default value is true
+
 ##### `$poolsize`
 
 The connection pool size to the database, defaults to 20
