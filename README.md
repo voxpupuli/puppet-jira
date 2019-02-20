@@ -271,7 +271,7 @@ Set the schema
 
 The Default value is 'public'
 
-##### `$oracle_SID`
+##### `$oracle_sid`
 
 If set to false module will use an oracle service syntax rather than the SID notation. Changes jdbc:${db}:thin:@${dbserver}:${dbport_real}:${dbname} to jdbc:${db}:thin:@${dbserver}:${dbport_real}/${dbname}
 

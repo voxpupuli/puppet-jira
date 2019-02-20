@@ -58,7 +58,7 @@ class jira (
   $dbpassword                                                       = 'mypassword',
   $dbserver                                                         = 'localhost',
   $dbname                                                           = 'jira',
-  bool $oracle_SID                                                  = true,
+  bool $oracle_sid                                                  = true,
   Optional[Variant[Integer,String]] $dbport                         = undef,
   Optional[String] $dbdriver                                        = undef,
   Optional[String] $dbtype                                          = undef,
@@ -235,7 +235,7 @@ class jira (
     $dburl_real = $db ? {
       'postgresql' => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}",
       'mysql'      => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB",
-      if oracle_SID {
+      if oracle_sid {
         'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport_real}:${dbname}",
       } else {
         'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport_real}/${dbname}",
