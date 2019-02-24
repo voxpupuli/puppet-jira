@@ -70,7 +70,7 @@ class jira (
   $mysql_connector_product                                          = 'mysql-connector-java',
   $mysql_connector_format                                           = 'tar.gz',
   Stdlib::Absolutepath $mysql_connector_install                     = '/opt/MySQL-connector',
-  Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $mysql_connector_url   = 'https://dev.mysql.com/get/Downloads/Connector-J',
+  Stdlib::HTTPUrl $mysql_connector_url                              = 'https://dev.mysql.com/get/Downloads/Connector-J',
   # Configure database settings if you are pooling connections
   $enable_connection_pooling                                        = false,
   $pool_min_size                                                    = 20,
@@ -93,7 +93,7 @@ class jira (
   $java_opts                                                        = '',
   $catalina_opts                                                    = '',
   # Misc Settings
-  Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $download_url          = 'https://downloads.atlassian.com/software/jira/downloads/',
+  Stdlib::HTTPUrl $download_url                                     = 'https://product-downloads.atlassian.com/software/jira/downloads',
   $checksum                                                         = undef,
   $disable_notifications                                            = false,
   # Choose whether to use puppet-staging, or puppet-archive
