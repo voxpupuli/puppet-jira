@@ -20,7 +20,7 @@ describe 'jira' do
                 format:       'tar.gz',
                 product:      'jira',
                 version:      '6.3.4a',
-                download_url: 'https://downloads.atlassian.com/software/jira/downloads'
+                download_url: 'https://product-downloads.atlassian.com/software/jira/downloads'
               }
             end
 
@@ -30,7 +30,7 @@ describe 'jira' do
             it 'deploys jira 6.3.4a from tar.gz' do
               is_expected.to contain_archive('/tmp/atlassian-jira-6.3.4a.tar.gz').
                 with('extract_path'  => '/opt/jira/atlassian-jira-6.3.4a-standalone',
-                     'source'        => 'https://downloads.atlassian.com/software/jira/downloads/atlassian-jira-6.3.4a.tar.gz',
+                     'source'        => 'https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-6.3.4a.tar.gz',
                      'creates'       => '/opt/jira/atlassian-jira-6.3.4a-standalone/conf',
                      'user'          => 'jira',
                      'group'         => 'jira',
