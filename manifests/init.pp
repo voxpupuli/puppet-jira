@@ -58,7 +58,7 @@ class jira (
   $dbpassword                                                       = 'mypassword',
   $dbserver                                                         = 'localhost',
   $dbname                                                           = 'jira',
-  Boolean $oracle_sid                                               = true,
+  Boolean $oracle_use_sid                                           = true,
   Optional[Variant[Integer,String]] $dbport                         = undef,
   Optional[String] $dbdriver                                        = undef,
   Optional[String] $dbtype                                          = undef,
@@ -232,24 +232,14 @@ class jira (
     $dburl_real = $dburl
   }
   else {
-    if oracle_sid {
-      $dburl_real = $db ? {
-        'postgresql' => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}",
-        'mysql'      => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB",
-        'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport_real}:${dbname}",
-        'sqlserver'  => "jdbc:jtds:${db}://${dbserver}:${dbport_real}/${dbname}",
-        'h2'         => "jdbc:h2:file:/${jira::homedir}/database/${dbname}",
-      }
-    } else {
-      $dburl_real = $db ? {
-        'postgresql' => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}",
-        'mysql'      => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB",
-        'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport_real}/${dbname}",
-        'sqlserver'  => "jdbc:jtds:${db}://${dbserver}:${dbport_real}/${dbname}",
-        'h2'         => "jdbc:h2:file:/${jira::homedir}/database/${dbname}",
-      }
+    $oracle_jdbc_separator = bool2str($oracle_use_sid, ':', '/')
+    $dburl_real = $db ? {
+      'postgresql' => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}",
+      'mysql'      => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB",
+      'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport_real}${oracle_jdbc_separator}${dbname}",
+      'sqlserver'  => "jdbc:jtds:${db}://${dbserver}:${dbport_real}/${dbname}",
+      'h2'         => "jdbc:h2:file:/${jira::homedir}/database/${dbname}",
     }
-
   }
 
   if $tomcat_protocol_ssl {
