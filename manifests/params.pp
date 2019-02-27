@@ -9,7 +9,7 @@ class jira::params {
   case $facts['osfamily'] {
     /RedHat/: {
       if $facts['operatingsystem'] == 'Amazon' and $facts['operatingsystemmajrelease'] =='2018' {
-        $json_packages = [ 'rubygem-json', 'ruby-json' ]
+        $json_packages = [ 'rubygem-json' ]
         $service_file_location = '/etc/init.d/jira'
         $service_file_template = 'jira/jira.initscript.erb'
         $service_lockfile = '/var/lock/subsys/jira'
