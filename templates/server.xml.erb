@@ -32,7 +32,7 @@
     <!--APR library loader. Documentation at /docs/apr.html -->
     <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
     <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
-<%- if scope.function_versioncmp([@version, '6.4.14']) <= 0 && @product =~ /^jira|servicedesk/ -%>
+<%- if scope.function_versioncmp([@version, '6.4.14']) <= 0 && @product =~ /^jira/ -%>
     <Listener className="org.apache.catalina.core.JasperListener"/>
 <% else -%>
     <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
@@ -58,7 +58,7 @@
                    useBodyEncodingForURI="<%= @tomcat_use_body_encoding_for_uri %>"
                    acceptCount="<%= @tomcat_accept_count %>"
                    disableUploadTimeout="<%= @tomcat_disable_upload_timeout %>"
-                   relaxedPathChars="[]|" 
+                   relaxedPathChars="[]|"
                    relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
 <% if @tomcat_native_ssl && @tomcat_redirect_https_port -%>
                    redirectPort="<%= @tomcat_redirect_https_port %>"
@@ -86,7 +86,7 @@
                     enableLookups="<%= @tomcat_enable_lookups %>"
                     disableUploadTimeout="<%= @tomcat_disable_upload_timeout %>"
                     acceptCount="<%= @tomcat_accept_count %>"
-                    relaxedPathChars="[]|" 
+                    relaxedPathChars="[]|"
                     relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
 <%   if ! @proxy['scheme'] -%>
                     scheme="https"
