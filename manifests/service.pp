@@ -29,7 +29,10 @@ class jira::service(
 
   file { $service_file_location:
     content => template($service_file_template),
-    mode    => '0755',
+    mode    => $service_provider ? {
+      'systemd' => '0644',
+      default   => '0755',
+    },
   }
 
   if $service_manage {
