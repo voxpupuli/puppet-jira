@@ -169,7 +169,7 @@ class jira (
   }
 
   # The default Jira product starting with version 7 is 'jira-software'
-  if ((versioncmp($version, '7.0.0') > 0) and ($product == 'jira')) {
+  if ((versioncmp($version, '7.0.0') >= 0) and ($product == 'jira')) {
     $product_name = 'jira-software'
   } else {
     $product_name = $product
