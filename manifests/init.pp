@@ -285,6 +285,6 @@ class jira (
   ~> Class['jira::service']
 
   if ($enable_sso) {
-    class { '::jira::sso': }
+    class { 'jira::sso': }
   }
 }

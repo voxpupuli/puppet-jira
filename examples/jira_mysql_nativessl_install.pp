@@ -3,7 +3,7 @@ node default {
   $cert = hiera('cert')
   $key = hiera('key')
 
-  class { '::mysql::server':
+  class { 'mysql::server':
     root_password    => 'strongpassword',
   }
 
@@ -45,7 +45,7 @@ node default {
     ],
   }
 
-  class { '::jira':
+  class { 'jira':
     javahome             => '/opt/java/latest',
     db                   => 'mysql',
     dbport               => '3306',
@@ -56,6 +56,6 @@ node default {
     require              => Mysql::Db['jira'],
   }
 
-  include ::jira::facts
+  include jira::facts
 
 }
