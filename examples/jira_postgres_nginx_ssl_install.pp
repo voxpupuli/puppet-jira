@@ -1,20 +1,20 @@
 node default {
 
-  class { '::nginx': }
+  class { 'nginx': }
 
-  -> class { '::postgresql::globals':
+  -> class { 'postgresql::globals':
     manage_package_repo => true,
     version             => '9.3',
   }
 
-  -> class { '::postgresql::server': }
+  -> class { 'postgresql::server': }
 
   -> postgresql::server::db { 'jira':
     user     => 'jiraadm',
     password => postgresql_password('jiraadm', 'mypassword'),
   }
 
-  -> class { '::jira':
+  -> class { 'jira':
     javahome => '/opt/java/latest',
     proxy    => {
       scheme    => 'https',
@@ -23,7 +23,7 @@ node default {
     },
   }
 
-  include ::jira::facts
+  include jira::facts
 
   nginx::resource::upstream { 'jira':
     ensure  => present,

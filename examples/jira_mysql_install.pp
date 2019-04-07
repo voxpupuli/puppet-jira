@@ -1,6 +1,6 @@
 node default {
 
-  class { '::mysql::server':
+  class { 'mysql::server':
     root_password    => 'strongpassword',
   }
 
@@ -11,7 +11,7 @@ node default {
     grant    => ['ALL'],
   }
 
-  -> class { '::jira':
+  -> class { 'jira':
     javahome => '/opt/java/latest',
     db       => 'mysql',
     dbport   => '3306',
@@ -19,6 +19,6 @@ node default {
     dbtype   => 'mysql',
   }
 
-  include ::jira::facts
+  include jira::facts
 
 }

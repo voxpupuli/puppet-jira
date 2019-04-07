@@ -15,7 +15,7 @@
 # -----------------------------------------------------------------------------
 class jira::install {
 
-  include '::archive'
+  include 'archive'
 
   if $jira::manage_user {
     group { $jira::group:
@@ -78,7 +78,7 @@ class jira::install {
 
   case $jira::deploy_module {
     'staging': {
-      require ::staging
+      require staging
       staging::file { $file:
         source  => "${jira::download_url}/${file}",
         timeout => 1800,
@@ -140,14 +140,14 @@ class jira::install {
 
   if $jira::db == 'mysql' and $jira::mysql_connector_manage {
     if $jira::deploy_module == 'archive' {
-      class { '::jira::mysql_connector':
+      class { 'jira::mysql_connector':
         require => Archive["/tmp/${file}"],
       }
     } elsif $jira::deploy_module == 'deploy' {
-      class { '::jira::mysql_connector':
+      class { 'jira::mysql_connector':
         require => Staging::Extract[$file],
       }
     }
-    contain ::jira::mysql_connector
+    contain jira::mysql_connector
   }
 }
