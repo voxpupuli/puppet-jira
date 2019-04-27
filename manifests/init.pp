@@ -62,6 +62,7 @@ class jira (
   Optional[String] $dbdriver                                        = undef,
   Optional[String] $dbtype                                          = undef,
   Optional[String] $dburl                                           = undef,
+  Optional[String] $dbencoding                                      = 'UTF8',
   $poolsize                                                         = '20',
   $dbschema                                                         = 'public',
   # MySQL Connector Settings
@@ -233,7 +234,7 @@ class jira (
   else {
     $dburl_real = $db ? {
       'postgresql' => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}",
-      'mysql'      => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB",
+      'mysql'      => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}?useUnicode=true&amp;characterEncoding=${dbencoding}&amp;sessionVariables=default_storage_engine=InnoDB",
       'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport_real}:${dbname}",
       'sqlserver'  => "jdbc:jtds:${db}://${dbserver}:${dbport_real}/${dbname}",
       'h2'         => "jdbc:h2:file:/${jira::homedir}/database/${dbname}",
