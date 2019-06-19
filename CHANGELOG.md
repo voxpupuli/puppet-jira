@@ -4,6 +4,39 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v4.0.0](https://github.com/voxpupuli/puppet-jira/tree/v4.0.0) (2019-06-19)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v3.5.2...v4.0.0)
+
+**Breaking changes:**
+
+- modulesync 2.7.0 and drop puppet 4 [\#292](https://github.com/voxpupuli/puppet-jira/pull/292) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Cannot add wished tag to server.xml [\#234](https://github.com/voxpupuli/puppet-jira/issues/234)
+- Better Amazon support [\#287](https://github.com/voxpupuli/puppet-jira/pull/287) ([cpepe](https://github.com/cpepe))
+- Added relaxedPath xml attributes as per jira apache tomcat upgrade file [\#280](https://github.com/voxpupuli/puppet-jira/pull/280) ([domgoodwin](https://github.com/domgoodwin))
+
+**Fixed bugs:**
+
+- Jira Service Desk doesn't start with JasperListener / need relaxedPath with correct version comp [\#288](https://github.com/voxpupuli/puppet-jira/pull/288) ([thonixx](https://github.com/thonixx))
+- Update default `download\_url` [\#286](https://github.com/voxpupuli/puppet-jira/pull/286) ([alexjfisher](https://github.com/alexjfisher))
+- Remove messy warnings. Fixes \#234 [\#272](https://github.com/voxpupuli/puppet-jira/pull/272) ([br0ch0n](https://github.com/br0ch0n))
+
+**Closed issues:**
+
+- Jira downloads url default [\#294](https://github.com/voxpupuli/puppet-jira/issues/294)
+- download url has changed [\#285](https://github.com/voxpupuli/puppet-jira/issues/285)
+- Support for additional cluster.properties config [\#245](https://github.com/voxpupuli/puppet-jira/issues/245)
+
+**Merged pull requests:**
+
+- Update `download\_url` default value in documentation [\#297](https://github.com/voxpupuli/puppet-jira/pull/297) ([towo](https://github.com/towo))
+- Add Ehcache options; require stdlib 4.25.0 [\#282](https://github.com/voxpupuli/puppet-jira/pull/282) ([nrhtr](https://github.com/nrhtr))
+- replace deprecated has\_key\(\) with `in` [\#276](https://github.com/voxpupuli/puppet-jira/pull/276) ([bastelfreak](https://github.com/bastelfreak))
+- replace validate\_\* with assert\_type in init.pp [\#275](https://github.com/voxpupuli/puppet-jira/pull/275) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v3.5.2](https://github.com/voxpupuli/puppet-jira/tree/v3.5.2) (2018-10-14)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v3.5.1...v3.5.2)
@@ -118,6 +151,7 @@ These should not affect the functionality of the module.
 **Merged pull requests:**
 
 - Fix \#206 rubocop failures [\#207](https://github.com/voxpupuli/puppet-jira/pull/207) ([sacres](https://github.com/sacres))
+- modulesync 0.16.6 [\#196](https://github.com/voxpupuli/puppet-jira/pull/196) ([bastelfreak](https://github.com/bastelfreak))
 
 ## v3.1.0 (2017-01-13)
 
