@@ -49,6 +49,10 @@
                    <%- if @tomcat_address -%>
                    address="<%= @tomcat_address %>"
                    <%- end -%>
+                   <%- if ( scope.function_versioncmp([@version, '7.12.1']) > 0 && @product =~ /^jira/ ) or @product =~ /^servicedesk/ -%>
+                   relaxedPathChars="[]|"
+                   relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
+                   <%- end -%>
                    maxThreads="<%= @tomcat_max_threads %>"
                    minSpareThreads="<%= @tomcat_min_spare_threads %>"
                    connectionTimeout="<%= @tomcat_connection_timeout %>"
@@ -76,6 +80,10 @@
                     protocol="<%= @tomcat_protocol_ssl_real %>"
                     <%- if @tomcat_address -%>
                     address="<%= @tomcat_address %>"
+                    <%- end -%>
+                    <%- if ( scope.function_versioncmp([@version, '7.12.1']) > 0 && @product =~ /^jira/ ) or @product =~ /^servicedesk/ -%>
+                    relaxedPathChars="[]|"
+                    relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
                     <%- end -%>
                     maxHttpHeaderSize="<%= @tomcat_max_http_header_size %>"
                     SSLEnabled="true"
