@@ -74,6 +74,7 @@ class jira (
   $pool_max_size                                                    = 20,
   $pool_max_wait                                                    = 30000,
   $validation_query                                                 = undef,
+  $validation_query_timeout                                         = 3,
   $min_evictable_idle_time                                          = 60000,
   $time_between_eviction_runs                                       = undef,
   $pool_max_idle                                                    = 20,
