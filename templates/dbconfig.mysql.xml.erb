@@ -14,7 +14,6 @@
     <pool-max-size><%= scope.lookupvar('jira::pool_max_size') %></pool-max-size>
     <pool-max-wait><%= scope.lookupvar('jira::pool_max_wait') %></pool-max-wait>
     <validation-query><% if @validation_query %><%= @validation_query %><% else %>scope.lookupvar('jira::validation_query')<% end %></validation-query>
-    <validation-query-timeout><%= scope.lookupvar('jira::validation_query_timeout') %></validation-query-timeout>
     <min-evictable-idle-time-millis><%= scope.lookupvar('jira::min_evictable_idle_time') %></min-evictable-idle-time-millis>
     <time-between-eviction-runs-millis><% if @time_between_eviction_runs %><%= @time_between_eviction_runs %><% else %><%= scope.lookupvar('jira::time_between_eviction_runs') %><% end %></time-between-eviction-runs-millis>
     <pool-max-idle><%= scope.lookupvar('jira::pool_max_idle') %></pool-max-idle>
