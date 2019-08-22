@@ -95,7 +95,8 @@ class jira (
   # Misc Settings
   Stdlib::HTTPUrl $download_url                                     = 'https://product-downloads.atlassian.com/software/jira/downloads',
   $checksum                                                         = undef,
-  $disable_notifications                                            = false,
+  $disable_notifications,
+  $ulimit                                          = false,
   # Choose whether to use puppet-staging, or puppet-archive
   $deploy_module                                                    = 'archive',
   $proxy_server                                                     = undef,

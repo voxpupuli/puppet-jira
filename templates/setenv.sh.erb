@@ -2,7 +2,10 @@
 # One way to set the JIRA HOME path is here via this variable.  Simply uncomment it and set a valid path like /jira/home.  You can of course set it outside in the command terminal.  That will also work.
 #
 JIRA_HOME="<%= scope.lookupvar('jira::homedir') %>"
-
+# ulimit options
+<% if scope.lookupvar('jira::ulimit') -%>
+ulimit -n "<%= scope.lookupvar('jira::ulimit') %>"
+<% end -%>
 #
 # Additional JAVA_OPTS
 #
