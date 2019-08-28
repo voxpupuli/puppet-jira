@@ -3,7 +3,7 @@
 #
 JIRA_HOME="<%= scope.lookupvar('jira::homedir') %>"
 # ulimit options
-<% if scope.lookupvar('jira::ulimit') -%>
+<% if @jira::ulimit -%>
 ulimit -n "<%= scope.lookupvar('jira::ulimit') %>"
 <% end -%>
 #
