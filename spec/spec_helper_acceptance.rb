@@ -21,4 +21,3 @@ RSpec.configure do |c|
     install_module_from_forge('puppetlabs-postgresql', '>= 5.1.0 < 6.0.0')
   end
 end
-
