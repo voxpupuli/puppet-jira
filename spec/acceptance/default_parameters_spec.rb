@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'jira postgresql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe 'jira postgresql' do
   it 'installs with defaults' do
     pp = <<-EOS
       if versioncmp($facts['puppetversion'],'3.6.1') >= 0 {

@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'jira mysql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe 'jira mysql' do
   it 'installs with mysql database' do
     pp = <<-EOS
       if versioncmp($facts['puppetversion'],'3.6.1') >= 0 {
