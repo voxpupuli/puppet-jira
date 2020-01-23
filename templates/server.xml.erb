@@ -134,7 +134,7 @@
             <Valve className="org.apache.catalina.valves.AccessLogValve" resolveHosts="false"
                    pattern="<%= @tomcat_accesslog_format %>"/>
 
-            <Valve className=“org.apache.catalina.valves.StuckThreadDetectionValve” threshold=“<%= @tomcat_stuckvalve_threshold %>" />
+            <Valve className="org.apache.catalina.valves.StuckThreadDetectionValve" threshold="<%= @tomcat_stuckvalve_threshold %>" />
 
         </Engine>
     </Service>
