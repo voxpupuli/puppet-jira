@@ -514,6 +514,23 @@ Password to access java keystore. Defaults to 'changeit'
 
 Defaults to 'JKS'. Valid options are 'JKS', 'PKCS12', 'JCEKS'.
 
+##### `$tomcat_additional_connectors`
+
+Well-formed, complex Hash where each key represents a port number and the key's
+value is a hash whose key/value pairs represent the attributes and their values
+that define the connector's behaviour. Default is `{}`.
+
+Use this parameter to specify arbitrary, additional connectors with arbitrary
+attributes. There are no defaults here, so you must take care to specify all
+attributes a connector requires to work in Jira. See below for examples.
+
+This is useful if you need to access your Jira instance directly through an
+additional HTTP port, e.g. one that is not configured for reverse proxy use.
+Atlassian describes use cases for this in
+https://confluence.atlassian.com/kb/how-to-create-an-unproxied-application-link-719095740.html
+and
+https://confluence.atlassian.com/kb/how-to-bypass-a-reverse-proxy-or-ssl-in-application-links-719095724.html
+
 #### Crowd single sign on parameters
 
 #### `enable_sso`
@@ -562,15 +579,53 @@ Some more crowd.properties for SSO, see atlassian documentation for details
 
 ```puppet
     class { 'jira':
-      version      => '6.0.1',
-      installdir   => '/opt/atlassian-jira',
-      homedir      => '/opt/atlassian-jira/jira-home',
-      user         => 'jira',
-      group        => 'jira',
-      dbpassword   => 'secret',
-      dbserver     => 'localhost',
-      javahome     => '/opt/java/jdk1.7.0_21/',
-      download_url => 'http://myserver/pub/development-tools/atlassian/',
+      version                      => '6.0.1',
+      installdir                   => '/opt/atlassian-jira',
+      homedir                      => '/opt/atlassian-jira/jira-home',
+      user                         => 'jira',
+      group                        => 'jira',
+      dbpassword                   => 'secret',
+      dbserver                     => 'localhost',
+      javahome                     => '/opt/java/jdk1.7.0_21/',
+      download_url                 => 'http://myserver/pub/development-tools/atlassian/',
+      tomcat_additional_connectors => {
+        # Define two additional connectors, listening on port 8081 and 8082
+        8081 => {
+          'relaxedPathChars'      => '[]|',
+          'relaxedQueryChars'     => '[]|{}^&#x5c;&#x60;&quot;&lt;&gt;',
+          'maxThreads'            => '150',
+          'minSpareThreads'       => '25',
+          'connectionTimeout'     => '20000',
+          'enableLookups'         => 'false',
+          'maxHttpHeaderSize'     => '8192',
+          'protocol'              => 'HTTP/1.1',
+          'useBodyEncodingForURI' => 'true',
+          'redirectPort'          => '8443',
+          'acceptCount'           => '100',
+          'disableUploadTimeout'  => 'true',
+          'bindOnInit'            => 'false',
+        },
+        # This additional connector is configured for access from a reverse proxy
+        8082 => {
+          'relaxedPathChars'      => '[]|',
+          'relaxedQueryChars'     => '[]|{}^&#x5c;&#x60;&quot;&lt;&gt;',
+          'maxThreads'            => '150',
+          'minSpareThreads'       => '25',
+          'connectionTimeout'     => '20000',
+          'enableLookups'         => 'false',
+          'maxHttpHeaderSize'     => '8192',
+          'protocol'              => 'HTTP/1.1',
+          'useBodyEncodingForURI' => 'true',
+          'redirectPort'          => '8443',
+          'acceptCount'           => '100',
+          'disableUploadTimeout'  => 'true',
+          'bindOnInit'            => 'false',
+          'proxyName'             => 'jira2.example.com',
+          'proxyPort'             => '443',
+          'scheme'                => 'https',
+          'secure'                => true,
+        },
+      }
     }
 ```
 
@@ -611,6 +666,21 @@ jira::proxy:
   proxyName: 'jira.example.co.za'
   proxyPort: '443'
 jira::contextpath: '/jira'
+jira::tomcat_additional_connectors:
+  8181:
+    relaxedPathChars: '[]|'
+    relaxedQueryChars: '[]|{}^&#x5c;&#x60;&quot;&lt;&gt;'
+    maxThreads: '150'
+    minSpareThreads: '25'
+    connectionTimeout: '20000'
+    enableLookups: 'false'
+    maxHttpHeaderSize: '8192'
+    protocol: 'HTTP/1.1'
+    useBodyEncodingForURI: 'true'
+    redirectPort: '8443'
+    acceptCount: '100'
+    disableUploadTimeout: 'true'
+    bindOnInit: 'false'
 ```
 
 These additional and substituted parameters are used in production in an
