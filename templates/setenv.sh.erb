@@ -1,4 +1,9 @@
 #
+# If the limit of files that Jira can open is too low, it will be set to this value.
+#
+MIN_NOFILES_LIMIT=16384
+
+#
 # One way to set the JIRA HOME path is here via this variable.  Simply uncomment it and set a valid path like /jira/home.  You can of course set it outside in the command terminal.  That will also work.
 #
 JIRA_HOME="<%= scope.lookupvar('jira::homedir') %>"
@@ -18,16 +23,28 @@ CATALINA_OPTS="<%= scope.lookupvar('jira::catalina_opts') %> $CATALINA_OPTS"
 JVM_SUPPORT_RECOMMENDED_ARGS="<%= scope.lookupvar('jira::jvm_optional') %>"
 
 #
+#  You can use variable below to modify garbage collector settings.
+#  For Java 8 we recommend default settings
+#  For Java 11 and relatively small heaps we recommend: -XX:+UseParallelGC
+#  For Java 11 and larger heaps we recommend: -XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent
+#
+JVM_GC_ARGS="-XX:+ExplicitGCInvokesConcurrent"
+
+#
 # The following 2 settings control the minimum and maximum given to the JIRA Java virtual machine.  In larger JIRA instances, the maximum amount will need to be increased.
 #
 JVM_MINIMUM_MEMORY="<%= scope.lookupvar('jira::jvm_xms') %>"
 JVM_MAXIMUM_MEMORY="<%= scope.lookupvar('jira::jvm_xmx') %>"
-JVM_PERMGEN_MEMORY="<%= scope.lookupvar('jira::jvm_permgen') %>"
+
+#
+# The following setting configures the size of JVM code cache.  A high value of reserved size allows Jira to work with more installed apps.
+#
+JVM_CODE_CACHE_ARGS='-XX:InitialCodeCacheSize=32m -XX:ReservedCodeCacheSize=512m'
 
 #
 # The following are the required arguments for JIRA.
 #
-JVM_REQUIRED_ARGS="-Djava.awt.headless=true -Datlassian.standalone=JIRA -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true -Dmail.mime.decodeparameters=true"
+JVM_REQUIRED_ARGS='-Djava.awt.headless=true -Datlassian.standalone=JIRA -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true -Dmail.mime.decodeparameters=true -Dorg.dom4j.factory=com.atlassian.core.xml.InterningDocumentFactory'
 
 # Uncomment this setting if you want to import data without notifications
 #
@@ -44,10 +61,14 @@ DISABLE_NOTIFICATIONS=" -Datlassian.mail.senddisabled=true -Datlassian.mail.fetc
 #-----------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------
-# This allows us to actually debug GC related issues by correlating timestamps
-# with other parts of the application logs.
+# Prevents the JVM from suppressing stack traces if a given type of exception
+# occurs frequently, which could make it harder for support to diagnose a problem.
 #-----------------------------------------------------------------------------------
-JVM_EXTRA_ARGS="-XX:+PrintGCDateStamps"
+JVM_EXTRA_ARGS="-XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT"
+
+CURRENT_NOFILES_LIMIT=$( ulimit -Hn )
+ulimit -Sn $CURRENT_NOFILES_LIMIT
+ulimit -n $(( CURRENT_NOFILES_LIMIT > MIN_NOFILES_LIMIT  ? CURRENT_NOFILES_LIMIT : MIN_NOFILES_LIMIT ))
 
 PRGDIR=`dirname "$0"`
 cat "${PRGDIR}"/jirabanner.txt
@@ -65,25 +86,15 @@ if [ "$JIRA_HOME" != "" ]; then
     fi
 fi
 
-JAVA_OPTS="-Xms${JVM_MINIMUM_MEMORY} -Xmx${JVM_MAXIMUM_MEMORY} ${JAVA_OPTS} ${JVM_REQUIRED_ARGS} ${DISABLE_NOTIFICATIONS} ${JVM_SUPPORT_RECOMMENDED_ARGS} ${JVM_EXTRA_ARGS} ${JIRA_HOME_MINUSD}"
-
-# Perm Gen size needs to be increased if encountering OutOfMemoryError: PermGen problems. Specifying PermGen size is not valid on IBM JDKs
-JIRA_MAX_PERM_SIZE=${JVM_PERMGEN_MEMORY}
-if [ -f "${PRGDIR}/permgen.sh" ]; then
-    echo "Detecting JVM PermGen support..."
-    . "${PRGDIR}/permgen.sh"
-    if [ $JAVA_PERMGEN_SUPPORTED = "true" ]; then
-        echo "PermGen switch is supported. Setting to ${JIRA_MAX_PERM_SIZE}"
-        JAVA_OPTS="-XX:MaxPermSize=${JIRA_MAX_PERM_SIZE} ${JAVA_OPTS}"
-    else
-        echo "PermGen switch is NOT supported and will NOT be set automatically."
-    fi
-fi
+JAVA_OPTS="-Xms${JVM_MINIMUM_MEMORY} -Xmx${JVM_MAXIMUM_MEMORY} ${JVM_CODE_CACHE_ARGS} ${JAVA_OPTS} ${JVM_REQUIRED_ARGS} ${DISABLE_NOTIFICATIONS} ${JVM_SUPPORT_RECOMMENDED_ARGS} ${JVM_EXTRA_ARGS} ${JIRA_HOME_MINUSD} ${START_JIRA_JAVA_OPTS}"
 
 export JAVA_OPTS CATALINA_OPTS
 
+# DO NOT remove the following line
+# !INSTALLER SET JAVA_HOME
+
 echo ""
-echo "If you encounter issues starting or stopping JIRA, please see the Troubleshooting guide at http://confluence.atlassian.com/display/JIRA/Installation+Troubleshooting+Guide"
+echo "If you encounter issues starting or stopping Jira, please see the Troubleshooting guide at https://docs.atlassian.com/jira/jadm-docs-087/Troubleshooting+installation"
 echo ""
 if [ "$JIRA_HOME_MINUSD" != "" ]; then
     echo "Using JIRA_HOME:       $JIRA_HOME"
