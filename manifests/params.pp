@@ -35,42 +35,12 @@ class jira::params {
       }
     }
     /Debian/: {
-      case $facts['os']['name'] {
-        'Ubuntu': {
-          if versioncmp($facts['os']['release']['major'], '15.04') >= 0 {
-            $json_packages         = [ 'ruby-json' ]
-            $service_file_location = '/lib/systemd/system/jira.service'
-            $service_file_template = 'jira/jira.service.erb'
-            $service_file_mode     = '0644'
-            $service_lockfile      = '/var/lock/subsys/jira'
-            $service_provider      = 'systemd'
-          } else {
-            $json_packages         = [ 'rubygem-json', 'ruby-json' ]
-            $service_file_location = '/etc/init.d/jira'
-            $service_file_template = 'jira/jira.initscript.erb'
-            $service_file_mode     = '0755'
-            $service_lockfile      = '/var/lock/jira'
-            $service_provider      = 'debian'
-          }
-        }
-        default: {
-          if versioncmp($facts['os']['release']['major'], '8') >= 0 {
-            $json_packages         = [ 'ruby-json' ]
-            $service_file_location = '/lib/systemd/system/jira.service'
-            $service_file_template = 'jira/jira.service.erb'
-            $service_file_mode     = '0644'
-            $service_lockfile      = '/var/lock/subsys/jira'
-            $service_provider      = 'systemd'
-          } else {
-            $json_packages         = [ 'rubygem-json', 'ruby-json' ]
-            $service_file_location = '/etc/init.d/jira'
-            $service_file_template = 'jira/jira.initscript.erb'
-            $service_file_mode     = '0755'
-            $service_lockfile      = '/var/lock/jira'
-            $service_provider      = 'debian'
-          }
-        }
-      }
+      $json_packages         = [ 'ruby-json' ]
+      $service_file_location = '/lib/systemd/system/jira.service'
+      $service_file_template = 'jira/jira.service.erb'
+      $service_file_mode     = '0644'
+      $service_lockfile      = '/var/lock/subsys/jira'
+      $service_provider      = 'systemd'
     }
     default: {
       $json_packages         = [ 'rubygem-json', 'ruby-json' ]
