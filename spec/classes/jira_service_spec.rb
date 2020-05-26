@@ -45,24 +45,6 @@ describe 'jira' do
               it { is_expected.to compile.with_all_deps }
             end
           end
-          if os =~ %r{ubuntu-12}
-            context 'default params' do
-              let(:facts) do
-                facts.merge(operatingsystem: 'Ubuntu', operatingsystemmajrelease: '12.04')
-              end
-
-              it { is_expected.not_to contain_file('/lib/systemd/system/jira.service') }
-            end
-          end
-          if os =~ %r{ubuntu-14}
-            context 'default params' do
-              let(:facts) do
-                facts.merge(operatingsystem: 'Ubuntu', operatingsystemmajrelease: '14.04')
-              end
-
-              it { is_expected.not_to contain_file('/lib/systemd/system/jira.service') }
-            end
-          end
           if os =~ %r{ubuntu-16}
             context 'default params' do
               let(:facts) do
