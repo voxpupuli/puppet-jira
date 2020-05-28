@@ -1,32 +1,12 @@
-require 'beaker-rspec'
-require 'beaker-puppet'
-require 'beaker/puppet_install_helper'
-require 'beaker/module_install_helper'
+# This file is completely managed via modulesync
+require 'voxpupuli/acceptance/spec_helper_acceptance'
 
-run_puppet_install_helper unless ENV['BEAKER_provision'] == 'no'
-install_ca_certs unless ENV['PUPPET_INSTALL_TYPE'] =~ %r{pe}i
-install_module_on(hosts)
-install_module_dependencies_on(hosts)
-
-RSpec.configure do |c|
-  # Readable test descriptions
-  c.formatter = :documentation
-  hosts.each do |host|
-    if host[:platform] =~ %r{el-7-x86_64} && host[:hypervisor] =~ %r{docker}
-      on(host, "sed -i '/nodocs/d' /etc/yum.conf")
-    end
-  end
+configure_beaker do |host|
+  install_module_from_forge_on(host, 'puppetlabs-apt', '>= 4.1.0 < 8.0.0') if fact_on(host, 'os.family') == 'Debian'
+  install_module_from_forge_on(host, 'puppetlabs-java', '>= 2.1.0 < 7.0.0')
+  install_module_from_forge_on(host, 'puppetlabs-java_ks', '>= 1.6.0 < 4.0.0')
+  install_module_from_forge_on(host, 'puppetlabs-mysql', '>= 4.0.1 < 11.0.0')
+  install_module_from_forge_on(host, 'puppetlabs-postgresql', '>= 5.1.0 < 7.0.0')
 end
 
-install_module_from_forge('puppetlabs-apt', '>= 4.1.0 < 7.0.0')
-install_module_from_forge('puppetlabs-java', '>= 2.1.0 < 4.0.0')
-install_module_from_forge('puppetlabs-java_ks', '>= 1.6.0 < 3.0.0')
-install_module_from_forge('puppetlabs-mysql', '>= 4.0.1 < 7.0.0')
-install_module_from_forge('puppetlabs-postgresql', '>= 5.1.0 < 6.0.0')
-
-UNSUPPORTED_PLATFORMS = %w[AIX windows Solaris].freeze
-
-RSpec.configure do |c|
-  # Readable test descriptions
-  c.formatter = :documentation
-end
+Dir['./spec/support/acceptance/**/*.rb'].sort.each { |f| require f }

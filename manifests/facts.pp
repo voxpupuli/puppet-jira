@@ -48,7 +48,7 @@ class jira::facts (
     }
   }
 
-  if $facts['osfamily'] == 'RedHat' and $facts['puppetversion'] !~ /Puppet Enterprise/ {
+  if $facts['os']['family'] == 'RedHat' and $facts['puppetversion'] !~ /Puppet Enterprise/ {
     ensure_packages ($json_packages, { ensure => present })
   }
 

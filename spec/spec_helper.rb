@@ -1,14 +1,39 @@
 # This file is managed via modulesync
 # https://github.com/voxpupuli/modulesync
 # https://github.com/voxpupuli/modulesync_config
-RSpec.configure do |c|
-  c.mock_with :rspec
-end
 
-require 'puppetlabs_spec_helper/module_spec_helper'
-require 'rspec-puppet-facts'
-require 'bundler'
-include RspecPuppetFacts
+# puppetlabs_spec_helper will set up coverage if the env variable is set.
+# We want to do this if lib exists and it hasn't been explicitly set.
+ENV['COVERAGE'] ||= 'yes' if Dir.exist?(File.expand_path('../../lib', __FILE__))
+
+require 'voxpupuli/test/spec_helper'
+
+# Rough conversion of grepping in the puppet source:
+# grep defaultfor lib/puppet/provider/service/*.rb
+add_custom_fact(:service_provider, lambda do |_os, facts|
+  case facts[:os]['family'].downcase
+  when 'archlinux'
+    'systemd'
+  when 'darwin'
+    'launchd'
+  when 'debian'
+    'systemd'
+  when 'freebsd'
+    'freebsd'
+  when 'gentoo'
+    'openrc'
+  when 'openbsd'
+    'openbsd'
+  when 'redhat'
+    facts[:operatingsystemrelease].to_i >= 7 ? 'systemd' : 'redhat'
+  when 'suse'
+    facts[:operatingsystemmajrelease].to_i >= 12 ? 'systemd' : 'redhat'
+  when 'windows'
+    'windows'
+  else
+    'init'
+  end
+end)
 
 if File.exist?(File.join(__dir__, 'default_module_facts.yml'))
   facts = YAML.load(File.read(File.join(__dir__, 'default_module_facts.yml')))
@@ -16,29 +41,5 @@ if File.exist?(File.join(__dir__, 'default_module_facts.yml'))
     facts.each do |name, value|
       add_custom_fact name.to_sym, value
     end
-  end
-end
-
-if Dir.exist?(File.expand_path('../../lib', __FILE__))
-  require 'coveralls'
-  require 'simplecov'
-  require 'simplecov-console'
-  SimpleCov.formatters = [
-    SimpleCov::Formatter::HTMLFormatter,
-    SimpleCov::Formatter::Console
-  ]
-  SimpleCov.start do
-    track_files 'lib/**/*.rb'
-    add_filter '/spec'
-    add_filter '/vendor'
-    add_filter '/.vendor'
-    add_filter Bundler.configured_bundle_path.path
-  end
-end
-
-RSpec.configure do |c|
-  # Coverage generation
-  c.after(:suite) do
-    RSpec::Puppet::Coverage.report!
   end
 end
