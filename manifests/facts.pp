@@ -34,7 +34,7 @@ class jira::facts (
     $dir = 'puppetlabs/'
   } elsif $facts['aio_agent_version'] =~ String[1] {
     $ruby_bin = '/opt/puppetlabs/puppet/bin/ruby'
-    $dir      = ''
+    $dir      = 'puppetlabs/'
   } else {
     $ruby_bin = '/usr/bin/env ruby'
     $dir = ''
