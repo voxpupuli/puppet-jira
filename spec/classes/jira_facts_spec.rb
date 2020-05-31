@@ -12,7 +12,7 @@ describe 'jira::facts' do
         regexp_oss = %r{^#\!/opt/puppetlabs/puppet/bin/ruby$}
         regexp_url = %r{http://127.0.0.1\:8080/rest/api/2/serverInfo}
         pe_external_fact_file = '/etc/puppetlabs/facter/facts.d/jira_facts.rb'
-        external_fact_file = '/etc/facter/facts.d/jira_facts.rb'
+        external_fact_file = '/etc/puppetlabs/facter/facts.d/jira_facts.rb'
 
         it { is_expected.to contain_file(external_fact_file) }
         it { is_expected.to compile.with_all_deps }
