@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v4.0.1](https://github.com/voxpupuli/puppet-jira/tree/v4.0.1) (2020-06-17)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v4.0.0...v4.0.1)
+
+**Fixed bugs:**
+
+- Added \>= to capture version 7.0.0 as using the "software" url [\#291](https://github.com/voxpupuli/puppet-jira/pull/291) ([rfreiberger](https://github.com/rfreiberger))
+
+**Closed issues:**
+
+- Bump puppetlabs-stdlib dependency [\#318](https://github.com/voxpupuli/puppet-jira/issues/318)
+- Raise puppet-archive version [\#304](https://github.com/voxpupuli/puppet-jira/issues/304)
+- Server.xml for servicedesk [\#295](https://github.com/voxpupuli/puppet-jira/issues/295)
+- Jira 7.12 needs relaxedPathChars & relaxedQueryChars [\#269](https://github.com/voxpupuli/puppet-jira/issues/269)
+- Puppet 4 support? [\#168](https://github.com/voxpupuli/puppet-jira/issues/168)
+- jira::facts don't work with All-in-One Puppet 4.x agent [\#151](https://github.com/voxpupuli/puppet-jira/issues/151)
+
+**Merged pull requests:**
+
+- Update jira::facts to check for Puppet AIO agent [\#321](https://github.com/voxpupuli/puppet-jira/pull/321) ([dpisano](https://github.com/dpisano))
+
 ## [v4.0.0](https://github.com/voxpupuli/puppet-jira/tree/v4.0.0) (2019-06-19)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v3.5.2...v4.0.0)
@@ -21,7 +42,7 @@ These should not affect the functionality of the module.
 **Fixed bugs:**
 
 - Jira Service Desk doesn't start with JasperListener / need relaxedPath with correct version comp [\#288](https://github.com/voxpupuli/puppet-jira/pull/288) ([thonixx](https://github.com/thonixx))
-- Update default `download\_url` [\#286](https://github.com/voxpupuli/puppet-jira/pull/286) ([alexjfisher](https://github.com/alexjfisher))
+- Update default `download_url` [\#286](https://github.com/voxpupuli/puppet-jira/pull/286) ([alexjfisher](https://github.com/alexjfisher))
 - Remove messy warnings. Fixes \#234 [\#272](https://github.com/voxpupuli/puppet-jira/pull/272) ([br0ch0n](https://github.com/br0ch0n))
 
 **Closed issues:**
@@ -32,7 +53,7 @@ These should not affect the functionality of the module.
 
 **Merged pull requests:**
 
-- Update `download\_url` default value in documentation [\#297](https://github.com/voxpupuli/puppet-jira/pull/297) ([towo](https://github.com/towo))
+- Update `download_url` default value in documentation [\#297](https://github.com/voxpupuli/puppet-jira/pull/297) ([towo](https://github.com/towo))
 - Add Ehcache options; require stdlib 4.25.0 [\#282](https://github.com/voxpupuli/puppet-jira/pull/282) ([nrhtr](https://github.com/nrhtr))
 - replace deprecated has\_key\(\) with `in` [\#276](https://github.com/voxpupuli/puppet-jira/pull/276) ([bastelfreak](https://github.com/bastelfreak))
 - replace validate\_\* with assert\_type in init.pp [\#275](https://github.com/voxpupuli/puppet-jira/pull/275) ([bastelfreak](https://github.com/bastelfreak))
@@ -70,7 +91,7 @@ These should not affect the functionality of the module.
 
 **Fixed bugs:**
 
-- certain `dbconfig.xml` settings require `enable\_connection\_pooling =\> true` [\#242](https://github.com/voxpupuli/puppet-jira/issues/242)
+- certain `dbconfig.xml` settings require `enable_connection_pooling => true` [\#242](https://github.com/voxpupuli/puppet-jira/issues/242)
 
 **Closed issues:**
 
@@ -151,7 +172,6 @@ These should not affect the functionality of the module.
 **Merged pull requests:**
 
 - Fix \#206 rubocop failures [\#207](https://github.com/voxpupuli/puppet-jira/pull/207) ([sacres](https://github.com/sacres))
-- modulesync 0.16.6 [\#196](https://github.com/voxpupuli/puppet-jira/pull/196) ([bastelfreak](https://github.com/bastelfreak))
 
 ## v3.1.0 (2017-01-13)
 
