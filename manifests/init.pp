@@ -294,7 +294,7 @@ class jira (
   }
 
   if ( !empty($plugins) ) {
-    $plugins.each |String $plugin| {
+    $plugins.each |Hash $plugin| {
       file { "${jira::webappdir}/atlassian-jira/WEB-INF/lib/${plugin['path']}":
         source => "puppet:///modules/profiles/jira/plugins/${plugin['source']}"
       }
