@@ -53,12 +53,12 @@ class jira (
   Optional[Stdlib::Port] $ehcache_listener_port                     = undef,
   Optional[Stdlib::Port] $ehcache_object_port                       = undef,
   # Database Settings
-  Enum['postgresql','mysql','sqlserver','oracle','h2'] $db          = 'postgresql',
+  Enum['postgresql', 'mysql', 'sqlserver', 'oracle', 'h2'] $db      = 'postgresql',
   $dbuser                                                           = 'jiraadm',
   $dbpassword                                                       = 'mypassword',
   $dbserver                                                         = 'localhost',
   $dbname                                                           = 'jira',
-  Optional[Variant[Integer,String]] $dbport                         = undef,
+  Optional[Variant[Integer, String]] $dbport                        = undef,
   Optional[String] $dbdriver                                        = undef,
   Optional[String] $dbtype                                          = undef,
   Optional[String] $dburl                                           = undef,
@@ -99,7 +99,7 @@ class jira (
   # Choose whether to use puppet-staging, or puppet-archive
   $deploy_module                                                    = 'archive',
   $proxy_server                                                     = undef,
-  Optional[Enum['none','http','https','ftp']] $proxy_type           = undef,
+  Optional[Enum['none', 'http', 'https', 'ftp']] $proxy_type        = undef,
   # Manage service
   $service_manage                                                   = true,
   $service_ensure                                                   = running,
@@ -133,7 +133,9 @@ class jira (
   Stdlib::Absolutepath $tomcat_keystore_file                        = '/home/jira/jira.jks',
   $tomcat_keystore_pass                                             = 'changeit',
   Enum['JKS', 'JCEKS', 'PKCS12'] $tomcat_keystore_type              = 'JKS',
-  $tomcat_accesslog_format                                          = '%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;',
+  $tomcat_accesslog_format                                          =
+  '%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;'
+  ,
   # Tomcat Tunables
   $tomcat_max_threads                                               = '150',
   $tomcat_accept_count                                              = '100',
@@ -156,6 +158,8 @@ class jira (
   String $session_tokenkey                                          = 'session.tokenkey',
   Integer $session_validationinterval                               = 5,
   String $session_lastvalidation                                    = 'session.lastvalidation',
+  # plugin installation
+  Array[Hash] $plugins                                              = [],
 ) inherits jira::params {
 
   if $datacenter and !$shared_homedir {
@@ -164,7 +168,7 @@ class jira (
 
   if $tomcat_redirect_https_port {
     unless ($tomcat_native_ssl) {
-        fail('You need to set native_ssl to true when using tomcat_redirect_https_port')
+      fail('You need to set native_ssl to true when using tomcat_redirect_https_port')
     }
   }
 
@@ -233,7 +237,8 @@ class jira (
   else {
     $dburl_real = $db ? {
       'postgresql' => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}",
-      'mysql'      => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB",
+      'mysql'      => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}
+        ?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB",
       'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport_real}:${dbname}",
       'sqlserver'  => "jdbc:jtds:${db}://${dbserver}:${dbport_real}/${dbname}",
       'h2'         => "jdbc:h2:file:/${jira::homedir}/database/${dbname}",
@@ -250,20 +255,20 @@ class jira (
     }
   }
 
-  if ! empty($ajp) {
-    if ! ('port' in $ajp) {
+  if !empty($ajp) {
+    if !('port' in $ajp) {
       fail('You need to specify a valid port for the AJP connector.')
     } else {
       assert_type(Variant[Pattern[/^\d+$/], Stdlib::Port], $ajp['port'])
     }
-    if ! ('protocol' in $ajp) {
+    if !('protocol' in $ajp) {
       fail('You need to specify a valid protocol for the AJP connector.')
     } else {
       assert_type(Enum['AJP/1.3', 'org.apache.coyote.ajp', 'org.apache.coyote.ajp.AjpNioProtocol'], $ajp['protocol'])
     }
   }
 
-  $merged_jira_config_properties = merge({'jira.websudo.is.disabled' => !$enable_secure_admin_sessions}, $jira_config_properties)
+  $merged_jira_config_properties = merge({ 'jira.websudo.is.disabled' => !$enable_secure_admin_sessions }, $jira_config_properties)
 
   if $javahome == undef {
     fail('You need to specify a value for javahome')
@@ -286,5 +291,13 @@ class jira (
 
   if ($enable_sso) {
     class { 'jira::sso': }
+  }
+
+  if ( !empty($plugins) ) {
+    $plugins.each |String $plugin| {
+      file { "${jira::webappdir}/atlassian-jira/WEB-INF/lib/${plugin['path']}":
+        source => "puppet:///modules/profiles/jira/plugins/${plugin['source']}"
+      }
+    }
   }
 }
