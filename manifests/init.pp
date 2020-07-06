@@ -161,7 +161,7 @@ class jira (
   Integer $session_validationinterval                               = 5,
   String $session_lastvalidation                                    = 'session.lastvalidation',
   # plugin installation
-  Array[Hash] $plugins                                              = [],
+  Hash $plugins                                                     = undef,
 ) inherits jira::params {
 
   if $datacenter and !$shared_homedir {
@@ -296,7 +296,7 @@ class jira (
   }
 
   # install any given libraries
-  if ( $plugins == undef or !empty($plugins) ) {
+  if ( $plugins != undef and !empty($plugins) ) {
     $plugins.each |String $plugin_file_name, Hash $plugin_data| {
       file { "${jira::webappdir}/atlassian-jira/WEB-INF/lib/${plugin_file_name}":
         source => "${plugin_data['source']}",
