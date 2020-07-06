@@ -126,6 +126,19 @@
 
                     <Resource name="UserTransaction" auth="Container" type="javax.transaction.UserTransaction"
                               factory="org.objectweb.jotm.UserTransactionFactory" jotm.timeout="60"/>
+
+<% if @use_jndi_ds %>
+                  <!-- If you're using JIRA 6.4 or below; change maxTotal to maxActive -->
+                  <Resource name="jdbc/<%= scope.lookupvar('jira::jndi_ds_name') %>" auth="Container" type="javax.sql.DataSource"
+                            driverClassName="<%= scope.lookupvar('jira::dbdriver_real') %>"
+                            url="<%= scope.lookupvar('jira::dburl_real') %>"
+                            username="<%= scope.lookupvar('jira::dbuser') %>"
+                            password="<%= scope.lookupvar('jira::dbpassword') %>"
+                            maxTotal="<%= scope.lookupvar('jira::pool_max_size') %>"
+                            maxIdle="<%= scope.lookupvar('jira::pool_max_idle') %>"
+                            validationQuery="select 1"
+                    />
+<%   end -%>
                     <Manager pathname=""/>
                     <JarScanner scanManifest="false"/>
                 </Context>

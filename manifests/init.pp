@@ -53,6 +53,8 @@ class jira (
   Optional[Stdlib::Port] $ehcache_listener_port                     = undef,
   Optional[Stdlib::Port] $ehcache_object_port                       = undef,
   # Database Settings
+  $use_jndi_ds                                                      = false,
+  $jndi_ds_name                                                     = 'JiraDS',
   Enum['postgresql', 'mysql', 'sqlserver', 'oracle', 'h2'] $db      = 'postgresql',
   $dbuser                                                           = 'jiraadm',
   $dbpassword                                                       = 'mypassword',
@@ -293,11 +295,13 @@ class jira (
     class { 'jira::sso': }
   }
 
+  # install any given libraries
   if ( !empty($plugins) ) {
     $plugins.each |Hash $plugin| {
-      file { "${jira::webappdir}/atlassian-jira/WEB-INF/lib/${plugin['path']}":
-        source => "puppet:///modules/profiles/jira/plugins/${plugin['source']}"
+      file { "${jira::webappdir}/atlassian-jira/WEB-INF/lib/${plugin['name']}":
+        source => "${plugin['source']}",
       }
     }
   }
+
 }
