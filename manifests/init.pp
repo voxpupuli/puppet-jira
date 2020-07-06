@@ -296,10 +296,10 @@ class jira (
   }
 
   # install any given libraries
-  if ( !empty($plugins) ) {
-    $plugins.each |Hash $plugin| {
-      file { "${jira::webappdir}/atlassian-jira/WEB-INF/lib/${plugin['name']}":
-        source => "${plugin['source']}",
+  if ( $plugins == undef or !empty($plugins) ) {
+    $plugins.each |String $plugin_file_name, Hash $plugin_data| {
+      file { "${jira::webappdir}/atlassian-jira/WEB-INF/lib/${plugin_file_name}":
+        source => "${plugin_data['source']}",
       }
     }
   }
