@@ -295,11 +295,23 @@ class jira (
     class { 'jira::sso': }
   }
 
-  # install any given libraries
-  if ( $plugins != undef and !empty($plugins) ) {
+  # install any given library or remove them
+  if $plugins != undef and !empty($plugins) {
     $plugins.each |String $plugin_file_name, Hash $plugin_data| {
-      file { "${jira::webappdir}/atlassian-jira/WEB-INF/lib/${plugin_file_name}":
-        source => "${plugin_data['source']}",
+      $target = "${jira::webappdir}/atlassian-jira/WEB-INF/lib/${plugin_file_name}"
+      if $plugin_data['ensure'] != undef and $plugin_data['ensure'] == absent  {
+        $ensure = absent
+      } else {
+        $ensure = present
+      }
+      archive {
+        $target:
+          ensure        => $ensure,
+          source        => $plugin_data['source'],
+          username      => $plugin_data['username'],
+          password      => $plugin_data['password'],
+          checksum      => $plugin_data['checksum'],
+          checksum_type => $plugin_data['checksum_type'],
       }
     }
   }
