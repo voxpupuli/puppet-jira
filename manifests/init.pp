@@ -161,7 +161,7 @@ class jira (
   Integer $session_validationinterval                               = 5,
   String $session_lastvalidation                                    = 'session.lastvalidation',
   # plugin installation
-  Hash $plugins                                                     = {},
+  Optional[Hash] $plugins                                           = {},
 ) inherits jira::params {
 
   if $datacenter and !$shared_homedir {
