@@ -14,7 +14,7 @@
 #
 # class { 'jira::facts': }
 #
-class jira::facts(
+class jira::facts (
   $ensure        = 'present',
   $port          = $jira::tomcat_port,
   $contextpath   = $jira::contextpath,
@@ -29,29 +29,30 @@ class jira::facts(
 
   # Puppet Enterprise supplies its own ruby version if your using it.
   # A modern ruby version is required to run the executable fact
-  if $::puppetversion =~ /Puppet Enterprise/ {
+  if $facts['puppetversion'] =~ /Puppet Enterprise/ {
     $ruby_bin = '/opt/puppet/bin/ruby'
+    $dir = 'puppetlabs/'
+  } elsif $facts['aio_agent_version'] =~ String[1] {
+    $ruby_bin = '/opt/puppetlabs/puppet/bin/ruby'
     $dir      = 'puppetlabs/'
   } else {
     $ruby_bin = '/usr/bin/env ruby'
-    $dir      = ''
+    $dir = ''
   }
 
-  if ! defined(File["/etc/${dir}facter"]) {
+  if !defined(File["/etc/${dir}facter"]) {
     file { "/etc/${dir}facter":
-      ensure  => directory,
+      ensure => directory,
     }
   }
-  if ! defined(File["/etc/${dir}facter/facts.d"]) {
+  if !defined(File["/etc/${dir}facter/facts.d"]) {
     file { "/etc/${dir}facter/facts.d":
-      ensure  => directory,
+      ensure => directory,
     }
   }
 
-  if $::osfamily == 'RedHat' and $::puppetversion !~ /Puppet Enterprise/ {
-    package { $json_packages:
-      ensure => present,
-    }
+  if $facts['os']['family'] == 'RedHat' and $facts['puppetversion'] !~ /Puppet Enterprise/ {
+    ensure_packages ($json_packages, { ensure => present })
   }
 
   file { "/etc/${dir}facter/facts.d/jira_facts.rb":

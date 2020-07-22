@@ -12,15 +12,15 @@ describe 'jira' do
           context 'default params' do
             let(:params) do
               {
-                javahome: '/opt/java',
-                user: 'jira',
-                group: 'jira',
-                installdir: '/opt/jira',
-                homedir: '/home/jira',
-                format: 'tar.gz',
-                product: 'jira',
-                version: '6.3.4a',
-                download_url: 'https://downloads.atlassian.com/software/jira/downloads'
+                javahome:     '/opt/java',
+                user:         'jira',
+                group:        'jira',
+                installdir:   '/opt/jira',
+                homedir:      '/home/jira',
+                format:       'tar.gz',
+                product:      'jira',
+                version:      '6.3.4a',
+                download_url: 'https://product-downloads.atlassian.com/software/jira/downloads'
               }
             end
 
@@ -29,8 +29,8 @@ describe 'jira' do
             it { is_expected.to contain_user('jira').with_shell('/bin/true') }
             it 'deploys jira 6.3.4a from tar.gz' do
               is_expected.to contain_archive('/tmp/atlassian-jira-6.3.4a.tar.gz').
-                with('extract_path' => '/opt/jira/atlassian-jira-6.3.4a-standalone',
-                     'source'        => 'https://downloads.atlassian.com/software/jira/downloads/atlassian-jira-6.3.4a.tar.gz',
+                with('extract_path'  => '/opt/jira/atlassian-jira-6.3.4a-standalone',
+                     'source'        => 'https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-6.3.4a.tar.gz',
                      'creates'       => '/opt/jira/atlassian-jira-6.3.4a-standalone/conf',
                      'user'          => 'jira',
                      'group'         => 'jira',
@@ -39,8 +39,8 @@ describe 'jira' do
 
             it 'manages the jira home directory' do
               is_expected.to contain_file('/home/jira').with('ensure' => 'directory',
-                                                             'owner' => 'jira',
-                                                             'group' => 'jira')
+                                                             'owner'  => 'jira',
+                                                             'group'  => 'jira')
             end
           end
 
@@ -48,17 +48,17 @@ describe 'jira' do
             context 'default product' do
               let(:params) do
                 {
-                  javahome: '/opt/java',
-                  installdir: '/opt/jira',
-                  product: 'jira',
-                  version: '7.0.4',
+                  javahome:     '/opt/java',
+                  installdir:   '/opt/jira',
+                  product:      'jira',
+                  version:      '7.0.4',
                   download_url: 'http://www.atlassian.com/software/jira/downloads/binary'
                 }
               end
 
               it 'deploys jira 7.0.4 from tar.gz' do
                 is_expected.to contain_archive('/tmp/atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz').
-                  with('extract_path' => '/opt/jira/atlassian-jira-software-7.0.4-standalone',
+                  with('extract_path'  => '/opt/jira/atlassian-jira-software-7.0.4-standalone',
                        'source'        => 'http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz',
                        'creates'       => '/opt/jira/atlassian-jira-software-7.0.4-standalone/conf',
                        'user'          => 'jira',
@@ -69,17 +69,17 @@ describe 'jira' do
             context 'core product' do
               let(:params) do
                 {
-                  javahome: '/opt/java',
-                  installdir: '/opt/jira',
-                  product: 'jira-core',
-                  version: '7.0.4',
+                  javahome:     '/opt/java',
+                  installdir:   '/opt/jira',
+                  product:      'jira-core',
+                  version:      '7.0.4',
                   download_url: 'http://www.atlassian.com/software/jira/downloads/binary'
                 }
               end
 
               it 'deploys jira 7.0.4 from tar.gz' do
                 is_expected.to contain_archive('/tmp/atlassian-jira-core-7.0.4.tar.gz').
-                  with('extract_path' => '/opt/jira/atlassian-jira-core-7.0.4-standalone',
+                  with('extract_path'  => '/opt/jira/atlassian-jira-core-7.0.4-standalone',
                        'source'        => 'http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-7.0.4.tar.gz',
                        'creates'       => '/opt/jira/atlassian-jira-core-7.0.4-standalone/conf',
                        'user'          => 'jira',
@@ -89,25 +89,46 @@ describe 'jira' do
             end
           end
 
+          context 'manage_users => false' do
+            let(:params) do
+              {
+                javahome:    '/opt/java',
+                installdir:  '/opt/jira',
+                manage_user: false
+              }
+            end
+            let(:pre_condition) do
+              <<-PRE
+user {'jira':
+  comment => 'My Personal Managed Account',
+}
+group {'jira':}
+              PRE
+            end
+
+            it { is_expected.to compile }
+            it { is_expected.to contain_user('jira').with_comment('My Personal Managed Account') }
+          end
+
           context 'overwriting params' do
             let(:params) do
               {
-                javahome: '/opt/java',
-                version: '6.1',
-                format: 'tar.gz',
-                installdir: '/opt/jira',
-                homedir: '/random/homedir',
-                user: 'foo',
-                group: 'bar',
-                uid: 333,
-                gid: 444,
-                shell: '/bin/bash',
+                javahome:     '/opt/java',
+                version:      '6.1',
+                format:       'tar.gz',
+                installdir:   '/opt/jira',
+                homedir:      '/random/homedir',
+                user:         'foo',
+                group:        'bar',
+                uid:          333,
+                gid:          444,
+                shell:        '/bin/bash',
                 download_url: 'https://www.atlassian.com/software/jira/downloads/binary'
               }
             end
 
             it do
-              is_expected.to contain_user('foo').with('home' => '/random/homedir',
+              is_expected.to contain_user('foo').with('home'  => '/random/homedir',
                                                       'shell' => '/bin/bash',
                                                       'uid'   => 333,
                                                       'gid'   => 444)
@@ -116,7 +137,7 @@ describe 'jira' do
 
             it 'deploys jira 6.1 from tar.gz' do
               is_expected.to contain_archive('/tmp/atlassian-jira-6.1.tar.gz').
-                with('extract_path' => '/opt/jira/atlassian-jira-6.1-standalone',
+                with('extract_path'  => '/opt/jira/atlassian-jira-6.1-standalone',
                      'source'        => 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.1.tar.gz',
                      'creates'       => '/opt/jira/atlassian-jira-6.1-standalone/conf',
                      'user'          => 'foo',
@@ -126,8 +147,8 @@ describe 'jira' do
 
             it 'manages the jira home directory' do
               is_expected.to contain_file('/random/homedir').with('ensure' => 'directory',
-                                                                  'owner' => 'foo',
-                                                                  'group' => 'bar')
+                                                                  'owner'  => 'foo',
+                                                                  'group'  => 'bar')
             end
           end
         end

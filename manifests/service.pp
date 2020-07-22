@@ -22,6 +22,7 @@ class jira::service(
   $service_subscribe      = $jira::service_subscribe,
   $service_file_location  = $jira::params::service_file_location,
   $service_file_template  = $jira::params::service_file_template,
+  $service_file_mode      = $jira::params::service_file_mode,
   $service_lockfile       = $jira::params::service_lockfile,
   $service_provider       = $jira::params::service_provider,
 
@@ -29,7 +30,7 @@ class jira::service(
 
   file { $service_file_location:
     content => template($service_file_template),
-    mode    => '0755',
+    mode    => $service_file_mode,
   }
 
   if $service_manage {

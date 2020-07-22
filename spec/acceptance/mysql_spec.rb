@@ -1,32 +1,30 @@
 require 'spec_helper_acceptance'
 
-describe 'jira mysql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
-  it 'installs with mysql database' do
+describe 'jira mysql' do
+  it 'installs with defaults' do
     pp = <<-EOS
-      if versioncmp($::puppetversion,'3.6.1') >= 0 {
-        $allow_virtual_packages = hiera('allow_virtual_packages',false)
-        Package {
-          allow_virtual => $allow_virtual_packages,
-        }
-      }
       class { 'mysql::server':
         root_password => 'strongpassword',
       }
-      -> mysql::db { 'jira':
+
+      mysql::db { 'jira':
         user     => 'jiraadm',
         password => 'mypassword',
         host     => 'localhost',
         grant    => ['ALL'],
       }
-      -> class { 'java':
+
+      class { 'java':
         distribution => 'jre',
       }
-      -> exec { 'tmpkey':
+
+      exec { 'tmpkey':
         command => "openssl req -x509 -nodes -days 1 -subj '/C=CA/ST=QC/L=Montreal/O=FOO/CN=${fqdn}' -newkey rsa:1024 -keyout /tmp/key.pem -out /tmp/cert.pem",
         path    => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ],
         creates => '/tmp/cert.pem',
       }
-      -> java_ks { 'jira':
+
+      java_ks { 'jira':
         ensure      => present,
         name        => 'jira',
         certificate => '/tmp/cert.pem',
@@ -34,10 +32,11 @@ describe 'jira mysql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) 
         target      => '/tmp/jira.ks',
         password    => 'changeit',
       }
-      -> class { 'jira':
+
+      class { 'jira':
         installdir           => '/opt/atlassian-jira',
         homedir              => '/opt/jira-home',
-        version              => '6.3.6',
+        version              => '8.9.0',
         javahome             => '/usr',
         db                   => 'mysql',
         dbport               => '3306',
@@ -48,8 +47,16 @@ describe 'jira mysql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) 
         tomcat_keystore_file => '/tmp/jira.ks',
       }
 
-      include jira::facts
+      class { 'jira::facts': }
+
+      Class['mysql::server']
+      -> Mysql::Db['jira']
+      -> Class['java']
+      -> Exec['tmpkey']
+      -> Java_ks['jira']
+      -> Class['jira']
     EOS
+
     apply_manifest(pp, catch_failures: true)
     sleep 60
     shell 'wget -q --tries=24 --retry-connrefused --read-timeout=10 --no-check-certificate localhost:8081', acceptable_exit_codes: [0, 8]
@@ -85,11 +92,11 @@ describe 'jira mysql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) 
   end
 
   describe command('wget -q --tries=24 --retry-connrefused --no-check-certificate --read-timeout=10 -O- localhost:8081') do
-    its(:stdout) { is_expected.to match(%r{6\.3\.6}) }
+    its(:stdout) { is_expected.to match(%r{8\.9\.0}) }
   end
 
   describe command('wget -q --tries=24 --retry-connrefused --no-check-certificate --read-timeout=10 -O- https://localhost:8443') do
-    its(:stdout) { is_expected.to match(%r{6\.3\.6}) }
+    its(:stdout) { is_expected.to match(%r{8\.9\.0}) }
   end
 
   describe 'shutdown' do

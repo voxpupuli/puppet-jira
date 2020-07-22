@@ -47,7 +47,7 @@ describe 'jira' do
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml') }
             it do
               is_expected.to contain_file('/home/jira/dbconfig.xml').
-                with_content(%r{jdbc:mysql://localhost:5432/jira})
+                with_content(%r{jdbc:mysql://localhost:3306/jira})
             end
           end
 
@@ -576,6 +576,29 @@ describe 'jira' do
               is_expected.to contain_file('/home/jira/cluster.properties').
                 with_content(%r{jira.node.id = \S+}).
                 with_content(%r{jira.shared.home = /mnt/jira_shared_home_dir})
+            end
+          end
+
+          context 'enable clustering with ehcache options' do
+            let(:params) do
+              {
+                version: '6.3.4a',
+                javahome: '/opt/java',
+                datacenter: true,
+                shared_homedir: '/mnt/jira_shared_home_dir',
+                ehcache_listener_host: 'jira.foo.net',
+                ehcache_listener_port: 42,
+                ehcache_object_port: 401
+              }
+            end
+
+            it do
+              is_expected.to contain_file('/home/jira/cluster.properties').
+                with_content(%r{jira.node.id = \S+}).
+                with_content(%r{jira.shared.home = /mnt/jira_shared_home_dir}).
+                with_content(%r{ehcache.listener.hostName = jira.foo.net}).
+                with_content(%r{ehcache.listener.port = 42}).
+                with_content(%r{ehcache.object.port = 401})
             end
           end
         end

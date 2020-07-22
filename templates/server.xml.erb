@@ -32,7 +32,7 @@
     <!--APR library loader. Documentation at /docs/apr.html -->
     <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
     <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
-<%- if scope.function_versioncmp([@version, '6.4.14']) <= 0 -%>
+<%- if scope.function_versioncmp([@version, '6.4.14']) <= 0 && @product =~ /^jira/ -%>
     <Listener className="org.apache.catalina.core.JasperListener"/>
 <% else -%>
     <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
@@ -48,6 +48,10 @@
         <Connector port="<%= @tomcat_port %>"
                    <%- if @tomcat_address -%>
                    address="<%= @tomcat_address %>"
+                   <%- end -%>
+                   <%- if ( scope.function_versioncmp([@version, '7.12.1']) > 0 && @product =~ /^jira/ ) or @product =~ /^servicedesk/ -%>
+                   relaxedPathChars="[]|"
+                   relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
                    <%- end -%>
                    maxThreads="<%= @tomcat_max_threads %>"
                    minSpareThreads="<%= @tomcat_min_spare_threads %>"
@@ -73,9 +77,13 @@
 <% if @tomcat_native_ssl -%>
         <Connector
                     port="<%= @tomcat_https_port %>"
-                    protocol="<%= @tomcat_protocol_ssl %>"
+                    protocol="<%= @tomcat_protocol_ssl_real %>"
                     <%- if @tomcat_address -%>
                     address="<%= @tomcat_address %>"
+                    <%- end -%>
+                    <%- if ( scope.function_versioncmp([@version, '7.12.1']) > 0 && @product =~ /^jira/ ) or @product =~ /^servicedesk/ -%>
+                    relaxedPathChars="[]|"
+                    relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
                     <%- end -%>
                     maxHttpHeaderSize="<%= @tomcat_max_http_header_size %>"
                     SSLEnabled="true"
@@ -119,6 +127,7 @@
                     <Resource name="UserTransaction" auth="Container" type="javax.transaction.UserTransaction"
                               factory="org.objectweb.jotm.UserTransactionFactory" jotm.timeout="60"/>
                     <Manager pathname=""/>
+                    <JarScanner scanManifest="false"/>
                 </Context>
 
             </Host>

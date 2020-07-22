@@ -49,16 +49,19 @@ class jira (
   Hash $jira_config_properties                                      = {},
   Boolean $datacenter                                               = false,
   $shared_homedir                                                   = undef,
+  Optional[Stdlib::Host] $ehcache_listener_host                     = undef,
+  Optional[Stdlib::Port] $ehcache_listener_port                     = undef,
+  Optional[Stdlib::Port] $ehcache_object_port                       = undef,
   # Database Settings
-  Enum['postgresql','mysql','sqlserver','oracle'] $db               = 'postgresql',
+  Enum['postgresql','mysql','sqlserver','oracle','h2'] $db          = 'postgresql',
   $dbuser                                                           = 'jiraadm',
   $dbpassword                                                       = 'mypassword',
   $dbserver                                                         = 'localhost',
   $dbname                                                           = 'jira',
-  $dbport                                                           = '5432',
-  $dbdriver                                                         = 'org.postgresql.Driver',
-  $dbtype                                                           = 'postgres72',
-  $dburl                                                            = undef,
+  Optional[Variant[Integer,String]] $dbport                         = undef,
+  Optional[String] $dbdriver                                        = undef,
+  Optional[String] $dbtype                                          = undef,
+  Optional[String] $dburl                                           = undef,
   $poolsize                                                         = '20',
   $dbschema                                                         = 'public',
   # MySQL Connector Settings
@@ -67,7 +70,7 @@ class jira (
   $mysql_connector_product                                          = 'mysql-connector-java',
   $mysql_connector_format                                           = 'tar.gz',
   Stdlib::Absolutepath $mysql_connector_install                     = '/opt/MySQL-connector',
-  Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $mysql_connector_url   = 'https://dev.mysql.com/get/Downloads/Connector-J',
+  Stdlib::HTTPUrl $mysql_connector_url                              = 'https://dev.mysql.com/get/Downloads/Connector-J',
   # Configure database settings if you are pooling connections
   $enable_connection_pooling                                        = false,
   $pool_min_size                                                    = 20,
@@ -90,13 +93,13 @@ class jira (
   $java_opts                                                        = '',
   $catalina_opts                                                    = '',
   # Misc Settings
-  Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $download_url          = 'https://downloads.atlassian.com/software/jira/downloads/',
+  Stdlib::HTTPUrl $download_url                                     = 'https://product-downloads.atlassian.com/software/jira/downloads',
   $checksum                                                         = undef,
   $disable_notifications                                            = false,
   # Choose whether to use puppet-staging, or puppet-archive
   $deploy_module                                                    = 'archive',
   $proxy_server                                                     = undef,
-  $proxy_type                                                       = undef,
+  Optional[Enum['none','http','https','ftp']] $proxy_type           = undef,
   # Manage service
   $service_manage                                                   = true,
   $service_ensure                                                   = running,
@@ -123,7 +126,7 @@ class jira (
   $tomcat_https_port                                                = 8443,
   Optional[Integer] $tomcat_redirect_https_port                     = undef,
   $tomcat_protocol                                                  = 'HTTP/1.1',
-  $tomcat_protocol_ssl                                              = 'org.apache.coyote.http11.Http11Protocol',
+  $tomcat_protocol_ssl                                              = undef,
   $tomcat_use_body_encoding_for_uri                                 = true,
   $tomcat_disable_upload_timeout                                    = true,
   $tomcat_key_alias                                                 = 'jira',
@@ -166,7 +169,7 @@ class jira (
   }
 
   # The default Jira product starting with version 7 is 'jira-software'
-  if ((versioncmp($version, '7.0.0') > 0) and ($product == 'jira')) {
+  if ((versioncmp($version, '7.0.0') >= 0) and ($product == 'jira')) {
     $product_name = 'jira-software'
   } else {
     $product_name = $product
@@ -188,28 +191,75 @@ class jira (
     $webappdir = $extractdir
   }
 
+  if $dbport {
+    $dbport_real = $dbport
+  } else {
+    $dbport_real = $db ? {
+      'postgresql' => '5432',
+      'mysql'      => '3306',
+      'oracle'     => '1521',
+      'sqlserver'  => '1433',
+      'h2'         => '',
+    }
+  }
+
+  if $dbdriver {
+    $dbdriver_real = $dbdriver
+  } else {
+    $dbdriver_real = $db ? {
+      'postgresql' => 'org.postgresql.Driver',
+      'mysql'      => 'com.mysql.jdbc.Driver',
+      'oracle'     => 'oracle.jdbc.OracleDriver',
+      'sqlserver'  => 'com.microsoft.sqlserver.jdbc.SQLServerDriver',
+      'h2'         => 'org.h2.Driver',
+    }
+  }
+
+  if $dbtype {
+    $dbtype_real = $dbtype
+  } else {
+    $dbtype_real = $db ? {
+      'postgresql' => 'postgres72',
+      'mysql'      => 'mysql',
+      'oracle'     => 'oracle10g',
+      'sqlserver'  => 'mssql',
+      'h2'         => 'h2',
+    }
+  }
+
   if $dburl {
     $dburl_real = $dburl
   }
   else {
     $dburl_real = $db ? {
-      'postgresql' => "jdbc:${db}://${dbserver}:${dbport}/${dbname}",
-      'mysql'      => "jdbc:${db}://${dbserver}:${dbport}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=storage_engine=InnoDB",
-      'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport}:${dbname}",
-      'sqlserver'  => "jdbc:jtds:${db}://${dbserver}:${dbport}/${dbname}"
+      'postgresql' => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}",
+      'mysql'      => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB",
+      'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport_real}:${dbname}",
+      'sqlserver'  => "jdbc:jtds:${db}://${dbserver}:${dbport_real}/${dbname}",
+      'h2'         => "jdbc:h2:file:/${jira::homedir}/database/${dbname}",
+    }
+  }
+
+  if $tomcat_protocol_ssl {
+    $tomcat_protocol_ssl_real = $tomcat_protocol_ssl
+  } else {
+    if versioncmp($version, '7.3.0') >= 0 {
+      $tomcat_protocol_ssl_real = 'org.apache.coyote.http11.Http11NioProtocol'
+    } else {
+      $tomcat_protocol_ssl_real = 'org.apache.coyote.http11.Http11Protocol'
     }
   }
 
   if ! empty($ajp) {
-    if ! has_key($ajp, 'port') {
+    if ! ('port' in $ajp) {
       fail('You need to specify a valid port for the AJP connector.')
     } else {
-      validate_re($ajp['port'], '^\d+$')
+      assert_type(Variant[Pattern[/^\d+$/], Stdlib::Port], $ajp['port'])
     }
-    if ! has_key($ajp, 'protocol') {
+    if ! ('protocol' in $ajp) {
       fail('You need to specify a valid protocol for the AJP connector.')
     } else {
-      validate_re($ajp['protocol'], ['^AJP/1.3$', '^org.apache.coyote.ajp'])
+      assert_type(Enum['AJP/1.3', 'org.apache.coyote.ajp', 'org.apache.coyote.ajp.AjpNioProtocol'], $ajp['protocol'])
     }
   }
 
@@ -235,6 +285,6 @@ class jira (
   ~> Class['jira::service']
 
   if ($enable_sso) {
-    class { '::jira::sso': }
+    class { 'jira::sso': }
   }
 }

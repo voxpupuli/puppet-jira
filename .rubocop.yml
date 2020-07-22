@@ -1,5 +1,6 @@
 require: rubocop-rspec
 AllCops:
+# Puppet Server 5 defaults to jruby 1.7 so TargetRubyVersion must stay at 1.9 until we drop support for puppet 5
   TargetRubyVersion: 1.9
   Include:
     - ./**/*.rb
@@ -12,6 +13,7 @@ AllCops:
     - Gemfile
     - Rakefile
     - Guardfile
+    - Vagrantfile
 Lint/ConditionPosition:
   Enabled: True
 
@@ -44,6 +46,9 @@ Style/HashSyntax:
 
 Style/RedundantReturn:
   Enabled: True
+
+Layout/EndOfLine:
+  Enabled: False
 
 Lint/AmbiguousOperator:
   Enabled: True
@@ -533,4 +538,9 @@ Security/YAMLLoad:
 
 # This affects hiera interpolation, as well as some configs that we push.
 Style/FormatStringToken:
+  Enabled: false
+
+# This is useful, but sometimes a little too picky about where unit tests files
+# are located.
+RSpec/FilePath:
   Enabled: false

@@ -204,8 +204,8 @@ is enabled, this parameter is *required*.
 
 ##### `$db`
 
-Which database to use for JIRA, defaults to 'postgresql'. Can be 'postgresql',
-'mysql', 'oracle' or 'sqlserver'.
+Which database to use for JIRA, defaults to 'postgresql'. Can be:
+'postgresql', 'mysql', 'oracle', 'sqlserver', or 'h2'.
 
 ##### `$dbuser`
 
@@ -226,20 +226,44 @@ SID.
 
 ##### `$dbport`
 
-The port of the database, defaults to '5432'. MySQL runs on '3306'. Oracle runs on
-'1521'. SQL Server runs on '1433'.
+The port of the database, defaults to an appropriate port for the $db:
+
+| $db | DEFAULT |
+|------|--------|
+| postgresql | 5432 |
+| mysql | 3306 |
+| oracle | 1521 |
+| sqlserver | 1443 |
+| h2 | N/A |
 
 ##### `$dbdriver`
 
-The database driver to use, defaults to 'org.postgresql.Driver'. Can be
-'org.postgresql.Driver', 'com.mysql.jdbc.Driver', 'oracle.jdbc.OracleDriver' or
-'net.sourceforge.jtds.jdbc.Driver'.
+The database driver to use, defaults to an appropriate value for $db:
+
+| $db | DEFAULT |
+|------|--------|
+| postgresql | org.postgresql.Driver |
+| mysql | com.mysql.jdbc.Driver |
+| oracle | oracle.jdbc.OracleDriver (*) |
+| sqlserver | com.microsoft.sqlserver.jdbc.SQLServerDriver |
+| h2 | org.h2.Driver |
+
+(*) NOTE: You must add the Oracle JDBC Driver manually with recent versions of JIRA (for now).
+See: https://confluence.atlassian.com/doc/database-jdbc-drivers-171742.html
 
 ##### `$dbtype`
 
-Database type, defaults to 'postgres72'. Can be 'postgres72', 'mysql', 'oracle10g',
-or 'mssql'. Atlassian only supports Oracle 11g, even so this value should be as
-documented here.
+Database type, defaults to an appropriate value for $db:
+
+| $db | DEFAULT |
+|------|--------|
+| postgresql | postgresql72 |
+| mysql | mysql |
+| oracle | oracle10g |
+| sqlserver | mssql |
+| h2 | h2 |
+
+NOTE: Atlassian only supports Oracle 11g/12g, even so this value should be as documented here.
 
 ##### `$dbschema`
 
@@ -262,47 +286,47 @@ Configure database settings if you are pooling connections, defaults to 'false'
 
 ##### `$pool_min_size`
 
-defaults to 20
+defaults to 20 (requires `enable_connection_pooling => true`)
 
 ##### `$pool_max_size`
 
-defaults to 20
+defaults to 20 (requires `enable_connection_pooling => true`)
 
 ##### `$pool_max_wait`
 
-defaults to 30000
+defaults to 30000 (requires `enable_connection_pooling => true`)
 
 ##### `$validation_query`
 
-defaults to undef
+defaults to undef (requires `enable_connection_pooling => true`)
 
 ##### `$min_evictable_idle_time`
 
-defaults to 60000
+defaults to 60000 (requires `enable_connection_pooling => true`)
 
 ##### `$time_between_eviction_runs`
 
-defaults to undef
+defaults to undef (requires `enable_connection_pooling => true`)
 
 ##### `$pool_max_idle`
 
-defaults to 20
+defaults to 20 (requires `enable_connection_pooling => true`)
 
 ##### `$pool_remove_abandoned`
 
-defaults to true
+defaults to true (requires `enable_connection_pooling => true`)
 
 ##### `$pool_remove_abandoned_timeout`
 
-defaults to 300
+defaults to 300 (requires `enable_connection_pooling => true`)
 
 ##### `$pool_test_while_idle`
 
-defaults to true
+defaults to true (requires `enable_connection_pooling => true`)
 
 ##### `$pool_test_on_borrow`
 
-defaults to false
+defaults to false (requires `enable_connection_pooling => true`)
 
 #### MySQL Java Connector parameters
 
@@ -370,7 +394,7 @@ defaults to ''
 ##### `$download_url`
 
 The URL used to download the JIRA installation file.
-Defaults to `https://downloads.atlassian.com/software/jira/downloads/`
+Defaults to `https://product-downloads.atlassian.com/software/jira/downloads/`
 
 ##### `checksum`
 
@@ -382,6 +406,16 @@ The md5 checksum of the archive file. Only supported with
 Module to use for downloading and extracting archive file. Supports puppet-archive
 and puppet-staging. Defaults to 'archive'. Archive supports md5 hash checking and
 Staging supports S3 buckets.
+
+##### `$proxy_server`
+
+Specify a proxy server, with port number if needed. ie: https://example.com:8080.
+Only supported with `deploy_module => archive` (the default).  Defaults to 'undef'.
+
+##### `$proxy_type`
+
+Proxy server type (none|http|https|ftp)
+Only supported with `deploy_module => archive` (the default).  Defaults to 'undef'.
 
 ##### `$service_manage`
 

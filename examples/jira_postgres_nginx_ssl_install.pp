@@ -1,29 +1,29 @@
 node default {
 
-  class { '::nginx': }
+  class { 'nginx': }
 
-  -> class { '::postgresql::globals':
+  -> class { 'postgresql::globals':
     manage_package_repo => true,
     version             => '9.3',
   }
 
-  -> class { '::postgresql::server': }
+  -> class { 'postgresql::server': }
 
   -> postgresql::server::db { 'jira':
     user     => 'jiraadm',
     password => postgresql_password('jiraadm', 'mypassword'),
   }
 
-  -> class { '::jira':
+  -> class { 'jira':
     javahome => '/opt/java/latest',
     proxy    => {
       scheme    => 'https',
-      proxyName => $::fqdn,
+      proxyName => $facts['networking']['fqdn'],
       proxyPort => '443',
     },
   }
 
-  include ::jira::facts
+  include jira::facts
 
   nginx::resource::upstream { 'jira':
     ensure  => present,
@@ -32,7 +32,7 @@ node default {
 
   nginx::resource::vhost { 'jira_vhost':
     ensure               => present,
-    server_name          => [ $::ipaddress, $::fqdn, $hostname ],
+    server_name          => [ $facts['networking']['ip'], $facts['networking']['fqdn'], $facts['networking']['hostname'] ],
     proxy                => 'http://jira',
     proxy_read_timeout   => '300',
     rewrite_to_https     => true,
