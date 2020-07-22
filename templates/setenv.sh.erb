@@ -47,7 +47,7 @@ DISABLE_NOTIFICATIONS=" -Datlassian.mail.senddisabled=true -Datlassian.mail.fetc
 # This allows us to actually debug GC related issues by correlating timestamps
 # with other parts of the application logs.
 #-----------------------------------------------------------------------------------
-JVM_EXTRA_ARGS="-XX:+PrintGCDateStamps"
+JVM_EXTRA_ARGS="<%= scope.lookupvar('jira::jvm_extra') %>"
 
 PRGDIR=`dirname "$0"`
 cat "${PRGDIR}"/jirabanner.txt

@@ -90,6 +90,7 @@ class jira (
   $jvm_xmx                                                          = '1024m',
   $jvm_permgen                                                      = '256m',
   $jvm_optional                                                     = '-XX:-HeapDumpOnOutOfMemoryError',
+  $jvm_extra                                                        = '-XX:+PrintGCDateStamps',
   $java_opts                                                        = '',
   $catalina_opts                                                    = '',
   # Misc Settings

@@ -381,6 +381,10 @@ defaults to '256m'
 
 defaults to '-XX:-HeapDumpOnOutOfMemoryError'
 
+##### `$jvm_extra`
+
+defaults to '-XX:+PrintGCDateStamps'
+
 ##### `$java_opts`
 
 defaults to ''
