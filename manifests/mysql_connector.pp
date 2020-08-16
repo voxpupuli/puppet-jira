@@ -6,7 +6,6 @@ class jira::mysql_connector (
   $installdir   = $jira::mysql_connector_install,
   $download_url = $jira::mysql_connector_url,
 ) {
-
   require staging
 
   $file = "${product}-${version}.${format}"
@@ -34,5 +33,4 @@ class jira::mysql_connector (
     ensure => link,
     target => "${installdir}/${product}-${version}/${product}-${version}-bin.jar",
   }
-
 }

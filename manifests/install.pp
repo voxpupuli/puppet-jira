@@ -14,7 +14,6 @@
 #   limitations under the License.
 # -----------------------------------------------------------------------------
 class jira::install {
-
   include 'archive'
 
   if $jira::manage_user {
@@ -32,7 +31,6 @@ class jira::install {
       managehome       => true,
       uid              => $jira::uid,
       gid              => $jira::gid,
-
     }
   }
 
@@ -94,7 +92,7 @@ class jira::install {
         require => [
           File[$jira::installdir],
           User[$jira::user],
-          File[$jira::extractdir] ],
+        File[$jira::extractdir]],
       }
     }
     'archive': {

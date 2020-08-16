@@ -14,7 +14,6 @@
 #   limitations under the License.
 # -----------------------------------------------------------------------------
 class jira::config inherits jira {
-
   File {
     owner => $jira::user,
     group => $jira::group,
@@ -59,7 +58,7 @@ class jira::config inherits jira {
   -> file { "${jira::homedir}/dbconfig.xml":
     content => template("jira/dbconfig.${jira::db}.xml.erb"),
     mode    => '0600',
-    require => [ Class['jira::install'],File[$jira::homedir] ],
+    require => [Class['jira::install'],File[$jira::homedir]],
     notify  => Class['jira::service'],
   }
 
@@ -91,7 +90,7 @@ class jira::config inherits jira {
   file { "${jira::homedir}/jira-config.properties":
     content => template('jira/jira-config.properties.erb'),
     mode    => '0600',
-    require => [ Class['jira::install'],File[$jira::homedir] ],
+    require => [Class['jira::install'],File[$jira::homedir]],
     notify  => Class['jira::service'],
   }
 
@@ -99,9 +98,8 @@ class jira::config inherits jira {
     file { "${jira::homedir}/cluster.properties":
       content => template('jira/cluster.properties.erb'),
       mode    => '0600',
-      require => [ Class['jira::install'],File[$jira::homedir] ],
+      require => [Class['jira::install'],File[$jira::homedir]],
       notify  => Class['jira::service'],
     }
   }
-
 }
