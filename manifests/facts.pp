@@ -26,7 +26,6 @@ class jira::facts (
   },
   # lint:endignore
 ) inherits jira::params {
-
   # Puppet Enterprise supplies its own ruby version if your using it.
   # A modern ruby version is required to run the executable fact
   if $facts['puppetversion'] =~ /Puppet Enterprise/ {
@@ -60,5 +59,4 @@ class jira::facts (
     content => template('jira/facts.rb.erb'),
     mode    => '0500',
   }
-
 }

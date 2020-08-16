@@ -2,7 +2,7 @@
 #
 # Install confluence SSO via crowd, See README.md for more.
 #
-class jira::sso(
+class jira::sso (
   $application_name                                                 = $jira::application_name,
   $application_password                                             = $jira::application_password,
   Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $application_login_url = $jira::application_login_url,
@@ -13,9 +13,8 @@ class jira::sso(
   $session_validationinterval                                       = $jira::session_validationinterval,
   $session_lastvalidation                                           = $jira::session_lastvalidation,
 ) {
-
   file { "${jira::webappdir}/atlassian-jira/WEB-INF/classes/crowd.properties":
-    ensure  => present,
+    ensure  => file,
     content => template('jira/crowd.properties'),
     mode    => '0660',
     owner   => $jira::user,

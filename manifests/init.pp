@@ -157,14 +157,13 @@ class jira (
   Integer $session_validationinterval                               = 5,
   String $session_lastvalidation                                    = 'session.lastvalidation',
 ) inherits jira::params {
-
   if $datacenter and !$shared_homedir {
     fail("\$shared_homedir must be set when \$datacenter is true")
   }
 
   if $tomcat_redirect_https_port {
     unless ($tomcat_native_ssl) {
-        fail('You need to set native_ssl to true when using tomcat_redirect_https_port')
+      fail('You need to set native_ssl to true when using tomcat_redirect_https_port')
     }
   }
 
@@ -263,7 +262,7 @@ class jira (
     }
   }
 
-  $merged_jira_config_properties = merge({'jira.websudo.is.disabled' => !$enable_secure_admin_sessions}, $jira_config_properties)
+  $merged_jira_config_properties = merge( { 'jira.websudo.is.disabled' => !$enable_secure_admin_sessions }, $jira_config_properties)
 
   if $javahome == undef {
     fail('You need to specify a value for javahome')

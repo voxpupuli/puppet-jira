@@ -13,7 +13,7 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 #-----------------------------------------------------------------------------
-class jira::service(
+class jira::service (
 
   Boolean $service_manage = $jira::service_manage,
   String $service_ensure  = $jira::service_ensure,
@@ -27,7 +27,6 @@ class jira::service(
   $service_provider       = $jira::params::service_provider,
 
 ) inherits jira::params {
-
   file { $service_file_location:
     content => template($service_file_template),
     mode    => $service_file_mode,
