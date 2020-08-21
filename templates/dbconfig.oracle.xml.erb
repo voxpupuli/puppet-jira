@@ -13,6 +13,7 @@
     <pool-max-size><%= scope.lookupvar('jira::pool_max_size') %></pool-max-size>
     <pool-max-wait><%= scope.lookupvar('jira::pool_max_wait') %></pool-max-wait>
     <pool-max-idle><%= scope.lookupvar('jira::pool_max_idle') %></pool-max-idle>
+    <connection-properties><%= scope.lookupvar('jira::connection_properties') %></connection-properties>
     <pool-remove-abandoned><%= scope.lookupvar('jira::pool_remove_abandoned') %></pool-remove-abandoned>
     <pool-remove-abandoned-timeout><%= scope.lookupvar('jira::pool_remove_abandoned_timeout') %></pool-remove-abandoned-timeout>
     <validation-query><% if @validation_query %><%= @validation_query %><% else %>scope.lookupvar('jira::validation_query')<% end %></validation-query>
