@@ -76,6 +76,7 @@ class jira (
   $pool_min_size                                                    = 20,
   $pool_max_size                                                    = 20,
   $pool_max_wait                                                    = 30000,
+  Hash $connection_properties                                       = {},
   $validation_query                                                 = undef,
   $min_evictable_idle_time                                          = 60000,
   $time_between_eviction_runs                                       = undef,
