@@ -141,6 +141,8 @@ class jira (
   Hash $proxy                                                       = {},
   # Options for the AJP connector
   Hash $ajp                                                         = {},
+  # Additional connectors in server.xml
+  Jira::Tomcat_connectors $tomcat_additional_connectors             = {},
   # Context path (usualy used in combination with a reverse proxy)
   String $contextpath                                               = '',
   # Resources for context.xml
