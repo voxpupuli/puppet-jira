@@ -87,7 +87,7 @@ class jira (
   $pool_test_on_borrow                                              = false,
   # JVM Settings
   $javahome                                                         = undef,
-  Enum['openjdk-11', 'oracle-jdk-1.8', 'custom'] $jvm_type          = 'custom',
+  Jira::Jvm_types $jvm_type                                         = 'custom',
   String $jvm_xms                                                   = '256m',
   String $jvm_xmx                                                   = '1024m',
   String $jvm_permgen                                               = '256m',

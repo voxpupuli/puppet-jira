@@ -648,6 +648,68 @@ describe 'jira' do
                 with_content(%r{ehcache.object.port = 401})
             end
           end
+
+          context 'jira-8.12 - OpenJDK jvm params' do
+            let(:params) do
+              {
+                version: '8.12.1',
+                javahome: '/opt/java',
+                jvm_type: 'openjdk-11'
+              }
+            end
+
+            it { is_expected.to compile.with_all_deps }
+            it do
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.12.1-standalone/bin/setenv.sh').
+                with_content(%r{#DISABLE_NOTIFICATIONS=}).
+                with_content(%r{JVM_SUPPORT_RECOMMENDED_ARGS=\S+HeapDumpOnOutOfMemoryError'}).
+                with_content(%r{JVM_GC_ARGS=\S+ExplicitGCInvokesConcurrent'}).
+                with_content(%r{JVM_CODE_CACHE_ARGS=\S+InitialCodeCacheSize=32m\S+ReservedCodeCacheSize=512m'}).
+                with_content(%r{JVM_REQUIRED_ARGS=\S+InterningDocumentFactory'})
+            end
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.12.1-standalone/bin/user.sh') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.12.1-standalone/conf/server.xml') }
+            it do
+              is_expected.to contain_file('/home/jira/dbconfig.xml').
+                with_content(%r{jdbc:postgresql://localhost:5432/jira}).
+                with_content(%r{<schema-name>public</schema-name>})
+            end
+            it { is_expected.not_to contain_file('/home/jira/cluster.properties') }
+            it { is_expected.not_to contain_file('/opt/jira/atlassian-jira-software-8.12.1-standalone/bin/check-java.sh') }
+          end
+
+          context 'jira-8.12 - custom jvm params' do
+            let(:params) do
+              {
+                version: '8.12.1',
+                javahome: '/opt/java',
+                jvm_type: 'custom',
+                jvm_optional: '-XX:-TEST_OPTIONAL',
+                jvm_gc_args: '-XX:-TEST_GC_ARG',
+                jvm_codecache_args: '-XX:-TEST_CODECACHE',
+                jvm_extra_args: '-XX:-TEST_EXTRA'
+              }
+            end
+
+            it { is_expected.to compile.with_all_deps }
+            it do
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.12.1-standalone/bin/setenv.sh').
+                with_content(%r{#DISABLE_NOTIFICATIONS=}).
+                with_content(%r{JVM_SUPPORT_RECOMMENDED_ARGS=\S+TEST_OPTIONAL'}).
+                with_content(%r{JVM_GC_ARGS=\S+TEST_GC_ARG'}).
+                with_content(%r{JVM_CODE_CACHE_ARGS=\S+TEST_CODECACHE'}).
+                with_content(%r{JVM_EXTRA_ARGS=\S+TEST_EXTRA'})
+            end
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.12.1-standalone/bin/user.sh') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.12.1-standalone/conf/server.xml') }
+            it do
+              is_expected.to contain_file('/home/jira/dbconfig.xml').
+                with_content(%r{jdbc:postgresql://localhost:5432/jira}).
+                with_content(%r{<schema-name>public</schema-name>})
+            end
+            it { is_expected.not_to contain_file('/home/jira/cluster.properties') }
+            it { is_expected.not_to contain_file('/opt/jira/atlassian-jira-software-8.12.1-standalone/bin/check-java.sh') }
+          end
         end
       end
     end
