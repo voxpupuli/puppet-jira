@@ -650,7 +650,7 @@ jira::java_opts: >
   -Dhttps.proxyHost=proxy.example.co.za
   -Dhttps.proxyPort=8080
   -Dhttp.nonProxyHosts=localhost\|127.0.0.1\|172.*.*.*\|10.*.*.*
-  -XX:+UseLargePages'
+  -XX:+UseLargePages
 jira::dbport:        '5439'
 jira::dbuser:        'jira'
 jira::jvm_xms:       '1G'
