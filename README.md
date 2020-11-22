@@ -644,13 +644,13 @@ jira::group:         'jira'
 jira::shell:         '/bin/bash'
 jira::dbserver:      'dbvip.example.co.za'
 jira::javahome:      '/opt/java'
-jira::java_opts: >
+jira::java_opts: >-
   -Dhttp.proxyHost=proxy.example.co.za
   -Dhttp.proxyPort=8080
   -Dhttps.proxyHost=proxy.example.co.za
   -Dhttps.proxyPort=8080
   -Dhttp.nonProxyHosts=localhost\|127.0.0.1\|172.*.*.*\|10.*.*.*
-  -XX:+UseLargePages'
+  -XX:+UseLargePages
 jira::dbport:        '5439'
 jira::dbuser:        'jira'
 jira::jvm_xms:       '1G'
