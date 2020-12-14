@@ -15,7 +15,8 @@ describe 'Jira::Jvm_types' do
     context 'with garbage inputs' do
       [
         'openheydk-11',
-        'uracle-jdk-1.8'].each do |value|
+        'uracle-jdk-1.8'
+      ].each do |value|
         describe value.inspect do
           it { is_expected.not_to allow_value(value) }
         end

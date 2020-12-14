@@ -12,11 +12,11 @@ JIRA_HOME="<%= @homedir %>"
 #  Occasionally Atlassian Support may recommend that you set some specific JVM arguments.  You can use this variable below to do that.
 #
 <%- if @jvm_type == 'openjdk-11' -%>
-JVM_SUPPORT_RECOMMENDED_ARGS='-XX:-HeapDumpOnOutOfMemoryError'
+JVM_SUPPORT_RECOMMENDED_ARGS='-XX:-HeapDumpOnOutOfMemoryError <%= @jvm_optional_additional %>'
 <%- elsif @jvm_type == 'oracle-jdk-1.8' -%>
-JVM_SUPPORT_RECOMMENDED_ARGS='-XX:-HeapDumpOnOutOfMemoryError'
+JVM_SUPPORT_RECOMMENDED_ARGS='-XX:-HeapDumpOnOutOfMemoryError <%= @jvm_optional_additional %>'
 <%- elsif @jvm_type == 'custom' -%>
-JVM_SUPPORT_RECOMMENDED_ARGS="<%= @jvm_optional %>"
+JVM_SUPPORT_RECOMMENDED_ARGS='<%= @jvm_optional %>'
 <%- end -%>
 
 #
@@ -26,29 +26,29 @@ JVM_SUPPORT_RECOMMENDED_ARGS="<%= @jvm_optional %>"
 #  For Java 11 and larger heaps we recommend: -XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent
 #
 <%- if @jvm_type == 'openjdk-11' -%>
-JVM_GC_ARGS='-XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent'
+JVM_GC_ARGS='-XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent <%= @jvm_gc_args_additional %>'
 <%- elsif @jvm_type == 'oracle-jdk-1.8' -%>
-JVM_GC_ARGS=''
+JVM_GC_ARGS='<%= @jvm_gc_args_additional %>'
 <%- elsif @jvm_type == 'custom' -%>
-JVM_GC_ARGS="<%= @jvm_gc_args %>"
+JVM_GC_ARGS='<%= @jvm_gc_args %>'
 <%- end -%>
 
 #
 # The following 2 settings control the minimum and maximum given to the JIRA Java virtual machine.  In larger JIRA instances, the maximum amount will need to be increased.
 #
-JVM_MINIMUM_MEMORY="<%= @jvm_xms %>"
-JVM_MAXIMUM_MEMORY="<%= @jvm_xmx %>"
-JVM_PERMGEN_MEMORY="<%= @jvm_permgen %>"
+JVM_MINIMUM_MEMORY='<%= @jvm_xms %>'
+JVM_MAXIMUM_MEMORY='<%= @jvm_xmx %>'
+JVM_PERMGEN_MEMORY='<%= @jvm_permgen %>'
 
 #
 # The following setting configures the size of JVM code cache.  A high value of reserved size allows Jira to work with more installed apps.
 #
 <%- if @jvm_type == 'openjdk-11' -%>
-JVM_CODE_CACHE_ARGS='-XX:InitialCodeCacheSize=32m -XX:ReservedCodeCacheSize=512m'
+JVM_CODE_CACHE_ARGS='-XX:InitialCodeCacheSize=32m -XX:ReservedCodeCacheSize=512m <%= @jvm_codecache_args_additional %>'
 <%- elsif @jvm_type == 'oracle-jdk-1.8' -%>
-JVM_CODE_CACHE_ARGS='-XX:InitialCodeCacheSize=32m -XX:ReservedCodeCacheSize=512m'
+JVM_CODE_CACHE_ARGS='-XX:InitialCodeCacheSize=32m -XX:ReservedCodeCacheSize=512m <%= @jvm_codecache_args_additional %>'
 <%- elsif @jvm_type == 'custom' -%>
-JVM_CODE_CACHE_ARGS="<%= @jvm_codecache_args %>"
+JVM_CODE_CACHE_ARGS='<%= @jvm_codecache_args %>'
 <%- end -%>
 
 #
@@ -65,9 +65,9 @@ JVM_REQUIRED_ARGS='-Djava.awt.headless=true -Datlassian.standalone=JIRA -Dorg.ap
 # Uncomment this setting if you want to import data without notifications
 #
 <% if @disable_notifications -%>
-DISABLE_NOTIFICATIONS=" -Datlassian.mail.senddisabled=true -Datlassian.mail.fetchdisabled=true -Datlassian.mail.popdisabled=true"
+DISABLE_NOTIFICATIONS='-Datlassian.mail.senddisabled=true -Datlassian.mail.fetchdisabled=true -Datlassian.mail.popdisabled=true'
 <% else %>
-#DISABLE_NOTIFICATIONS=" -Datlassian.mail.senddisabled=true -Datlassian.mail.fetchdisabled=true -Datlassian.mail.popdisabled=true"
+#DISABLE_NOTIFICATIONS='-Datlassian.mail.senddisabled=true -Datlassian.mail.fetchdisabled=true -Datlassian.mail.popdisabled=true'
 <% end -%>
 
 
@@ -82,11 +82,11 @@ DISABLE_NOTIFICATIONS=" -Datlassian.mail.senddisabled=true -Datlassian.mail.fetc
 # occurs frequently, which could make it harder for support to diagnose a problem.
 #-----------------------------------------------------------------------------------
 <%- if @jvm_type == 'openjdk-11' -%>
-JVM_EXTRA_ARGS='-Xlog:gc*:verbose_gc.log:time,uptime:filecount=15,filesize=10M -XX:+ExplicitGCInvokesConcurrent -XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT'
+JVM_EXTRA_ARGS='-Xlog:gc*:verbose_gc.log:time,uptime:filecount=15,filesize=10M -XX:+ExplicitGCInvokesConcurrent -XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT <%= @jvm_extra_args_additional %>'
 <%- elsif @jvm_type == 'oracle-jdk-1.8' -%>
-JVM_EXTRA_ARGS='-XX:+PrintGCDateStamps -XX:+ExplicitGCInvokesConcurrent -XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT'
+JVM_EXTRA_ARGS='-XX:+PrintGCDateStamps -XX:+ExplicitGCInvokesConcurrent -XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT <%= @jvm_extra_args_additional %>'
 <%- elsif @jvm_type == 'custom' -%>
-JVM_EXTRA_ARGS="<%= @jvm_extra_args %>"
+JVM_EXTRA_ARGS='<%= @jvm_extra_args %>'
 <%- end -%>
 
 CURRENT_NOFILES_LIMIT=$( ulimit -Hn )
