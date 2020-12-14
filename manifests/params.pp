@@ -21,13 +21,6 @@ class jira::params {
         $service_file_mode     = '0644'
         $service_lockfile      = '/var/lock/subsys/jira'
         $service_provider      = 'systemd'
-      } elsif versioncmp($facts['os']['release']['major'], '6') >= 0 {
-        $json_packages         = ['rubygem-json', 'ruby-json']
-        $service_file_location = '/etc/init.d/jira'
-        $service_file_template = 'jira/jira.initscript.erb'
-        $service_file_mode     = '0755'
-        $service_lockfile      = '/var/lock/subsys/jira'
-        $service_provider      = undef
       } else {
       fail("\"${module_name}\" provides no service parameters
             for \"${facts['os']['family']}\" - \"${$facts['os']['release']['major']}\"")
