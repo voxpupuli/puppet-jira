@@ -5,6 +5,7 @@ class jira::mysql_connector (
   $format       = $jira::mysql_connector_format,
   $installdir   = $jira::mysql_connector_install,
   $download_url = $jira::mysql_connector_url,
+  $jar_suffix   = $jira::mysql_connector_jar_suffix,
 ) {
   require staging
 
@@ -31,6 +32,6 @@ class jira::mysql_connector (
 
   -> file { "${jira::webappdir}/lib/mysql-connector-java.jar":
     ensure => link,
-    target => "${installdir}/${product}-${version}/${product}-${version}-bin.jar",
+    target => "${installdir}/${product}-${version}/${product}-${version}${jar_suffix}.jar",
   }
 }
