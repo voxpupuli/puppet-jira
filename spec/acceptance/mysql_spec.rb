@@ -31,6 +31,7 @@ describe 'jira mysql' do
         private_key => '/tmp/key.pem',
         target      => '/tmp/jira.ks',
         password    => 'changeit',
+        require     => Exec['tmpkey'],
       }
 
       class { 'jira':
@@ -44,16 +45,10 @@ describe 'jira mysql' do
         tomcat_port          => '8081',
         tomcat_native_ssl    => true,
         tomcat_keystore_file => '/tmp/jira.ks',
+        require              => [Mysql::Db['jira'], Java_ks['jira']],
       }
 
       class { 'jira::facts': }
-
-      Class['mysql::server']
-      -> Mysql::Db['jira']
-      -> Class['java']
-      -> Exec['tmpkey']
-      -> Java_ks['jira']
-      -> Class['jira']
     EOS
 
     apply_manifest(pp, catch_failures: true)

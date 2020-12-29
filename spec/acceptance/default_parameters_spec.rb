@@ -16,14 +16,10 @@ describe 'jira postgresql' do
 
       class { 'jira':
         javahome => '/usr',
+        require  => [Class['java'], Postgresql::Server::Db['jira']],
       }
 
       class { 'jira::facts': }
-
-      Class['postgresql::server']
-      -> Postgresql::Server::Db['jira']
-      -> Class['java']
-      -> Class['jira']
     EOS
 
     apply_manifest(pp, catch_failures: true)
