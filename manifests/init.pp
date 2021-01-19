@@ -71,7 +71,6 @@ class jira (
   $mysql_connector_format                                           = 'tar.gz',
   Stdlib::Absolutepath $mysql_connector_install                     = '/opt/MySQL-connector',
   Stdlib::HTTPUrl $mysql_connector_url                              = 'https://dev.mysql.com/get/Downloads/Connector-J',
-  String[1] $mysql_connector_jar_suffix                             = '-bin',
   # Configure database settings if you are pooling connections
   $enable_connection_pooling                                        = false,
   $pool_min_size                                                    = 20,
