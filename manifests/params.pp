@@ -14,6 +14,12 @@ class jira::params {
         $service_file_template = 'jira/jira.initscript.erb'
         $service_lockfile = '/var/lock/subsys/jira'
         $service_provider = undef
+      } elsif $facts['operatingsystem'] == 'Amazon' and $facts['operatingsystemmajrelease'] =='2' {
+        $json_packages = [ 'rubygem-json' ]
+        $service_file_location = '/usr/lib/systemd/system/jira.service'
+        $service_file_template = 'jira/jira.service.erb'
+        $service_lockfile = '/var/lock/subsys/jira'
+        $service_provider = 'systemd'
       } elsif versioncmp($facts['operatingsystemmajrelease'], '7') >= 0 {
         $json_packages = [ 'rubygem-json' ]
         $service_file_location = '/usr/lib/systemd/system/jira.service'
