@@ -4,8 +4,7 @@ class jira::mysql_connector (
   $product      = $jira::mysql_connector_product,
   $format       = $jira::mysql_connector_format,
   $installdir   = $jira::mysql_connector_install,
-  $download_url = $jira::mysql_connector_url,
-  $jar_suffix   = $jira::mysql_connector_jar_suffix,
+  $download_url = $jira::mysql_connector_url
 ) {
   require staging
 
@@ -20,6 +19,12 @@ class jira::mysql_connector (
     }
   }
 
+  if (versioncmp($jira::mysql_connector_version, '8.0.0') == -1) { # version < 8.0.0
+    $jarfile = "${product}-${version}-bin.jar"
+  } else {
+    $jarfile = "${product}-${version}.jar"
+  }
+
   staging::file { $file:
     source  => "${download_url}/${file}",
     timeout => 300,
@@ -32,6 +37,6 @@ class jira::mysql_connector (
 
   -> file { "${jira::webappdir}/lib/mysql-connector-java.jar":
     ensure => link,
-    target => "${installdir}/${product}-${version}/${product}-${version}${jar_suffix}.jar",
+    target => "${installdir}/${product}-${version}/${jarfile}",
   }
 }
