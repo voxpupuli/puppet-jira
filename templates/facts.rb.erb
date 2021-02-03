@@ -11,10 +11,10 @@
 # Purpose: Return facts for the running version of jira.
 #
 require 'json'
-require 'open-uri'
+require 'uri'
 begin
   url = 'http://<%= @uri %>:<%= @port %><%= @contextpath %>/rest/api/2/serverInfo'
-  info = open(url, &:read)
+  info = URI.open(url).read
 rescue
   exit 0
 end
