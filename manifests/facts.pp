@@ -21,7 +21,7 @@ class jira::facts (
   $json_packages = $jira::params::json_packages,
   # lint:ignore:parameter_order
   $uri           = $jira::tomcat_address ? {
-    undef   => '127.0.0.1',
+    undef   => 'localhost',
     default => $jira::tomcat_address,
   },
   # lint:endignore
