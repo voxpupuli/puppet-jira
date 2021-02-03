@@ -57,6 +57,6 @@ class jira::facts (
   file { "/etc/${dir}facter/facts.d/jira_facts.rb":
     ensure  => $ensure,
     content => template('jira/facts.rb.erb'),
-    mode    => '0500',
+    mode    => '0755',
   }
 }

@@ -14,7 +14,7 @@ describe 'jira::facts' do
         pe_external_fact_file = '/etc/puppetlabs/facter/facts.d/jira_facts.rb'
         external_fact_file = '/etc/puppetlabs/facter/facts.d/jira_facts.rb'
 
-        it { is_expected.to contain_file(external_fact_file) }
+        it { is_expected.to contain_file(external_fact_file).with_mode('0755') }
         it { is_expected.to compile.with_all_deps }
 
         # Test puppet enterprise shebang generated correctly
