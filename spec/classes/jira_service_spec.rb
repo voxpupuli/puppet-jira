@@ -15,35 +15,14 @@ describe 'jira' do
             'package { "jdk": }'
           end
 
-          case facts[:os]['family']
-          when 'RedHat'
-            service_file_location = if facts['service_provider'] == 'systemd'
-                                      '/usr/lib/systemd/system/jira.service'
-                                    else
-                                      '/etc/init.d/jira'
-                                    end
-          when 'Debian'
-            service_file_location = '/lib/systemd/system/jira.service'
-          end
-
           context 'with defaults for all parameters' do
             it { is_expected.to compile.with_all_deps }
 
-            case facts['service_provider']
-            when 'systemd'
-              it do
-                is_expected.to contain_file(service_file_location).
-                  with_content(%r{Atlassian Systemd Jira Service})
-              end
-              it { is_expected.to contain_exec('refresh_systemd') }
-            when 'redhat'
-              it do
-                is_expected.to contain_file(service_file_location).
-                  with_content(%r{Short-Description: Start up JIRA}).
-                  with_content(%r{lockfile=/var/lock/subsys/jira})
-              end
+            it do
+              is_expected.to contain_file('/lib/systemd/system/jira.service').
+                with_content(%r{Atlassian Systemd Jira Service})
             end
-
+            it { is_expected.to contain_exec('refresh_systemd') }
             it { is_expected.to contain_service('jira') }
           end
 
