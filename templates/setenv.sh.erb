@@ -83,8 +83,6 @@ DISABLE_NOTIFICATIONS='-Datlassian.mail.senddisabled=true -Datlassian.mail.fetch
 #-----------------------------------------------------------------------------------
 <%- if @jvm_type == 'openjdk-11' -%>
 JVM_EXTRA_ARGS='<%= @jvm_extra_args_additional %>'
-JVM_EXTRA_ARGS+="-Xlog:gc*:${CATALINA_HOME}/logs/verbose_gc.log:time,uptime:filecount=15,filesize=10M"
-JVM_EXTRA_ARGS+=' '
 JVM_EXTRA_ARGS+='-XX:+ExplicitGCInvokesConcurrent -XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT'
 <%- elsif @jvm_type == 'oracle-jdk-1.8' -%>
 JVM_EXTRA_ARGS='-XX:+PrintGCDateStamps -XX:+ExplicitGCInvokesConcurrent -XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT <%= @jvm_extra_args_additional %>'
