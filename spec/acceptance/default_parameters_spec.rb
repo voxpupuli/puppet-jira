@@ -15,7 +15,7 @@ describe 'jira postgresql' do
       }
 
       class { 'jira':
-        version      => '7.13.0',
+        version      => '8.13.4',
         javahome     => '/usr',
       }
 
@@ -62,7 +62,7 @@ describe 'jira postgresql' do
   end
 
   describe command('wget -q --tries=24 --retry-connrefused --read-timeout=10 -O- localhost:8080') do
-    its(:stdout) { is_expected.to match(%r{7\.13\.0}) }
+    its(:stdout) { is_expected.to include('8.13.4') }
   end
 
   describe 'shutdown' do
