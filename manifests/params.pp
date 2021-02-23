@@ -5,7 +5,7 @@
 class jira::params {
   Exec { path => ['/bin/', '/sbin/', '/usr/bin/', '/usr/sbin/'] }
 
-  $service_file_location = '/usr/lib/systemd/system/jira.service'
+  $service_file_location = '/lib/systemd/system/jira.service'
   $service_file_template = 'jira/jira.service.erb'
   $service_file_mode     = '0644'
 
