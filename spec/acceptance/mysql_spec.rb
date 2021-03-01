@@ -31,12 +31,12 @@ describe 'jira mysql' do
         private_key => '/tmp/key.pem',
         target      => '/tmp/jira.ks',
         password    => 'changeit',
+        require     => Exec['tmpkey'],
       }
 
       class { 'jira':
         installdir           => '/opt/atlassian-jira',
         homedir              => '/opt/jira-home',
-        version              => '8.9.0',
         javahome             => '/usr',
         db                   => 'mysql',
         dbport               => '3306',
@@ -45,16 +45,10 @@ describe 'jira mysql' do
         tomcat_port          => '8081',
         tomcat_native_ssl    => true,
         tomcat_keystore_file => '/tmp/jira.ks',
+        require              => [Mysql::Db['jira'], Java_ks['jira']],
       }
 
       class { 'jira::facts': }
-
-      Class['mysql::server']
-      -> Mysql::Db['jira']
-      -> Class['java']
-      -> Exec['tmpkey']
-      -> Java_ks['jira']
-      -> Class['jira']
     EOS
 
     apply_manifest(pp, catch_failures: true)
@@ -92,11 +86,11 @@ describe 'jira mysql' do
   end
 
   describe command('wget -q --tries=24 --retry-connrefused --no-check-certificate --read-timeout=10 -O- localhost:8081') do
-    its(:stdout) { is_expected.to match(%r{8\.9\.0}) }
+    its(:stdout) { is_expected.to include('8.13.4') }
   end
 
   describe command('wget -q --tries=24 --retry-connrefused --no-check-certificate --read-timeout=10 -O- https://localhost:8443') do
-    its(:stdout) { is_expected.to match(%r{8\.9\.0}) }
+    its(:stdout) { is_expected.to include('8.13.4') }
   end
 
   describe 'shutdown' do

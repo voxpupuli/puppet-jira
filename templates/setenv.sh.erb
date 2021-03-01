@@ -83,8 +83,6 @@ DISABLE_NOTIFICATIONS='-Datlassian.mail.senddisabled=true -Datlassian.mail.fetch
 #-----------------------------------------------------------------------------------
 <%- if @jvm_type == 'openjdk-11' -%>
 JVM_EXTRA_ARGS='<%= @jvm_extra_args_additional %>'
-JVM_EXTRA_ARGS+="-Xlog:gc*:${CATALINA_HOME}/logs/verbose_gc.log:time,uptime:filecount=15,filesize=10M"
-JVM_EXTRA_ARGS+=' '
 JVM_EXTRA_ARGS+='-XX:+ExplicitGCInvokesConcurrent -XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT'
 <%- elsif @jvm_type == 'oracle-jdk-1.8' -%>
 JVM_EXTRA_ARGS='-XX:+PrintGCDateStamps -XX:+ExplicitGCInvokesConcurrent -XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT <%= @jvm_extra_args_additional %>'
@@ -100,15 +98,15 @@ PRGDIR=$(dirname "$0")
 cat "${PRGDIR}"/jirabanner.txt
 
 JIRA_HOME_MINUSD=""
-if [[ "${JIRA_HOME}" != "" ]]; then
+if [ -n "${JIRA_HOME}" ]; then
     echo "${JIRA_HOME}" | grep -q " "
-    if [[ $? -eq 0 ]]; then
-	    echo ""
-	    echo "--------------------------------------------------------------------------------------------------------------------"
-		echo "   WARNING : You cannot have a JIRA_HOME environment variable set with spaces in it.  This variable is being ignored"
-	    echo "--------------------------------------------------------------------------------------------------------------------"
+    if [ $? -eq 0 ]; then
+        echo ""
+        echo "--------------------------------------------------------------------------------------------------------------------"
+        echo "   WARNING : You cannot have a JIRA_HOME environment variable set with spaces in it.  This variable is being ignored"
+        echo "--------------------------------------------------------------------------------------------------------------------"
     else
-		JIRA_HOME_MINUSD=-Djira.home="${JIRA_HOME}"
+        JIRA_HOME_MINUSD=-Djira.home="${JIRA_HOME}"
     fi
 fi
 
@@ -116,10 +114,10 @@ JAVA_OPTS="-Xms${JVM_MINIMUM_MEMORY} -Xmx${JVM_MAXIMUM_MEMORY} ${JVM_CODE_CACHE_
 
 # Perm Gen size needs to be increased if encountering OutOfMemoryError: PermGen problems. Specifying PermGen size is not valid on IBM JDKs
 JIRA_MAX_PERM_SIZE=${JVM_PERMGEN_MEMORY}
-if [[ -f "${PRGDIR}/permgen.sh" ]]; then
+if [ -f "${PRGDIR}/permgen.sh" ]; then
     echo "Detecting JVM PermGen support..."
     . "${PRGDIR}/permgen.sh"
-    if [[ "${JAVA_PERMGEN_SUPPORTED}" = "true" ]]; then
+    if [ "${JAVA_PERMGEN_SUPPORTED}" = "true" ]; then
         echo "PermGen switch is supported. Setting to ${JIRA_MAX_PERM_SIZE}"
         JAVA_OPTS="-XX:MaxPermSize=${JIRA_MAX_PERM_SIZE} ${JAVA_OPTS}"
     else
@@ -135,22 +133,22 @@ export JAVA_OPTS
 echo ""
 echo "If you encounter issues starting or stopping Jira, please see the Troubleshooting guide at https://docs.atlassian.com/jira/jadm-docs-0812/Troubleshooting+installation"
 echo ""
-if [[ "${JIRA_HOME_MINUSD}" != "" ]]; then
+if [ -n "${JIRA_HOME_MINUSD}" ]; then
     echo "Using JIRA_HOME:       ${JIRA_HOME}"
 fi
 
 # set the location of the pid file
-if [[ -z "${CATALINA_PID}" ]] ; then
-    if [[ -n "${CATALINA_HOME}" ]] ; then
+if [ -z "${CATALINA_PID}" ] ; then
+    if [ -n "${CATALINA_HOME}" ] ; then
         CATALINA_PID="${CATALINA_HOME}/work/catalina.pid"
-    elif [[ -n "${CATALINA_HOME}" ]] ; then
+    elif [ -n "${CATALINA_HOME}" ] ; then
         CATALINA_PID="${CATALINA_HOME}/work/catalina.pid"
     fi
 fi
 export CATALINA_PID
 
-if [[ -z "${CATALINA_HOME}" ]]; then
-  if [[ -z "${CATALINA_HOME}" ]]; then
+if [ -z "${CATALINA_HOME}" ]; then
+  if [ -z "${CATALINA_HOME}" ]; then
     LOGBASE=${PRGDIR}
     LOGTAIL=..
   else

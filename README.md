@@ -716,18 +716,17 @@ enabled in order to upgrade to new JIRA versions smoothly.
 
 ## Limitations
 
-* Puppet 3.8.7+
+* Puppet 5.5.8+
 * Puppet Enterprise
 
 The puppetlabs repositories can be found at:
 <http://yum.puppetlabs.com/> and <http://apt.puppetlabs.com/>
 
-* RedHat 6/7
-* CentOS 6/7
-* Scientific 6/7
-* Oracle Linux 6/7
-* Ubuntu 12.04/14.04
-* Debian 7
+* RedHat 7
+* CentOS 7
+* Scientific 7
+* Oracle Linux 7
+* Ubuntu 18.04
 
 * PostgreSQL
 * MySQL 5.x

@@ -33,7 +33,7 @@
 class jira (
 
   # Jira Settings
-  String $version                                                   = '6.4.1',
+  String $version                                                   = '8.13.4',
   String $product                                                   = 'jira',
   String $format                                                    = 'tar.gz',
   Stdlib::Absolutepath $installdir                                  = '/opt/jira',
@@ -86,7 +86,7 @@ class jira (
   $pool_test_on_borrow                                              = false,
   # JVM Settings
   $javahome                                                         = undef,
-  Jira::Jvm_types $jvm_type                                         = 'oracle-jdk-1.8',
+  Jira::Jvm_types $jvm_type                                         = 'openjdk-11',
   String $jvm_xms                                                   = '256m',
   String $jvm_xmx                                                   = '1024m',
   String $jvm_permgen                                               = '256m',
