@@ -39,13 +39,14 @@ Puppet.
 
 * JIRA requires a Java Developers Kit (JDK) or Java Run-time Environment (JRE)
   platform to be installed on your server's operating system. Oracle JDK / JRE
-  (formerly Sun JDK / JRE) versions 7 and 8 are currently supported by Atlassian.
+  (formerly Sun JDK / JRE) versions 8 (and 11 since JIRA 8.2) are currently
+  supported by Atlassian. OpenJDK version 8 (and 11 since JIRA 8.2) are supported
+  as well - Atlassian recommends to use AdoptOpenJDK to get better support
 
 * JIRA requires a relational database to store its issue data. This module
-  currently supports PostgreSQL 8.4 to 9.x and MySQL 5.x and Oracle 11g and
-  Microsoft SQL Server 2008 & 2012. We suggest using
-  puppetlabs-postgresql/puppetlabs-mysql modules to configure/manage the
-  database. The module uses PostgreSQL as a default.
+  currently supports PostgreSQL and MySQL and Oracle and Microsoft SQL Server.
+  We suggest using puppetlabs-postgresql/puppetlabs-mysql modules to
+  configure/manage the database. The module uses PostgreSQL as a default.
 
 * Whilst not required, for production use we recommend using nginx/apache as a
   reverse proxy to JIRA. We suggest using the jfryman/nginx puppet module.
@@ -728,8 +729,10 @@ The puppetlabs repositories can be found at:
 * Oracle Linux 7
 * Ubuntu 18.04
 
+* Jira 8.x
+
 * PostgreSQL
-* MySQL 5.x
+* MySQL
 * Oracle 11G with Oracle 11.2.x drivers
 * Microsoft SQL Server 2005/2008/2012 with JTDS driver (included in non-WAR version)
 
@@ -784,4 +787,4 @@ export download_url="'http://my.local.server/'"
 
 ## Contributors
 
-The list of contributors can be found [here](https://github.com/brycejohnson/puppet-jira/graphs/contributors)
+The list of contributors can be found [here](https://github.com/voxpupuli/puppet-jira/graphs/contributors)
