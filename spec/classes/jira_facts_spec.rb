@@ -35,7 +35,7 @@ describe 'jira::facts' do
 
           it do
             is_expected.to contain_file('/etc/facter/facts.d/jira_facts.rb'). \
-              with_content(%r{#!/opt/puppet/bin/ruby}).
+              with_content(%r{#!/usr/bin/env ruby}).
               with_content(%r{http://127\.0\.0\.1:8080/rest/api/2/serverInfo})
           end
 
