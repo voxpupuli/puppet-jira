@@ -18,7 +18,7 @@ describe 'jira::facts' do
           it do
             is_expected.to contain_file('/etc/puppetlabs/facter/facts.d/jira_facts.rb'). \
               with_content(%r{#!/opt/puppetlabs/puppet/bin/ruby}).
-              with_content(%r{http://127\.0\.0\.1:8080/rest/api/2/serverInfo})
+              with_content(%r{http://localhost:8080/rest/api/2/serverInfo})
           end
 
           it { is_expected.not_to contain_file('/etc/facter/facts.d/jira_facts.rb') }
@@ -36,7 +36,7 @@ describe 'jira::facts' do
           it do
             is_expected.to contain_file('/etc/facter/facts.d/jira_facts.rb'). \
               with_content(%r{#!/usr/bin/env ruby}).
-              with_content(%r{http://127\.0\.0\.1:8080/rest/api/2/serverInfo})
+              with_content(%r{http://localhost:8080/rest/api/2/serverInfo})
           end
 
           case facts[:osfamily]
@@ -54,7 +54,7 @@ describe 'jira::facts' do
 
           it do
             is_expected.to contain_file('/etc/puppetlabs/facter/facts.d/jira_facts.rb'). \
-              with_content(%r{  url = 'http://127.0.0.1:8080/jira})
+              with_content(%r{  url = 'http://localhost:8080/jira})
           end
         end
       end
