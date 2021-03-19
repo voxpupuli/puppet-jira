@@ -463,6 +463,22 @@ describe 'jira' do
             end
           end
 
+          context 'tomcat access log format with x-forward-for handling' do
+            let(:params) do
+              {
+                version: '8.12.1',
+                javahome: '/opt/java',
+                tomcat_accesslog_enable_xforwarded_for: true,
+              }
+            end
+
+            it do
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.12.1-standalone/conf/server.xml').
+                with_content(%r{org.apache.catalina.valves.RemoteIpValve}).
+                with_content(%r{requestAttributesEnabled="true"})
+            end
+          end
+
           context 'with script_check_java_managed enabled' do
             let(:params) do
               {

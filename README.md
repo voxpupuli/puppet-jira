@@ -532,6 +532,14 @@ https://confluence.atlassian.com/kb/how-to-create-an-unproxied-application-link-
 and
 https://confluence.atlassian.com/kb/how-to-bypass-a-reverse-proxy-or-ssl-in-application-links-719095724.html
 
+##### `$tomcat_accesslog_enable_xforwarded_for`
+
+If a proxy operates before JIRA, the access logs will only contain the IP addresses of the proxy
+instead of the address of the user. With `X-Forwarded-For` the proxy can forward the users IP
+address to the JIRA application server so that it can be logged correctly.
+
+Defaults to `false`.
+
 #### Crowd single sign on parameters
 
 #### `enable_sso`
