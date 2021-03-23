@@ -1,5 +1,4 @@
 node default {
-
   class { 'nginx': }
 
   -> class { 'postgresql::globals':
@@ -27,12 +26,12 @@ node default {
 
   nginx::resource::upstream { 'jira':
     ensure  => present,
-    members => [ 'localhost:8080' ],
+    members => ['localhost:8080'],
   }
 
   nginx::resource::vhost { 'jira_vhost':
     ensure               => present,
-    server_name          => [ $facts['networking']['ip'], $facts['networking']['fqdn'], $facts['networking']['hostname'] ],
+    server_name          => [$facts['networking']['ip'], $facts['networking']['fqdn'], $facts['networking']['hostname']],
     listen_port          => '80',
     proxy                => 'http://jira',
     proxy_read_timeout   => '300',
@@ -44,5 +43,4 @@ node default {
       'proxy_redirect'                      => 'off',
     },
   }
-
 }

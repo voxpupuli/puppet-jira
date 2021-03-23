@@ -13,7 +13,7 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 #-----------------------------------------------------------------------------
-class jira::service(
+class jira::service (
 
   Boolean $service_manage = $jira::service_manage,
   String $service_ensure  = $jira::service_ensure,
@@ -23,24 +23,19 @@ class jira::service(
   $service_file_location  = $jira::params::service_file_location,
   $service_file_template  = $jira::params::service_file_template,
   $service_file_mode      = $jira::params::service_file_mode,
-  $service_lockfile       = $jira::params::service_lockfile,
-  $service_provider       = $jira::params::service_provider,
 
 ) inherits jira::params {
-
   file { $service_file_location:
     content => template($service_file_template),
     mode    => $service_file_mode,
   }
 
   if $service_manage {
-    if $service_provider == 'systemd' {
-      exec { 'refresh_systemd':
-        command     => 'systemctl daemon-reload',
-        refreshonly => true,
-        subscribe   => File[$service_file_location],
-        before      => Service['jira'],
-      }
+    exec { 'refresh_systemd':
+      command     => 'systemctl daemon-reload',
+      refreshonly => true,
+      subscribe   => File[$service_file_location],
+      before      => Service['jira'],
     }
 
     service { 'jira':
@@ -49,7 +44,6 @@ class jira::service(
       require   => File[$service_file_location],
       notify    => $service_notify,
       subscribe => $service_subscribe,
-      provider  => $service_provider,
     }
   }
 }

@@ -1,5 +1,4 @@
 node default {
-
   $cert = hiera('cert')
   $key = hiera('key')
 
@@ -57,5 +56,4 @@ node default {
   }
 
   include jira::facts
-
 }

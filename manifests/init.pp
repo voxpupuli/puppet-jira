@@ -33,7 +33,7 @@
 class jira (
 
   # Jira Settings
-  String $version                                                   = '6.4.1',
+  String $version                                                   = '8.13.4',
   String $product                                                   = 'jira',
   String $format                                                    = 'tar.gz',
   Stdlib::Absolutepath $installdir                                  = '/opt/jira',
@@ -88,12 +88,21 @@ class jira (
   $pool_test_on_borrow                                              = false,
   # JVM Settings
   $javahome                                                         = undef,
-  $jvm_xms                                                          = '256m',
-  $jvm_xmx                                                          = '1024m',
-  $jvm_permgen                                                      = '256m',
-  $jvm_optional                                                     = '-XX:-HeapDumpOnOutOfMemoryError',
-  $java_opts                                                        = '',
-  $catalina_opts                                                    = '',
+  Jira::Jvm_types $jvm_type                                         = 'openjdk-11',
+  String $jvm_xms                                                   = '256m',
+  String $jvm_xmx                                                   = '1024m',
+  String $jvm_permgen                                               = '256m',
+  Optional[String] $jvm_optional                                    = undef,
+  Optional[String] $jvm_optional_additional                         = undef,
+  Optional[String] $jvm_extra_args                                  = undef,
+  Optional[String] $jvm_extra_args_additional                       = undef,
+  Optional[String] $jvm_gc_args                                     = undef,
+  Optional[String] $jvm_gc_args_additional                          = undef,
+  Optional[String] $jvm_codecache_args                              = undef,
+  Optional[String] $jvm_codecache_args_additional                   = undef,
+  Integer $jvm_nofiles_limit                                        = 16384,
+  String $java_opts                                                 = '',
+  String $catalina_opts                                             = '',
   # Misc Settings
   Stdlib::HTTPUrl $download_url                                     = 'https://product-downloads.atlassian.com/software/jira/downloads',
   $checksum                                                         = undef,
@@ -145,6 +154,8 @@ class jira (
   Hash $proxy                                                       = {},
   # Options for the AJP connector
   Hash $ajp                                                         = {},
+  # Additional connectors in server.xml
+  Jira::Tomcat_connectors $tomcat_additional_connectors             = {},
   # Context path (usualy used in combination with a reverse proxy)
   String $contextpath                                               = '',
   # Resources for context.xml
@@ -257,20 +268,20 @@ class jira (
     }
   }
 
-  if !empty($ajp) {
-    if !('port' in $ajp) {
+  if ! empty($ajp) {
+    if ! ('port' in $ajp) {
       fail('You need to specify a valid port for the AJP connector.')
     } else {
       assert_type(Variant[Pattern[/^\d+$/], Stdlib::Port], $ajp['port'])
     }
-    if !('protocol' in $ajp) {
+    if ! ('protocol' in $ajp) {
       fail('You need to specify a valid protocol for the AJP connector.')
     } else {
       assert_type(Enum['AJP/1.3', 'org.apache.coyote.ajp', 'org.apache.coyote.ajp.AjpNioProtocol'], $ajp['protocol'])
     }
   }
 
-  $merged_jira_config_properties = merge({ 'jira.websudo.is.disabled' => !$enable_secure_admin_sessions }, $jira_config_properties)
+  $merged_jira_config_properties = merge( { 'jira.websudo.is.disabled' => !$enable_secure_admin_sessions }, $jira_config_properties)
 
   if $javahome == undef {
     fail('You need to specify a value for javahome')

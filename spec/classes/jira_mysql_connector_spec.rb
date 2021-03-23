@@ -34,6 +34,31 @@ describe 'jira' do
                                                                                                  'creates' => '/opt/MySQL-connector/mysql-connector-java-5.1.34')
             end
           end
+          context 'mysql connector defaults Connector Version >8' do
+            let(:params) do
+              {
+                version: '6.3.4a',
+                javahome: '/opt/java',
+                db: 'mysql',
+                mysql_connector_version: '8.0.23'
+              }
+            end
+
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to contain_file('/opt/MySQL-connector').with_ensure('directory') }
+            it do
+              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/lib/mysql-connector-java.jar').
+                with(
+                  'ensure' => 'link',
+                  'target' => '/opt/MySQL-connector/mysql-connector-java-8.0.23/mysql-connector-java-8.0.23.jar'
+                )
+            end
+            it 'deploys mysql connector 8.0.23 from tar.gz' do
+              is_expected.to contain_staging__file('mysql-connector-java-8.0.23.tar.gz').with('source' => 'https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.23.tar.gz')
+              is_expected.to contain_staging__extract('mysql-connector-java-8.0.23.tar.gz').with('target' => '/opt/MySQL-connector',
+                                                                                                 'creates' => '/opt/MySQL-connector/mysql-connector-java-8.0.23')
+            end
+          end
           context 'mysql connector overwrite params' do
             let(:params) do
               {

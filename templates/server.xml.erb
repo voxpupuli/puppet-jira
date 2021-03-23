@@ -119,6 +119,15 @@
         />
 <% end -%>
 
+<% if @tomcat_additional_connectors and ! @tomcat_additional_connectors.empty? -%>
+<% @tomcat_additional_connectors.sort.map do |port, attrs| -%>
+        <Connector port="<%= port -%>"
+<% attrs.sort.map do |key, value| -%>
+                   <%= key -%>="<%= value -%>"
+<% end -%>
+                   />
+<% end -%>
+<% end -%>
         <Engine name="Catalina" defaultHost="localhost">
             <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true">
 

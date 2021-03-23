@@ -1,5 +1,4 @@
 node default {
-
   class { 'postgresql::globals':
     manage_package_repo => true,
     version             => '9.3',
@@ -17,5 +16,4 @@ node default {
   }
 
   include jira::facts
-
 }

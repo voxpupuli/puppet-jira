@@ -7,11 +7,6 @@ describe 'jira postgresql' do
         distribution => 'jre',
       }
 
-      class { 'postgresql::globals':
-        manage_package_repo => true,
-        version             => '9.4',
-      }
-
       class { 'postgresql::server': }
 
       postgresql::server::db { 'jira':
@@ -20,16 +15,11 @@ describe 'jira postgresql' do
       }
 
       class { 'jira':
-        version      => '7.13.0',
-        javahome     => '/usr',
+        javahome => '/usr',
+        require  => [Class['java'], Postgresql::Server::Db['jira']],
       }
 
       class { 'jira::facts': }
-
-      Class['postgresql::server']
-      -> Postgresql::Server::Db['jira']
-      -> Class['java']
-      -> Class['jira']
     EOS
 
     apply_manifest(pp, catch_failures: true)
@@ -67,7 +57,7 @@ describe 'jira postgresql' do
   end
 
   describe command('wget -q --tries=24 --retry-connrefused --read-timeout=10 -O- localhost:8080') do
-    its(:stdout) { is_expected.to match(%r{7\.13\.0}) }
+    its(:stdout) { is_expected.to include('8.13.4') }
   end
 
   describe 'shutdown' do
