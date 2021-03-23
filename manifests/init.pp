@@ -145,8 +145,7 @@ class jira (
   $tomcat_keystore_pass                                             = 'changeit',
   Enum['JKS', 'JCEKS', 'PKCS12'] $tomcat_keystore_type              = 'JKS',
   $tomcat_accesslog_format                                          =
-  '%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;'
-  ,
+    '%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;',
   # Tomcat Tunables
   $tomcat_max_threads                                               = '150',
   $tomcat_accept_count                                              = '100',
@@ -174,7 +173,6 @@ class jira (
   # plugin installation
   Optional[Hash] $plugins                                           = {},
 ) inherits jira::params {
-
   if $datacenter and !$shared_homedir {
     fail("\$shared_homedir must be set when \$datacenter is true")
   }
@@ -268,13 +266,13 @@ class jira (
     }
   }
 
-  if ! empty($ajp) {
-    if ! ('port' in $ajp) {
+  if !empty($ajp) {
+    if !('port' in $ajp) {
       fail('You need to specify a valid port for the AJP connector.')
     } else {
       assert_type(Variant[Pattern[/^\d+$/], Stdlib::Port], $ajp['port'])
     }
-    if ! ('protocol' in $ajp) {
+    if !('protocol' in $ajp) {
       fail('You need to specify a valid protocol for the AJP connector.')
     } else {
       assert_type(Enum['AJP/1.3', 'org.apache.coyote.ajp', 'org.apache.coyote.ajp.AjpNioProtocol'], $ajp['protocol'])
@@ -326,5 +324,4 @@ class jira (
       }
     }
   }
-
 }
