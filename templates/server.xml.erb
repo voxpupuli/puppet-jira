@@ -130,9 +130,18 @@
 
             </Host>
 
-            <Valve className="org.apache.catalina.valves.AccessLogValve" resolveHosts="false"
-                   pattern="<%= @tomcat_accesslog_format %>"/>
+          <Valve className="org.apache.catalina.valves.AccessLogValve" resolveHosts="false"
+<% if @tomcat_accesslog_enable_xforwarded_for %>
+                 requestAttributesEnabled="true"
+<% end -%>
+                 pattern="<%= @tomcat_accesslog_format %>"/>
 
+<% if @tomcat_accesslog_enable_xforwarded_for %>
+            <Valve
+              className="org.apache.catalina.valves.RemoteIpValve"
+              remoteIpHeader="x-forwarded-for"
+              remoteIpProxiesHeader="x-forwarded-by"/>
+<% end -%>
         </Engine>
     </Service>
 </Server>
