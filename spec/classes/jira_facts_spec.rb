@@ -8,37 +8,42 @@ describe 'jira::facts' do
         end
         let(:pre_condition) { "class{'::jira': javahome => '/opt/java'}" }
 
-        regexp_pe = %r{^#\!/opt/puppet/bin/ruby$}
-        regexp_oss = %r{^#\!/opt/puppetlabs/puppet/bin/ruby$}
-        regexp_url = %r{http://127.0.0.1\:8080/rest/api/2/serverInfo}
-        pe_external_fact_file = '/etc/puppetlabs/facter/facts.d/jira_facts.rb'
-        external_fact_file = '/etc/puppetlabs/facter/facts.d/jira_facts.rb'
-
-        it { is_expected.to contain_file(external_fact_file).with_mode('0755') }
         it { is_expected.to compile.with_all_deps }
 
-        # Test puppet enterprise shebang generated correctly
-        context 'with puppet enterprise' do
+        context 'with puppet AIO' do
           let(:facts) do
-            facts.merge(puppetversion: '3.4.3 (Puppet Enterprise 3.2.1)')
+            facts.merge(aio_agent_version: 'something')
           end
 
           it do
-            is_expected.to contain_file(pe_external_fact_file). \
-              with_content(regexp_pe).
-              with_content(regexp_url)
+            is_expected.to contain_file('/etc/puppetlabs/facter/facts.d/jira_facts.rb'). \
+              with_content(%r{#!/opt/puppetlabs/puppet/bin/ruby}).
+              with_content(%r{http://localhost:8080/rest/api/2/serverInfo})
           end
+
+          it { is_expected.not_to contain_file('/etc/facter/facts.d/jira_facts.rb') }
+          it { is_expected.not_to contain_package('rubygem-json') }
+          it { is_expected.not_to contain_package('ruby-json') }
         end
-        # Test puppet oss shebang generated correctly
+
         context 'with puppet oss' do
           let(:facts) do
-            facts.merge(puppetversion: 'all other versions')
+            facts.merge(aio_agent_version: nil)
           end
 
+          it { is_expected.not_to contain_file('/etc/puppetlabs/facter/facts.d/jira_facts.rb') }
+
           it do
-            is_expected.to contain_file(external_fact_file). \
-              with_content(regexp_oss). \
-              with_content(regexp_url)
+            is_expected.to contain_file('/etc/facter/facts.d/jira_facts.rb'). \
+              with_content(%r{#!/usr/bin/env ruby}).
+              with_content(%r{http://localhost:8080/rest/api/2/serverInfo})
+          end
+
+          case facts[:osfamily]
+          when 'RedHat'
+            it { is_expected.to contain_package('rubygem-json') }
+          when 'Debian'
+            it { is_expected.to contain_package('ruby-json') }
           end
         end
 
@@ -48,8 +53,8 @@ describe 'jira::facts' do
           end
 
           it do
-            is_expected.to contain_file(external_fact_file). \
-              with_content(%r{  url = 'http://127.0.0.1:8080/jira})
+            is_expected.to contain_file('/etc/puppetlabs/facter/facts.d/jira_facts.rb'). \
+              with_content(%r{  url = 'http://localhost:8080/jira})
           end
         end
       end
