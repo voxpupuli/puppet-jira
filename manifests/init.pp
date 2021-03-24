@@ -144,8 +144,7 @@ class jira (
   Stdlib::Absolutepath $tomcat_keystore_file                        = '/home/jira/jira.jks',
   $tomcat_keystore_pass                                             = 'changeit',
   Enum['JKS', 'JCEKS', 'PKCS12'] $tomcat_keystore_type              = 'JKS',
-  $tomcat_accesslog_format                                          =
-    '%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;',
+  $tomcat_accesslog_format                                          = '%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;',
   # Tomcat Tunables
   $tomcat_max_threads                                               = '150',
   $tomcat_accept_count                                              = '100',
