@@ -91,7 +91,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_port: '9229'
+                tomcat_port: 9229
               }
             end
 
@@ -152,7 +152,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_port: '9229',
+                tomcat_port: 9229,
                 tomcat_address: '127.0.0.1'
               }
             end
@@ -183,7 +183,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_port: '8888'
+                tomcat_port: 8888
               }
             end
 
@@ -198,7 +198,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_accept_count: '200'
+                tomcat_accept_count: 200
               }
             end
 
@@ -213,7 +213,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_max_http_header_size: '4096'
+                tomcat_max_http_header_size: 4096
               }
             end
 
@@ -228,7 +228,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_min_spare_threads: '50'
+                tomcat_min_spare_threads: 50
               }
             end
 
@@ -243,7 +243,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_connection_timeout: '25000'
+                tomcat_connection_timeout: 25000
               }
             end
 
@@ -258,7 +258,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_enable_lookups: 'true'
+                tomcat_enable_lookups: true
               }
             end
 
@@ -288,7 +288,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_use_body_encoding_for_uri: 'false'
+                tomcat_use_body_encoding_for_uri: false
               }
             end
 
@@ -303,7 +303,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_disable_upload_timeout: 'false'
+                tomcat_disable_upload_timeout: false
               }
             end
 
@@ -318,7 +318,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_enable_lookups: 'true'
+                tomcat_enable_lookups: true
               }
             end
 
@@ -333,7 +333,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_max_threads: '300'
+                tomcat_max_threads: 300
               }
             end
 
@@ -552,10 +552,10 @@ describe 'jira' do
                 version: '6.3.4a',
                 javahome: '/opt/java',
                 tomcat_native_ssl: true,
-                tomcat_https_port: '9443',
+                tomcat_https_port: 9443,
                 tomcat_address: '127.0.0.1',
-                tomcat_max_threads: '600',
-                tomcat_accept_count: '600',
+                tomcat_max_threads: 600,
+                tomcat_accept_count: 600,
                 tomcat_key_alias: 'keystorealias',
                 tomcat_keystore_file: '/tmp/keyfile.ks',
                 tomcat_keystore_pass: 'keystorepass',
