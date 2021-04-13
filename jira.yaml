@@ -65,9 +65,7 @@ jira::dbschema: 'public'
 # Default for mssql
 #jira::dbschema: 'dbo'
 
-# The connection pool size
-jira::poolsize: 20
-jira::enable_connection_pooling: false
+# The connection pool parameters
 jira::pool_min_size: 20
 jira::pool_max_size: 20
 jira::pool_max_wait: 30000
@@ -102,8 +100,8 @@ jira::service_ensure: running
 jira::service_enable: true
 
 # Tomcat settings
-jira::tomcat_max_threads:  '150'
-jira::tomcat_accept_count: '100'
+jira::tomcat_max_threads:  150
+jira::tomcat_accept_count: 100
 
 # Configure reverse ssl proxy
 jira::proxy:
