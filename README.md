@@ -270,64 +270,59 @@ NOTE: Atlassian only supports Oracle 11g/12g, even so this value should be as do
 
 Set the schema
 
-The Default value is 'public'
-
-##### `$poolsize`
-
-The connection pool size to the database, defaults to 20
+The default value is 'public' for PostgreSQL, and undef for others
 
 ##### `$dburl`
 
 This parameter is not required nor do we recommend setting it. However it can be
 used to customize the database connection string.
 
-##### `$enable_connection_pooling`
+##### `$pool_max_size`
 
-Configure database settings if you are pooling connections, defaults to 'false'
+Setting most of the advanced JDBC parameters is not required unless you want to tune JIRA
+settings.
+
+defaults to undef
 
 ##### `$pool_min_size`
 
-defaults to 20 (requires `enable_connection_pooling => true`)
-
-##### `$pool_max_size`
-
-defaults to 20 (requires `enable_connection_pooling => true`)
+defaults to undef
 
 ##### `$pool_max_wait`
 
-defaults to 30000 (requires `enable_connection_pooling => true`)
+defaults to undef
 
 ##### `$validation_query`
 
-defaults to undef (requires `enable_connection_pooling => true`)
+defaults to undef
 
 ##### `$min_evictable_idle_time`
 
-defaults to 60000 (requires `enable_connection_pooling => true`)
+defaults to undef
 
 ##### `$time_between_eviction_runs`
 
-defaults to undef (requires `enable_connection_pooling => true`)
+defaults to undef
 
 ##### `$pool_max_idle`
 
-defaults to 20 (requires `enable_connection_pooling => true`)
+defaults to undef
 
 ##### `$pool_remove_abandoned`
 
-defaults to true (requires `enable_connection_pooling => true`)
+defaults to undef
 
 ##### `$pool_remove_abandoned_timeout`
 
-defaults to 300 (requires `enable_connection_pooling => true`)
+defaults to undef
 
 ##### `$pool_test_while_idle`
 
-defaults to true (requires `enable_connection_pooling => true`)
+defaults to undef
 
 ##### `$pool_test_on_borrow`
 
-defaults to false (requires `enable_connection_pooling => true`)
+defaults to undef
 
 #### MySQL Java Connector parameters
 
@@ -666,7 +661,6 @@ jira::jvm_xms:       '1G'
 jira::jvm_xmx:       '3G'
 jira::jvm_permgen:   '384m'
 jira::service_manage: false
-jira::enable_connection_pooling: 'true'
 jira::env:
   - 'http_proxy=proxy.example.co.za:8080'
   - 'https_proxy=proxy.example.co.za:8080'
