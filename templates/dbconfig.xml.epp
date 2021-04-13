@@ -17,8 +17,8 @@
 <% if $jira::pool_min_size != undef { -%>
     <pool-min-size><%= $jira::pool_min_size %></pool-min-size>
 <% } -%>
-<% if $jira::pool_max_size != undef { -%>
-    <pool-max-size><%= $jira::pool_max_size %></pool-max-size>
+<% if $jira::pool_max_size_real != undef { -%>
+    <pool-max-size><%= $jira::pool_max_size_real %></pool-max-size>
 <% } -%>
 <% if $jira::pool_max_idle != undef { -%>
     <pool-max-idle><%= $jira::pool_max_idle %></pool-max-idle>

@@ -70,6 +70,7 @@ class jira (
   $mysql_connector_format                                           = 'tar.gz',
   Stdlib::Absolutepath $mysql_connector_install                     = '/opt/MySQL-connector',
   Stdlib::HTTPUrl $mysql_connector_url                              = 'https://dev.mysql.com/get/Downloads/Connector-J',
+  Optional[Integer[0]] $poolsize                                    = undef,
   Optional[Integer[0]] $pool_min_size                               = undef,
   Optional[Integer[0]] $pool_max_size                               = undef,
   Optional[Integer[-1]] $pool_max_wait                              = undef,
@@ -172,6 +173,14 @@ class jira (
     $jvm_extra_args_real = "${java_opts} ${jvm_extra_args}"
   } else {
     $jvm_extra_args_real = $jvm_extra_args
+  }
+
+  # Allow some backwards compatibility;
+  if $poolsize {
+    deprecation('jira::poolsize', 'jira::poolsize is deprecated and simply sets max-pool-size. Please use jira::pool_max_size instead and remove this configuration')
+    $pool_max_size_real = pick($pool_max_size, $poolsize)
+  } else {
+    $pool_max_size_real = $pool_max_size
   }
 
   if $tomcat_redirect_https_port {
