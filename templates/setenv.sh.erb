@@ -12,9 +12,9 @@ JIRA_HOME="<%= @homedir %>"
 #  Occasionally Atlassian Support may recommend that you set some specific JVM arguments.  You can use this variable below to do that.
 #
 <%- if @jvm_type == 'openjdk-11' -%>
-JVM_SUPPORT_RECOMMENDED_ARGS='-XX:-HeapDumpOnOutOfMemoryError <%= @jvm_optional_additional %>'
+JVM_SUPPORT_RECOMMENDED_ARGS='-XX:-HeapDumpOnOutOfMemoryError <%= @jvm_optional %>'
 <%- elsif @jvm_type == 'oracle-jdk-1.8' -%>
-JVM_SUPPORT_RECOMMENDED_ARGS='-XX:-HeapDumpOnOutOfMemoryError <%= @jvm_optional_additional %>'
+JVM_SUPPORT_RECOMMENDED_ARGS='-XX:-HeapDumpOnOutOfMemoryError <%= @jvm_optional %>'
 <%- elsif @jvm_type == 'custom' -%>
 JVM_SUPPORT_RECOMMENDED_ARGS='<%= @jvm_optional %>'
 <%- end -%>
@@ -26,9 +26,9 @@ JVM_SUPPORT_RECOMMENDED_ARGS='<%= @jvm_optional %>'
 #  For Java 11 and larger heaps we recommend: -XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent
 #
 <%- if @jvm_type == 'openjdk-11' -%>
-JVM_GC_ARGS='-XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent <%= @jvm_gc_args_additional %>'
+JVM_GC_ARGS='-XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent <%= @jvm_gc_args %>'
 <%- elsif @jvm_type == 'oracle-jdk-1.8' -%>
-JVM_GC_ARGS='<%= @jvm_gc_args_additional %>'
+JVM_GC_ARGS='<%= @jvm_gc_args %>'
 <%- elsif @jvm_type == 'custom' -%>
 JVM_GC_ARGS='<%= @jvm_gc_args %>'
 <%- end -%>
@@ -44,9 +44,9 @@ JVM_PERMGEN_MEMORY='<%= @jvm_permgen %>'
 # The following setting configures the size of JVM code cache.  A high value of reserved size allows Jira to work with more installed apps.
 #
 <%- if @jvm_type == 'openjdk-11' -%>
-JVM_CODE_CACHE_ARGS='-XX:InitialCodeCacheSize=32m -XX:ReservedCodeCacheSize=512m <%= @jvm_codecache_args_additional %>'
+JVM_CODE_CACHE_ARGS='-XX:InitialCodeCacheSize=32m -XX:ReservedCodeCacheSize=512m <%= @jvm_codecache_args %>'
 <%- elsif @jvm_type == 'oracle-jdk-1.8' -%>
-JVM_CODE_CACHE_ARGS='-XX:InitialCodeCacheSize=32m -XX:ReservedCodeCacheSize=512m <%= @jvm_codecache_args_additional %>'
+JVM_CODE_CACHE_ARGS='-XX:InitialCodeCacheSize=32m -XX:ReservedCodeCacheSize=512m <%= @jvm_codecache_args %>'
 <%- elsif @jvm_type == 'custom' -%>
 JVM_CODE_CACHE_ARGS='<%= @jvm_codecache_args %>'
 <%- end -%>
@@ -82,12 +82,12 @@ DISABLE_NOTIFICATIONS='-Datlassian.mail.senddisabled=true -Datlassian.mail.fetch
 # occurs frequently, which could make it harder for support to diagnose a problem.
 #-----------------------------------------------------------------------------------
 <%- if @jvm_type == 'openjdk-11' -%>
-JVM_EXTRA_ARGS='<%= @jvm_extra_args_additional %>'
+JVM_EXTRA_ARGS='<%= @jvm_extra_args_real %>'
 JVM_EXTRA_ARGS+='-XX:+ExplicitGCInvokesConcurrent -XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT'
 <%- elsif @jvm_type == 'oracle-jdk-1.8' -%>
-JVM_EXTRA_ARGS='-XX:+PrintGCDateStamps -XX:+ExplicitGCInvokesConcurrent -XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT <%= @jvm_extra_args_additional %>'
+JVM_EXTRA_ARGS='-XX:+PrintGCDateStamps -XX:+ExplicitGCInvokesConcurrent -XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT <%= @jvm_extra_args_real %>'
 <%- elsif @jvm_type == 'custom' -%>
-JVM_EXTRA_ARGS='<%= @jvm_extra_args %>'
+JVM_EXTRA_ARGS='<%= @jvm_extra_args_real %>'
 <%- end -%>
 
 CURRENT_NOFILES_LIMIT=$( ulimit -Hn )
