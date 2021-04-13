@@ -91,15 +91,11 @@ class jira (
   String $jvm_xmx                                                   = '1024m',
   String $jvm_permgen                                               = '256m',
   Optional[String] $jvm_optional                                    = undef,
-  Optional[String] $jvm_optional_additional                         = undef,
   Optional[String] $jvm_extra_args                                  = undef,
-  Optional[String] $jvm_extra_args_additional                       = undef,
   Optional[String] $jvm_gc_args                                     = undef,
-  Optional[String] $jvm_gc_args_additional                          = undef,
   Optional[String] $jvm_codecache_args                              = undef,
-  Optional[String] $jvm_codecache_args_additional                   = undef,
   Integer $jvm_nofiles_limit                                        = 16384,
-  String $java_opts                                                 = '',
+  Optional[String] $java_opts                                       = undef,
   String $catalina_opts                                             = '',
   # Misc Settings
   Stdlib::HTTPUrl $download_url                                     = 'https://product-downloads.atlassian.com/software/jira/downloads',
@@ -171,6 +167,13 @@ class jira (
 ) inherits jira::params {
   if $datacenter and !$shared_homedir {
     fail("\$shared_homedir must be set when \$datacenter is true")
+  }
+
+  if $java_opts {
+    deprecation('jira::java_opts', 'jira::java_opts is deprecated. Please use jira::jvm_extra_args')
+    $jvm_extra_args_real = "${java_opts} ${jvm_extra_args}"
+  } else {
+    $jvm_extra_args_real = $jvm_extra_args
   }
 
   if $tomcat_redirect_https_port {

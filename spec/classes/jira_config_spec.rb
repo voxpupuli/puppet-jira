@@ -733,10 +733,10 @@ describe 'jira' do
                 version: '8.12.1',
                 javahome: '/opt/java',
                 jvm_type: 'openjdk-11',
-                jvm_optional_additional: '-XX:-TEST_OPTIONAL',
-                jvm_gc_args_additional: '-XX:-TEST_GC_ARG',
-                jvm_codecache_args_additional: '-XX:-TEST_CODECACHE',
-                jvm_extra_args_additional: '-XX:-TEST_EXTRA'
+                jvm_optional: '-XX:-TEST_OPTIONAL',
+                jvm_gc_args: '-XX:-TEST_GC_ARG',
+                jvm_codecache_args: '-XX:-TEST_CODECACHE',
+                jvm_extra_args: '-XX:-TEST_EXTRA'
               }
             end
 
