@@ -70,7 +70,6 @@ class jira (
   $mysql_connector_format                                           = 'tar.gz',
   Stdlib::Absolutepath $mysql_connector_install                     = '/opt/MySQL-connector',
   Stdlib::HTTPUrl $mysql_connector_url                              = 'https://dev.mysql.com/get/Downloads/Connector-J',
-  Optional[Integer[0]] $poolsize                                    = undef,
   Optional[Integer[0]] $pool_min_size                               = undef,
   Optional[Integer[0]] $pool_max_size                               = undef,
   Optional[Integer[-1]] $pool_max_wait                              = undef,
@@ -94,7 +93,6 @@ class jira (
   Optional[String] $jvm_gc_args                                     = undef,
   Optional[String] $jvm_codecache_args                              = undef,
   Integer $jvm_nofiles_limit                                        = 16384,
-  Optional[String] $java_opts                                       = undef,
   String $catalina_opts                                             = '',
   # Misc Settings
   Stdlib::HTTPUrl $download_url                                     = 'https://product-downloads.atlassian.com/software/jira/downloads',
@@ -163,9 +161,17 @@ class jira (
   String $session_tokenkey                                          = 'session.tokenkey',
   Integer $session_validationinterval                               = 5,
   String $session_lastvalidation                                    = 'session.lastvalidation',
+  # Deprecated parameters
+  Optional[Integer[0]] $poolsize                                    = undef,
+  Optional[String] $java_opts                                       = undef,
+  Optional[Boolean] $enable_connection_pooling                      = undef,
 ) inherits jira::params {
   if $datacenter and !$shared_homedir {
     fail("\$shared_homedir must be set when \$datacenter is true")
+  }
+
+  if $enable_connection_pooling != undef {
+    deprecation('jira::enable_connection_pooling', 'jira::enable_connection_pooling has been removed and does nothing. Please simply configure the connection pooling parameters')
   }
 
   if $java_opts {
