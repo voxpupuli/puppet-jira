@@ -19,24 +19,13 @@ class jira::config inherits jira {
     group => $jira::group,
   }
 
-  if $jira::validation_query == undef {
-    $validation_query = $jira::db ? {
-      'postgresql' => 'select version();',
-      'mysql'      => 'select 1',
-      'oracle'     => 'select 1 from dual',
-      'sqlserver'  => 'select 1',
-      'h2'         => 'select 1',
-    }
+  $dbschema_default = $jira::db ? {
+    'postgresql' => 'public',
+    default      => undef
   }
-  if $jira::time_between_eviction_runs == undef {
-    $time_between_eviction_runs = $jira::db ? {
-      'postgresql' => '30000',
-      'mysql'      => '300000',
-      'oracle'     => '300000',
-      'sqlserver'  => '300000',
-      'h2'         => '5000',
-    }
-  }
+
+  # can't use pick_default: https://tickets.puppetlabs.com/browse/MODULES-11018
+  $dbschema = if $jira::dbschema { $jira::dbschema } else { $dbschema_default }
 
   file { "${jira::webappdir}/bin/user.sh":
     content => template('jira/user.sh.erb'),
@@ -56,7 +45,7 @@ class jira::config inherits jira {
   }
 
   -> file { "${jira::homedir}/dbconfig.xml":
-    content => template("jira/dbconfig.${jira::db}.xml.erb"),
+    content => epp('jira/dbconfig.xml.epp'),
     mode    => '0600',
     require => [Class['jira::install'],File[$jira::homedir]],
     notify  => Class['jira::service'],
