@@ -98,8 +98,6 @@ class jira (
   Stdlib::HTTPUrl $download_url                                     = 'https://product-downloads.atlassian.com/software/jira/downloads',
   Optional[String] $checksum                                        = undef,
   Boolean $disable_notifications                                    = false,
-  # Choose whether to use puppet-staging, or puppet-archive
-  $deploy_module                                                    = 'archive',
   Optional[String] $proxy_server                                    = undef,
   Optional[Enum['none','http','https','ftp']] $proxy_type           = undef,
   # Manage service

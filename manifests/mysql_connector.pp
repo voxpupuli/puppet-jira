@@ -6,16 +6,15 @@ class jira::mysql_connector (
   $installdir   = $jira::mysql_connector_install,
   $download_url = $jira::mysql_connector_url
 ) {
-  require staging
-
+  assert_private()
   $file = "${product}-${version}.${format}"
 
   if ! defined(File[$installdir]) {
     file { $installdir:
       ensure => 'directory',
-      owner  => root,
-      group  => root,
-      before => Staging::File[$file],
+      owner  => $jira::user,
+      group  => $jira::group,
+      before => Archive["${installdir}/${file}"],
     }
   }
 
@@ -25,18 +24,22 @@ class jira::mysql_connector (
     $jarfile = "${product}-${version}.jar"
   }
 
-  staging::file { $file:
-    source  => "${download_url}/${file}",
-    timeout => 300,
+  archive { "${installdir}/${file}":
+    ensure       => present,
+    extract      => true,
+    extract_path => $installdir,
+    source       => "${download_url}/${file}",
+    creates      => "${installdir}/${product}-${version}",
+    cleanup      => true,
+    proxy_server => $jira::proxy_server,
+    proxy_type   => $jira::proxy_type,
+    user         => $jira::user,
+    group        => $jira::group,
   }
 
-  -> staging::extract { $file:
-    target  => $installdir,
-    creates => "${installdir}/${product}-${version}",
-  }
-
-  -> file { "${jira::webappdir}/lib/mysql-connector-java.jar":
-    ensure => link,
-    target => "${installdir}/${product}-${version}/${jarfile}",
+  file { "${jira::webappdir}/lib/mysql-connector-java.jar":
+    ensure  => link,
+    target  => "${installdir}/${product}-${version}/${jarfile}",
+    require => Archive["${installdir}/${file}"],
   }
 }

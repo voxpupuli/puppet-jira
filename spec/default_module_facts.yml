@@ -1,3 +1,2 @@
 ---
 jira_version: '6.4'
-staging_http_get: 'curl'
