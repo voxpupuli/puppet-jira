@@ -32,9 +32,9 @@
     <Valve className="org.apache.catalina.valves.CometConnectionManagerValve" />
     -->
 
-<%   $jira::resources.each |$name, $values| { -%>
-    <Resource name = "<%= name %>"
-<%     $values.each |$key, $value| { -%>
+<%   jira::sort_hash($jira::resources).each |$name, $values| { -%>
+    <Resource name = "<%= $name %>"
+<%     jira::sort_hash($values).each |$key, $value| { -%>
         <%= $key %> = "<%= $value %>"
 <%     } -%>
     />

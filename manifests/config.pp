@@ -115,7 +115,7 @@ class jira::config inherits jira {
     }
   }
 
-  $merged_jira_config_properties = merge({ 'jira.websudo.is.disabled' => !$jira::enable_secure_admin_sessions }, $jira::jira_config_properties)
+  $merged_jira_config_properties = jira::sort_hash({ 'jira.websudo.is.disabled' => !$jira::enable_secure_admin_sessions } + $jira::jira_config_properties)
 
   # Configuration logic ends, resources begin:
 

@@ -56,7 +56,7 @@
                    redirectPort="<%= $jira::tomcat_https_port%>"
 <% } -%>
 <% if $jira::proxy { -%>
-<%   $jira::proxy.each |$key, $value| { -%>
+<%   jira::sort_hash($jira::proxy).each |$key, $value| { -%>
                    <%= $key %> = '<%= $value %>'
 <%   } -%>
 <% } -%>
@@ -92,7 +92,7 @@
                     keystorePass="<%= $jira::tomcat_keystore_pass %>"
                     keystoreType="<%= $jira::tomcat_keystore_type %>"
 <%   if $jira::proxy { -%>
-<%     $jira::proxy.each |$key, $value| { -%>
+<%     jira::sort_hash($jira::proxy).each |$key, $value| { -%>
                     <%= key %> = '<%= $value %>'
 <%     } -%>
 <%   } -%>
@@ -101,15 +101,15 @@
 
 <% if !empty($jira::ajp) { -%>
         <Connector enableLookups="false" URIEncoding="UTF-8"
-<%   $jira::ajp.each |$key, $value| { -%>
+<%   jira::sort_hash($jira::ajp).each |$key, $value| { -%>
                    <%= key %> = '<%= $value %>'
 <%   } -%>
         />
 <% } -%>
 
-<% $jira::tomcat_additional_connectors.each |$port, $attrs| { -%>
+<% jira::sort_hash($jira::tomcat_additional_connectors).each |$port, $attrs| { -%>
         <Connector port="<%= $port -%>"
-<% $attrs.each |$key, $value| { -%>
+<% jira::sort_hash($attrs).each |$key, $value| { -%>
                    <%= $key -%>="<%= $value -%>"
 <% } -%>
                    />
