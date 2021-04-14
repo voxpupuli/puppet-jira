@@ -125,7 +125,7 @@ class jira::config inherits jira {
   }
 
   file { "${jira::webappdir}/bin/setenv.sh":
-    content => template('jira/setenv.sh.erb'),
+    content => epp('jira/setenv.sh.epp'),
     mode    => '0755',
   }
 
