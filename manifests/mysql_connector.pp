@@ -14,7 +14,7 @@ class jira::mysql_connector (
       ensure => 'directory',
       owner  => $jira::user,
       group  => $jira::group,
-      before => Archive[$file],
+      before => Archive["${installdir}/${file}"],
     }
   }
 
@@ -40,6 +40,6 @@ class jira::mysql_connector (
   file { "${jira::webappdir}/lib/mysql-connector-java.jar":
     ensure  => link,
     target  => "${installdir}/${product}-${version}/${jarfile}",
-    require => Archive[$file],
+    require => Archive["${installdir}/${file}"],
   }
 }
