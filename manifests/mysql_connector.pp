@@ -25,14 +25,14 @@ class jira::mysql_connector (
   }
 
   archive { $file:
-    ensure          => present,
-    extract         => true,
-    extract_path    => $installdir,
-    source          => "${download_url}/${file}",
-    creates         => "${installdir}/${product}-${version}",
-    cleanup         => true,
-    proxy_server    => $jira::proxy_server,
-    proxy_type      => $jira::proxy_type,
+    ensure       => present,
+    extract      => true,
+    extract_path => $installdir,
+    source       => "${download_url}/${file}",
+    creates      => "${installdir}/${product}-${version}",
+    cleanup      => true,
+    proxy_server => $jira::proxy_server,
+    proxy_type   => $jira::proxy_type,
   }
 
   file { "${jira::webappdir}/lib/mysql-connector-java.jar":
