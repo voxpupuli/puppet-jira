@@ -13,10 +13,9 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 # -----------------------------------------------------------------------------
-class jira::config inherits jira {
+class jira::config {
   # This class should be used from init.pp with a dependency on jira::install
   # and sending a refresh to jira::service
-  # We need to inherit jira because the templates use lots of @var
   assert_private()
 
   File {
