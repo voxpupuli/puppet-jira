@@ -143,7 +143,7 @@ class jira::config inherits jira {
   }
 
   file { "${jira::webappdir}/conf/server.xml":
-    content => template('jira/server.xml.erb'),
+    content => epp('jira/server.xml.epp'),
     mode    => '0600',
   }
 
