@@ -24,13 +24,40 @@ describe 'jira' do
             end
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/user.sh') }
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml') }
+            # Also ensure that we actually omit elements by default
             it do
               is_expected.to contain_file('/home/jira/dbconfig.xml').
                 with_content(%r{jdbc:postgresql://localhost:5432/jira}).
-                with_content(%r{<schema-name>public</schema-name>})
+                with_content(%r{<schema-name>public</schema-name>}).
+                without_content(%r{<pool})
+
             end
             it { is_expected.not_to contain_file('/home/jira/cluster.properties') }
             it { is_expected.not_to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/check-java.sh') }
+          end
+
+          context 'database settings' do
+            let(:params) do
+              {
+                version: '6.3.4a',
+                javahome: '/opt/java',
+                connection_settings: 'TEST-SETTING;',
+                pool_max_size: 20,
+                pool_min_size: 10,
+                validation_query: 'SELECT version();',
+              }
+            end
+
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/user.sh') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml') }
+            it do
+              is_expected.to contain_file('/home/jira/dbconfig.xml').
+                with_content(%r{<connection-settings>TEST-SETTING;</connection-settings>}).
+                with_content(%r{<pool-max-size>20</pool-max-size>}).
+                with_content(%r{<pool-min-size>10</pool-min-size>}).
+                with_content(%r{<validation-query>SELECT version\(\);</validation-query>})
+            end
           end
 
           context 'mysql params' do
