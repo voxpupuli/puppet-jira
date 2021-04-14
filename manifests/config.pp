@@ -14,8 +14,6 @@
 #   limitations under the License.
 # -----------------------------------------------------------------------------
 class jira::config inherits jira {
-
-
   # This class should be used from init.pp with a dependency on jira::install
   # and sending a refresh to jira::service
   # We need to inherit jira because the templates use lots of @var
@@ -33,7 +31,6 @@ class jira::config inherits jira {
 
   # can't use pick_default: https://tickets.puppetlabs.com/browse/MODULES-11018
   $dbschema = if $jira::dbschema { $jira::dbschema } else { $dbschema_default }
-
 
   if $jira::java_opts {
     deprecation('jira::java_opts', 'jira::java_opts is deprecated. Please use jira::jvm_extra_args')
@@ -115,7 +112,10 @@ class jira::config inherits jira {
     }
   }
 
-  $merged_jira_config_properties = jira::sort_hash({ 'jira.websudo.is.disabled' => !$jira::enable_secure_admin_sessions } + $jira::jira_config_properties)
+  $jira_properties = {
+    'jira.websudo.is.disabled' => !$jira::enable_secure_admin_sessions,
+  }
+  $merged_jira_config_properties = jira::sort_hash($jira_properties + $jira::jira_config_properties)
 
   # Configuration logic ends, resources begin:
 
@@ -154,10 +154,10 @@ class jira::config inherits jira {
 
   file { "${jira::homedir}/jira-config.properties":
     content => inline_epp(@(EOF)
-      <% $merged_jira_config_properties.each |$key, $val| { -%>
-      <%= $key %> = <%= $val %>
-      <%- } -%>
-      | EOF
+        <% $merged_jira_config_properties.each |$key, $val| { -%>
+        <%= $key %> = <%= $val %>
+        <%- } -%>
+        | EOF
     ),
     mode    => '0600',
   }

@@ -65,7 +65,7 @@
 <% if $jira::tomcat_native_ssl { -%>
         <Connector
                     port="<%= $jira::tomcat_https_port %>"
-                    protocol="<%= $jira::tomcat_protocol_ssl_real %>"
+                    protocol="<%= $jira::config::tomcat_protocol_ssl_real %>"
                     <%- if $jira::tomcat_address { -%>
                     address="<%= $jira::tomcat_address %>"
                     <%- } -%>
@@ -102,7 +102,7 @@
 <% if !empty($jira::ajp) { -%>
         <Connector enableLookups="false" URIEncoding="UTF-8"
 <%   jira::sort_hash($jira::ajp).each |$key, $value| { -%>
-                   <%= key %> = '<%= $value %>'
+                   <%= $key %> = "<%= $value %>"
 <%   } -%>
         />
 <% } -%>
