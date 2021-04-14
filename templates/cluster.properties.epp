@@ -1,0 +1,13 @@
+# This ID must be unique across the cluster
+jira.node.id = <%= $facts['fqdn'] %>
+# The location of the shared home directory for all JIRA nodes
+jira.shared.home = <%= $jira::shared_homedir %>
+<% if $jira::ehcache_listener_host { -%>
+ehcache.listener.hostName = <%= $jira::ehcache_listener_host %>
+<% } -%>
+<% if $jira::ehcache_listener_port { -%>
+ehcache.listener.port = <%= $jira::ehcache_listener_port %>
+<% } -%>
+<% if $jira::ehcache_object_port { -%>
+ehcache.object.port = <%= $jira::ehcache_object_port %>
+<% } -%>
