@@ -40,6 +40,6 @@ class jira::mysql_connector (
   file { "${jira::webappdir}/lib/mysql-connector-java.jar":
     ensure  => link,
     target  => "${installdir}/${product}-${version}/${jarfile}",
-    require => Archive[$file]
+    require => Archive[$file],
   }
 }
