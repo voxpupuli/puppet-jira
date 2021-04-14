@@ -74,54 +74,27 @@ class jira::install {
     }
   }
 
-  case $jira::deploy_module {
-    'staging': {
-      require staging
-      staging::file { $file:
-        source  => "${jira::download_url}/${file}",
-        timeout => 1800,
-      }
-      -> staging::extract { $file:
-        target  => $jira::extractdir,
-        creates => "${jira::webappdir}/conf",
-        strip   => 1,
-        user    => $jira::user,
-        group   => $jira::group,
-        notify  => Exec["chown_${jira::extractdir}"],
-        before  => File[$jira::homedir],
-        require => [
-          File[$jira::installdir],
-          User[$jira::user],
-        File[$jira::extractdir]],
-      }
-    }
-    'archive': {
-      archive { "/tmp/${file}":
-        ensure          => present,
-        extract         => true,
-        extract_command => 'tar xfz %s --strip-components=1',
-        extract_path    => $jira::webappdir,
-        source          => "${jira::download_url}/${file}",
-        creates         => "${jira::webappdir}/conf",
-        cleanup         => true,
-        checksum_verify => $jira::checksum_verify,
-        checksum_type   => 'md5',
-        checksum        => $jira::checksum,
-        user            => $jira::user,
-        group           => $jira::group,
-        proxy_server    => $jira::proxy_server,
-        proxy_type      => $jira::proxy_type,
-        before          => File[$jira::homedir],
-        require         => [
-          File[$jira::installdir],
-          File[$jira::webappdir],
-          User[$jira::user],
-        ],
-      }
-    }
-    default: {
-      fail('deploy_module parameter must equal "archive" or staging""')
-    }
+  archive { "/tmp/${file}":
+    ensure          => present,
+    extract         => true,
+    extract_command => 'tar xfz %s --strip-components=1',
+    extract_path    => $jira::webappdir,
+    source          => "${jira::download_url}/${file}",
+    creates         => "${jira::webappdir}/conf",
+    cleanup         => true,
+    checksum_verify => $jira::checksum_verify,
+    checksum_type   => 'md5',
+    checksum        => $jira::checksum,
+    user            => $jira::user,
+    group           => $jira::group,
+    proxy_server    => $jira::proxy_server,
+    proxy_type      => $jira::proxy_type,
+    before          => File[$jira::homedir],
+    require         => [
+      File[$jira::installdir],
+      File[$jira::webappdir],
+      User[$jira::user],
+    ],
   }
 
   file { $jira::homedir:
@@ -137,14 +110,8 @@ class jira::install {
   }
 
   if $jira::db == 'mysql' and $jira::mysql_connector_manage {
-    if $jira::deploy_module == 'archive' {
-      class { 'jira::mysql_connector':
-        require => Archive["/tmp/${file}"],
-      }
-    } elsif $jira::deploy_module == 'deploy' {
-      class { 'jira::mysql_connector':
-        require => Staging::Extract[$file],
-      }
+    class { 'jira::mysql_connector':
+      require => Archive["/tmp/${file}"],
     }
     contain jira::mysql_connector
   }

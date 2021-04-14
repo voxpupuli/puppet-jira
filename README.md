@@ -108,7 +108,6 @@ deploying the JIRA binaries.
 ```puppet
   class { 'jira':
     javahome      => '/opt/java',
-    deploy_module => 'archive',
   }
 ```
 
@@ -394,24 +393,16 @@ Defaults to `https://product-downloads.atlassian.com/software/jira/downloads/`
 
 ##### `checksum`
 
-The md5 checksum of the archive file. Only supported with
-`deploy_module => archive`. Defaults to 'undef'
-
-##### `$deploy_module`
-
-Module to use for downloading and extracting archive file. Supports puppet-archive
-and puppet-staging. Defaults to 'archive'. Archive supports md5 hash checking and
-Staging supports S3 buckets.
+The md5 checksum of the archive file. Defaults to 'undef'
 
 ##### `$proxy_server`
 
 Specify a proxy server, with port number if needed. ie: https://example.com:8080.
-Only supported with `deploy_module => archive` (the default).  Defaults to 'undef'.
+Defaults to 'undef'.
 
 ##### `$proxy_type`
 
-Proxy server type (none|http|https|ftp)
-Only supported with `deploy_module => archive` (the default).  Defaults to 'undef'.
+Proxy server type (none|http|https|ftp). Defaults to 'undef'.
 
 ##### `$service_manage`
 
