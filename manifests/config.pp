@@ -153,7 +153,12 @@ class jira::config inherits jira {
   }
 
   file { "${jira::homedir}/jira-config.properties":
-    content => template('jira/jira-config.properties.erb'),
+    content => inline_epp(@(EOF)
+      <% $merged_jira_config_properties.each |$key, $val| { -%>
+      <%= $key %> = <%= $val %>
+      <%- } -%>
+      | EOF
+    ),
     mode    => '0600',
   }
 
