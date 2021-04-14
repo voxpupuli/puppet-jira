@@ -15,7 +15,7 @@ class jira::sso (
 ) {
   file { "${jira::webappdir}/atlassian-jira/WEB-INF/classes/crowd.properties":
     ensure  => file,
-    content => template('jira/crowd.properties'),
+    content => epp('jira/crowd.properties.epp'),
     mode    => '0660',
     owner   => $jira::user,
     group   => $jira::group,
