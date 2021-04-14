@@ -12,8 +12,9 @@ class jira::mysql_connector (
   if ! defined(File[$installdir]) {
     file { $installdir:
       ensure => 'directory',
-      owner  => $jira::user,
-      group  => $jira::group,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0755',
       before => Archive["${installdir}/${file}"],
     }
   }
@@ -33,8 +34,6 @@ class jira::mysql_connector (
     cleanup      => true,
     proxy_server => $jira::proxy_server,
     proxy_type   => $jira::proxy_type,
-    user         => $jira::user,
-    group        => $jira::group,
   }
 
   file { "${jira::webappdir}/lib/mysql-connector-java.jar":
