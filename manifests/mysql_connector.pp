@@ -34,8 +34,6 @@ class jira::mysql_connector (
     cleanup      => true,
     proxy_server => $jira::proxy_server,
     proxy_type   => $jira::proxy_type,
-    user         => $jira::user,
-    group        => $jira::group,
   }
 
   file { "${jira::webappdir}/lib/mysql-connector-java.jar":
