@@ -174,21 +174,6 @@ class jira (
     deprecation('jira::enable_connection_pooling', 'jira::enable_connection_pooling has been removed and does nothing. Please simply configure the connection pooling parameters')
   }
 
-  if $java_opts {
-    deprecation('jira::java_opts', 'jira::java_opts is deprecated. Please use jira::jvm_extra_args')
-    $jvm_extra_args_real = "${java_opts} ${jvm_extra_args}"
-  } else {
-    $jvm_extra_args_real = $jvm_extra_args
-  }
-
-  # Allow some backwards compatibility;
-  if $poolsize {
-    deprecation('jira::poolsize', 'jira::poolsize is deprecated and simply sets max-pool-size. Please use jira::pool_max_size instead and remove this configuration')
-    $pool_max_size_real = pick($pool_max_size, $poolsize)
-  } else {
-    $pool_max_size_real = $pool_max_size
-  }
-
   if $tomcat_redirect_https_port {
     unless ($tomcat_native_ssl) {
       fail('You need to set native_ssl to true when using tomcat_redirect_https_port')
@@ -218,65 +203,6 @@ class jira (
     $webappdir = $extractdir
   }
 
-  if $dbport {
-    $dbport_real = $dbport
-  } else {
-    $dbport_real = $db ? {
-      'postgresql' => '5432',
-      'mysql'      => '3306',
-      'oracle'     => '1521',
-      'sqlserver'  => '1433',
-      'h2'         => '',
-    }
-  }
-
-  if $dbdriver {
-    $dbdriver_real = $dbdriver
-  } else {
-    $dbdriver_real = $db ? {
-      'postgresql' => 'org.postgresql.Driver',
-      'mysql'      => 'com.mysql.jdbc.Driver',
-      'oracle'     => 'oracle.jdbc.OracleDriver',
-      'sqlserver'  => 'com.microsoft.sqlserver.jdbc.SQLServerDriver',
-      'h2'         => 'org.h2.Driver',
-    }
-  }
-
-  if $dbtype {
-    $dbtype_real = $dbtype
-  } else {
-    $dbtype_real = $db ? {
-      'postgresql' => 'postgres72',
-      'mysql'      => 'mysql',
-      'oracle'     => 'oracle10g',
-      'sqlserver'  => 'mssql',
-      'h2'         => 'h2',
-    }
-  }
-
-  if $dburl {
-    $dburl_real = $dburl
-  }
-  else {
-    $dburl_real = $db ? {
-      'postgresql' => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}",
-      'mysql'      => "jdbc:${db}://${dbserver}:${dbport_real}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB",
-      'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport_real}:${dbname}",
-      'sqlserver'  => "jdbc:jtds:${db}://${dbserver}:${dbport_real}/${dbname}",
-      'h2'         => "jdbc:h2:file:/${jira::homedir}/database/${dbname}",
-    }
-  }
-
-  if $tomcat_protocol_ssl {
-    $tomcat_protocol_ssl_real = $tomcat_protocol_ssl
-  } else {
-    if versioncmp($version, '7.3.0') >= 0 {
-      $tomcat_protocol_ssl_real = 'org.apache.coyote.http11.Http11NioProtocol'
-    } else {
-      $tomcat_protocol_ssl_real = 'org.apache.coyote.http11.Http11Protocol'
-    }
-  }
-
   if ! empty($ajp) {
     if ! ('port' in $ajp) {
       fail('You need to specify a valid port for the AJP connector.')
@@ -289,8 +215,6 @@ class jira (
       assert_type(Enum['AJP/1.3', 'org.apache.coyote.ajp', 'org.apache.coyote.ajp.AjpNioProtocol'], $ajp['protocol'])
     }
   }
-
-  $merged_jira_config_properties = merge( { 'jira.websudo.is.disabled' => !$enable_secure_admin_sessions }, $jira_config_properties)
 
   if $javahome == undef {
     fail('You need to specify a value for javahome')
