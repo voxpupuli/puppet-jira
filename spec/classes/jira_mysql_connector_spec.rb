@@ -55,8 +55,8 @@ describe 'jira' do
             end
             it 'deploys mysql connector 8.0.23 from tar.gz' do
               is_expected.to contain_archive('mysql-connector-java-8.0.23.tar.gz').with('source' => 'https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.23.tar.gz',
-                                                                                        'target' => '/opt/MySQL-connector',
-                                                                                        'extract_path' => '/opt/MySQL-connector/mysql-connector-java-8.0.23')
+                                                                                        'extract_path' => '/opt/MySQL-connector',
+                                                                                        'creates' => '/opt/MySQL-connector/mysql-connector-java-8.0.23')
             end
           end
           context 'mysql connector overwrite params' do
