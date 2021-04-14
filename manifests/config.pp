@@ -120,7 +120,7 @@ class jira::config inherits jira {
   # Configuration logic ends, resources begin:
 
   file { "${jira::webappdir}/bin/user.sh":
-    content => template('jira/user.sh.erb'),
+    content => epp('jira/user.sh.epp'),
     mode    => '0755',
   }
 
