@@ -24,7 +24,7 @@ class jira::mysql_connector (
     $jarfile = "${product}-${version}.jar"
   }
 
-  archive { $file:
+  archive { "${installdir}/${file}":
     ensure       => present,
     extract      => true,
     extract_path => $installdir,

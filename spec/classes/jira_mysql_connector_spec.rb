@@ -29,7 +29,7 @@ describe 'jira' do
                 )
             end
             it 'deploys mysql connector 5.1.34 from tar.gz' do
-              is_expected.to contain_archive('mysql-connector-java-5.1.34.tar.gz').with('source' => 'https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.34.tar.gz', 
+              is_expected.to contain_archive('/opt/MySQL-connector/mysql-connector-java-5.1.34.tar.gz').with('source' => 'https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.34.tar.gz',
                                                                                         'extract_path' => '/opt/MySQL-connector',
                                                                                         'creates' => '/opt/MySQL-connector/mysql-connector-java-5.1.34')
             end
@@ -54,7 +54,7 @@ describe 'jira' do
                 )
             end
             it 'deploys mysql connector 8.0.23 from tar.gz' do
-              is_expected.to contain_archive('mysql-connector-java-8.0.23.tar.gz').with('source' => 'https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.23.tar.gz',
+              is_expected.to contain_archive('/opt/MySQL-connector/mysql-connector-java-8.0.23.tar.gz').with('source' => 'https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.23.tar.gz',
                                                                                         'extract_path' => '/opt/MySQL-connector',
                                                                                         'creates' => '/opt/MySQL-connector/mysql-connector-java-8.0.23')
             end
@@ -81,7 +81,7 @@ describe 'jira' do
                 )
             end
             it 'deploys mysql connector 5.1.15 from zip' do
-              is_expected.to contain_archive('mysql-connector-java-5.1.15.zip').with('source' => 'http://example.co.za/foo/mysql-connector-java-5.1.15.zip',
+              is_expected.to contain_archive('/opt/foo/mysql-connector-java-5.1.15.zip').with('source' => 'http://example.co.za/foo/mysql-connector-java-5.1.15.zip',
                                                                                      'extract_path' => '/opt/foo',
                                                                                      'creates' => '/opt/foo/mysql-connector-java-5.1.15')
             end
