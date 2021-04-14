@@ -12,8 +12,9 @@ class jira::mysql_connector (
   if ! defined(File[$installdir]) {
     file { $installdir:
       ensure => 'directory',
-      owner  => $jira::user,
-      group  => $jira::group,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0755',
       before => Archive["${installdir}/${file}"],
     }
   }
