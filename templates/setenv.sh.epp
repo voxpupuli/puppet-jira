@@ -1,3 +1,5 @@
+<%# MAINTAINERS: try to keep diff with the original file to a minimum #-%>
+<%# Don't include shell style fixes unless they fix real bugs         #-%>
 #
 # If the limit of files that Jira can open is too low, it will be set to this value.
 #
