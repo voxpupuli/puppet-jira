@@ -23,6 +23,15 @@ class jira::config {
     group => $jira::group,
   }
 
+  # JVM args. These will be the defaults if not overridden
+  if $jira::jvm_type == 'openjdk-11' {
+    $jvm_gc_args = '-XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent'
+  } else {
+    $jvm_gc_args = '-XX:+ExplicitGCInvokesConcurrent'
+  }
+  $jvm_code_cache_args = '-XX:InitialCodeCacheSize=32m -XX:ReservedCodeCacheSize=512m'
+  $jvm_extra_args = '-XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT'
+
   $dbschema_default = $jira::db ? {
     'postgresql' => 'public',
     default      => undef
@@ -30,13 +39,6 @@ class jira::config {
 
   # can't use pick_default: https://tickets.puppetlabs.com/browse/MODULES-11018
   $dbschema = if $jira::dbschema { $jira::dbschema } else { $dbschema_default }
-
-  if $jira::java_opts {
-    deprecation('jira::java_opts', 'jira::java_opts is deprecated. Please use jira::jvm_extra_args')
-    $jvm_extra_args_real = "${jira::java_opts} ${jira::jvm_extra_args}"
-  } else {
-    $jvm_extra_args_real = $jira::jvm_extra_args
-  }
 
   # Allow some backwards compatibility;
   if $jira::poolsize {
