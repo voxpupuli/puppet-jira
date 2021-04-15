@@ -95,7 +95,7 @@ The jira::facts class is required for upgrades.
 ```puppet
   class { 'jira':
     javahome    => '/opt/java',
-    version     => '6.3.7',
+    version     => '8.13.5',
   }
   class { 'jira::facts': }
 ```
@@ -149,11 +149,13 @@ The default file format of the JIRA install file, defaults to tar.gz
 
 ##### `$installdir`
 
-The directory to install to, defaults to '/opt/jira'
+The directory to install to, defaults to '/opt/jira'. Note that
+any parent directories must exist.
 
 ##### `$homedir`
 
-The default home directory of JIRA, defaults to '/home/jira'
+The default home directory of JIRA, defaults to '/home/jira'. Note that
+any parent directories must exist.
 
 ##### `$user`
 
@@ -574,14 +576,14 @@ Some more crowd.properties for SSO, see atlassian documentation for details
 
 ```puppet
     class { 'jira':
-      version                      => '6.0.1',
+      version                      => '8.13.5',
       installdir                   => '/opt/atlassian-jira',
       homedir                      => '/opt/atlassian-jira/jira-home',
       user                         => 'jira',
       group                        => 'jira',
       dbpassword                   => 'secret',
       dbserver                     => 'localhost',
-      javahome                     => '/opt/java/jdk1.7.0_21/',
+      javahome                     => '/usr/lib/jvm/jre-11-openjdk/',
       download_url                 => 'http://myserver/pub/development-tools/atlassian/',
       tomcat_additional_connectors => {
         # Define two additional connectors, listening on port 8081 and 8082
@@ -626,12 +628,9 @@ Some more crowd.properties for SSO, see atlassian documentation for details
 
 ### Hiera examples
 
-This example is used in production for 2000 users in an traditional enterprise
-environment. Your mileage may vary. The dbpassword can be stored using eyaml
-hiera extension.
-
 ```yaml
-jira::version:       '6.2.7'
+jira::version:       '8.13.5'
+# parent directories must exist
 jira::installdir:    '/opt/atlassian/atlassian-jira'
 jira::homedir:       '/opt/atlassian/application-data/jira-home'
 jira::user:          'jira'
@@ -650,7 +649,6 @@ jira::dbport:        '5439'
 jira::dbuser:        'jira'
 jira::jvm_xms:       '1G'
 jira::jvm_xmx:       '3G'
-jira::jvm_permgen:   '384m'
 jira::service_manage: false
 jira::env:
   - 'http_proxy=proxy.example.co.za:8080'
