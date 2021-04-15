@@ -34,6 +34,12 @@ class jira::install {
     }
   }
 
+  file { $jira::homedir:
+    ensure => 'directory',
+    owner  => $jira::user,
+    group  => $jira::group,
+  }
+
   if ! defined(File[$jira::installdir]) {
     file { $jira::installdir:
       ensure => 'directory',
@@ -42,30 +48,9 @@ class jira::install {
     }
   }
 
-  # Examples of product tarballs from Atlassian
-  # Core                - atlassian-jira-core-7.0.3.tar.gz
-  # Software (pre-7)    - atlassian-jira-6.4.12.tar.gz
-  # Software (7 to 7.1.8 ) - atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz
-  # Software (7.1.9 and up) - atlassian-jira-software-7.1.9.tar.gz
+  $file = "atlassian-${jira::product_name}-${jira::version}.tar.gz"
 
-  if (versioncmp($jira::version, '7.1.9') < 0) {
-    if ((versioncmp($jira::version, '7.0.0') < 0) or ($jira::product_name == 'jira-core')) {
-      $file = "atlassian-${jira::product_name}-${jira::version}.${jira::format}"
-    } else {
-      $file = "atlassian-${jira::product_name}-${jira::version}-jira-${jira::version}.${jira::format}"
-    }
-  } else {
-    $file = "atlassian-${jira::product_name}-${jira::version}.${jira::format}"
-  }
-
-  if ! defined(File[$jira::extractdir]) {
-    file { $jira::extractdir:
-      ensure => 'directory',
-      owner  => $jira::user,
-      group  => $jira::group,
-    }
-  }
-
+  # webappdir is defined in init.pp because other things depend on it.
   if ! defined(File[$jira::webappdir]) {
     file { $jira::webappdir:
       ensure => 'directory',
@@ -82,29 +67,22 @@ class jira::install {
     source          => "${jira::download_url}/${file}",
     creates         => "${jira::webappdir}/conf",
     cleanup         => true,
-    checksum_verify => $jira::checksum_verify,
+    checksum_verify => ($jira::checksum != undef),
     checksum_type   => 'md5',
     checksum        => $jira::checksum,
     user            => $jira::user,
     group           => $jira::group,
     proxy_server    => $jira::proxy_server,
     proxy_type      => $jira::proxy_type,
-    before          => File[$jira::homedir],
     require         => [
       File[$jira::installdir],
-      File[$jira::webappdir],
       User[$jira::user],
+      File[$jira::webappdir],
     ],
   }
 
-  file { $jira::homedir:
-    ensure => 'directory',
-    owner  => $jira::user,
-    group  => $jira::group,
-  }
-
-  -> exec { "chown_${jira::extractdir}":
-    command     => "/bin/chown -R ${jira::user}:${jira::group} ${jira::extractdir}",
+  -> exec { "chown_${jira::webappdir}":
+    command     => "/bin/chown -R ${jira::user}:${jira::group} ${jira::webappdir}",
     refreshonly => true,
     subscribe   => User[$jira::user],
   }

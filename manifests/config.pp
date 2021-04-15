@@ -101,15 +101,7 @@ class jira::config {
     }
   }
 
-  if $jira::tomcat_protocol_ssl {
-    $tomcat_protocol_ssl_real = $jira::tomcat_protocol_ssl
-  } else {
-    if versioncmp($jira::version, '7.3.0') >= 0 {
-      $tomcat_protocol_ssl_real = 'org.apache.coyote.http11.Http11NioProtocol'
-    } else {
-      $tomcat_protocol_ssl_real = 'org.apache.coyote.http11.Http11Protocol'
-    }
-  }
+  $tomcat_protocol_ssl_real = pick($jira::tomcat_protocol_ssl, 'org.apache.coyote.http11.Http11NioProtocol')
 
   $jira_properties = {
     'jira.websudo.is.disabled' => !$jira::enable_secure_admin_sessions,

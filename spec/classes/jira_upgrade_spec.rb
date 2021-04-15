@@ -14,7 +14,7 @@ describe 'jira' do
               { javahome: '/opt/java' }
             end
             let(:facts) do
-              facts.merge(jira_version: '6.3.4a')
+              facts.merge(jira_version: '8.0.0')
             end
 
             it { is_expected.to compile.with_all_deps }
@@ -28,7 +28,7 @@ describe 'jira' do
               }
             end
             let(:facts) do
-              facts.merge(jira_version: '6.3.4a')
+              facts.merge(jira_version: '8.0.0')
             end
 
             it { is_expected.to contain_exec('stop service please') }
