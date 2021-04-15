@@ -57,7 +57,7 @@ describe 'jira postgresql' do
   end
 
   describe command('wget -q --tries=24 --retry-connrefused --read-timeout=10 -O- localhost:8080') do
-    its(:stdout) { is_expected.to include('8.13.4') }
+    its(:stdout) { is_expected.to include('8.13.5') }
   end
 
   describe 'shutdown' do
