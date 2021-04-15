@@ -1,4 +1,4 @@
-#!<%= @ruby_bin %>
+#!<%= $jira::facts::ruby_bin %>
 # Facts:
 #   - jira_buildNumber
 #   - jira_version
@@ -13,7 +13,7 @@
 require 'json'
 require 'uri'
 begin
-  url = 'http://<%= @uri %>:<%= @port %><%= @contextpath %>/rest/api/2/serverInfo'
+  url = 'http://<%= $jira::facts::uri %>:<%= $jira::facts::port %><%= $jira::facts::contextpath %>/rest/api/2/serverInfo'
   info = URI.open(url).read
 rescue
   exit 0

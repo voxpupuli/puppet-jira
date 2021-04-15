@@ -44,7 +44,7 @@ class jira::facts (
 
   file { "${dir}/facts.d/jira_facts.rb":
     ensure  => $ensure,
-    content => template('jira/facts.rb.erb'),
+    content => epp('jira/facts.rb.epp'),
     mode    => '0755',
   }
 }

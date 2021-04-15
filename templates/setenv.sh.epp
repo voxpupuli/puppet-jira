@@ -1,23 +1,23 @@
 #
 # If the limit of files that Jira can open is too low, it will be set to this value.
 #
-MIN_NOFILES_LIMIT=<%= @jvm_nofiles_limit %>
+MIN_NOFILES_LIMIT=<%= $jira::jvm_nofiles_limit %>
 
 #
 # One way to set the JIRA HOME path is here via this variable.  Simply uncomment it and set a valid path like /jira/home.  You can of course set it outside in the command terminal.  That will also work.
 #
-JIRA_HOME="<%= @homedir %>"
+JIRA_HOME="<%= $jira::homedir %>"
 
 #
 #  Occasionally Atlassian Support may recommend that you set some specific JVM arguments.  You can use this variable below to do that.
 #
-<%- if @jvm_type == 'openjdk-11' -%>
-JVM_SUPPORT_RECOMMENDED_ARGS='-XX:-HeapDumpOnOutOfMemoryError <%= @jvm_optional %>'
-<%- elsif @jvm_type == 'oracle-jdk-1.8' -%>
-JVM_SUPPORT_RECOMMENDED_ARGS='-XX:-HeapDumpOnOutOfMemoryError <%= @jvm_optional %>'
-<%- elsif @jvm_type == 'custom' -%>
-JVM_SUPPORT_RECOMMENDED_ARGS='<%= @jvm_optional %>'
-<%- end -%>
+<%- if $jira::jvm_type == 'openjdk-11' { -%>
+JVM_SUPPORT_RECOMMENDED_ARGS='-XX:-HeapDumpOnOutOfMemoryError <%= $jira::jvm_optional %>'
+<%- } elsif $jira::jvm_type == 'oracle-jdk-1.8' { -%>
+JVM_SUPPORT_RECOMMENDED_ARGS='-XX:-HeapDumpOnOutOfMemoryError <%= $jira::jvm_optional %>'
+<%- } elsif $jira::jvm_type == 'custom' { -%>
+JVM_SUPPORT_RECOMMENDED_ARGS='<%= $jira::jvm_optional %>'
+<%- } -%>
 
 #
 #  You can use variable below to modify garbage collector settings.
@@ -25,50 +25,50 @@ JVM_SUPPORT_RECOMMENDED_ARGS='<%= @jvm_optional %>'
 #  For Java 11 and relatively small heaps we recommend: -XX:+UseParallelGC
 #  For Java 11 and larger heaps we recommend: -XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent
 #
-<%- if @jvm_type == 'openjdk-11' -%>
-JVM_GC_ARGS='-XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent <%= @jvm_gc_args %>'
-<%- elsif @jvm_type == 'oracle-jdk-1.8' -%>
-JVM_GC_ARGS='<%= @jvm_gc_args %>'
-<%- elsif @jvm_type == 'custom' -%>
-JVM_GC_ARGS='<%= @jvm_gc_args %>'
-<%- end -%>
+<%- if $jira::jvm_type == 'openjdk-11' { -%>
+JVM_GC_ARGS='-XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent <%= $jira::jvm_gc_args %>'
+<%- } elsif $jira::jvm_type == 'oracle-jdk-1.8' { -%>
+JVM_GC_ARGS='<%= $jira::jvm_gc_args %>'
+<%- } elsif $jira::jvm_type == 'custom' { -%>
+JVM_GC_ARGS='<%= $jira::jvm_gc_args %>'
+<%- } -%>
 
 #
 # The following 2 settings control the minimum and maximum given to the JIRA Java virtual machine.  In larger JIRA instances, the maximum amount will need to be increased.
 #
-JVM_MINIMUM_MEMORY='<%= @jvm_xms %>'
-JVM_MAXIMUM_MEMORY='<%= @jvm_xmx %>'
-JVM_PERMGEN_MEMORY='<%= @jvm_permgen %>'
+JVM_MINIMUM_MEMORY='<%= $jira::jvm_xms %>'
+JVM_MAXIMUM_MEMORY='<%= $jira::jvm_xmx %>'
+JVM_PERMGEN_MEMORY='<%= $jira::jvm_permgen %>'
 
 #
 # The following setting configures the size of JVM code cache.  A high value of reserved size allows Jira to work with more installed apps.
 #
-<%- if @jvm_type == 'openjdk-11' -%>
-JVM_CODE_CACHE_ARGS='-XX:InitialCodeCacheSize=32m -XX:ReservedCodeCacheSize=512m <%= @jvm_codecache_args %>'
-<%- elsif @jvm_type == 'oracle-jdk-1.8' -%>
-JVM_CODE_CACHE_ARGS='-XX:InitialCodeCacheSize=32m -XX:ReservedCodeCacheSize=512m <%= @jvm_codecache_args %>'
-<%- elsif @jvm_type == 'custom' -%>
-JVM_CODE_CACHE_ARGS='<%= @jvm_codecache_args %>'
-<%- end -%>
+<%- if $jira::jvm_type == 'openjdk-11' { -%>
+JVM_CODE_CACHE_ARGS='-XX:InitialCodeCacheSize=32m -XX:ReservedCodeCacheSize=512m <%= $jira::jvm_codecache_args %>'
+<%- } elsif $jira::jvm_type == 'oracle-jdk-1.8' { -%>
+JVM_CODE_CACHE_ARGS='-XX:InitialCodeCacheSize=32m -XX:ReservedCodeCacheSize=512m <%= $jira::jvm_codecache_args %>'
+<%- } elsif $jira::jvm_type == 'custom' { -%>
+JVM_CODE_CACHE_ARGS='<%= $jira::jvm_codecache_args %>'
+<%- } -%>
 
 #
 # The following are the required arguments for Jira.
 #
-<%- if scope.call_function('versioncmp', [@version, '8.11.0']) > 0 -%>
+<%- if versioncmp($jira::version, '8.11.0') > 0 { -%>
 JVM_REQUIRED_ARGS='-Djava.awt.headless=true -Datlassian.standalone=JIRA -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true -Dmail.mime.decodeparameters=true -Dorg.dom4j.factory=com.atlassian.core.xml.InterningDocumentFactory'
-<% else -%>
+<% } else { -%>
 JVM_REQUIRED_ARGS='-Djava.awt.headless=true -Datlassian.standalone=JIRA -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true -Dmail.mime.decodeparameters=true'
-<%- end -%>
+<%- } -%>
 
 
 
 # Uncomment this setting if you want to import data without notifications
 #
-<% if @disable_notifications -%>
+<%- if $jira::disable_notifications { -%>
 DISABLE_NOTIFICATIONS='-Datlassian.mail.senddisabled=true -Datlassian.mail.fetchdisabled=true -Datlassian.mail.popdisabled=true'
-<% else %>
+<% } else { %>
 #DISABLE_NOTIFICATIONS='-Datlassian.mail.senddisabled=true -Datlassian.mail.fetchdisabled=true -Datlassian.mail.popdisabled=true'
-<% end -%>
+<% } -%>
 
 
 #-----------------------------------------------------------------------------------
@@ -81,14 +81,14 @@ DISABLE_NOTIFICATIONS='-Datlassian.mail.senddisabled=true -Datlassian.mail.fetch
 # Prevents the JVM from suppressing stack traces if a given type of exception
 # occurs frequently, which could make it harder for support to diagnose a problem.
 #-----------------------------------------------------------------------------------
-<%- if @jvm_type == 'openjdk-11' -%>
-JVM_EXTRA_ARGS='<%= @jvm_extra_args_real %>'
+<%- if $jira::jvm_type == 'openjdk-11' { -%>
+JVM_EXTRA_ARGS='<%= $jira::config::jvm_extra_args_real %>'
 JVM_EXTRA_ARGS+='-XX:+ExplicitGCInvokesConcurrent -XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT'
-<%- elsif @jvm_type == 'oracle-jdk-1.8' -%>
-JVM_EXTRA_ARGS='-XX:+PrintGCDateStamps -XX:+ExplicitGCInvokesConcurrent -XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT <%= @jvm_extra_args_real %>'
-<%- elsif @jvm_type == 'custom' -%>
-JVM_EXTRA_ARGS='<%= @jvm_extra_args_real %>'
-<%- end -%>
+<%- } elsif $jira::jvm_type == 'oracle-jdk-1.8' { -%>
+JVM_EXTRA_ARGS='-XX:+PrintGCDateStamps -XX:+ExplicitGCInvokesConcurrent -XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT <%= $jira::config::jvm_extra_args_real %>'
+<%- } elsif $jira::jvm_type == 'custom' { -%>
+JVM_EXTRA_ARGS='<%= $jira::config::jvm_extra_args_real %>'
+<%- } -%>
 
 CURRENT_NOFILES_LIMIT=$( ulimit -Hn )
 ulimit -Sn "${CURRENT_NOFILES_LIMIT}"

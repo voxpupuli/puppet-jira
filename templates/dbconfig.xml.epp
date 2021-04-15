@@ -4,21 +4,21 @@
 <jira-database-config>
   <name>defaultDS</name>
   <delegator-name>default</delegator-name>
-  <database-type><%= $jira::dbtype_real %></database-type>
+  <database-type><%= $jira::config::dbtype_real %></database-type>
 <% if $jira::config::dbschema != undef { -%>
   <schema-name><%= $jira::config::dbschema %></schema-name>
 <% } -%>
   <jdbc-datasource>
-    <url><%= $jira::dburl_real %></url>
-    <driver-class><%= $jira::dbdriver_real %></driver-class>
+    <url><%= $jira::config::dburl_real %></url>
+    <driver-class><%= $jira::config::dbdriver_real %></driver-class>
     <username><%= $jira::dbuser %></username>
     <password><%= $jira::dbpassword %></password>
 <%# For most of these, Jira defaults are better... -%>
 <% if $jira::pool_min_size != undef { -%>
     <pool-min-size><%= $jira::pool_min_size %></pool-min-size>
 <% } -%>
-<% if $jira::pool_max_size_real != undef { -%>
-    <pool-max-size><%= $jira::pool_max_size_real %></pool-max-size>
+<% if $jira::config::pool_max_size_real != undef { -%>
+    <pool-max-size><%= $jira::config::pool_max_size_real %></pool-max-size>
 <% } -%>
 <% if $jira::pool_max_idle != undef { -%>
     <pool-max-idle><%= $jira::pool_max_idle %></pool-max-idle>
