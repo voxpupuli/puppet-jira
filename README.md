@@ -357,7 +357,7 @@ Defaults to `http://cdn.mysql.com/Downloads/Connector-J`
 
 ##### `$javahome`
 
-The JAVA_HOME directory, defaults to undef. This is a *required* parameter
+The `JAVA_HOME` directory, defaults to undef. This is a *required* parameter
 
 ##### `$jvm_xms`
 
@@ -369,18 +369,28 @@ defaults to '256m'
 Maximum memory allocation pool for a Java Virtual Machine.
 defaults to '1024m'
 
-##### `$jvm_permgen`
+##### `$jvm_type`
 
-Increase max permgen size for a Java Virtual Machine.
-defaults to '256m'
-
-##### `$jvm_optional`
-
-defaults to '-XX:-HeapDumpOnOutOfMemoryError'
+Choose your JVM type. Valid values are 'openjdk-11', 'oracle-jdk-1.8'
+This setting affects various defaults in setenv.sh if the options aren't defined
 
 ##### `$java_opts`
 
-defaults to ''
+defaults to ''. This sets `JVM_SUPPORT_RECOMMENDED_ARGS` in setenv.sh
+
+##### `$jvm_gc_args`
+
+This sets `JVM_GC_ARGS` in `setenv.sh`. Defaults to undef, meaning
+the module makes a choice based on `jvm_type`
+
+##### `$jvm_code_cache_args`
+
+This sets `JVM_CODE_CACHE_ARGS` in `setenv.sh`. Defaults to undef, meaning
+the module makes a choice based on `jvm_type`
+
+##### `$jvm_extra_args`
+This sets `JVM_EXTRA_ARGS` in `setenv.sh`. Defaults to undef, meaning
+the module makes a choice based on `jvm_type`
 
 ##### `$catalina_opts`
 

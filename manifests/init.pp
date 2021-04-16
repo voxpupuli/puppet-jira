@@ -87,11 +87,10 @@ class jira (
   Jira::Jvm_types $jvm_type                                         = 'openjdk-11',
   String $jvm_xms                                                   = '256m',
   String $jvm_xmx                                                   = '1024m',
-  String $jvm_permgen                                               = '256m',
-  Optional[String] $jvm_optional                                    = undef,
-  Optional[String] $jvm_extra_args                                  = undef,
+  Optional[String] $java_opts                                       = undef,
   Optional[String] $jvm_gc_args                                     = undef,
-  Optional[String] $jvm_codecache_args                              = undef,
+  Optional[String] $jvm_code_cache_args                             = undef,
+  Optional[String] $jvm_extra_args                                  = undef,
   Integer $jvm_nofiles_limit                                        = 16384,
   String $catalina_opts                                             = '',
   # Misc Settings
@@ -160,8 +159,8 @@ class jira (
   Integer $session_validationinterval                               = 5,
   String $session_lastvalidation                                    = 'session.lastvalidation',
   # Deprecated parameters
+  Optional[String] $jvm_permgen                                     = undef,
   Optional[Integer[0]] $poolsize                                    = undef,
-  Optional[String] $java_opts                                       = undef,
   Optional[Boolean] $enable_connection_pooling                      = undef,
 ) inherits jira::params {
   if versioncmp($jira::version, '8.0.0') < 0 {
@@ -170,6 +169,10 @@ class jira (
 
   if $datacenter and !$shared_homedir {
     fail("\$shared_homedir must be set when \$datacenter is true")
+  }
+
+  if $jvm_permgen {
+    fail('jira::jvm_permgen', 'jira::jvm_permgen has been removed and no longer does anything. Configuring it hasn\'t been supported since JDK 8')
   }
 
   if $enable_connection_pooling != undef {

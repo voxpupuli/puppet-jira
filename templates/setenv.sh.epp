@@ -1,3 +1,5 @@
+<%# MAINTAINERS: try to keep diff with the original file to a minimum #-%>
+<%# Don't include shell style fixes unless they fix real bugs         #-%>
 #
 # If the limit of files that Jira can open is too low, it will be set to this value.
 #
@@ -11,13 +13,8 @@ JIRA_HOME="<%= $jira::homedir %>"
 #
 #  Occasionally Atlassian Support may recommend that you set some specific JVM arguments.  You can use this variable below to do that.
 #
-<%- if $jira::jvm_type == 'openjdk-11' { -%>
-JVM_SUPPORT_RECOMMENDED_ARGS='-XX:-HeapDumpOnOutOfMemoryError <%= $jira::jvm_optional %>'
-<%- } elsif $jira::jvm_type == 'oracle-jdk-1.8' { -%>
-JVM_SUPPORT_RECOMMENDED_ARGS='-XX:-HeapDumpOnOutOfMemoryError <%= $jira::jvm_optional %>'
-<%- } elsif $jira::jvm_type == 'custom' { -%>
-JVM_SUPPORT_RECOMMENDED_ARGS='<%= $jira::jvm_optional %>'
-<%- } -%>
+# Puppet: $jira::jvm_type is <%= $jira::jvm_type %>
+JVM_SUPPORT_RECOMMENDED_ARGS='<%= $jira::java_opts %>'
 
 #
 #  You can use variable below to modify garbage collector settings.
@@ -25,31 +22,18 @@ JVM_SUPPORT_RECOMMENDED_ARGS='<%= $jira::jvm_optional %>'
 #  For Java 11 and relatively small heaps we recommend: -XX:+UseParallelGC
 #  For Java 11 and larger heaps we recommend: -XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent
 #
-<%- if $jira::jvm_type == 'openjdk-11' { -%>
-JVM_GC_ARGS='-XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent <%= $jira::jvm_gc_args %>'
-<%- } elsif $jira::jvm_type == 'oracle-jdk-1.8' { -%>
-JVM_GC_ARGS='<%= $jira::jvm_gc_args %>'
-<%- } elsif $jira::jvm_type == 'custom' { -%>
-JVM_GC_ARGS='<%= $jira::jvm_gc_args %>'
-<%- } -%>
+JVM_GC_ARGS='<%= pick_default($jira::jvm_gc_args, $jira::config::jvm_gc_args) %>'
 
 #
 # The following 2 settings control the minimum and maximum given to the JIRA Java virtual machine.  In larger JIRA instances, the maximum amount will need to be increased.
 #
 JVM_MINIMUM_MEMORY='<%= $jira::jvm_xms %>'
 JVM_MAXIMUM_MEMORY='<%= $jira::jvm_xmx %>'
-JVM_PERMGEN_MEMORY='<%= $jira::jvm_permgen %>'
 
 #
 # The following setting configures the size of JVM code cache.  A high value of reserved size allows Jira to work with more installed apps.
 #
-<%- if $jira::jvm_type == 'openjdk-11' { -%>
-JVM_CODE_CACHE_ARGS='-XX:InitialCodeCacheSize=32m -XX:ReservedCodeCacheSize=512m <%= $jira::jvm_codecache_args %>'
-<%- } elsif $jira::jvm_type == 'oracle-jdk-1.8' { -%>
-JVM_CODE_CACHE_ARGS='-XX:InitialCodeCacheSize=32m -XX:ReservedCodeCacheSize=512m <%= $jira::jvm_codecache_args %>'
-<%- } elsif $jira::jvm_type == 'custom' { -%>
-JVM_CODE_CACHE_ARGS='<%= $jira::jvm_codecache_args %>'
-<%- } -%>
+JVM_CODE_CACHE_ARGS='<%= pick_default($jira::jvm_code_cache_args, $jira::config::jvm_code_cache_args) %>'
 
 #
 # The following are the required arguments for Jira.
@@ -65,9 +49,9 @@ JVM_REQUIRED_ARGS='-Djava.awt.headless=true -Datlassian.standalone=JIRA -Dorg.ap
 # Uncomment this setting if you want to import data without notifications
 #
 <%- if $jira::disable_notifications { -%>
-DISABLE_NOTIFICATIONS='-Datlassian.mail.senddisabled=true -Datlassian.mail.fetchdisabled=true -Datlassian.mail.popdisabled=true'
+DISABLE_NOTIFICATIONS=" -Datlassian.mail.senddisabled=true -Datlassian.mail.fetchdisabled=true -Datlassian.mail.popdisabled=true"
 <% } else { %>
-#DISABLE_NOTIFICATIONS='-Datlassian.mail.senddisabled=true -Datlassian.mail.fetchdisabled=true -Datlassian.mail.popdisabled=true'
+#DISABLE_NOTIFICATIONS=" -Datlassian.mail.senddisabled=true -Datlassian.mail.fetchdisabled=true -Datlassian.mail.popdisabled=true"
 <% } -%>
 
 
@@ -81,49 +65,29 @@ DISABLE_NOTIFICATIONS='-Datlassian.mail.senddisabled=true -Datlassian.mail.fetch
 # Prevents the JVM from suppressing stack traces if a given type of exception
 # occurs frequently, which could make it harder for support to diagnose a problem.
 #-----------------------------------------------------------------------------------
-<%- if $jira::jvm_type == 'openjdk-11' { -%>
-JVM_EXTRA_ARGS='<%= $jira::config::jvm_extra_args_real %>'
-JVM_EXTRA_ARGS+='-XX:+ExplicitGCInvokesConcurrent -XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT'
-<%- } elsif $jira::jvm_type == 'oracle-jdk-1.8' { -%>
-JVM_EXTRA_ARGS='-XX:+PrintGCDateStamps -XX:+ExplicitGCInvokesConcurrent -XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT <%= $jira::config::jvm_extra_args_real %>'
-<%- } elsif $jira::jvm_type == 'custom' { -%>
-JVM_EXTRA_ARGS='<%= $jira::config::jvm_extra_args_real %>'
-<%- } -%>
+JVM_EXTRA_ARGS='<%= pick_default($jira::jvm_extra_args, $jira::config::jvm_extra_args) %>'
 
 CURRENT_NOFILES_LIMIT=$( ulimit -Hn )
-ulimit -Sn "${CURRENT_NOFILES_LIMIT}"
+ulimit -Sn $CURRENT_NOFILES_LIMIT
 ulimit -n $(( CURRENT_NOFILES_LIMIT > MIN_NOFILES_LIMIT  ? CURRENT_NOFILES_LIMIT : MIN_NOFILES_LIMIT ))
 
-PRGDIR=$(dirname "$0")
+PRGDIR=`dirname "$0"`
 cat "${PRGDIR}"/jirabanner.txt
 
 JIRA_HOME_MINUSD=""
-if [ -n "${JIRA_HOME}" ]; then
-    echo "${JIRA_HOME}" | grep -q " "
+if [ "$JIRA_HOME" != "" ]; then
+    echo $JIRA_HOME | grep -q " "
     if [ $? -eq 0 ]; then
-        echo ""
-        echo "--------------------------------------------------------------------------------------------------------------------"
-        echo "   WARNING : You cannot have a JIRA_HOME environment variable set with spaces in it.  This variable is being ignored"
-        echo "--------------------------------------------------------------------------------------------------------------------"
+	    echo ""
+	    echo "--------------------------------------------------------------------------------------------------------------------"
+		echo "   WARNING : You cannot have a JIRA_HOME environment variable set with spaces in it.  This variable is being ignored"
+	    echo "--------------------------------------------------------------------------------------------------------------------"
     else
-        JIRA_HOME_MINUSD=-Djira.home="${JIRA_HOME}"
+		JIRA_HOME_MINUSD=-Djira.home=$JIRA_HOME
     fi
 fi
 
 JAVA_OPTS="-Xms${JVM_MINIMUM_MEMORY} -Xmx${JVM_MAXIMUM_MEMORY} ${JVM_CODE_CACHE_ARGS} ${JAVA_OPTS} ${JVM_REQUIRED_ARGS} ${DISABLE_NOTIFICATIONS} ${JVM_SUPPORT_RECOMMENDED_ARGS} ${JVM_EXTRA_ARGS} ${JIRA_HOME_MINUSD} ${START_JIRA_JAVA_OPTS}"
-
-# Perm Gen size needs to be increased if encountering OutOfMemoryError: PermGen problems. Specifying PermGen size is not valid on IBM JDKs
-JIRA_MAX_PERM_SIZE=${JVM_PERMGEN_MEMORY}
-if [ -f "${PRGDIR}/permgen.sh" ]; then
-    echo "Detecting JVM PermGen support..."
-    . "${PRGDIR}/permgen.sh"
-    if [ "${JAVA_PERMGEN_SUPPORTED}" = "true" ]; then
-        echo "PermGen switch is supported. Setting to ${JIRA_MAX_PERM_SIZE}"
-        JAVA_OPTS="-XX:MaxPermSize=${JIRA_MAX_PERM_SIZE} ${JAVA_OPTS}"
-    else
-        echo "PermGen switch is NOT supported and will NOT be set automatically."
-    fi
-fi
 
 export JAVA_OPTS
 
@@ -131,40 +95,40 @@ export JAVA_OPTS
 # !INSTALLER SET JAVA_HOME
 
 echo ""
-echo "If you encounter issues starting or stopping Jira, please see the Troubleshooting guide at https://docs.atlassian.com/jira/jadm-docs-0812/Troubleshooting+installation"
+echo "If you encounter issues starting or stopping Jira, please see the Troubleshooting guide at https://docs.atlassian.com/jira/jadm-docs-0813/Troubleshooting+installation"
 echo ""
-if [ -n "${JIRA_HOME_MINUSD}" ]; then
-    echo "Using JIRA_HOME:       ${JIRA_HOME}"
+if [ "$JIRA_HOME_MINUSD" != "" ]; then
+    echo "Using JIRA_HOME:       $JIRA_HOME"
 fi
 
 # set the location of the pid file
-if [ -z "${CATALINA_PID}" ] ; then
-    if [ -n "${CATALINA_HOME}" ] ; then
-        CATALINA_PID="${CATALINA_HOME}/work/catalina.pid"
-    elif [ -n "${CATALINA_HOME}" ] ; then
-        CATALINA_PID="${CATALINA_HOME}/work/catalina.pid"
+if [ -z "$CATALINA_PID" ] ; then
+    if [ -n "$CATALINA_BASE" ] ; then
+        CATALINA_PID="$CATALINA_BASE"/work/catalina.pid
+    elif [ -n "$CATALINA_HOME" ] ; then
+        CATALINA_PID="$CATALINA_HOME"/work/catalina.pid
     fi
 fi
 export CATALINA_PID
 
-if [ -z "${CATALINA_HOME}" ]; then
-  if [ -z "${CATALINA_HOME}" ]; then
-    LOGBASE=${PRGDIR}
+if [ -z "$CATALINA_BASE" ]; then
+  if [ -z "$CATALINA_HOME" ]; then
+    LOGBASE=$PRGDIR
     LOGTAIL=..
   else
-    LOGBASE=${CATALINA_HOME}
+    LOGBASE=$CATALINA_HOME
     LOGTAIL=.
   fi
 else
-  LOGBASE=${CATALINA_BASE}
+  LOGBASE=$CATALINA_BASE
   LOGTAIL=.
 fi
 
-PUSHED_DIR=$(pwd)
-cd ${LOGBASE}
-cd ${LOGTAIL}
-LOGBASEABS=$(pwd)
-cd ${PUSHED_DIR}
+PUSHED_DIR=`pwd`
+cd $LOGBASE
+cd $LOGTAIL
+LOGBASEABS=`pwd`
+cd $PUSHED_DIR
 
 echo ""
-echo "Server startup logs are located in ${LOGBASEABS}/logs/catalina.out"
+echo "Server startup logs are located in $LOGBASEABS/logs/catalina.out"
