@@ -33,9 +33,8 @@
 class jira (
 
   # Jira Settings
-  String $version                                                   = '8.13.4',
+  String $version                                                   = '8.13.5',
   String $product                                                   = 'jira',
-  String $format                                                    = 'tar.gz',
   Stdlib::Absolutepath $installdir                                  = '/opt/jira',
   Stdlib::Absolutepath $homedir                                     = '/home/jira',
   Boolean $manage_user                                              = true,
@@ -164,6 +163,10 @@ class jira (
   Optional[Integer[0]] $poolsize                                    = undef,
   Optional[Boolean] $enable_connection_pooling                      = undef,
 ) inherits jira::params {
+  if versioncmp($jira::version, '8.0.0') < 0 {
+    fail('JIRA versions older than 8.0.0 are no longer supported. Please use an older version of this module to upgrade first.')
+  }
+
   if $datacenter and !$shared_homedir {
     fail("\$shared_homedir must be set when \$datacenter is true")
   }
@@ -182,12 +185,15 @@ class jira (
     }
   }
 
-  # The default Jira product starting with version 7 is 'jira-software'
-  if ((versioncmp($version, '7.0.0') >= 0) and ($product == 'jira')) {
+  # The default Jira product starting with version 7 is 'jira-software',
+  # but some old configuration may explicitly specify 'jira'
+  if $product == 'jira' {
     $product_name = 'jira-software'
   } else {
     $product_name = $product
   }
+
+  $webappdir = "${installdir}/atlassian-${product_name}-${version}-standalone"
 
   if defined('$::jira_version') {
     # If the running version of JIRA is less than the expected version of JIRA
@@ -196,13 +202,6 @@ class jira (
       notify { 'Attempting to upgrade JIRA': }
       exec { $stop_jira: before => Class['jira::install'] }
     }
-  }
-
-  $extractdir = "${installdir}/atlassian-${product_name}-${version}-standalone"
-  if $format == zip {
-    $webappdir = "${extractdir}/atlassian-${product_name}-${version}-standalone"
-  } else {
-    $webappdir = $extractdir
   }
 
   if ! empty($ajp) {
@@ -220,13 +219,6 @@ class jira (
 
   if $javahome == undef {
     fail('You need to specify a value for javahome')
-  }
-
-  # Archive module checksum_verify = true; this verifies checksum if provided, doesn't if not.
-  if $checksum == undef {
-    $checksum_verify = false
-  } else {
-    $checksum_verify = true
   }
 
   contain jira::install

@@ -86,11 +86,11 @@ describe 'jira mysql' do
   end
 
   describe command('wget -q --tries=24 --retry-connrefused --no-check-certificate --read-timeout=10 -O- localhost:8081') do
-    its(:stdout) { is_expected.to include('8.13.4') }
+    its(:stdout) { is_expected.to include('8.13.5') }
   end
 
   describe command('wget -q --tries=24 --retry-connrefused --no-check-certificate --read-timeout=10 -O- https://localhost:8443') do
-    its(:stdout) { is_expected.to include('8.13.4') }
+    its(:stdout) { is_expected.to include('8.13.5') }
   end
 
   describe 'shutdown' do

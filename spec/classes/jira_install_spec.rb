@@ -17,9 +17,8 @@ describe 'jira' do
                 group:        'jira',
                 installdir:   '/opt/jira',
                 homedir:      '/home/jira',
-                format:       'tar.gz',
                 product:      'jira',
-                version:      '6.3.4a',
+                version:      '8.13.5',
                 download_url: 'https://product-downloads.atlassian.com/software/jira/downloads'
               }
             end
@@ -27,11 +26,11 @@ describe 'jira' do
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_group('jira') }
             it { is_expected.to contain_user('jira').with_shell('/bin/true') }
-            it 'deploys jira 6.3.4a from tar.gz' do
-              is_expected.to contain_archive('/tmp/atlassian-jira-6.3.4a.tar.gz').
-                with('extract_path'  => '/opt/jira/atlassian-jira-6.3.4a-standalone',
-                     'source'        => 'https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-6.3.4a.tar.gz',
-                     'creates'       => '/opt/jira/atlassian-jira-6.3.4a-standalone/conf',
+            it 'deploys jira 8.13.5 from tar.gz' do
+              is_expected.to contain_archive('/tmp/atlassian-jira-software-8.13.5.tar.gz').
+                with('extract_path'  => '/opt/jira/atlassian-jira-software-8.13.5-standalone',
+                     'source'        => 'https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-software-8.13.5.tar.gz',
+                     'creates'       => '/opt/jira/atlassian-jira-software-8.13.5-standalone/conf',
                      'user'          => 'jira',
                      'group'         => 'jira',
                      'checksum_type' => 'md5')
@@ -44,23 +43,23 @@ describe 'jira' do
             end
           end
 
-          context 'jira 7' do
+          context 'jira version 8.16.0' do
             context 'default product' do
               let(:params) do
                 {
                   javahome:     '/opt/java',
                   installdir:   '/opt/jira',
                   product:      'jira',
-                  version:      '7.0.4',
+                  version:      '8.16.0',
                   download_url: 'http://www.atlassian.com/software/jira/downloads/binary'
                 }
               end
 
-              it 'deploys jira 7.0.4 from tar.gz' do
-                is_expected.to contain_archive('/tmp/atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz').
-                  with('extract_path'  => '/opt/jira/atlassian-jira-software-7.0.4-standalone',
-                       'source'        => 'http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz',
-                       'creates'       => '/opt/jira/atlassian-jira-software-7.0.4-standalone/conf',
+              it 'deploys jira 8.16.0 from tar.gz' do
+                is_expected.to contain_archive('/tmp/atlassian-jira-software-8.16.0.tar.gz').
+                  with('extract_path'  => '/opt/jira/atlassian-jira-software-8.16.0-standalone',
+                       'source'        => 'http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.16.0.tar.gz',
+                       'creates'       => '/opt/jira/atlassian-jira-software-8.16.0-standalone/conf',
                        'user'          => 'jira',
                        'group'         => 'jira',
                        'checksum_type' => 'md5')
@@ -72,16 +71,16 @@ describe 'jira' do
                   javahome:     '/opt/java',
                   installdir:   '/opt/jira',
                   product:      'jira-core',
-                  version:      '7.0.4',
+                  version:      '8.1.0',
                   download_url: 'http://www.atlassian.com/software/jira/downloads/binary'
                 }
               end
 
-              it 'deploys jira 7.0.4 from tar.gz' do
-                is_expected.to contain_archive('/tmp/atlassian-jira-core-7.0.4.tar.gz').
-                  with('extract_path'  => '/opt/jira/atlassian-jira-core-7.0.4-standalone',
-                       'source'        => 'http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-7.0.4.tar.gz',
-                       'creates'       => '/opt/jira/atlassian-jira-core-7.0.4-standalone/conf',
+              it 'deploys jira 8.1.0 from tar.gz' do
+                is_expected.to contain_archive('/tmp/atlassian-jira-core-8.1.0.tar.gz').
+                  with('extract_path'  => '/opt/jira/atlassian-jira-core-8.1.0-standalone',
+                       'source'        => 'http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-8.1.0.tar.gz',
+                       'creates'       => '/opt/jira/atlassian-jira-core-8.1.0-standalone/conf',
                        'user'          => 'jira',
                        'group'         => 'jira',
                        'checksum_type' => 'md5')
@@ -114,8 +113,7 @@ group {'jira':}
             let(:params) do
               {
                 javahome:     '/opt/java',
-                version:      '6.1',
-                format:       'tar.gz',
+                version:      '8.5.0',
                 installdir:   '/opt/jira',
                 homedir:      '/random/homedir',
                 user:         'foo',
@@ -135,11 +133,11 @@ group {'jira':}
             end
             it { is_expected.to contain_group('bar') }
 
-            it 'deploys jira 6.1 from tar.gz' do
-              is_expected.to contain_archive('/tmp/atlassian-jira-6.1.tar.gz').
-                with('extract_path'  => '/opt/jira/atlassian-jira-6.1-standalone',
-                     'source'        => 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.1.tar.gz',
-                     'creates'       => '/opt/jira/atlassian-jira-6.1-standalone/conf',
+            it 'deploys jira 8.5.0 from tar.gz' do
+              is_expected.to contain_archive('/tmp/atlassian-jira-software-8.5.0.tar.gz').
+                with('extract_path'  => '/opt/jira/atlassian-jira-software-8.5.0-standalone',
+                     'source'        => 'https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-8.5.0.tar.gz',
+                     'creates'       => '/opt/jira/atlassian-jira-software-8.5.0-standalone/conf',
                      'user'          => 'foo',
                      'group'         => 'bar',
                      'checksum_type' => 'md5')
