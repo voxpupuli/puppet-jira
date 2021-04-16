@@ -83,6 +83,7 @@ class jira (
   Optional[Boolean] $pool_test_while_idle                           = undef,
   Optional[Boolean] $pool_test_on_borrow                            = undef,
   # JVM Settings
+  Optional[String] $java_package                                    = undef,
   Optional[Stdlib::AbsolutePath] $javahome                          = undef,
   Jira::Jvm_types $jvm_type                                         = 'openjdk-11',
   String $jvm_xms                                                   = '256m',
