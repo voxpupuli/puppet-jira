@@ -13,27 +13,27 @@ describe 'jira' do
             let(:params) do
               {
                 javahome: '/opt/java',
-                version: '6.3.4a',
+                version: '8.13.5',
                 enable_sso: true
               }
             end
 
             it { is_expected.to compile.with_all_deps }
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/atlassian-jira/WEB-INF/classes/seraph-config.xml') }
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/atlassian-jira/WEB-INF/classes/crowd.properties') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/atlassian-jira/WEB-INF/classes/seraph-config.xml') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/atlassian-jira/WEB-INF/classes/crowd.properties') }
           end
           context 'with param application_name set to appname' do
             let(:params) do
               {
                 javahome: '/opt/java',
-                version: '6.3.4a',
+                version: '8.13.5',
                 enable_sso: true,
                 application_name: 'appname'
               }
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/atlassian-jira/WEB-INF/classes/crowd.properties').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/atlassian-jira/WEB-INF/classes/crowd.properties').
                 with_content(%r{application.name                        appname})
             end
           end
@@ -41,7 +41,7 @@ describe 'jira' do
             let(:params) do
               {
                 javahome: '/opt/java',
-                version: '6.3.4a',
+                version: '8.13.5',
                 enable_sso: true,
                 application_name: 'app',
                 application_password: 'password',
@@ -51,9 +51,9 @@ describe 'jira' do
               }
             end
 
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/atlassian-jira/WEB-INF/classes/seraph-config.xml') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/atlassian-jira/WEB-INF/classes/seraph-config.xml') }
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/atlassian-jira/WEB-INF/classes/crowd.properties').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/atlassian-jira/WEB-INF/classes/crowd.properties').
                 with_content(%r{application.name                        app}).
                 with_content(%r{application.password                    password}).
                 with_content(%r{application.login.url                   https://login.url/}).
