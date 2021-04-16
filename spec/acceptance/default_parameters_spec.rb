@@ -3,8 +3,14 @@ require 'spec_helper_acceptance'
 describe 'jira postgresql' do
   it 'installs with defaults' do
     pp = <<-EOS
-      class { 'java':
-        distribution => 'jre',
+      $java_package = $facts['os']['family'] ? {
+        'RedHat' => 'java-11-openjdk-headless',
+        'Debian' => 'openjdk-11-jre-headless',
+      }
+
+      $java_home = $facts['os']['family'] ? {
+        'RedHat' => '/usr/lib/jvm/jre-11-openjdk',
+        'Debian' => '/usr/lib/jvm/java-1.11.0-openjdk-amd64',
       }
 
       class { 'postgresql::server': }
@@ -15,8 +21,9 @@ describe 'jira postgresql' do
       }
 
       class { 'jira':
-        javahome => '/usr',
-        require  => [Class['java'], Postgresql::Server::Db['jira']],
+        java_package => $java_package,
+        javahome     => $java_home,
+        require      => Postgresql::Server::Db['jira'],
       }
 
       class { 'jira::facts': }

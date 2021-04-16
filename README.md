@@ -69,7 +69,7 @@ connector directory from mysql.com as per Atlassian's documented recommendations
 
 ### Beginning with JIRA
 
-This puppet module will automatically download the JIRA zip from Atlassian and
+This puppet module will automatically download the JIRA archive from Atlassian and
 extracts it into /opt/jira/atlassian-jira-$version. The default JIRA home is
 /home/jira.
 
@@ -78,8 +78,20 @@ If you would prefer to use Hiera then see jira.yaml file for available options.
 #### Basic example
 
 ```puppet
+  # Java 11 is managed externally and installed in /opt/java
   class { 'jira':
-    javahome    => '/opt/java',
+    javahome     => '/opt/java',
+  }
+```
+
+The module can install a package for you using your OS's package manager.
+Note that there's no smarts here. You need to set javahome correctly.
+
+```puppet
+  # this example works on RHEL
+  class { 'jira':
+    java_package  => 'java-11-openjdk-headless'
+    javahome      => '/usr/lib/jvm/jre-11-opendjk/',
   }
 ```
 
@@ -94,22 +106,13 @@ The jira::facts class is required for upgrades.
 
 ```puppet
   class { 'jira':
-    javahome    => '/opt/java',
-    version     => '8.13.5',
+    java_package  => 'java-11-openjdk-headless'
+    javahome      => '/usr/lib/jvm/jre-11-opendjk/',
+    version     => '8.16.0',
   }
   class { 'jira::facts': }
 ```
 
-##### Upgrades to the JIRA puppet Module
-
-puppet-archive is the default module for
-deploying the JIRA binaries.
-
-```puppet
-  class { 'jira':
-    javahome      => '/opt/java',
-  }
-```
 
 ## Reference
 
@@ -359,6 +362,11 @@ Defaults to `http://cdn.mysql.com/Downloads/Connector-J`
 
 The `JAVA_HOME` directory, defaults to undef. This is a *required* parameter
 
+##### `$java_package`
+
+If defined, the module will install this package before it runs the JIRA service.
+Defaults to undef.
+
 ##### `$jvm_xms`
 
 The initial memory allocation pool for a Java Virtual Machine.
@@ -593,6 +601,7 @@ Some more crowd.properties for SSO, see atlassian documentation for details
       group                        => 'jira',
       dbpassword                   => 'secret',
       dbserver                     => 'localhost',
+      java_package                 => 'java-11-openjdk-headless',
       javahome                     => '/usr/lib/jvm/jre-11-openjdk/',
       download_url                 => 'http://myserver/pub/development-tools/atlassian/',
       tomcat_additional_connectors => {

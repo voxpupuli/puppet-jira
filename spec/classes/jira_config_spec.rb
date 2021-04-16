@@ -35,6 +35,18 @@ describe 'jira' do
             it { is_expected.not_to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/check-java.sh') }
           end
 
+          context 'default params with java install' do
+            let(:params) do
+              {
+                javahome: '/usr/lib/jvm/jre-11-openjdk',
+                java_package: 'java-11-openjdk-headless',
+              }
+            end
+
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to contain_package('java-11-openjdk-headless') }
+          end
+
           context 'database settings' do
             let(:params) do
               {

@@ -48,6 +48,12 @@ class jira::install {
     }
   }
 
+  if $jira::java_package {
+    package { $jira::java_package:
+      ensure => 'present',
+    }
+  }
+
   $file = "atlassian-${jira::product_name}-${jira::version}.tar.gz"
 
   # webappdir is defined in init.pp because other things depend on it.

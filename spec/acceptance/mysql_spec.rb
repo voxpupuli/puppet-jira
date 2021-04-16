@@ -38,6 +38,7 @@ describe 'jira mysql' do
         installdir           => '/opt/atlassian-jira',
         homedir              => '/opt/jira-home',
         javahome             => '/usr',
+        jvm_type             => 'oracle-jdk-1.8',
         db                   => 'mysql',
         dbport               => 3306,
         dbdriver             => 'com.mysql.jdbc.Driver',
