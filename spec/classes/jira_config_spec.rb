@@ -89,6 +89,43 @@ describe 'jira' do
             end
           end
 
+          context 'oracle params' do
+            let(:params) do
+              {
+                version: '8.13.5',
+                javahome: '/opt/java',
+                db: 'oracle',
+                dbname: 'mydatabase',
+              }
+            end
+
+            it do
+              is_expected.to contain_file('/home/jira/dbconfig.xml').
+                with_content(%r{jdbc:oracle:thin:@localhost:1521:mydatabase}).
+                with_content(%r{<database-type>oracle10g}).
+                with_content(%r{<driver-class>oracle.jdbc.OracleDriver})
+            end
+          end
+
+          context 'oracle servicename' do
+            let(:params) do
+              {
+                version: '8.13.5',
+                javahome: '/opt/java',
+                db: 'oracle',
+                dbport: 1522,
+                dbserver: 'oracleserver',
+                oracle_use_sid: false,
+                dbname: 'mydatabase',
+              }
+            end
+
+            it do
+              is_expected.to contain_file('/home/jira/dbconfig.xml').
+                with_content(%r{jdbc:oracle:thin:@oracleserver:1522/mydatabase})
+            end
+          end
+
           context 'sqlserver params' do
             let(:params) do
               {

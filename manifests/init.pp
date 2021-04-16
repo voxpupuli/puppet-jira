@@ -62,6 +62,7 @@ class jira (
   Optional[String] $dbtype                                          = undef,
   Optional[String] $dburl                                           = undef,
   Optional[String] $connection_settings                             = undef,
+  Boolean $oracle_use_sid                                           = true,
   $dbschema                                                         = undef,
   # MySQL Connector Settings
   $mysql_connector_manage                                           = true,

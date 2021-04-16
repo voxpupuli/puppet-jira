@@ -94,10 +94,12 @@ class jira::config {
     $dburl_real = $jira::dburl
   }
   else {
+    # SIDs use :, service names use /
+    $oracle_separator = bool2str($jira::oracle_use_sid, ':', '/')
     $dburl_real = $jira::db ? {
       'postgresql' => "jdbc:${jira::db}://${jira::dbserver}:${dbport_real}/${jira::dbname}",
       'mysql'      => "jdbc:${jira::db}://${jira::dbserver}:${dbport_real}/${jira::dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB",
-      'oracle'     => "jdbc:${jira::db}:thin:@${jira::dbserver}:${dbport_real}:${jira::dbname}",
+      'oracle'     => "jdbc:${jira::db}:thin:@${jira::dbserver}:${dbport_real}${oracle_separator}${jira::dbname}",
       'sqlserver'  => "jdbc:jtds:${jira::db}://${jira::dbserver}:${dbport_real}/${jira::dbname}",
       'h2'         => "jdbc:h2:file:/${jira::homedir}/database/${jira::dbname}",
     }
