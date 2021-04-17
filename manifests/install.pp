@@ -43,8 +43,8 @@ class jira::install {
   if ! defined(File[$jira::installdir]) {
     file { $jira::installdir:
       ensure => 'directory',
-      owner  => $jira::user,
-      group  => $jira::group,
+      owner  => 'root',
+      group  => 'root',
     }
   }
 
@@ -88,7 +88,7 @@ class jira::install {
   }
 
   -> exec { "chown_${jira::webappdir}":
-    command     => "/bin/chown -R ${jira::user}:${jira::group} ${jira::webappdir}",
+    command     => shellquote('/bin/chown', '-R', "${jira::user}:${jira::group}", $jira::webappdir),
     refreshonly => true,
     subscribe   => User[$jira::user],
   }
