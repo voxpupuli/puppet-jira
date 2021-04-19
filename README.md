@@ -281,6 +281,11 @@ The default value is 'public' for PostgreSQL, and undef for others
 This parameter is not required nor do we recommend setting it. However it can be
 used to customize the database connection string.
 
+##### `$oracle_use_sid`
+
+Controls whether the module will use SID or service name syntax for the database URL.
+Only has an effect if `$dbtype` is oracle. Defaults to true
+
 ##### `$pool_max_size`
 
 Setting most of the advanced JDBC parameters is not required unless you want to tune JIRA
