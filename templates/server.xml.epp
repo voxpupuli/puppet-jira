@@ -25,6 +25,7 @@
     <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
 
     <Service name="Catalina">
+<% if !$jira::disable_default_connector { -%>
         <Connector port="<%= $jira::tomcat_port %>"
                    <%- if $jira::tomcat_address { -%>
                    address="<%= $jira::tomcat_address %>"
@@ -55,6 +56,7 @@
 <%   } -%>
 <% } -%>
         />
+<%- } -%>
 
 <% if $jira::tomcat_native_ssl { -%>
         <Connector
