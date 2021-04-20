@@ -29,7 +29,6 @@ describe 'jira' do
                 with_content(%r{jdbc:postgresql://localhost:5432/jira}).
                 with_content(%r{<schema-name>public</schema-name>}).
                 without_content(%r{<pool})
-
             end
             it { is_expected.not_to contain_file('/home/jira/cluster.properties') }
             it { is_expected.not_to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/check-java.sh') }
@@ -288,7 +287,7 @@ describe 'jira' do
               {
                 version: '8.13.5',
                 javahome: '/opt/java',
-                tomcat_connection_timeout: 25000
+                tomcat_connection_timeout: 25_000
               }
             end
 
