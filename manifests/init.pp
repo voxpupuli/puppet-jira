@@ -107,10 +107,12 @@ class jira (
   Boolean $service_enable                                           = true,
   $service_notify                                                   = undef,
   $service_subscribe                                                = undef,
-  # Command to stop jira in preparation to updgrade. This is configurable
+  # Command to stop jira in preparation to upgrade. This is configurable
   # incase the jira service is managed outside of puppet. eg: using the
   # puppetlabs-corosync module: 'crm resource stop jira && sleep 15'
-  String $stop_jira                                                 = 'service jira stop && sleep 15',
+  # Note: the command should return either 0 or  5 
+  # when the service doesn't exist
+  String $stop_jira                                                 = 'systemctl stop jira.service && sleep 15',
   # Whether to manage the 'check-java.sh' script, and where to retrieve
   # the script from.
   Boolean $script_check_java_manage                                 = false,
@@ -165,7 +167,7 @@ class jira (
   Optional[String] $jvm_permgen                                     = undef,
   Optional[Integer[0]] $poolsize                                    = undef,
   Optional[Boolean] $enable_connection_pooling                      = undef,
-) inherits jira::params {
+) {
   if versioncmp($jira::version, '8.0.0') < 0 {
     fail('JIRA versions older than 8.0.0 are no longer supported. Please use an older version of this module to upgrade first.')
   }
@@ -197,15 +199,6 @@ class jira (
   }
 
   $webappdir = "${installdir}/atlassian-${product_name}-${version}-standalone"
-
-  if defined('$::jira_version') {
-    # If the running version of JIRA is less than the expected version of JIRA
-    # Shut it down in preparation for upgrade.
-    if versioncmp($version, $::jira_version) > 0 {
-      notify { 'Attempting to upgrade JIRA': }
-      exec { $stop_jira: before => Class['jira::install'] }
-    }
-  }
 
   if ! empty($ajp) {
     if ! ('port' in $ajp) {
