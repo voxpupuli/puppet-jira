@@ -446,11 +446,12 @@ describe 'jira' do
             end
           end
 
-          context 'tomcat additional connectors' do
+          context 'tomcat additional connectors, without default' do
             let(:params) do
               {
                 version: '8.13.5',
                 javahome: '/opt/java',
+                tomcat_default_connector: false,
                 tomcat_additional_connectors: {
                   8081 => {
                     'URIEncoding' => 'UTF-8',
@@ -475,6 +476,7 @@ describe 'jira' do
 
             it do
               is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+                without_content(%r{<Connector port="8080"}).
                 with_content(%r{<Connector port="8081"}).
                 with_content(%r{connectionTimeout="20000"}).
                 with_content(%r{protocol="HTTP/1\.1"}).

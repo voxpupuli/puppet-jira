@@ -65,10 +65,10 @@ class jira (
   Boolean $oracle_use_sid                                           = true,
   $dbschema                                                         = undef,
   # MySQL Connector Settings
-  $mysql_connector_manage                                           = true,
-  $mysql_connector_version                                          = '5.1.34',
-  $mysql_connector_product                                          = 'mysql-connector-java',
-  $mysql_connector_format                                           = 'tar.gz',
+  Boolean $mysql_connector_manage                                   = true,
+  String $mysql_connector_version                                   = '8.0.23',
+  String $mysql_connector_product                                   = 'mysql-connector-java',
+  String $mysql_connector_format                                    = 'tar.gz',
   Stdlib::Absolutepath $mysql_connector_install                     = '/opt/MySQL-connector',
   Stdlib::HTTPUrl $mysql_connector_url                              = 'https://dev.mysql.com/get/Downloads/Connector-J',
   Optional[Integer[0]] $pool_min_size                               = undef,
@@ -143,6 +143,7 @@ class jira (
   Hash $proxy                                                       = {},
   # Options for the AJP connector
   Hash $ajp                                                         = {},
+  Boolean $tomcat_default_connector                                 = true,
   # Additional connectors in server.xml
   Jira::Tomcat_connectors $tomcat_additional_connectors             = {},
   # Context path (usualy used in combination with a reverse proxy)
