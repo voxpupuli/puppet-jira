@@ -451,7 +451,7 @@ describe 'jira' do
               {
                 version: '8.13.5',
                 javahome: '/opt/java',
-                disable_default_connector: true,
+                tomcat_default_connector: false,
                 tomcat_additional_connectors: {
                   8081 => {
                     'URIEncoding' => 'UTF-8',

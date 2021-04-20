@@ -25,7 +25,7 @@
     <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
 
     <Service name="Catalina">
-<% if !$jira::disable_default_connector { -%>
+<% if $jira::tomcat_default_connector { -%>
         <Connector port="<%= $jira::tomcat_port %>"
                    <%- if $jira::tomcat_address { -%>
                    address="<%= $jira::tomcat_address %>"
