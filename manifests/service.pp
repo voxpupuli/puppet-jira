@@ -13,37 +13,22 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 #-----------------------------------------------------------------------------
-class jira::service (
+class jira::service {
+  assert_private()
 
-  Boolean $service_manage = $jira::service_manage,
-  String $service_ensure  = $jira::service_ensure,
-  Boolean $service_enable = $jira::service_enable,
-  $service_notify         = $jira::service_notify,
-  $service_subscribe      = $jira::service_subscribe,
-  $service_file_location  = $jira::params::service_file_location,
-  $service_file_template  = $jira::params::service_file_template,
-  $service_file_mode      = $jira::params::service_file_mode,
-
-) inherits jira::params {
-  file { $service_file_location:
-    content => template($service_file_template),
-    mode    => $service_file_mode,
+  systemd::unit_file { 'jira.service':
+    ensure  => 'present',
+    content => epp('jira/jira.service.epp'),
   }
 
-  if $service_manage {
-    exec { 'refresh_systemd':
-      command     => 'systemctl daemon-reload',
-      refreshonly => true,
-      subscribe   => File[$service_file_location],
-      before      => Service['jira'],
-    }
+  if $jira::service_manage {
+    Systemd::Unit_file['jira.service'] ~> Service['jira']
 
     service { 'jira':
-      ensure    => $service_ensure,
-      enable    => $service_enable,
-      require   => File[$service_file_location],
-      notify    => $service_notify,
-      subscribe => $service_subscribe,
+      ensure    => $jira::service_ensure,
+      enable    => $jira::service_enable,
+      notify    => $jira::service_notify,
+      subscribe => $jira::service_subscribe,
     }
   }
 }

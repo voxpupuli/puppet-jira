@@ -1,0 +1,14 @@
+# THIS FILE IS MANAGED BY PUPPET
+[Unit]
+Description=Atlassian Systemd Jira Service
+After=syslog.target network.target
+
+[Service]
+Type=forking
+Environment="JAVA_HOME=<%= $jira::javahome %>"
+User=<%= $jira::user %>
+ExecStart=<%= $jira::webappdir %>/bin/start-jira.sh
+ExecStop=<%= $jira::webappdir %>/bin/stop-jira.sh
+
+[Install]
+WantedBy=multi-user.target

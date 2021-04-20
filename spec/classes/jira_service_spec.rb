@@ -19,10 +19,9 @@ describe 'jira' do
             it { is_expected.to compile.with_all_deps }
 
             it do
-              is_expected.to contain_file('/lib/systemd/system/jira.service').
+              is_expected.to contain_file('/etc/systemd/system/jira.service').
                 with_content(%r{Atlassian Systemd Jira Service})
             end
-            it { is_expected.to contain_exec('refresh_systemd') }
             it { is_expected.to contain_service('jira') }
           end
 
