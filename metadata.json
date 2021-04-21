@@ -1,6 +1,6 @@
 {
   "name": "puppet-jira",
-  "version": "5.0.0",
+  "version": "5.0.1-rc0",
   "author": "Vox Pupuli",
   "summary": "Module to install, configure and manage Atlassian Jira",
   "license": "Apache-2.0",
@@ -35,19 +35,22 @@
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "7", "8"
+        "7",
+        "8"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "7", "8"
+        "7",
+        "8"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "7", "8"
+        "7",
+        "8"
       ]
     },
     {
@@ -59,7 +62,8 @@
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "18.04", "20.04"
+        "18.04",
+        "20.04"
       ]
     }
   ]
