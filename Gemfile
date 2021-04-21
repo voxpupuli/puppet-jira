@@ -4,6 +4,7 @@ group :test do
   gem 'voxpupuli-test', '~> 2.1',  :require => false
   gem 'coveralls',                 :require => false
   gem 'simplecov-console',         :require => false
+  gem 'puppet-lint-param-docs',    :require => false
 end
 
 group :development do
