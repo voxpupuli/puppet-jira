@@ -48,8 +48,6 @@ describe 'jira mysql' do
         tomcat_keystore_file => '/tmp/jira.ks',
         require              => [Mysql::Db['jira'], Java_ks['jira']],
       }
-
-      class { 'jira::facts': }
     EOS
 
     apply_manifest(pp, catch_failures: true)

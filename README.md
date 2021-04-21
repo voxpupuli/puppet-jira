@@ -102,7 +102,6 @@ Note that there's no smarts here. You need to set javahome correctly.
 Jira can be upgraded by incrementing this version number. This will *STOP* the
 running instance of Jira and attempt to upgrade. You should take caution when
 doing large version upgrades. Always backup your database and your home directory.
-The jira::facts class is required for upgrades.
 
 ```puppet
   class { 'jira':
@@ -110,7 +109,6 @@ The jira::facts class is required for upgrades.
     javahome      => '/usr/lib/jvm/jre-11-opendjk/',
     version     => '8.16.0',
   }
-  class { 'jira::facts': }
 ```
 
 
@@ -121,9 +119,6 @@ The jira::facts class is required for upgrades.
 #### Public Classes
 
 * `jira`: Main class, manages the installation and configuration of JIRA
-* `jira::facts`: Enable external facts for running instance of JIRA. This class is
-  required to handle upgrades of jira. As it is an external fact, we chose not to
-  enable it by default.
 
 #### Private Classes
 
@@ -723,16 +718,9 @@ Reverse proxy can be configured as a hash as part of the JIRA resource
    },
 ```
 
-Enable external facts for puppet version. These facts are required to be
-enabled in order to upgrade to new JIRA versions smoothly.
-
-```puppet
-  class { 'jira::facts': }
-```
-
 ## Limitations
 
-* Puppet 5.5.8+
+* Puppet 6.1.0
 * Puppet Enterprise
 
 The puppetlabs repositories can be found at:

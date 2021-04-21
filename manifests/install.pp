@@ -28,7 +28,7 @@ class jira::install {
       password         => '*',
       password_min_age => '0',
       password_max_age => '99999',
-      managehome       => true,
+      managehome       => false,
       uid              => $jira::uid,
       gid              => $jira::gid,
     }
@@ -91,6 +91,21 @@ class jira::install {
     command     => shellquote('/bin/chown', '-R', "${jira::user}:${jira::group}", $jira::webappdir),
     refreshonly => true,
     subscribe   => User[$jira::user],
+  }
+
+  file { "${jira::installdir}/atlassian-${jira::product_name}-running":
+    ensure  => 'link',
+    target  => $jira::webappdir,
+    notify  => Exec['stop-jira-for-version-change'],
+    require => Archive["/tmp/${file}"],
+  }
+
+  exec { 'stop-jira-for-version-change':
+    path        => ['/bin/', '/sbin/', '/usr/bin/', '/usr/sbin/'],
+    command     => $jira::stop_jira,
+    refreshonly => true,
+    # 5 means the service doesn't exist; that's fine
+    returns     => [0, 5],
   }
 
   if $jira::db == 'mysql' and $jira::mysql_connector_manage {
