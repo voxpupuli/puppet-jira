@@ -1,4 +1,4 @@
-# Class to install the MySQL Java connector
+# @api private
 class jira::mysql_connector (
   $version      = $jira::mysql_connector_version,
   $product      = $jira::mysql_connector_product,

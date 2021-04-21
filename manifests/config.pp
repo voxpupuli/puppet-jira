@@ -13,6 +13,8 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 # -----------------------------------------------------------------------------
+
+# @api private
 class jira::config {
   # This class should be used from init.pp with a dependency on jira::install
   # and sending a refresh to jira::service

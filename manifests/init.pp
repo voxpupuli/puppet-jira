@@ -13,23 +13,253 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 # -----------------------------------------------------------------------------
-# == Class: jira
 #
-# This module is used to install Jira.
+# @author Bryce Johnson, Merritt Krakowitzer, Vox Pupuli
+# @param version
+#   The JIRA version to install or upgrade to. Changing this will trigger a restart
+# @param product
+#   Atlassian product to install.
+# @param installdir
+#   The directory in which JIRA software packages will be extracted
+# @param homedir
+#   The directory for JIRA's runtime data that persists between versions.
+# @param manage_user
+#   Whether to manage the service user
+# @param user
+#   User that the service will run as
+# @param group
+#   Group that the service will run as
+# @param uid
+#   The desired UID for the service user
+# @param gid
+#   The desired GID for the service group
+# @param shell
+#   The shell of the service user
+# @param enable_secure_admin_sessions
+#   Enables secure administrator sessions
+# @param jira_config_properties
+#   Allows configuring advanced JIRA properties as a key-value hash.
+#   See https://confluence.atlassian.com/adminjiraserver0813/advanced-jira-application-configuration-1027138631.html
+# @param datacenter
+#   Set to true to enable clustered mode (JIRA Datacenter)
+# @param shared_homedir
+#   Shared data directory for all JIRA instances in a cluster
+# @param ehcache_listener_host
+#   EHCache configuration for clustered mode
+# @param ehcache_listener_port
+#   EHCache configuration for clustered mode
+# @param ehcache_object_port
+#   EHCache configuration for clustered mode
+# @param db
+#   The kind of database to use.
+# @param dbname
+#   The database name to connect to
+# @param dbuser
+#   Database username
+# @param dbpassword
+#   Database password
+# @param dbserver
+#   Database host DNS name or IP address
+# @param dbport
+#   The database port. Default depends on `$db`
+# @param dbtype
+#   The database type. Default depends on `$db`
+# @param dbdriver
+#   The database driver class. Default depends on `$db`
+# @param dbschema
+#   The database schema, if applicable. Defaults to 'public' with PostgreSQL
+# @param dburl
+#   Set this if you wish to use a custom database URL
+# @param connection_settings
+#   Configures JDBC connection settings
+# @param oracle_use_sid
+#   Affects the database URL format for Oracle depending on whether you connect via a SID or a service name
+# @param mysql_connector_manage
+#   If true, the module will download and install the MySQL connector for JDBC
+# @param mysql_connector_version
+#   Version of the connector to install
+# @param mysql_connector_product
+#   Determines the filename for the download
+# @param mysql_connector_install
+#   Directory in which the connector will be installed
+# @param mysql_connector_format
+#   Format of the downloaded package
+# @param mysql_connector_url
+#   Source for the connector
+# @param pool_min_size
+#   Configures pool-min-size in dbconfig.xml
+# @param pool_max_size
+#   Configures pool-max-size in dbconfig.xml
+# @param pool_max_wait
+#   Configures pool-max-wait in dbconfig.xml
+# @param validation_query
+#   Configures validation_query in dbconfig.xml
+# @param validation_query_timeout
+#   Configures validation_query_timeout in dbconfig.xml
+# @param min_evictable_idle_time
+#   Configures min-evictable-idle-time-millis in dbconfig.xml
+# @param time_between_eviction_runs
+#   Configures time-between-eviction-runs-millis in dbconfig.xml
+# @param pool_max_idle
+#   Configures pool-max-idle in dbconfig.xml
+# @param pool_remove_abandoned
+#   Configures pool-remove-abandoned in dbconfig.xml
+# @param pool_remove_abandoned_timeout
+#   Configures pool-remove-abandoned-timeout in dbconfig.xml
+# @param pool_test_while_idle
+#   Configures pool-test-while-idle in dbconfig.xml
+# @param pool_test_on_borrow
+#   Configures pool-test-on-borrow in dbconfig.xml
+# @param java_package
+#   If defined, the module will install this package before installing JIRA.
+# @param javahome
+#   The location of an installed JVM. Must be set even if you specify java_package
+# @param jvm_type
+#   The type of JVM to use. Affects some defaults for the arguments below
+# @param jvm_xms
+#   Java -Xms parameter
+# @param jvm_xmx
+#   Java -Xmx parameter
+# @param java_opts
+#   Configures JVM_SUPPORT_RECOMMENDED_ARGS in setenv.sh. This is the preferred option to override.
+# @param jvm_gc_args
+#   Configures JVM_GC_ARGS in setenv.sh
+# @param jvm_code_cache_args
+#   Configures JVM_CODE_CACHE_ARGS in setenv.sh
+# @param jvm_extra_args
+#   Configures JVM_EXTRA_ARGS in setenv.sh
+# @param jvm_nofiles_limit
+#   Set the limit for open files
+# @param catalina_opts
+#   Does nothing :-)
+# @param download_url
+#   Base URL for downloading Atlassian software
+# @param checksum
+#   Optional checksum to verify the downloaded package
+# @param disable_notifications
+#   Configures JIRA to disable e-mail handlers
+# @param proxy_server
+#   Configures the proxy server to use for downloads
+# @param proxy_type
+#   Configures the proxy type
+# @param service_manage
+#   Whether to manage the jira service
+# @param service_ensure
+#   Service state to ensure
+# @param service_enable
+#   Whether to enable the service on boot
+# @param service_notify
+#   Service notify parameter
+# @param service_subscribe
+#   Service subscribe parameter
+# @param stop_jira
+#   The command used to stop jira prior to upgrades. You can override this if you use an external too l to manage the jira service. Must return either 0 or 5 for success
+# @param script_check_java_manage
+#   undocumented
+# @param script_check_java_template
+#   undocumented
+# @param tomcat_address
+#   Tomcat bind address
+# @param tomcat_port
+#   Tomcat bind port
+# @param tomcat_shutdown_port
+#   Tomcat shutdown command port
+# @param tomcat_max_http_header_size
+#   Tomcat connector setting
+# @param tomcat_min_spare_threads
+#   Tomcat connector setting
+# @param tomcat_connection_timeout
+#   Tomcat connector setting
+# @param tomcat_enable_lookups
+#   Tomcat connector setting
+# @param tomcat_native_ssl
+#   Enables a native SSL connector
+# @param tomcat_https_port
+#   Tomcat port for the native SSL connector
+# @param tomcat_redirect_https_port
+#   Specify which port to redirect internally when using port redirection from 80 to 8080 and
+#   from 443 to 8443 or with proxy server in front, defaults to $tomcat_https_port. To be used
+#   with tomcat_native_ssl.
+# @param tomcat_protocol
+#   Tomcat connector setting
+# @param tomcat_protocol_ssl
+#   Tomcat connector setting
+# @param tomcat_use_body_encoding_for_uri
+#   Tomcat connector setting
+# @param tomcat_disable_upload_timeout
+#   Tomcat connector setting
+# @param tomcat_key_alias
+#   Key alias in the keystore for the SSL connector
+# @param tomcat_keystore_file
+#   Path to a Java keystore for the SSL connector
+# @param tomcat_keystore_pass
+#   Keystore passphrase
+# @param tomcat_keystore_type
+#   Keystore type
+# @param tomcat_accesslog_format
+#   Format string for Tomcat access log
+# @param tomcat_accesslog_enable_xforwarded_for
+#   Configures tomcat to respect X-Forwarded-For and X-Forwarded-By headers
+#   If a proxy operates before JIRA, the access logs will only contain the IP addresses of the proxy
+#   instead of the address of the user. With `X-Forwarded-For` the proxy can forward the users IP
+#   address to the JIRA application server so that it can be logged correctly.
+# @param tomcat_max_threads
+#   Tomcat connector setting
+# @param tomcat_accept_count
+#   Tomcat connector setting
+# @param proxy
+#   Hash of additional settings to configure on the connectors.
+#   The confusing naming is retained for backwards compatibility
+# @param ajp
+#   Properties for an AJP connector
+# @param tomcat_default_connector
+#   If set to false, the default connector will be omitted
+# @param tomcat_additional_connectors
+#   Well-formed, complex Hash where each key represents a port number and the key's
+#   value is a hash whose key/value pairs represent the attributes and their values
+#   that define the connector's behaviour. Default is `{}`.
 #
-# See README.md for more details
+#   Use this parameter to specify arbitrary, additional connectors with arbitrary
+#   attributes. There are no defaults here, so you must take care to specify all
+#   attributes a connector requires to work in Jira. See below for examples.
 #
-# === Authors
-#
-# Bryce Johnson
-# Merritt Krakowitzer
-#
-# === Copyright
-#
-# Copyright (c) 2012 Bryce Johnson
-#
-# Published under the Apache License, Version 2.0
-#
+#   This is useful if you need to access your Jira instance directly through an
+#   additional HTTP port, e.g. one that is not configured for reverse proxy use.
+#   Atlassian describes use cases for this in
+#   https://confluence.atlassian.com/kb/how-to-create-an-unproxied-application-link-719095740.html
+#   and
+#   https://confluence.atlassian.com/kb/how-to-bypass-a-reverse-proxy-or-ssl-in-application-links-719095724.html
+# @param contextpath
+#   Tomcat context path for the web service
+# @param resources
+#   undocumented
+# @param enable_sso
+#   Enable single sign-on via Crowd
+# @param application_name
+#   Crowd application name
+# @param application_password
+#   Crowd application password
+# @param application_login_url
+#   Crowd application login URL
+# @param crowd_server_url
+#   Crowd server URL
+# @param crowd_base_url
+#   Crowd base URL
+# @param session_isauthenticated
+#   undocumented SSO parameter
+# @param session_tokenkey
+#   undocumented SSO parameter
+# @param session_validationinterval
+#   undocumented SSO parameter
+# @param session_lastvalidation
+#   undocumented SSO parameter
+# @param jvm_permgen
+#   Deprecated. Exists to notify users that they're trying to configure a parameter that has no effect
+# @param poolsize
+#   Deprecated alias for `$pool_max_size`.
+# @param enable_connection_pooling
+#   Deprecated. Has no effect.
+# @summary Downloads and installs Atlassian JIRA
 class jira (
 
   # Jira Settings
