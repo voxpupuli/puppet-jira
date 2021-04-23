@@ -28,7 +28,17 @@ describe 'jira' do
               is_expected.to contain_file('/home/jira/dbconfig.xml').
                 with_content(%r{jdbc:postgresql://localhost:5432/jira}).
                 with_content(%r{<schema-name>public</schema-name>}).
-                without_content(%r{<pool})
+                with_content(%r{<pool-max-size>20}).
+                with_content(%r{<pool-min-size>20}).
+                with_content(%r{<pool-max-wait>30000}).
+                with_content(%r{<pool-max-idle>20}).
+                with_content(%r{<pool-remove-abandoned>true}).
+                with_content(%r{<pool-remove-abandoned-timeout>300}).
+                with_content(%r{<min-evictable-idle-time-millis>60000}).
+                with_content(%r{<time-between-eviction-runs-millis>300000}).
+                with_content(%r{<pool-test-while-idle>true}).
+                with_content(%r{<pool-test-on-borrow>false}).
+                with_content(%r{<validation-query>select version\(\);})
             end
             it { is_expected.not_to contain_file('/home/jira/cluster.properties') }
             it { is_expected.not_to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/check-java.sh') }
@@ -46,15 +56,33 @@ describe 'jira' do
             it { is_expected.to contain_package('java-11-openjdk-headless') }
           end
 
+          context 'default params with java install and mysql' do
+            let(:params) do
+              {
+                db: 'mysql',
+                javahome: '/usr/lib/jvm/jre-11-openjdk',
+                java_package: 'java-11-openjdk-headless',
+              }
+            end
+
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to contain_package('java-11-openjdk-headless') }
+            it do
+              is_expected.to contain_file('/home/jira/dbconfig.xml').
+                with_content(%r{<validation-query>select 1</validation-query>}).
+                with_content(%r{<validation-query-timeout>3</validation-query-timeout>})
+            end
+          end
+
           context 'database settings' do
             let(:params) do
               {
                 version: '8.13.5',
                 javahome: '/opt/java',
                 connection_settings: 'TEST-SETTING;',
-                pool_max_size: 20,
+                pool_max_size: 200,
                 pool_min_size: 10,
-                validation_query: 'SELECT version();',
+                validation_query: 'SELECT myfunction();',
               }
             end
 
@@ -64,9 +92,9 @@ describe 'jira' do
             it do
               is_expected.to contain_file('/home/jira/dbconfig.xml').
                 with_content(%r{<connection-settings>TEST-SETTING;</connection-settings>}).
-                with_content(%r{<pool-max-size>20</pool-max-size>}).
+                with_content(%r{<pool-max-size>200</pool-max-size>}).
                 with_content(%r{<pool-min-size>10</pool-min-size>}).
-                with_content(%r{<validation-query>SELECT version\(\);</validation-query>})
+                with_content(%r{<validation-query>SELECT myfunction\(\);</validation-query>})
             end
           end
 
