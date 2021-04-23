@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v5.0.1](https://github.com/voxpupuli/puppet-jira/tree/v5.0.1) (2021-04-23)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v5.0.0...v5.0.1)
+
+**Fixed bugs:**
+
+- Explicitly configure dbconfig.xml parameters again to stop JIRA's healthcheck from complaining. This restores the behaviour prior to 5.0.0 [\#375](https://github.com/voxpupuli/puppet-jira/pull/375) ([oranenj](https://github.com/oranenj))
+
 ## [v5.0.0](https://github.com/voxpupuli/puppet-jira/tree/v5.0.0) (2021-04-21)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v4.0.1...v5.0.0)
