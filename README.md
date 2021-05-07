@@ -51,6 +51,12 @@ Puppet.
 * Whilst not required, for production use we recommend using nginx/apache as a
   reverse proxy to JIRA. We suggest using the puppet/nginx puppet module.
 
+* On RHEL 8 and variants, you may experience SELinux denials if you use a custom
+  installation directory that is not under `/opt`. To fix this, add an fcontext
+  equivalence between `/opt` and your desired directory:
+  `semanage fcontext -a /apps/jira -e /opt`
+  and run `restorecon`.
+
 ### What JIRA affects
 
 If installing to an existing JIRA instance, it is your responsibility to backup
@@ -249,20 +255,18 @@ Reverse proxy can be configured as a hash as part of the JIRA resource
 The puppetlabs repositories can be found at:
 <http://yum.puppetlabs.com/> and <http://apt.puppetlabs.com/>
 
-* RedHat 7
-* CentOS 7
-* Scientific 7
-* Oracle Linux 7
-* Ubuntu 18.04
+* RedHat 7, 8 or compatible (CentOS, Oracle Linux, etc)
+* Ubuntu 18.04, 20.04
 
 * Jira 8.x
 
 * PostgreSQL
 * MySQL
-* Oracle 11G with Oracle 11.2.x drivers
-* Microsoft SQL Server 2005/2008/2012 with JTDS driver (included in non-WAR version)
 
-We plan to support other Linux distributions and possibly Windows in the near future.
+The databases below should work, but are not tested. YMMV.
+
+* Oracle
+* Microsoft SQL Server with JTDS driver (included in non-WAR version)
 
 ## Development
 
@@ -282,7 +286,7 @@ bundle install && bundle exec rake spec
 to get results.
 
 ```
-ruby-1.9.3-p484/bin/ruby -S rspec spec/classes/jira_install_spec.rb --color
+ruby -S rspec spec/classes/jira_install_spec.rb --color
 .
 
 Finished in 0.38159 seconds
