@@ -40,13 +40,15 @@ class jira::install {
     ensure => 'directory',
     owner  => $jira::user,
     group  => $jira::group,
+    mode   => $jira::homedir_mode,
   }
 
   if ! defined(File[$jira::installdir]) {
     file { $jira::installdir:
       ensure => 'directory',
-      owner  => 'root',
-      group  => 'root',
+      owner  => $jira::installdir_owner,
+      group  => $jira::installdir_group,
+      mode   => $jira::installdir_mode,
     }
   }
 

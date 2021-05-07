@@ -29,6 +29,14 @@
 #   User that the service will run as
 # @param group
 #   Group that the service will run as
+# @param installdir_owner
+#   The owner of the installation directory.
+# @param installdir_group
+#   The group of the installation directory.
+# @param installdir_mode
+#   The permissions of the installation directory. Note that the JIRA service user must have at least execute permission on the directory.
+# @param homedir_mode
+#   The permissions of the service user's home directory, where JIRA's data will reside
 # @param uid
 #   The desired UID for the service user
 # @param gid
@@ -270,6 +278,10 @@ class jira (
   Boolean $manage_user                                              = true,
   String $user                                                      = 'jira',
   String $group                                                     = 'jira',
+  String[1] $installdir_owner                                       = 'root',
+  String[1] $installdir_group                                       = 'root',
+  Stdlib::Filemode $installdir_mode                                 = '0755',
+  Optional[Stdlib::Filemode] $homedir_mode                          = undef,
   Optional[Integer[0]] $uid                                         = undef,
   Optional[Integer[0]] $gid                                         = undef,
   Stdlib::Absolutepath $shell                                       = '/bin/true',
@@ -293,7 +305,7 @@ class jira (
   Optional[String] $dburl                                           = undef,
   Optional[String] $connection_settings                             = undef,
   Boolean $oracle_use_sid                                           = true,
-  $dbschema                                                         = undef,
+  Optional[String[1]] $dbschema                                     = undef,
   # MySQL Connector Settings
   Boolean $mysql_connector_manage                                   = true,
   String $mysql_connector_version                                   = '8.0.23',
