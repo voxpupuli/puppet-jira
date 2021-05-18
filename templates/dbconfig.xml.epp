@@ -51,7 +51,7 @@
     <time-between-eviction-runs-millis><%= $jira::config::time_between_eviction_runs %></time-between-eviction-runs-millis>
 <% } -%>
 <% if $jira::config::connection_settings { -%>
-    <connection-settings><%= $jira::config::connection_settings %></connection-settings>
+    <connection-properties><%= $jira::config::connection_settings %></connection-properties>
 <% } -%>
   </jdbc-datasource>
 </jira-database-config>

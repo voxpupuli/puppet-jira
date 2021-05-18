@@ -38,7 +38,8 @@ describe 'jira' do
                 with_content(%r{<time-between-eviction-runs-millis>300000}).
                 with_content(%r{<pool-test-while-idle>true}).
                 with_content(%r{<pool-test-on-borrow>false}).
-                with_content(%r{<validation-query>select version\(\);})
+                with_content(%r{<validation-query>select version\(\);}).
+                with_content(%r{<connection-properties>tcpKeepAlive=true;socketTimeout=240})
             end
             it { is_expected.not_to contain_file('/home/jira/cluster.properties') }
             it { is_expected.not_to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/check-java.sh') }
@@ -70,7 +71,8 @@ describe 'jira' do
             it do
               is_expected.to contain_file('/home/jira/dbconfig.xml').
                 with_content(%r{<validation-query>select 1</validation-query>}).
-                with_content(%r{<validation-query-timeout>3</validation-query-timeout>})
+                with_content(%r{<validation-query-timeout>3</validation-query-timeout>}).
+                without_content(%r{<connection-properties>})
             end
           end
 
@@ -91,7 +93,7 @@ describe 'jira' do
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml') }
             it do
               is_expected.to contain_file('/home/jira/dbconfig.xml').
-                with_content(%r{<connection-settings>TEST-SETTING;</connection-settings>}).
+                with_content(%r{<connection-properties>TEST-SETTING;</connection-properties>}).
                 with_content(%r{<pool-max-size>200</pool-max-size>}).
                 with_content(%r{<pool-min-size>10</pool-min-size>}).
                 with_content(%r{<validation-query>SELECT myfunction\(\);</validation-query>})
