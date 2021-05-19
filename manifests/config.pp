@@ -115,8 +115,13 @@ class jira::config {
   $pool_test_while_idle = pick($jira::pool_test_while_idle, true)
   $pool_test_on_borrow = pick($jira::pool_test_on_borrow, false)
 
-  # This is just for consistency
-  $connection_settings = $jira::connection_settings
+  # JIRA will complain if these aren't set for PostgreSQL (will work fine though)
+  # https://confluence.atlassian.com/jirakb/connection-problems-to-postgresql-result-in-stuck-threads-in-jira-1047534091.html
+  if $jira::db == 'postgresql' {
+    $connection_settings = pick($jira::connection_settings, 'tcpKeepAlive=true;socketTimeout=240')
+  } else {
+    $connection_settings = $jira::connection_settings
+  }
 
   if $jira::db == 'mysql' {
     $validation_query_timeout = pick($jira::validation_query_timeout, 3)

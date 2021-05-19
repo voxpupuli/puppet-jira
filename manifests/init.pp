@@ -79,7 +79,9 @@
 # @param dburl
 #   Set this if you wish to use a custom database URL
 # @param connection_settings
-#   Configures JDBC connection settings
+#   Configures additional JDBC connection properties in dbconfig.xml
+#   For PostgreSQL, a default value of "tcpKeepAlive=true;socketTimeout=240" will be used
+#   See https://confluence.atlassian.com/jirakb/connection-problems-to-postgresql-result-in-stuck-threads-in-jira-1047534091.html
 # @param oracle_use_sid
 #   Affects the database URL format for Oracle depending on whether you connect via a SID or a service name
 # @param mysql_connector_manage
