@@ -1,5 +1,5 @@
 ---
 Gemfile:
   optional:
-    ':test:'
+    ':test:':
       - gem: puppet-lint-param-docs
