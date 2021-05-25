@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<Server port="<%= $jira::tomcat_shutdown_port %>" shutdown="SHUTDOWN">
+    <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+    <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener"/>
+    <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
+    <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener"/>
+
+    <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
+
+    <Service name="Catalina">
+<% if $jira::tomcat_default_connector { -%>
+        <Connector port="<%= $jira::tomcat_port %>"
+                   <%- if $jira::tomcat_address { -%>
+                   address="<%= $jira::tomcat_address %>"
+                   <%- } -%>
+                   relaxedPathChars="[]|"
+                   relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
+                   maxThreads="<%= $jira::tomcat_max_threads %>"
+                   minSpareThreads="<%= $jira::tomcat_min_spare_threads %>"
+                   connectionTimeout="<%= $jira::tomcat_connection_timeout %>"
+                   enableLookups="<%= $jira::tomcat_enable_lookups %>"
+                   maxHttpHeaderSize="<%= $jira::tomcat_max_http_header_size %>"
+                   protocol="<%= $jira::tomcat_protocol %>"
+                   useBodyEncodingForURI="<%= $jira::tomcat_use_body_encoding_for_uri %>"
+                   acceptCount="<%= $jira::tomcat_accept_count %>"
+<% if ! $jira::proxy['scheme'] { -%>
+                   scheme="http"
+<% } -%>
+                   disableUploadTimeout="<%= $jira::tomcat_disable_upload_timeout %>"
+                   bindOnInit="false"
+<% if $jira::tomcat_native_ssl and $jira::tomcat_redirect_https_port { -%>
+                   redirectPort="<%= $jira::tomcat_redirect_https_port %>"
+<% } else { -%>
+                   redirectPort="<%= $jira::tomcat_https_port%>"
+<% } -%>
+<% if $jira::proxy { -%>
+<%   jira::sort_hash($jira::proxy).each |$key, $value| { -%>
+                   <%= $key %> = '<%= $value %>'
+<%   } -%>
+<% } -%>
+        />
+<%- } -%>
+
+<% if $jira::tomcat_native_ssl { -%>
+        <Connector
+                    port="<%= $jira::tomcat_https_port %>"
+                    protocol="<%= $jira::config::tomcat_protocol_ssl_real %>"
+                    <%- if $jira::tomcat_address { -%>
+                    address="<%= $jira::tomcat_address %>"
+                    <%- } -%>
+                    relaxedPathChars="[]|"
+                    relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
+                    maxHttpHeaderSize="<%= $jira::tomcat_max_http_header_size %>"
+                    SSLEnabled="true"
+                    maxThreads="<%= $jira::tomcat_max_threads %>"
+                    minSpareThreads="<%= $jira::tomcat_min_spare_threads %>"
+                    enableLookups="<%= $jira::tomcat_enable_lookups %>"
+                    disableUploadTimeout="<%= $jira::tomcat_disable_upload_timeout %>"
+                    acceptCount="<%= $jira::tomcat_accept_count %>"
+<%   if $jira::proxy['scheme'] { -%>
+                    scheme="https"
+<%   } -%>
+                    secure="true"
+                    clientAuth="false"
+                    sslProtocol="TLS"
+                    useBodyEncodingForURI="true"
+                    keyAlias="<%= $jira::tomcat_key_alias %>"
+                    keystoreFile="<%= $jira::tomcat_keystore_file %>"
+                    keystorePass="<%= $jira::tomcat_keystore_pass %>"
+                    keystoreType="<%= $jira::tomcat_keystore_type %>"
+<%   if $jira::proxy { -%>
+<%     jira::sort_hash($jira::proxy).each |$key, $value| { -%>
+                    <%= key %> = '<%= $value %>'
+<%     } -%>
+<%   } -%>
+        />
+<% } -%>
+
+<% if !empty($jira::ajp) { -%>
+        <Connector enableLookups="false" URIEncoding="UTF-8"
+<%   jira::sort_hash($jira::ajp).each |$key, $value| { -%>
+                   <%= $key %> = "<%= $value %>"
+<%   } -%>
+        />
+<% } -%>
+
+<% jira::sort_hash($jira::tomcat_additional_connectors).each |$port, $attrs| { -%>
+        <Connector port="<%= $port -%>"
+<% jira::sort_hash($attrs).each |$key, $value| { -%>
+                   <%= $key -%>="<%= $value -%>"
+<% } -%>
+                   />
+<% } -%>
+        <Engine name="Catalina" defaultHost="localhost">
+            <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true">
+
+                <Context path="<%= $jira::contextpath %>" docBase="${catalina.home}/atlassian-jira" reloadable="false" useHttpOnly="true">
+
+                    <Resource name="UserTransaction" auth="Container" type="javax.transaction.UserTransaction"
+                              factory="org.objectweb.jotm.UserTransactionFactory" jotm.timeout="60"/>
+                    <Manager pathname=""/>
+                    <JarScanner scanManifest="false"/>
+                    <Valve className="org.apache.catalina.valves.StuckThreadDetectionValve" threshold="120" />
+                </Context>
+
+            </Host>
+
+          <Valve className="org.apache.catalina.valves.AccessLogValve" resolveHosts="false"
+<% if $jira::tomcat_accesslog_enable_xforwarded_for { %>
+                 requestAttributesEnabled="true"
+<% } -%>
+                 pattern="<%= $jira::tomcat_accesslog_format %>"/>
+
+<% if $jira::tomcat_accesslog_enable_xforwarded_for { %>
+            <Valve
+              className="org.apache.catalina.valves.RemoteIpValve"
+              remoteIpHeader="x-forwarded-for"
+              remoteIpProxiesHeader="x-forwarded-by"/>
+<% } -%>
+        </Engine>
+    </Service>
+</Server>

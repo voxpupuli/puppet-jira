@@ -4,6 +4,127 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v5.0.1](https://github.com/voxpupuli/puppet-jira/tree/v5.0.1) (2021-04-23)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v5.0.0...v5.0.1)
+
+**Fixed bugs:**
+
+- Explicitly configure dbconfig.xml parameters again to stop JIRA's healthcheck from complaining. This restores the behaviour prior to 5.0.0 [\#375](https://github.com/voxpupuli/puppet-jira/pull/375) ([oranenj](https://github.com/oranenj))
+
+## [v5.0.0](https://github.com/voxpupuli/puppet-jira/tree/v5.0.0) (2021-04-21)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v4.0.1...v5.0.0)
+
+Version 5.0.0 is a major release of the `puppet/jira` module. The API stays mostly the same, but there are a few changes that users should take into account:
+
+### Only JIRA version 8.0.0 and newer are supported.
+- The module's templates have been synchronized with the latest LTS release of JIRA (8.13.5)
+- Upgrade your JIRA installation to a supported version using a previous version of this module first.
+### The `jira::facts` class has been removed
+- The `jira_version` fact is no longer required for upgrades and the facts weren't particularly useful, so they have been removed. The module will not remove existing files, however, so existing installations will continue reporting jira facts.
+- Note: upgrading to this version will cause jira to restart once due to the way updates are detected. If you would like to avoid this, create a `${jira::installdir}/atlassian-${jira::product_name}-running` symlink pointing to your current active installation.
+### Default versions have changed
+- The module will now install 8.13.5 by default. If you for some reason don't explicitly specify a JIRA version in your installation, you will get an automatic upgrade.
+- The MySQL connector, if installed, is now 8.0.23 by default, as the previous default is EOL.
+### The API is now typed
+The type enforcement is mostly backwards compatible, but some variables which previously accepted integer-looking strings will now require actual integers.
+### Database configuration is overhauled
+- Most settings in `dbconfig.xml` are now *omitted* of not explicitly configured by the user. JIRA will fall back to its built-in default values, which mostly matched what the module configured previously.
+**If this causes adverse effects with your installation, please report a bug.**
+- `jira::poolsize` is now a deprecated parameter and merely an alias for `$jira::pool_max_size`. If both are configured, the latter takes precedence. Jira's default value for this parameter is 20, which matches the module's previous default
+- `jira::enable_connection_pooling` is now deprecated and has no effect. It previously only affected users using PostgreSQL databases, and served no useful purpose.
+### Changes to default behaviour
+- We now use the `camptocamp/systemd` module, and the unit file is installed in `/etc/systemd/system/jira.service`. The old file at `/lib/systemd/system/jira.service` can be removed, though its existence should not matter.
+- `jira::java_opts` no longer defaults to `-XX:-HeapDumpOnOutOfMemoryError` as it is not on by default in Atlassian's configuration. If you want this, please add it to your configuration explicitly. The old name for the parameter is maintained
+- The module selects some defaults for `setenv.sh` based on the value of `jira::jvm_type`. This parameter **defaults to** `openjdk-11`. You may override the module's choices by using the new `jira::jvm_gc_args`, `jira::jvm_code_cache_args` and `jira::jvm_extra_args` parameters. For backwards compatibility, `JVM_SUPPORT_RECOMMENDED_ARGS` is configured by `jira::java_opts`
+### Broken / deprecated functionality has been removed
+- The `jira::service` class is now private, and overriding the service template is no longer possible. Use systemd drop-ins instead.
+- Only `puppet/archive` is supported for downloading the installation packages, and this is not configurable
+- `jira::format` no longer exists; it's always `tar.gz`. This parameter never worked properly.
+
+**Breaking changes:**
+
+- Remove jira::facts and rewrite upgrade logic [\#372](https://github.com/voxpupuli/puppet-jira/pull/372) ([oranenj](https://github.com/oranenj))
+- Bump default MySQL connector version to 8.0.23 and allow disabling the default HTTP connector [\#369](https://github.com/voxpupuli/puppet-jira/pull/369) ([oranenj](https://github.com/oranenj))
+- Add newer OSes and Puppet 7 to test matrix, drop Puppet 5 [\#364](https://github.com/voxpupuli/puppet-jira/pull/364) ([oranenj](https://github.com/oranenj))
+- Drop support for JIRA \<8.0.0 [\#359](https://github.com/voxpupuli/puppet-jira/pull/359) ([oranenj](https://github.com/oranenj))
+- Sync setenv.sh with upstream 8.13.5 \(LTS\) [\#357](https://github.com/voxpupuli/puppet-jira/pull/357) ([oranenj](https://github.com/oranenj))
+- Remove support for the deprecated staging module [\#355](https://github.com/voxpupuli/puppet-jira/pull/355) ([oranenj](https://github.com/oranenj))
+- Refactor database configuration and make the main API typed [\#352](https://github.com/voxpupuli/puppet-jira/pull/352) ([oranenj](https://github.com/oranenj))
+- Drop support for sysvinit [\#344](https://github.com/voxpupuli/puppet-jira/pull/344) ([ekohl](https://github.com/ekohl))
+
+**Implemented enhancements:**
+
+- Add provider to set server ID and install License [\#36](https://github.com/voxpupuli/puppet-jira/issues/36)
+- Test with Ubuntu 20.04 [\#371](https://github.com/voxpupuli/puppet-jira/pull/371) ([oranenj](https://github.com/oranenj))
+- Depend on camptocamp/systemd and clean up service handling [\#368](https://github.com/voxpupuli/puppet-jira/pull/368) ([oranenj](https://github.com/oranenj))
+- puppetlabs/stdlib: Allow 7.x [\#367](https://github.com/voxpupuli/puppet-jira/pull/367) ([bastelfreak](https://github.com/bastelfreak))
+- Add support for Oracle service names [\#365](https://github.com/voxpupuli/puppet-jira/pull/365) ([oranenj](https://github.com/oranenj))
+- Provide jira::java\_package option to allow installing a java package directly via this module [\#363](https://github.com/voxpupuli/puppet-jira/pull/363) ([oranenj](https://github.com/oranenj))
+- Allow specifying JDBC connection parameters with jira::connection\_settings [\#353](https://github.com/voxpupuli/puppet-jira/pull/353) ([oranenj](https://github.com/oranenj))
+- Add handling for X-Forwarded-For in access logs [\#350](https://github.com/voxpupuli/puppet-jira/pull/350) ([diLLec](https://github.com/diLLec))
+- Allow defining additional Tomcat connectors [\#316](https://github.com/voxpupuli/puppet-jira/pull/316) ([antaflos](https://github.com/antaflos))
+
+**Fixed bugs:**
+
+- systemd provider has incorrect file-mode [\#289](https://github.com/voxpupuli/puppet-jira/issues/289)
+- Restore $jira::java\_opts for compatibility and remove $jira::jvm\_\*\_additional from the API, as setting JDK type to custom allows full control anyway. [\#351](https://github.com/voxpupuli/puppet-jira/pull/351) ([oranenj](https://github.com/oranenj))
+- Fixing that the suffix can be empty as well \(needed for mysql-connector \> 8\) [\#337](https://github.com/voxpupuli/puppet-jira/pull/337) ([diLLec](https://github.com/diLLec))
+
+**Closed issues:**
+
+- Test with Puppet 7 and fresher OSes [\#361](https://github.com/voxpupuli/puppet-jira/issues/361)
+- Drop Ubuntu 16.04, Add 18.04 instead [\#346](https://github.com/voxpupuli/puppet-jira/issues/346)
+- server.xml - StuckThreadDetectionValve introduced in 7.6.12 [\#339](https://github.com/voxpupuli/puppet-jira/issues/339)
+- jira::java\_opts defined as YAML multiline block string generates incorrect JAVA\_OPTS string in setenv.sh [\#333](https://github.com/voxpupuli/puppet-jira/issues/333)
+- Jira\_facts deprecation warnings [\#330](https://github.com/voxpupuli/puppet-jira/issues/330)
+- Add optional MySQL connection string options [\#323](https://github.com/voxpupuli/puppet-jira/issues/323)
+- jira service not restarted when changing systemd file [\#315](https://github.com/voxpupuli/puppet-jira/issues/315)
+- remove dependency to puppet/staging [\#313](https://github.com/voxpupuli/puppet-jira/issues/313)
+- JVM\_REQUIRED\_ARGS is missing -Dorg.dom4j.factory=com.atlassian.core.xml.InterningDocumentFactory [\#309](https://github.com/voxpupuli/puppet-jira/issues/309)
+- JVM\_CODE\_CACHE\_ARGS not set [\#308](https://github.com/voxpupuli/puppet-jira/issues/308)
+- Please allow adding properties to server.xml that would add the clients' real ip address to jira access logs when running behind a proxy server [\#305](https://github.com/voxpupuli/puppet-jira/issues/305)
+- Java 11 Compatibility [\#300](https://github.com/voxpupuli/puppet-jira/issues/300)
+- Mysql connector is not respecting the deploy\_module choice [\#293](https://github.com/voxpupuli/puppet-jira/issues/293)
+- Oracle real url has : instead of / [\#283](https://github.com/voxpupuli/puppet-jira/issues/283)
+- jira user depends on install dir \(unable to set home dir inside install dir as per example\) [\#255](https://github.com/voxpupuli/puppet-jira/issues/255)
+- MySQL Connector is not installing with correct directory permissions [\#241](https://github.com/voxpupuli/puppet-jira/issues/241)
+- Connector class incompatibility since JIRA 7.3.0. [\#213](https://github.com/voxpupuli/puppet-jira/issues/213)
+- Can't create parent directories if they dont exist [\#150](https://github.com/voxpupuli/puppet-jira/issues/150)
+- Oracle connection string incorrect [\#146](https://github.com/voxpupuli/puppet-jira/issues/146)
+- HTTP to HTTPS redirect [\#138](https://github.com/voxpupuli/puppet-jira/issues/138)
+- Seems to be obsolete - JIRA 7.1.4 [\#137](https://github.com/voxpupuli/puppet-jira/issues/137)
+- Use service\_provider for init management [\#124](https://github.com/voxpupuli/puppet-jira/issues/124)
+- JIRA 7.1.x compatibility [\#120](https://github.com/voxpupuli/puppet-jira/issues/120)
+- Jira don't want to use my created database [\#117](https://github.com/voxpupuli/puppet-jira/issues/117)
+- Add workaround for staging strip with zip archive [\#103](https://github.com/voxpupuli/puppet-jira/issues/103)
+- puppet-jira -- Upgrade howto & addons management questions  [\#102](https://github.com/voxpupuli/puppet-jira/issues/102)
+- Add support to configure AJP as the only enabled connector [\#85](https://github.com/voxpupuli/puppet-jira/issues/85)
+- Add support for handling archive permisions on hardened servers [\#77](https://github.com/voxpupuli/puppet-jira/issues/77)
+- jira::facts cannot access $jira::tomcatPort [\#63](https://github.com/voxpupuli/puppet-jira/issues/63)
+- Add tests for oracle database [\#53](https://github.com/voxpupuli/puppet-jira/issues/53)
+- Validate all parameters [\#49](https://github.com/voxpupuli/puppet-jira/issues/49)
+- JIRA can't parse the JVM arguments when delimited with spaces instead of semicolons. [\#44](https://github.com/voxpupuli/puppet-jira/issues/44)
+
+**Merged pull requests:**
+
+- Convert documentation to puppet strings [\#373](https://github.com/voxpupuli/puppet-jira/pull/373) ([oranenj](https://github.com/oranenj))
+- $installdir was previously unnecessarily owned by the jira user. It will now be owned by root. [\#366](https://github.com/voxpupuli/puppet-jira/pull/366) ([oranenj](https://github.com/oranenj))
+- Minor documentation updates [\#360](https://github.com/voxpupuli/puppet-jira/pull/360) ([oranenj](https://github.com/oranenj))
+- Make MySQL connector library world-readable [\#356](https://github.com/voxpupuli/puppet-jira/pull/356) ([oranenj](https://github.com/oranenj))
+- Refactor most configuration to use EPP templates [\#354](https://github.com/voxpupuli/puppet-jira/pull/354) ([oranenj](https://github.com/oranenj))
+- Fix Ruby path expectation [\#349](https://github.com/voxpupuli/puppet-jira/pull/349) ([ekohl](https://github.com/ekohl))
+- Updating check-java.sh and server.xml templates to upstream version [\#348](https://github.com/voxpupuli/puppet-jira/pull/348) ([timdeluxe](https://github.com/timdeluxe))
+- Remove special code path for Puppet Enterprise [\#347](https://github.com/voxpupuli/puppet-jira/pull/347) ([ekohl](https://github.com/ekohl))
+- Fix unit tests after sysvinit patch broke them [\#345](https://github.com/voxpupuli/puppet-jira/pull/345) ([ekohl](https://github.com/ekohl))
+- facts.pp: use less restrictive mode for the external fact script [\#343](https://github.com/voxpupuli/puppet-jira/pull/343) ([kenyon](https://github.com/kenyon))
+- templates/facts.rb.erb: update URI.open syntax to fix deprecation warnings [\#342](https://github.com/voxpupuli/puppet-jira/pull/342) ([kenyon](https://github.com/kenyon))
+- acceptance tests: use the default version of postgresql [\#340](https://github.com/voxpupuli/puppet-jira/pull/340) ([kenyon](https://github.com/kenyon))
+- facts.pp: use localhost instead of 127.0.0.1 [\#338](https://github.com/voxpupuli/puppet-jira/pull/338) ([kenyon](https://github.com/kenyon))
+- remove incorrect apostrophe in example [\#332](https://github.com/voxpupuli/puppet-jira/pull/332) ([wolfaba](https://github.com/wolfaba))
+- Make JVM\_EXTRA\_ARGS manageable for java 11 compatibility [\#326](https://github.com/voxpupuli/puppet-jira/pull/326) ([diLLec](https://github.com/diLLec))
+
 ## [v4.0.1](https://github.com/voxpupuli/puppet-jira/tree/v4.0.1) (2020-06-17)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v4.0.0...v4.0.1)

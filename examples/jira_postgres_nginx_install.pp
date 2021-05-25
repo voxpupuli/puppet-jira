@@ -3,7 +3,7 @@ node default {
 
   -> class { 'postgresql::globals':
     manage_package_repo => true,
-    version             => '9.3',
+    version             => '11',
   }
 
   -> class { 'postgresql::server': }
@@ -18,7 +18,7 @@ node default {
     proxy    => {
       scheme    => 'http',
       proxyName => $facts['networking']['fqdn'],
-      proxyPort => '80',
+      proxyPort => 80,
     },
   }
 

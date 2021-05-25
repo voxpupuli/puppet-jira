@@ -18,9 +18,7 @@
 # 2.) Modify the database settings below according to your setup
 #
 # Atlassian jira Git Enterprise Source Control Server
-jira::jira_name: jira
-jira::version: 5.1.7
-jira::format: tar.gz
+jira::version: 8.13.5
 
 # Directory where the webapp will run from
 jira::installdir: /opt/jira
@@ -40,14 +38,6 @@ jira::db: postgresql
 #jira::db: oracle
 #jira::db: sqlserver
 
-jira::dbtype: postgres72
-#jira::dbtype: mysql
-#jira::dbtype: mssql
-
-jira::dbdriver: org.postgresql.Driver
-#jira::dbdriver: com.mysql.jdbc.Driver
-#jira::dbdriver: com.microsoft.sqlserver.jdbc.SQLServerDriver
-
 # Change these values to your jira database credentials
 jira::dbuser: jiraadm
 jira::dbpassword: jiraadm
@@ -62,12 +52,8 @@ jira::dbport: 5432
 # Schema
 # Default for postgres
 jira::dbschema: 'public'
-# Default for mssql
-#jira::dbschema: 'dbo'
 
-# The connection pool size
-jira::poolsize: 20
-jira::enable_connection_pooling: false
+# The connection pool parameters
 jira::pool_min_size: 20
 jira::pool_max_size: 20
 jira::pool_max_wait: 30000
@@ -85,11 +71,10 @@ jira::pool_test_on_borrow: true
 jira::dbserver: localhost
 
 # Tomcat configuration
-# TODO because I'm never a fan of the stock tomcat settings
-jira::javahome: /opt/java/jdk1.6.0_33
+jira::javahome: /opt/java/openjdk-11-jre
 jira::jvm_xmx: 1024m
-jira::jvm_optional: -XX:-HeapDumpOnOutOfMemoryError
-#jira::jvm_optional: -XX:NewSize=256m -XX:MaxNewSize=256m -XX:SurvivorRatio=16
+jira::java_opts: -XX:-HeapDumpOnOutOfMemoryError
+#jira::java_opts: -XX:NewSize=256m -XX:MaxNewSize=256m -XX:SurvivorRatio=16
 # the New and SR figures are purely optional
 # for heap dumps add -XX:-HeapDumpOnOutOfMemoryError
 # by default jira has 256m permgen which is a good setting to go with
@@ -102,8 +87,8 @@ jira::service_ensure: running
 jira::service_enable: true
 
 # Tomcat settings
-jira::tomcat_max_threads:  '150'
-jira::tomcat_accept_count: '100'
+jira::tomcat_max_threads:  150
+jira::tomcat_accept_count: 100
 
 # Configure reverse ssl proxy
 jira::proxy:

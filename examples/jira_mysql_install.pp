@@ -13,7 +13,7 @@ node default {
   -> class { 'jira':
     javahome => '/opt/java/latest',
     db       => 'mysql',
-    dbport   => '3306',
+    dbport   => 3306,
     dbdriver => 'com.mysql.jdbc.Driver',
     dbtype   => 'mysql',
   }

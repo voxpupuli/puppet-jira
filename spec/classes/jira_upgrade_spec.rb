@@ -14,11 +14,14 @@ describe 'jira' do
               { javahome: '/opt/java' }
             end
             let(:facts) do
-              facts.merge(jira_version: '6.3.4a')
+              facts.merge(jira_version: '8.0.0')
             end
 
             it { is_expected.to compile.with_all_deps }
-            it { is_expected.to contain_exec('service jira stop && sleep 15') }
+            it do
+              is_expected.to contain_exec('stop-jira-for-version-change').
+                with_command('systemctl stop jira.service && sleep 15')
+            end
           end
           context 'custom params' do
             let(:params) do
@@ -28,10 +31,13 @@ describe 'jira' do
               }
             end
             let(:facts) do
-              facts.merge(jira_version: '6.3.4a')
+              facts.merge(jira_version: '8.0.0')
             end
 
-            it { is_expected.to contain_exec('stop service please') }
+            it do
+              is_expected.to contain_exec('stop-jira-for-version-change').
+                with_command('stop service please')
+            end
           end
         end
       end

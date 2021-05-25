@@ -12,49 +12,153 @@ describe 'jira' do
           context 'default params' do
             let(:params) do
               {
-                version: '6.3.4a',
                 javahome: '/opt/java'
               }
             end
 
             it { is_expected.to compile.with_all_deps }
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/setenv.sh').
                 with_content(%r{#DISABLE_NOTIFICATIONS=})
             end
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/user.sh') }
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/user.sh') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml') }
+            # Also ensure that we actually omit elements by default
             it do
               is_expected.to contain_file('/home/jira/dbconfig.xml').
                 with_content(%r{jdbc:postgresql://localhost:5432/jira}).
-                with_content(%r{<schema-name>public</schema-name>})
+                with_content(%r{<schema-name>public</schema-name>}).
+                with_content(%r{<pool-max-size>20}).
+                with_content(%r{<pool-min-size>20}).
+                with_content(%r{<pool-max-wait>30000}).
+                with_content(%r{<pool-max-idle>20}).
+                with_content(%r{<pool-remove-abandoned>true}).
+                with_content(%r{<pool-remove-abandoned-timeout>300}).
+                with_content(%r{<min-evictable-idle-time-millis>60000}).
+                with_content(%r{<time-between-eviction-runs-millis>300000}).
+                with_content(%r{<pool-test-while-idle>true}).
+                with_content(%r{<pool-test-on-borrow>false}).
+                with_content(%r{<validation-query>select version\(\);}).
+                with_content(%r{<connection-properties>tcpKeepAlive=true;socketTimeout=240})
             end
             it { is_expected.not_to contain_file('/home/jira/cluster.properties') }
-            it { is_expected.not_to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/check-java.sh') }
+            it { is_expected.not_to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/check-java.sh') }
+          end
+
+          context 'default params with java install' do
+            let(:params) do
+              {
+                javahome: '/usr/lib/jvm/jre-11-openjdk',
+                java_package: 'java-11-openjdk-headless',
+              }
+            end
+
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to contain_package('java-11-openjdk-headless') }
+          end
+
+          context 'default params with java install and mysql' do
+            let(:params) do
+              {
+                db: 'mysql',
+                javahome: '/usr/lib/jvm/jre-11-openjdk',
+                java_package: 'java-11-openjdk-headless',
+              }
+            end
+
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to contain_package('java-11-openjdk-headless') }
+            it do
+              is_expected.to contain_file('/home/jira/dbconfig.xml').
+                with_content(%r{<validation-query>select 1</validation-query>}).
+                with_content(%r{<validation-query-timeout>3</validation-query-timeout>}).
+                without_content(%r{<connection-properties>})
+            end
+          end
+
+          context 'database settings' do
+            let(:params) do
+              {
+                version: '8.13.5',
+                javahome: '/opt/java',
+                connection_settings: 'TEST-SETTING;',
+                pool_max_size: 200,
+                pool_min_size: 10,
+                validation_query: 'SELECT myfunction();',
+              }
+            end
+
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/setenv.sh') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/user.sh') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml') }
+            it do
+              is_expected.to contain_file('/home/jira/dbconfig.xml').
+                with_content(%r{<connection-properties>TEST-SETTING;</connection-properties>}).
+                with_content(%r{<pool-max-size>200</pool-max-size>}).
+                with_content(%r{<pool-min-size>10</pool-min-size>}).
+                with_content(%r{<validation-query>SELECT myfunction\(\);</validation-query>})
+            end
           end
 
           context 'mysql params' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
                 db: 'mysql'
               }
             end
 
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh') }
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/user.sh') }
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/setenv.sh') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/user.sh') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml') }
             it do
               is_expected.to contain_file('/home/jira/dbconfig.xml').
                 with_content(%r{jdbc:mysql://localhost:3306/jira})
             end
           end
 
+          context 'oracle params' do
+            let(:params) do
+              {
+                version: '8.13.5',
+                javahome: '/opt/java',
+                db: 'oracle',
+                dbname: 'mydatabase',
+              }
+            end
+
+            it do
+              is_expected.to contain_file('/home/jira/dbconfig.xml').
+                with_content(%r{jdbc:oracle:thin:@localhost:1521:mydatabase}).
+                with_content(%r{<database-type>oracle10g}).
+                with_content(%r{<driver-class>oracle.jdbc.OracleDriver})
+            end
+          end
+
+          context 'oracle servicename' do
+            let(:params) do
+              {
+                version: '8.13.5',
+                javahome: '/opt/java',
+                db: 'oracle',
+                dbport: 1522,
+                dbserver: 'oracleserver',
+                oracle_use_sid: false,
+                dbname: 'mydatabase',
+              }
+            end
+
+            it do
+              is_expected.to contain_file('/home/jira/dbconfig.xml').
+                with_content(%r{jdbc:oracle:thin:@oracleserver:1522/mydatabase})
+            end
+          end
+
           context 'sqlserver params' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
                 db: 'sqlserver',
                 dbport: '1433',
@@ -62,9 +166,9 @@ describe 'jira' do
               }
             end
 
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh') }
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/user.sh') }
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/setenv.sh') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/user.sh') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml') }
             it do
               is_expected.to contain_file('/home/jira/dbconfig.xml').
                 with_content(%r{<schema-name>public</schema-name>})
@@ -74,7 +178,7 @@ describe 'jira' do
           context 'custom dburl' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
                 dburl: 'my custom dburl'
               }
@@ -89,59 +193,29 @@ describe 'jira' do
           context 'customise tomcat connector' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
-                tomcat_port: '9229'
+                tomcat_port: 9229
               }
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
-                with_content(%r{<Connector port=\"9229\"\s+maxThreads=}m)
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+                with_content(%r{<Connector port=\"9229\"\s+relaxedPathChars=}m)
             end
           end
 
           context 'server.xml listeners' do
-            context 'version less than 7' do
+            context 'version greater than 8' do
               let(:params) do
                 {
-                  version: '6.3.4a',
+                  version: '8.1.0',
                   javahome: '/opt/java'
                 }
               end
 
               it do
-                is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
-                  with_content(%r{<Listener className=\"org.apache.catalina.core.JasperListener\"})
-              end
-            end
-          end
-
-          context 'server.xml 7 listeners' do
-            let(:params) do
-              {
-                version: '7.0.4',
-                javahome: '/opt/java'
-              }
-            end
-
-            it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/conf/server.xml').
-                with_content(%r{<Listener className=\"org.apache.catalina.startup.VersionLoggerListener\"})
-            end
-          end
-
-          context 'server.xml listeners' do
-            context 'version greater than 7' do
-              let(:params) do
-                {
-                  version: '7.0.4',
-                  javahome: '/opt/java'
-                }
-              end
-
-              it do
-                is_expected.to contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/conf/server.xml').
+                is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.1.0-standalone/conf/server.xml').
                   with_content(%r{<Listener className=\"org.apache.catalina.core.JreMemoryLeakPreventionListener\"})
               end
             end
@@ -150,30 +224,30 @@ describe 'jira' do
           context 'customise tomcat connector with a binding address' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
-                tomcat_port: '9229',
+                tomcat_port: 9229,
                 tomcat_address: '127.0.0.1'
               }
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
-                with_content(%r{<Connector port=\"9229\"\s+address=\"127\.0\.0\.1\"\s+maxThreads=}m)
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+                with_content(%r{<Connector port=\"9229\"\s+address=\"127\.0\.0\.1\"\s+relaxedPathChars=}m)
             end
           end
 
           context 'tomcat context path' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
                 contextpath: '/jira'
               }
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
                 with_content(%r{path="/jira"})
             end
           end
@@ -181,14 +255,14 @@ describe 'jira' do
           context 'tomcat port' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
-                tomcat_port: '8888'
+                tomcat_port: 8888
               }
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
                 with_content(%r{port="8888"})
             end
           end
@@ -196,14 +270,14 @@ describe 'jira' do
           context 'tomcat acceptCount' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
-                tomcat_accept_count: '200'
+                tomcat_accept_count: 200
               }
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
                 with_content(%r{acceptCount="200"})
             end
           end
@@ -211,14 +285,14 @@ describe 'jira' do
           context 'tomcat MaxHttpHeaderSize' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
-                tomcat_max_http_header_size: '4096'
+                tomcat_max_http_header_size: 4096
               }
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
                 with_content(%r{maxHttpHeaderSize="4096"})
             end
           end
@@ -226,14 +300,14 @@ describe 'jira' do
           context 'tomcat MinSpareThreads' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
-                tomcat_min_spare_threads: '50'
+                tomcat_min_spare_threads: 50
               }
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
                 with_content(%r{minSpareThreads="50"})
             end
           end
@@ -241,14 +315,14 @@ describe 'jira' do
           context 'tomcat ConnectionTimeout' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
-                tomcat_connection_timeout: '25000'
+                tomcat_connection_timeout: 25_000
               }
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
                 with_content(%r{connectionTimeout="25000"})
             end
           end
@@ -256,14 +330,14 @@ describe 'jira' do
           context 'tomcat EnableLookups' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
-                tomcat_enable_lookups: 'true'
+                tomcat_enable_lookups: true
               }
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
                 with_content(%r{enableLookups="true"})
             end
           end
@@ -271,14 +345,14 @@ describe 'jira' do
           context 'tomcat Protocol' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
                 tomcat_protocol: 'HTTP/1.1'
               }
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
                 with_content(%r{protocol="HTTP/1.1"})
             end
           end
@@ -286,14 +360,14 @@ describe 'jira' do
           context 'tomcat UseBodyEncodingForURI' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
-                tomcat_use_body_encoding_for_uri: 'false'
+                tomcat_use_body_encoding_for_uri: false
               }
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
                 with_content(%r{useBodyEncodingForURI="false"})
             end
           end
@@ -301,14 +375,14 @@ describe 'jira' do
           context 'tomcat DisableUploadTimeout' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
-                tomcat_disable_upload_timeout: 'false'
+                tomcat_disable_upload_timeout: false
               }
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
                 with_content(%r{disableUploadTimeout="false"})
             end
           end
@@ -316,14 +390,14 @@ describe 'jira' do
           context 'tomcat EnableLookups' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
-                tomcat_enable_lookups: 'true'
+                tomcat_enable_lookups: true
               }
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
                 with_content(%r{enableLookups="true"})
             end
           end
@@ -331,14 +405,14 @@ describe 'jira' do
           context 'tomcat maxThreads' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
-                tomcat_max_threads: '300'
+                tomcat_max_threads: 300
               }
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
                 with_content(%r{maxThreads="300"})
             end
           end
@@ -346,7 +420,7 @@ describe 'jira' do
           context 'tomcat proxy path' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
                 proxy: {
                   'scheme'    => 'https',
@@ -357,7 +431,7 @@ describe 'jira' do
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
                 with_content(%r{proxyName = 'www\.example\.com'}).
                 with_content(%r{scheme = 'https'}).
                 with_content(%r{proxyPort = '9999'})
@@ -368,7 +442,7 @@ describe 'jira' do
             context 'with valid config including protocol AJP/1.3' do
               let(:params) do
                 {
-                  version: '6.3.4a',
+                  version: '8.13.5',
                   javahome: '/opt/java',
                   ajp: {
                     'port'     => '8009',
@@ -378,14 +452,14 @@ describe 'jira' do
               end
 
               it do
-                is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+                is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
                   with_content(%r{<Connector enableLookups="false" URIEncoding="UTF-8"\s+port = "8009"\s+protocol = "AJP/1.3"\s+/>})
               end
             end
             context 'with valid config including protocol org.apache.coyote.ajp.AjpNioProtocol' do
               let(:params) do
                 {
-                  version: '6.3.4a',
+                  version: '8.13.5',
                   javahome: '/opt/java',
                   ajp: {
                     'port'     => '8009',
@@ -395,17 +469,18 @@ describe 'jira' do
               end
 
               it do
-                is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+                is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
                   with_content(%r{<Connector enableLookups="false" URIEncoding="UTF-8"\s+port = "8009"\s+protocol = "org.apache.coyote.ajp.AjpNioProtocol"\s+/>})
               end
             end
           end
 
-          context 'tomcat additional connectors' do
+          context 'tomcat additional connectors, without default' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
+                tomcat_default_connector: false,
                 tomcat_additional_connectors: {
                   8081 => {
                     'URIEncoding' => 'UTF-8',
@@ -429,7 +504,8 @@ describe 'jira' do
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+                without_content(%r{<Connector port="8080"}).
                 with_content(%r{<Connector port="8081"}).
                 with_content(%r{connectionTimeout="20000"}).
                 with_content(%r{protocol="HTTP/1\.1"}).
@@ -451,15 +527,31 @@ describe 'jira' do
           context 'tomcat access log format' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
                 tomcat_accesslog_format: '%a %{jira.request.id}r %{jira.request.username}r %t %I'
               }
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
                 with_content(%r{pattern="%a %{jira.request.id}r %{jira.request.username}r %t %I"/>})
+            end
+          end
+
+          context 'tomcat access log format with x-forward-for handling' do
+            let(:params) do
+              {
+                version: '8.16.0',
+                javahome: '/opt/java',
+                tomcat_accesslog_enable_xforwarded_for: true,
+              }
+            end
+
+            it do
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.16.0-standalone/conf/server.xml').
+                with_content(%r{org.apache.catalina.valves.RemoteIpValve}).
+                with_content(%r{requestAttributesEnabled="true"})
             end
           end
 
@@ -467,13 +559,13 @@ describe 'jira' do
             let(:params) do
               {
                 script_check_java_manage: true,
-                version: '7.0.4',
+                version: '8.1.0',
                 javahome: '/opt/java'
               }
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-7.0.4-standalone/bin/check-java.sh').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.1.0-standalone/bin/check-java.sh').
                 with_content(%r{Wrong JVM version})
             end
           end
@@ -481,14 +573,14 @@ describe 'jira' do
           context 'context resources' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
                 resources: { 'testdb' => { 'auth' => 'Container' } }
               }
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/context.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/context.xml').
                 with_content(%r{<Resource name = "testdb"\n        auth = "Container"\n    />})
             end
           end
@@ -496,14 +588,14 @@ describe 'jira' do
           context 'disable notifications' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
                 disable_notifications: true
               }
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/setenv.sh').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/setenv.sh').
                 with_content(%r{^DISABLE_NOTIFICATIONS=})
             end
           end
@@ -511,14 +603,14 @@ describe 'jira' do
           context 'native ssl support default params' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
                 tomcat_native_ssl: true
               }
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
                 with_content(%r{redirectPort="8443"}).
                 with_content(%r{port="8443"}).
                 with_content(%r{keyAlias="jira"}).
@@ -533,13 +625,13 @@ describe 'jira' do
           context 'native ssl support custom params' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
                 tomcat_native_ssl: true,
-                tomcat_https_port: '9443',
+                tomcat_https_port: 9443,
                 tomcat_address: '127.0.0.1',
-                tomcat_max_threads: '600',
-                tomcat_accept_count: '600',
+                tomcat_max_threads: 600,
+                tomcat_accept_count: 600,
                 tomcat_key_alias: 'keystorealias',
                 tomcat_keystore_file: '/tmp/keyfile.ks',
                 tomcat_keystore_pass: 'keystorepass',
@@ -548,7 +640,7 @@ describe 'jira' do
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
                 with_content(%r{redirectPort="9443"}).
                 with_content(%r{port="9443"}).
                 with_content(%r{keyAlias="keystorealias"}).
@@ -564,7 +656,7 @@ describe 'jira' do
           context 'enable secure admin sessions' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
                 enable_secure_admin_sessions: true
               }
@@ -579,7 +671,7 @@ describe 'jira' do
           context 'disable secure admin sessions' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
                 enable_secure_admin_sessions: false
               }
@@ -594,7 +686,7 @@ describe 'jira' do
           context 'jira-config.properties' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
                 jira_config_properties: {
                   'ops.bar.group.size.opsbar-transitions' => '4'
@@ -612,7 +704,7 @@ describe 'jira' do
           context 'enable clustering' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
                 datacenter: true,
                 shared_homedir: '/mnt/jira_shared_home_dir'
@@ -629,7 +721,7 @@ describe 'jira' do
           context 'enable clustering with ehcache options' do
             let(:params) do
               {
-                version: '6.3.4a',
+                version: '8.13.5',
                 javahome: '/opt/java',
                 datacenter: true,
                 shared_homedir: '/mnt/jira_shared_home_dir',
@@ -652,7 +744,7 @@ describe 'jira' do
           context 'jira-8.12 - OpenJDK jvm params' do
             let(:params) do
               {
-                version: '8.12.1',
+                version: '8.16.0',
                 javahome: '/opt/java',
                 jvm_type: 'openjdk-11'
               }
@@ -660,82 +752,54 @@ describe 'jira' do
 
             it { is_expected.to compile.with_all_deps }
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.12.1-standalone/bin/setenv.sh').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.16.0-standalone/bin/setenv.sh').
                 with_content(%r{#DISABLE_NOTIFICATIONS=}).
-                with_content(%r{JVM_SUPPORT_RECOMMENDED_ARGS='\S+HeapDumpOnOutOfMemoryError}).
+                with_content(%r{JVM_SUPPORT_RECOMMENDED_ARGS=''}).
                 with_content(%r{JVM_GC_ARGS='.+ \-XX:\+ExplicitGCInvokesConcurrent}).
                 with_content(%r{JVM_CODE_CACHE_ARGS='\S+InitialCodeCacheSize=32m \S+ReservedCodeCacheSize=512m}).
                 with_content(%r{JVM_REQUIRED_ARGS='.+InterningDocumentFactory})
             end
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.12.1-standalone/bin/user.sh') }
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.12.1-standalone/conf/server.xml') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.16.0-standalone/bin/user.sh') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.16.0-standalone/conf/server.xml') }
             it do
               is_expected.to contain_file('/home/jira/dbconfig.xml').
                 with_content(%r{jdbc:postgresql://localhost:5432/jira}).
                 with_content(%r{<schema-name>public</schema-name>})
             end
             it { is_expected.not_to contain_file('/home/jira/cluster.properties') }
-            it { is_expected.not_to contain_file('/opt/jira/atlassian-jira-software-8.12.1-standalone/bin/check-java.sh') }
+            it { is_expected.not_to contain_file('/opt/jira/atlassian-jira-software-8.16.0-standalone/bin/check-java.sh') }
           end
 
           context 'jira-8.12 - custom jvm params' do
             let(:params) do
               {
-                version: '8.12.1',
+                version: '8.16.0',
                 javahome: '/opt/java',
-                jvm_type: 'custom',
-                jvm_optional: '-XX:-TEST_OPTIONAL',
+                java_opts: '-XX:-TEST_OPTIONAL',
                 jvm_gc_args: '-XX:-TEST_GC_ARG',
-                jvm_codecache_args: '-XX:-TEST_CODECACHE',
+                jvm_code_cache_args: '-XX:-TEST_CODECACHE',
                 jvm_extra_args: '-XX:-TEST_EXTRA'
               }
             end
 
             it { is_expected.to compile.with_all_deps }
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.12.1-standalone/bin/setenv.sh').
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.16.0-standalone/bin/setenv.sh').
                 with_content(%r{#DISABLE_NOTIFICATIONS=}).
                 with_content(%r{JVM_SUPPORT_RECOMMENDED_ARGS=\S+TEST_OPTIONAL}).
                 with_content(%r{JVM_GC_ARGS=\S+TEST_GC_ARG}).
                 with_content(%r{JVM_CODE_CACHE_ARGS=\S+TEST_CODECACHE}).
                 with_content(%r{JVM_EXTRA_ARGS=\S+TEST_EXTRA})
             end
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.12.1-standalone/bin/user.sh') }
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.12.1-standalone/conf/server.xml') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.16.0-standalone/bin/user.sh') }
+            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.16.0-standalone/conf/server.xml') }
             it do
               is_expected.to contain_file('/home/jira/dbconfig.xml').
                 with_content(%r{jdbc:postgresql://localhost:5432/jira}).
                 with_content(%r{<schema-name>public</schema-name>})
             end
             it { is_expected.not_to contain_file('/home/jira/cluster.properties') }
-            it { is_expected.not_to contain_file('/opt/jira/atlassian-jira-software-8.12.1-standalone/bin/check-java.sh') }
-          end
-
-          context 'jira-8.12 - openjdk-11 with additional jvm params' do
-            let(:params) do
-              {
-                version: '8.12.1',
-                javahome: '/opt/java',
-                jvm_type: 'openjdk-11',
-                jvm_optional_additional: '-XX:-TEST_OPTIONAL',
-                jvm_gc_args_additional: '-XX:-TEST_GC_ARG',
-                jvm_codecache_args_additional: '-XX:-TEST_CODECACHE',
-                jvm_extra_args_additional: '-XX:-TEST_EXTRA'
-              }
-            end
-
-            it { is_expected.to compile.with_all_deps }
-            it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.12.1-standalone/bin/setenv.sh').
-                with_content(%r{JVM_SUPPORT_RECOMMENDED_ARGS='.+TEST_OPTIONAL'}).
-                with_content(%r{JVM_GC_ARGS='.+TEST_GC_ARG'}).
-                with_content(%r{JVM_CODE_CACHE_ARGS='.+TEST_CODECACHE'}).
-                with_content(%r{JVM_EXTRA_ARGS='.+TEST_EXTRA'})
-            end
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.12.1-standalone/bin/user.sh') }
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.12.1-standalone/conf/server.xml') }
-            it { is_expected.not_to contain_file('/home/jira/cluster.properties') }
-            it { is_expected.not_to contain_file('/opt/jira/atlassian-jira-software-8.12.1-standalone/bin/check-java.sh') }
+            it { is_expected.not_to contain_file('/opt/jira/atlassian-jira-software-8.16.0-standalone/bin/check-java.sh') }
           end
         end
       end

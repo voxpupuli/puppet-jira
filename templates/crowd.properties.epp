@@ -1,0 +1,11 @@
+application.name                        <%= $jira::sso::application_name %>
+application.password                    <%= $jira::sso::application_password %>
+application.login.url                   <%= $jira::sso::application_login_url %>
+
+crowd.server.url                        <%= $jira::sso::crowd_server_url %>
+crowd.base.url                          <%= $jira::sso::crowd_base_url %>
+
+session.isauthenticated                 <%= $jira::sso::session_isauthenticated %>
+session.tokenkey                        <%= $jira::sso::session_tokenkey %>
+session.validationinterval              <%= $jira::sso::session_validationinterval %>
+session.lastvalidation                  <%= $jira::sso::session_lastvalidation %>

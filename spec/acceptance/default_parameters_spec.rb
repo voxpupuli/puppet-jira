@@ -3,8 +3,14 @@ require 'spec_helper_acceptance'
 describe 'jira postgresql' do
   it 'installs with defaults' do
     pp = <<-EOS
-      class { 'java':
-        distribution => 'jre',
+      $java_package = $facts['os']['family'] ? {
+        'RedHat' => 'java-11-openjdk-headless',
+        'Debian' => 'openjdk-11-jre-headless',
+      }
+
+      $java_home = $facts['os']['family'] ? {
+        'RedHat' => '/usr/lib/jvm/jre-11-openjdk',
+        'Debian' => '/usr/lib/jvm/java-1.11.0-openjdk-amd64',
       }
 
       class { 'postgresql::server': }
@@ -15,20 +21,43 @@ describe 'jira postgresql' do
       }
 
       class { 'jira':
-        javahome => '/usr',
-        require  => [Class['java'], Postgresql::Server::Db['jira']],
+        java_package => $java_package,
+        javahome     => $java_home,
+        require      => Postgresql::Server::Db['jira'],
+      }
+    EOS
+    pp_upgrade = <<-EOS
+      $java_package = $facts['os']['family'] ? {
+        'RedHat' => 'java-11-openjdk-headless',
+        'Debian' => 'openjdk-11-jre-headless',
       }
 
-      class { 'jira::facts': }
+      $java_home = $facts['os']['family'] ? {
+        'RedHat' => '/usr/lib/jvm/jre-11-openjdk',
+        'Debian' => '/usr/lib/jvm/java-1.11.0-openjdk-amd64',
+      }
+
+      class { 'jira':
+        version      => '8.16.0',
+        java_package => $java_package,
+        javahome     => $java_home,
+      }
     EOS
 
+    # jira just takes *ages* to start up :-(
     apply_manifest(pp, catch_failures: true)
     sleep 60
     shell 'wget -q --tries=24 --retry-connrefused --read-timeout=10 localhost:8080', acceptable_exit_codes: [0, 8]
     sleep 60
     shell 'wget -q --tries=24 --retry-connrefused --read-timeout=10 localhost:8080', acceptable_exit_codes: [0, 8]
     sleep 60
-    apply_manifest(pp, catch_changes: true)
+    apply_manifest(pp_upgrade, catch_failures: true)
+    sleep 60
+    shell 'wget -q --tries=24 --retry-connrefused --read-timeout=10 localhost:8080', acceptable_exit_codes: [0, 8]
+    sleep 60
+    shell 'wget -q --tries=24 --retry-connrefused --read-timeout=10 localhost:8080', acceptable_exit_codes: [0, 8]
+    sleep 60
+    apply_manifest(pp_upgrade, catch_failures: true)
   end
 
   describe process('java') do
@@ -57,7 +86,7 @@ describe 'jira postgresql' do
   end
 
   describe command('wget -q --tries=24 --retry-connrefused --read-timeout=10 -O- localhost:8080') do
-    its(:stdout) { is_expected.to include('8.13.4') }
+    its(:stdout) { is_expected.to include('8.16.0') }
   end
 
   describe 'shutdown' do

@@ -13,93 +13,190 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 # -----------------------------------------------------------------------------
-class jira::config inherits jira {
+
+# @api private
+class jira::config {
+  # This class should be used from init.pp with a dependency on jira::install
+  # and sending a refresh to jira::service
+  assert_private()
+
   File {
     owner => $jira::user,
     group => $jira::group,
   }
 
-  if $jira::validation_query == undef {
+  # JVM args. These will be the defaults if not overridden
+  if $jira::jvm_type == 'openjdk-11' {
+    $jvm_gc_args = '-XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent'
+  } else {
+    $jvm_gc_args = '-XX:+ExplicitGCInvokesConcurrent'
+  }
+  $jvm_code_cache_args = '-XX:InitialCodeCacheSize=32m -XX:ReservedCodeCacheSize=512m'
+  $jvm_extra_args = '-XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT'
+
+  $dbschema_default = $jira::db ? {
+    'postgresql' => 'public',
+    default      => undef
+  }
+
+  # can't use pick_default: https://tickets.puppetlabs.com/browse/MODULES-11018
+  $dbschema = if $jira::dbschema { $jira::dbschema } else { $dbschema_default }
+
+  if $jira::tomcat_redirect_https_port {
+    unless $jira::tomcat_native_ssl {
+      fail('You need to set jira::tomcat_native_ssl to true when using jira::tomcat_redirect_https_port')
+    }
+  }
+
+  if $jira::dbport {
+    $dbport = $jira::dbport
+  } else {
+    $dbport = $jira::db ? {
+      'postgresql' => '5432',
+      'mysql'      => '3306',
+      'oracle'     => '1521',
+      'sqlserver'  => '1433',
+      'h2'         => '',
+    }
+  }
+
+  if $jira::dbdriver {
+    $dbdriver = $jira::dbdriver
+  } else {
+    $dbdriver = $jira::db ? {
+      'postgresql' => 'org.postgresql.Driver',
+      'mysql'      => 'com.mysql.jdbc.Driver',
+      'oracle'     => 'oracle.jdbc.OracleDriver',
+      'sqlserver'  => 'com.microsoft.sqlserver.jdbc.SQLServerDriver',
+      'h2'         => 'org.h2.Driver',
+    }
+  }
+
+  if $jira::dbtype {
+    $dbtype = $jira::dbtype
+  } else {
+    $dbtype = $jira::db ? {
+      'postgresql' => 'postgres72',
+      'mysql'      => 'mysql',
+      'oracle'     => 'oracle10g',
+      'sqlserver'  => 'mssql',
+      'h2'         => 'h2',
+    }
+  }
+
+  if $jira::dburl {
+    $dburl = $jira::dburl
+  }
+  else {
+    # SIDs use :, service names use /
+    $oracle_separator = bool2str($jira::oracle_use_sid, ':', '/')
+    $dburl = $jira::db ? {
+      'postgresql' => "jdbc:${jira::db}://${jira::dbserver}:${dbport}/${jira::dbname}",
+      'mysql'      => "jdbc:${jira::db}://${jira::dbserver}:${dbport}/${jira::dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB",
+      'oracle'     => "jdbc:${jira::db}:thin:@${jira::dbserver}:${dbport}${oracle_separator}${jira::dbname}",
+      'sqlserver'  => "jdbc:jtds:${jira::db}://${jira::dbserver}:${dbport}/${jira::dbname}",
+      'h2'         => "jdbc:h2:file:/${jira::homedir}/database/${jira::dbname}",
+    }
+  }
+
+  # Allow some backwards compatibility;
+  if $jira::poolsize {
+    deprecation('jira::poolsize', 'jira::poolsize is deprecated and simply sets max-pool-size. Please use jira::pool_max_size instead and remove this configuration')
+  }
+
+  $pool_min_size = pick($jira::pool_min_size, 20)
+  $pool_max_size = pick($jira::pool_max_size, $jira::poolsize, 20)
+  $pool_max_wait = pick($jira::pool_max_wait, 30000)
+  $pool_max_idle = pick($jira::pool_max_idle, 20)
+  $pool_remove_abandoned = pick($jira::pool_remove_abandoned, true)
+  $pool_remove_abandoned_timeout = pick($jira::pool_remove_abandoned_timeout, 300)
+  $min_evictable_idle_time = pick($jira::min_evictable_idle_time, 60000)
+  $time_between_eviction_runs = pick($jira::time_between_eviction_runs, 300000)
+  $pool_test_while_idle = pick($jira::pool_test_while_idle, true)
+  $pool_test_on_borrow = pick($jira::pool_test_on_borrow, false)
+
+  # JIRA will complain if these aren't set for PostgreSQL (will work fine though)
+  # https://confluence.atlassian.com/jirakb/connection-problems-to-postgresql-result-in-stuck-threads-in-jira-1047534091.html
+  if $jira::db == 'postgresql' {
+    $connection_settings = pick($jira::connection_settings, 'tcpKeepAlive=true;socketTimeout=240')
+  } else {
+    $connection_settings = $jira::connection_settings
+  }
+
+  if $jira::db == 'mysql' {
+    $validation_query_timeout = pick($jira::validation_query_timeout, 3)
+  } else {
+    $validation_query_timeout = $jira::validation_query_timeout
+  }
+
+  if $jira::validation_query {
+    $validation_query = $jira::validation_query
+  } else {
     $validation_query = $jira::db ? {
-      'postgresql' => 'select version();',
       'mysql'      => 'select 1',
-      'oracle'     => 'select 1 from dual',
       'sqlserver'  => 'select 1',
-      'h2'         => 'select 1',
+      'oracle'     => 'select 1 from dual',
+      'postgresql' => 'select version();',
+      'h2'         => undef,
     }
   }
-  if $jira::time_between_eviction_runs == undef {
-    $time_between_eviction_runs = $jira::db ? {
-      'postgresql' => '30000',
-      'mysql'      => '300000',
-      'oracle'     => '300000',
-      'sqlserver'  => '300000',
-      'h2'         => '5000',
-    }
+
+  $tomcat_protocol_ssl_real = pick($jira::tomcat_protocol_ssl, 'org.apache.coyote.http11.Http11NioProtocol')
+
+  $jira_properties = {
+    'jira.websudo.is.disabled' => !$jira::enable_secure_admin_sessions,
   }
+  $merged_jira_config_properties = jira::sort_hash($jira_properties + $jira::jira_config_properties)
+
+  # Configuration logic ends, resources begin:
 
   file { "${jira::webappdir}/bin/user.sh":
-    content => template('jira/user.sh.erb'),
+    content => epp('jira/user.sh.epp'),
     mode    => '0755',
-    require => [
-      Class['jira::install'],
-      File[$jira::webappdir],
-      File[$jira::homedir],
-    ],
   }
 
-  -> file { "${jira::webappdir}/bin/setenv.sh":
-    content => template('jira/setenv.sh.erb'),
+  file { "${jira::webappdir}/bin/setenv.sh":
+    content => epp('jira/setenv.sh.epp'),
     mode    => '0755',
-    require => Class['jira::install'],
-    notify  => Class['jira::service'],
   }
 
-  -> file { "${jira::homedir}/dbconfig.xml":
-    content => template("jira/dbconfig.${jira::db}.xml.erb"),
+  file { "${jira::homedir}/dbconfig.xml":
+    content => epp('jira/dbconfig.xml.epp'),
     mode    => '0600',
-    require => [Class['jira::install'],File[$jira::homedir]],
-    notify  => Class['jira::service'],
   }
 
   if $jira::script_check_java_manage {
     file { "${jira::webappdir}/bin/check-java.sh":
       content => template($jira::script_check_java_template),
       mode    => '0755',
-      require => [
-        Class['jira::install'],
-        File["${jira::webappdir}/bin/setenv.sh"],
-      ],
-      notify  => Class['jira::service'],
+      require => File["${jira::webappdir}/bin/setenv.sh"],
     }
   }
 
   file { "${jira::webappdir}/conf/server.xml":
-    content => template('jira/server.xml.erb'),
+    content => epp('jira/server.xml.epp'),
     mode    => '0600',
-    require => Class['jira::install'],
-    notify  => Class['jira::service'],
   }
-  -> file { "${jira::webappdir}/conf/context.xml":
-    content => template('jira/context.xml.erb'),
+
+  file { "${jira::webappdir}/conf/context.xml":
+    content => epp('jira/context.xml.epp'),
     mode    => '0600',
-    require => Class['jira::install'],
-    notify  => Class['jira::service'],
   }
 
   file { "${jira::homedir}/jira-config.properties":
-    content => template('jira/jira-config.properties.erb'),
+    content => inline_epp(@(EOF)
+        <% $merged_jira_config_properties.each |$key, $val| { -%>
+        <%= $key %> = <%= $val %>
+        <%- } -%>
+        | EOF
+    ),
     mode    => '0600',
-    require => [Class['jira::install'],File[$jira::homedir]],
-    notify  => Class['jira::service'],
   }
 
   if $jira::datacenter {
     file { "${jira::homedir}/cluster.properties":
-      content => template('jira/cluster.properties.erb'),
+      content => epp('jira/cluster.properties.epp'),
       mode    => '0600',
-      require => [Class['jira::install'],File[$jira::homedir]],
-      notify  => Class['jira::service'],
     }
   }
 }

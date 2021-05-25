@@ -13,6 +13,8 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 # -----------------------------------------------------------------------------
+
+# @api private
 class jira::install {
   include 'archive'
 
@@ -28,44 +30,37 @@ class jira::install {
       password         => '*',
       password_min_age => '0',
       password_max_age => '99999',
-      managehome       => true,
+      managehome       => false,
       uid              => $jira::uid,
       gid              => $jira::gid,
     }
   }
 
+  file { $jira::homedir:
+    ensure => 'directory',
+    owner  => $jira::user,
+    group  => $jira::group,
+    mode   => $jira::homedir_mode,
+  }
+
   if ! defined(File[$jira::installdir]) {
     file { $jira::installdir:
       ensure => 'directory',
-      owner  => $jira::user,
-      group  => $jira::group,
+      owner  => $jira::installdir_owner,
+      group  => $jira::installdir_group,
+      mode   => $jira::installdir_mode,
     }
   }
 
-  # Examples of product tarballs from Atlassian
-  # Core                - atlassian-jira-core-7.0.3.tar.gz
-  # Software (pre-7)    - atlassian-jira-6.4.12.tar.gz
-  # Software (7 to 7.1.8 ) - atlassian-jira-software-7.0.4-jira-7.0.4.tar.gz
-  # Software (7.1.9 and up) - atlassian-jira-software-7.1.9.tar.gz
-
-  if (versioncmp($jira::version, '7.1.9') < 0) {
-    if ((versioncmp($jira::version, '7.0.0') < 0) or ($jira::product_name == 'jira-core')) {
-      $file = "atlassian-${jira::product_name}-${jira::version}.${jira::format}"
-    } else {
-      $file = "atlassian-${jira::product_name}-${jira::version}-jira-${jira::version}.${jira::format}"
-    }
-  } else {
-    $file = "atlassian-${jira::product_name}-${jira::version}.${jira::format}"
-  }
-
-  if ! defined(File[$jira::extractdir]) {
-    file { $jira::extractdir:
-      ensure => 'directory',
-      owner  => $jira::user,
-      group  => $jira::group,
+  if $jira::java_package {
+    package { $jira::java_package:
+      ensure => 'present',
     }
   }
 
+  $file = "atlassian-${jira::product_name}-${jira::version}.tar.gz"
+
+  # webappdir is defined in init.pp because other things depend on it.
   if ! defined(File[$jira::webappdir]) {
     file { $jira::webappdir:
       ensure => 'directory',
@@ -74,77 +69,52 @@ class jira::install {
     }
   }
 
-  case $jira::deploy_module {
-    'staging': {
-      require staging
-      staging::file { $file:
-        source  => "${jira::download_url}/${file}",
-        timeout => 1800,
-      }
-      -> staging::extract { $file:
-        target  => $jira::extractdir,
-        creates => "${jira::webappdir}/conf",
-        strip   => 1,
-        user    => $jira::user,
-        group   => $jira::group,
-        notify  => Exec["chown_${jira::extractdir}"],
-        before  => File[$jira::homedir],
-        require => [
-          File[$jira::installdir],
-          User[$jira::user],
-        File[$jira::extractdir]],
-      }
-    }
-    'archive': {
-      archive { "/tmp/${file}":
-        ensure          => present,
-        extract         => true,
-        extract_command => 'tar xfz %s --strip-components=1',
-        extract_path    => $jira::webappdir,
-        source          => "${jira::download_url}/${file}",
-        creates         => "${jira::webappdir}/conf",
-        cleanup         => true,
-        checksum_verify => $jira::checksum_verify,
-        checksum_type   => 'md5',
-        checksum        => $jira::checksum,
-        user            => $jira::user,
-        group           => $jira::group,
-        proxy_server    => $jira::proxy_server,
-        proxy_type      => $jira::proxy_type,
-        before          => File[$jira::homedir],
-        require         => [
-          File[$jira::installdir],
-          File[$jira::webappdir],
-          User[$jira::user],
-        ],
-      }
-    }
-    default: {
-      fail('deploy_module parameter must equal "archive" or staging""')
-    }
+  archive { "/tmp/${file}":
+    ensure          => present,
+    extract         => true,
+    extract_command => 'tar xfz %s --strip-components=1',
+    extract_path    => $jira::webappdir,
+    source          => "${jira::download_url}/${file}",
+    creates         => "${jira::webappdir}/conf",
+    cleanup         => true,
+    checksum_verify => ($jira::checksum != undef),
+    checksum_type   => 'md5',
+    checksum        => $jira::checksum,
+    user            => $jira::user,
+    group           => $jira::group,
+    proxy_server    => $jira::proxy_server,
+    proxy_type      => $jira::proxy_type,
+    require         => [
+      File[$jira::installdir],
+      User[$jira::user],
+      File[$jira::webappdir],
+    ],
   }
 
-  file { $jira::homedir:
-    ensure => 'directory',
-    owner  => $jira::user,
-    group  => $jira::group,
-  }
-
-  -> exec { "chown_${jira::extractdir}":
-    command     => "/bin/chown -R ${jira::user}:${jira::group} ${jira::extractdir}",
+  -> exec { "chown_${jira::webappdir}":
+    command     => shellquote('/bin/chown', '-R', "${jira::user}:${jira::group}", $jira::webappdir),
     refreshonly => true,
     subscribe   => User[$jira::user],
   }
 
+  file { "${jira::installdir}/atlassian-${jira::product_name}-running":
+    ensure  => 'link',
+    target  => $jira::webappdir,
+    notify  => Exec['stop-jira-for-version-change'],
+    require => Archive["/tmp/${file}"],
+  }
+
+  exec { 'stop-jira-for-version-change':
+    path        => ['/bin/', '/sbin/', '/usr/bin/', '/usr/sbin/'],
+    command     => $jira::stop_jira,
+    refreshonly => true,
+    # 5 means the service doesn't exist; that's fine
+    returns     => [0, 5],
+  }
+
   if $jira::db == 'mysql' and $jira::mysql_connector_manage {
-    if $jira::deploy_module == 'archive' {
-      class { 'jira::mysql_connector':
-        require => Archive["/tmp/${file}"],
-      }
-    } elsif $jira::deploy_module == 'deploy' {
-      class { 'jira::mysql_connector':
-        require => Staging::Extract[$file],
-      }
+    class { 'jira::mysql_connector':
+      require => Archive["/tmp/${file}"],
     }
     contain jira::mysql_connector
   }

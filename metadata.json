@@ -1,6 +1,6 @@
 {
   "name": "puppet-jira",
-  "version": "4.0.2-rc0",
+  "version": "5.0.2-rc0",
   "author": "Vox Pupuli",
   "summary": "Module to install, configure and manage Atlassian Jira",
   "license": "Apache-2.0",
@@ -13,41 +13,44 @@
   ],
   "dependencies": [
     {
-      "name": "puppet/archive",
-      "version_requirement": ">= 1.0.0 < 5.0.0"
-    },
-    {
-      "name": "puppet/staging",
-      "version_requirement": ">= 2.0.1 < 4.0.0"
+      "name": "camptocamp/systemd",
+      "version_requirement": ">= 3.0.0 < 4.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.25.0 < 7.0.0"
+      "version_requirement": ">= 4.25.0 < 8.0.0"
+    },
+    {
+      "name": "puppet/archive",
+      "version_requirement": ">= 1.0.0 < 6.0.0"
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 5.5.8 < 7.0.0"
+      "version_requirement": ">= 6.1.0 < 8.0.0"
     }
   ],
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "7"
+        "7",
+        "8"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "7"
+        "7",
+        "8"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "7"
+        "7",
+        "8"
       ]
     },
     {
@@ -59,7 +62,8 @@
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "18.04"
+        "18.04",
+        "20.04"
       ]
     }
   ]

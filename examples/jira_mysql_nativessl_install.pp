@@ -30,7 +30,7 @@ node default {
   }
 
   java_ks { 'jira':
-    ensure      => present,
+    ensure      => 'present',
     name        => 'jira',
     certificate => '/etc/ssl/jira_cert.pem',
     private_key => '/etc/ssl/jira_key.pem',

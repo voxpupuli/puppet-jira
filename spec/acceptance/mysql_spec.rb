@@ -7,7 +7,17 @@ describe 'jira mysql' do
         root_password => 'strongpassword',
       }
 
+      # Default MySQL is too old for utf8mb4 on CentOS 7, or something. Also Ubuntu 20.04
+      # for some reason fails with utf8
+      if $facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] == '7' {
+        $cs = 'utf8'
+      } else {
+        $cs = 'utf8mb4'
+      }
+
       mysql::db { 'jira':
+        charset  => $cs,
+        collate  => "${cs}_general_ci",
         user     => 'jiraadm',
         password => 'mypassword',
         host     => 'localhost',
@@ -38,17 +48,16 @@ describe 'jira mysql' do
         installdir           => '/opt/atlassian-jira',
         homedir              => '/opt/jira-home',
         javahome             => '/usr',
+        jvm_type             => 'oracle-jdk-1.8',
         db                   => 'mysql',
-        dbport               => '3306',
+        dbport               => 3306,
         dbdriver             => 'com.mysql.jdbc.Driver',
         dbtype               => 'mysql',
-        tomcat_port          => '8081',
+        tomcat_port          => 8081,
         tomcat_native_ssl    => true,
         tomcat_keystore_file => '/tmp/jira.ks',
         require              => [Mysql::Db['jira'], Java_ks['jira']],
       }
-
-      class { 'jira::facts': }
     EOS
 
     apply_manifest(pp, catch_failures: true)
@@ -86,11 +95,11 @@ describe 'jira mysql' do
   end
 
   describe command('wget -q --tries=24 --retry-connrefused --no-check-certificate --read-timeout=10 -O- localhost:8081') do
-    its(:stdout) { is_expected.to include('8.13.4') }
+    its(:stdout) { is_expected.to include('8.13.5') }
   end
 
   describe command('wget -q --tries=24 --retry-connrefused --no-check-certificate --read-timeout=10 -O- https://localhost:8443') do
-    its(:stdout) { is_expected.to include('8.13.4') }
+    its(:stdout) { is_expected.to include('8.13.5') }
   end
 
   describe 'shutdown' do

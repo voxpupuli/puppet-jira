@@ -32,14 +32,12 @@
     <Valve className="org.apache.catalina.valves.CometConnectionManagerValve" />
     -->
 
-<% if ! scope.lookupvar('jira::resources').empty? -%>
-<%   scope.lookupvar('jira::resources').each do |name, values| -%>
-    <Resource name = "<%= name %>"
-<%     values.each_pair do |key,value| -%>
-        <%= key %> = <%= "\"#{value}\"" %>
-<%     end -%>
+<%   jira::sort_hash($jira::resources).each |$name, $values| { -%>
+    <Resource name = "<%= $name %>"
+<%     jira::sort_hash($values).each |$key, $value| { -%>
+        <%= $key %> = "<%= $value %>"
+<%     } -%>
     />
-<%   end -%>
-<% end -%>
+<% } -%>
 <JarScanner scanManifest="false"/>
 </Context>
