@@ -298,12 +298,12 @@ class jira (
   # Database Settings
   $use_jndi_ds                                                      = false,
   $jndi_ds_name                                                     = 'JiraDS',
-  Enum['postgresql','mysql','sqlserver','oracle','h2'] $db          = 'postgresql',
+  Enum['postgresql', 'mysql', 'sqlserver', 'oracle', 'h2'] $db      = 'postgresql',
   String $dbuser                                                    = 'jiraadm',
   String $dbpassword                                                = 'mypassword',
   String $dbserver                                                  = 'localhost',
   String $dbname                                                    = 'jira',
-  Optional[Variant[Integer,String]] $dbport                         = undef,
+  Optional[Variant[Integer, String]] $dbport                        = undef,
   Optional[String] $dbdriver                                        = undef,
   Optional[String] $dbtype                                          = undef,
   Optional[String] $dburl                                           = undef,
@@ -346,7 +346,7 @@ class jira (
   Optional[String] $checksum                                        = undef,
   Boolean $disable_notifications                                    = false,
   Optional[String] $proxy_server                                    = undef,
-  Optional[Enum['none','http','https','ftp']] $proxy_type           = undef,
+  Optional[Enum['none', 'http', 'https', 'ftp']] $proxy_type        = undef,
   # Manage service
   Boolean $service_manage                                           = true,
   Stdlib::Ensure::Service $service_ensure                           = 'running',
@@ -382,7 +382,9 @@ class jira (
   Stdlib::Absolutepath $tomcat_keystore_file                        = '/home/jira/jira.jks',
   String $tomcat_keystore_pass                                      = 'changeit',
   Enum['JKS', 'JCEKS', 'PKCS12'] $tomcat_keystore_type              = 'JKS',
-  String $tomcat_accesslog_format                                   = '%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;',
+  String $tomcat_accesslog_format                                   =
+  '%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;'
+  ,
   Boolean $tomcat_accesslog_enable_xforwarded_for                   = false,
   # Tomcat Tunables
   Integer $tomcat_max_threads                                       = 150,
@@ -429,7 +431,8 @@ class jira (
   }
 
   if $enable_connection_pooling != undef {
-    deprecation('jira::enable_connection_pooling', 'jira::enable_connection_pooling has been removed and does nothing. Please simply configure the connection pooling parameters')
+    deprecation('jira::enable_connection_pooling',
+      'jira::enable_connection_pooling has been removed and does nothing. Please simply configure the connection pooling parameters')
   }
 
   if $tomcat_redirect_https_port {
@@ -448,13 +451,13 @@ class jira (
 
   $webappdir = "${installdir}/atlassian-${product_name}-${version}-standalone"
 
-  if ! empty($ajp) {
-    if ! ('port' in $ajp) {
+  if !empty($ajp) {
+    if !('port' in $ajp) {
       fail('You need to specify a valid port for the AJP connector.')
     } else {
       assert_type(Variant[Pattern[/^\d+$/], Stdlib::Port], $ajp['port'])
     }
-    if ! ('protocol' in $ajp) {
+    if !('protocol' in $ajp) {
       fail('You need to specify a valid protocol for the AJP connector.')
     } else {
       assert_type(Enum['AJP/1.3', 'org.apache.coyote.ajp', 'org.apache.coyote.ajp.AjpNioProtocol'], $ajp['protocol'])

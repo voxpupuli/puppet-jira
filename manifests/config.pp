@@ -92,7 +92,8 @@ class jira::config {
     $oracle_separator = bool2str($jira::oracle_use_sid, ':', '/')
     $dburl = $jira::db ? {
       'postgresql' => "jdbc:${jira::db}://${jira::dbserver}:${dbport}/${jira::dbname}",
-      'mysql'      => "jdbc:${jira::db}://${jira::dbserver}:${dbport}/${jira::dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB",
+      'mysql'      => "jdbc:${jira::db}://${jira::dbserver}:${dbport}/${jira::dbname}
+        ?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB",
       'oracle'     => "jdbc:${jira::db}:thin:@${jira::dbserver}:${dbport}${oracle_separator}${jira::dbname}",
       'sqlserver'  => "jdbc:jtds:${jira::db}://${jira::dbserver}:${dbport}/${jira::dbname}",
       'h2'         => "jdbc:h2:file:/${jira::homedir}/database/${jira::dbname}",
@@ -101,7 +102,8 @@ class jira::config {
 
   # Allow some backwards compatibility;
   if $jira::poolsize {
-    deprecation('jira::poolsize', 'jira::poolsize is deprecated and simply sets max-pool-size. Please use jira::pool_max_size instead and remove this configuration')
+    deprecation('jira::poolsize',
+      'jira::poolsize is deprecated and simply sets max-pool-size. Please use jira::pool_max_size instead and remove this configuration')
   }
 
   $pool_min_size = pick($jira::pool_min_size, 20)
@@ -160,8 +162,13 @@ class jira::config {
     mode    => '0755',
   }
 
+
+  $dbconfig_template = $jira::use_jndi_ds ? {
+    true    => 'jira/dbconfig.jndi.xml.epp',
+    default => 'jira/dbconfig.xml.epp'
+  }
   file { "${jira::homedir}/dbconfig.xml":
-    content => epp('jira/dbconfig.xml.epp'),
+    content => epp($dbconfig_template),
     mode    => '0600',
   }
 
