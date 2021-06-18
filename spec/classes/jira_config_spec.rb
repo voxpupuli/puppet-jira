@@ -155,6 +155,119 @@ describe 'jira' do
             end
           end
 
+          context 'postgres params' do
+            let(:params) do
+              {
+                'version': '8.13.5',
+                'javahome': '/opt/java',
+                'db': 'postgresql',
+                'dbport': 4711,
+                'dbserver': 'TheSQLServer',
+                'dbname': 'TheJiraDB',
+                'dbuser': 'TheDBUser',
+                'dbpassword': 'TheDBPassword',
+              }
+            end
+
+            it do
+              is_expected.to contain_file('/home/jira/dbconfig.xml')
+                               .with_content(%r{jdbc:postgresql://TheSQLServer:4711/TheJiraDB})
+                               .with_content(%r{<schema-name>public</schema-name>})
+                               .with_content(%r{<username>TheDBUser</username>})
+                               .with_content(%r{<password>TheDBPassword</password>})
+            end
+          end
+
+          context 'JNDI DS usage' do
+
+            let :params do
+              {
+                'javahome': '/opt/java',
+                'use_jndi_ds': true,
+                'jndi_ds_name': 'TestJndiDSName',
+                'db': 'postgresql',
+                'dbport': 4711,
+                'dbserver': 'TheSQLServer',
+                'dbname': 'TheJiraDB',
+                'dbuser': 'TheDBUser',
+                'dbpassword': 'TheDBPassword',
+              }
+            end
+
+            it do
+              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml')
+                               .with_content(%r{Resource name="jdbc/TestJndiDSName"})
+                               .with_content(%r{driverClassName="org.postgresql.Driver"})
+                               .with_content(%r{url="jdbc:postgresql://TheSQLServer:4711/TheJiraDB"})
+                               .with_content(%r{username="TheDBUser"})
+                               .with_content(%r{password="TheDBPassword"})
+                               .with_content(%r{maxTotal="20"})
+                               .with_content(%r{maxIdle="20"})
+                               .with_content(%r{validationQuery="select 1"})
+            end
+
+            it do
+              is_expected.not_to contain_file('/home/jira/dbconfig.xml')
+                                   .with_content(%r{jdbc:postgresql://TheSQLServer:4711/TheJiraDB})
+                                   .with_content(%r{<pool-max-size>20</pool-max-size>})
+                                   .with_content(%r{<pool-min-size>20</pool-min-size>})
+                                   .with_content(%r{<validation-query>select version\(\);</validation-query>})
+            end
+
+            it do
+              is_expected.to contain_file('/home/jira/dbconfig.xml')
+                               .with_content(%r{<name>defaultDS</name>})
+                               .with_content(%r{<delegator-name>default</delegator-name>})
+                               .with_content(%r{<database-type>postgres72</database-type>})
+                               .with_content(%r{<schema-name>public</schema-name>})
+                               .with_content(%r{<jndi-datasource>\s*<jndi-name>java:comp/env/jdbc/TestJndiDSName</jndi-name>\s*</jndi-datasource>})
+            end
+          end
+
+          context 'Non JNDI DS usage' do
+
+            let :params do
+              {
+                'javahome': '/opt/java',
+                'db': 'postgresql',
+                'dbport': 4711,
+                'dbserver': 'TheSQLServer',
+                'dbname': 'TheJiraDB',
+                'dbuser': 'TheDBUser',
+                'dbpassword': 'TheDBPassword',
+              }
+            end
+
+            it do
+              is_expected.not_to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml')
+                               .with_content(%r{Resource name="jdbc/TestJndiDSName"})
+                               .with_content(%r{driverClassName="org.postgresql.Driver"})
+                               .with_content(%r{url="jdbc:postgresql://TheSQLServer:4711/TheJiraDB"})
+                               .with_content(%r{username="TheDBUser"})
+                               .with_content(%r{password="TheDBPassword"})
+                               .with_content(%r{maxTotal="20"})
+                               .with_content(%r{maxIdle="20"})
+                               .with_content(%r{validationQuery="select 1"})
+            end
+
+            it do
+              is_expected.to contain_file('/home/jira/dbconfig.xml')
+                                   .with_content(%r{jdbc:postgresql://TheSQLServer:4711/TheJiraDB})
+                                   .with_content(%r{<pool-max-size>20</pool-max-size>})
+                                   .with_content(%r{<pool-min-size>20</pool-min-size>})
+                                   .with_content(%r{<validation-query>select version\(\);</validation-query>})
+            end
+
+            it do
+              is_expected.not_to contain_file('/home/jira/dbconfig.xml')
+                               .with_content(%r{<name>defaultDS</name>})
+                               .with_content(%r{<delegator-name>default</delegator-name>})
+                               .with_content(%r{<database-type>postgres72</database-type>})
+                               .with_content(%r{<schema-name>public</schema-name>})
+                               .with_content(%r{<jndi-datasource>\s*<jndi-name>java:comp/env/jdbc/TestJndiDSName</jndi-name>\s*</jndi-datasource>})
+            end
+          end
+
           context 'sqlserver params' do
             let(:params) do
               {
@@ -423,7 +536,7 @@ describe 'jira' do
                 version: '8.13.5',
                 javahome: '/opt/java',
                 proxy: {
-                  'scheme'    => 'https',
+                  'scheme' => 'https',
                   'proxyName' => 'www.example.com',
                   'proxyPort' => '9999'
                 }
@@ -445,7 +558,7 @@ describe 'jira' do
                   version: '8.13.5',
                   javahome: '/opt/java',
                   ajp: {
-                    'port'     => '8009',
+                    'port' => '8009',
                     'protocol' => 'AJP/1.3'
                   }
                 }
@@ -462,7 +575,7 @@ describe 'jira' do
                   version: '8.13.5',
                   javahome: '/opt/java',
                   ajp: {
-                    'port'     => '8009',
+                    'port' => '8009',
                     'protocol' => 'org.apache.coyote.ajp.AjpNioProtocol'
                   }
                 }
