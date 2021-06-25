@@ -45,17 +45,18 @@ describe 'jira postgresql' do
     EOS
 
     # jira just takes *ages* to start up :-(
+    WGET_CMD = 'wget -q --tries=24 --retry-connrefused --read-timeout=10 localhost:8080'
     apply_manifest(pp, catch_failures: true)
     sleep 60
-    shell 'wget -q --tries=24 --retry-connrefused --read-timeout=10 localhost:8080', acceptable_exit_codes: [0, 8]
+    shell WGET_CMD, acceptable_exit_codes: [0, 8]
     sleep 60
-    shell 'wget -q --tries=24 --retry-connrefused --read-timeout=10 localhost:8080', acceptable_exit_codes: [0, 8]
+    shell WGET_CMD, acceptable_exit_codes: [0, 8]
     sleep 60
     apply_manifest(pp_upgrade, catch_failures: true)
     sleep 60
-    shell 'wget -q --tries=24 --retry-connrefused --read-timeout=10 localhost:8080', acceptable_exit_codes: [0, 8]
+    shell WGET_CMD, acceptable_exit_codes: [0, 8]
     sleep 60
-    shell 'wget -q --tries=24 --retry-connrefused --read-timeout=10 localhost:8080', acceptable_exit_codes: [0, 8]
+    shell WGET_CMD, acceptable_exit_codes: [0, 8]
     sleep 60
     apply_manifest(pp_upgrade, catch_failures: true)
   end

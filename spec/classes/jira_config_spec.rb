@@ -1,7 +1,23 @@
 require 'spec_helper.rb'
 
+# set some constants to keep it DRY
+DEFAULT_VERSION = '8.13.5'
+INSTALLATION_BASE_PATH = "/opt/jira/atlassian-jira-software-#{DEFAULT_VERSION}-standalone"
+FILENAME_SETENV_SH = "#{INSTALLATION_BASE_PATH}/bin/setenv.sh"
+FILENAME_USER_SH = "#{INSTALLATION_BASE_PATH}/bin/user.sh"
+FILENAME_SERVER_XML = "#{INSTALLATION_BASE_PATH}/conf/server.xml"
+FILENAME_DBCONFIG_XML = '/home/jira/dbconfig.xml'
+
 describe 'jira' do
   describe 'jira::config' do
+
+    let(:params) do
+      {
+        javahome: '/opt/java',
+        version: '8.13.5',
+      }
+    end
+
     context 'supported operating systems' do
       on_supported_os.each do |os, facts|
         context "on #{os}" do
@@ -10,22 +26,16 @@ describe 'jira' do
           end
 
           context 'default params' do
-            let(:params) do
-              {
-                javahome: '/opt/java'
-              }
-            end
-
             it { is_expected.to compile.with_all_deps }
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/setenv.sh').
+              is_expected.to contain_file(FILENAME_SETENV_SH).
                 with_content(%r{#DISABLE_NOTIFICATIONS=})
             end
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/user.sh') }
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml') }
+            it { is_expected.to contain_file(FILENAME_USER_SH) }
+            it { is_expected.to contain_file(FILENAME_SERVER_XML) }
             # Also ensure that we actually omit elements by default
             it do
-              is_expected.to contain_file('/home/jira/dbconfig.xml').
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
                 with_content(%r{jdbc:postgresql://localhost:5432/jira}).
                 with_content(%r{<schema-name>public</schema-name>}).
                 with_content(%r{<pool-max-size>20}).
@@ -42,7 +52,7 @@ describe 'jira' do
                 with_content(%r{<connection-properties>tcpKeepAlive=true;socketTimeout=240})
             end
             it { is_expected.not_to contain_file('/home/jira/cluster.properties') }
-            it { is_expected.not_to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/check-java.sh') }
+            it { is_expected.not_to contain_file("#{INSTALLATION_BASE_PATH}/bin/check-java.sh") }
           end
 
           context 'default params with java install' do
@@ -69,7 +79,7 @@ describe 'jira' do
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_package('java-11-openjdk-headless') }
             it do
-              is_expected.to contain_file('/home/jira/dbconfig.xml').
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
                 with_content(%r{<validation-query>select 1</validation-query>}).
                 with_content(%r{<validation-query-timeout>3</validation-query-timeout>}).
                 without_content(%r{<connection-properties>})
@@ -78,21 +88,19 @@ describe 'jira' do
 
           context 'database settings' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
+              super().merge(
                 connection_settings: 'TEST-SETTING;',
                 pool_max_size: 200,
                 pool_min_size: 10,
                 validation_query: 'SELECT myfunction();',
-              }
+              )
             end
 
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/setenv.sh') }
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/user.sh') }
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml') }
+            it { is_expected.to contain_file(FILENAME_SETENV_SH) }
+            it { is_expected.to contain_file(FILENAME_USER_SH) }
+            it { is_expected.to contain_file(FILENAME_SERVER_XML) }
             it do
-              is_expected.to contain_file('/home/jira/dbconfig.xml').
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
                 with_content(%r{<connection-properties>TEST-SETTING;</connection-properties>}).
                 with_content(%r{<pool-max-size>200</pool-max-size>}).
                 with_content(%r{<pool-min-size>10</pool-min-size>}).
@@ -102,34 +110,30 @@ describe 'jira' do
 
           context 'mysql params' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
-                db: 'mysql'
-              }
+              super().merge(
+                db: 'mysql',
+              )
             end
 
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/setenv.sh') }
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/user.sh') }
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml') }
+            it { is_expected.to contain_file(FILENAME_SETENV_SH) }
+            it { is_expected.to contain_file(FILENAME_USER_SH) }
+            it { is_expected.to contain_file(FILENAME_SERVER_XML) }
             it do
-              is_expected.to contain_file('/home/jira/dbconfig.xml').
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
                 with_content(%r{jdbc:mysql://localhost:3306/jira})
             end
           end
 
           context 'oracle params' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
+              super().merge(
                 db: 'oracle',
                 dbname: 'mydatabase',
-              }
+              )
             end
 
             it do
-              is_expected.to contain_file('/home/jira/dbconfig.xml').
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
                 with_content(%r{jdbc:oracle:thin:@localhost:1521:mydatabase}).
                 with_content(%r{<database-type>oracle10g}).
                 with_content(%r{<driver-class>oracle.jdbc.OracleDriver})
@@ -138,182 +142,168 @@ describe 'jira' do
 
           context 'oracle servicename' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
+              super().merge(
                 db: 'oracle',
                 dbport: 1522,
                 dbserver: 'oracleserver',
                 oracle_use_sid: false,
                 dbname: 'mydatabase',
-              }
+              )
             end
 
             it do
-              is_expected.to contain_file('/home/jira/dbconfig.xml').
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
                 with_content(%r{jdbc:oracle:thin:@oracleserver:1522/mydatabase})
             end
           end
 
           context 'postgres params' do
             let(:params) do
-              {
-                'version': '8.13.5',
-                'javahome': '/opt/java',
-                'db': 'postgresql',
-                'dbport': 4711,
-                'dbserver': 'TheSQLServer',
-                'dbname': 'TheJiraDB',
-                'dbuser': 'TheDBUser',
-                'dbpassword': 'TheDBPassword',
-              }
+              super().merge(
+                db: 'postgresql',
+                dbport: 4711,
+                dbserver: 'TheSQLServer',
+                dbname: 'TheJiraDB',
+                dbuser: 'TheDBUser',
+                dbpassword: 'TheDBPassword',
+              )
             end
 
             it do
-              is_expected.to contain_file('/home/jira/dbconfig.xml')
-                               .with_content(%r{jdbc:postgresql://TheSQLServer:4711/TheJiraDB})
-                               .with_content(%r{<schema-name>public</schema-name>})
-                               .with_content(%r{<username>TheDBUser</username>})
-                               .with_content(%r{<password>TheDBPassword</password>})
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{jdbc:postgresql://TheSQLServer:4711/TheJiraDB}).
+                with_content(%r{<schema-name>public</schema-name>}).
+                with_content(%r{<username>TheDBUser</username>}).
+                with_content(%r{<password>TheDBPassword</password>})
             end
           end
 
           context 'JNDI DS usage' do
-
-            let :params do
-              {
-                'javahome': '/opt/java',
-                'use_jndi_ds': true,
-                'jndi_ds_name': 'TestJndiDSName',
-                'db': 'postgresql',
-                'dbport': 4711,
-                'dbserver': 'TheSQLServer',
-                'dbname': 'TheJiraDB',
-                'dbuser': 'TheDBUser',
-                'dbpassword': 'TheDBPassword',
-              }
+            let(:params) do
+              super().merge(
+                use_jndi_ds: true,
+                jndi_ds_name: 'TestJndiDSName',
+                db: 'postgresql',
+                dbport: 4711,
+                dbserver: 'TheSQLServer',
+                dbname: 'TheJiraDB',
+                dbuser: 'TheDBUser',
+                dbpassword: 'TheDBPassword',
+              )
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml')
-                               .with_content(%r{Resource name="jdbc/TestJndiDSName"})
-                               .with_content(%r{driverClassName="org.postgresql.Driver"})
-                               .with_content(%r{url="jdbc:postgresql://TheSQLServer:4711/TheJiraDB"})
-                               .with_content(%r{username="TheDBUser"})
-                               .with_content(%r{password="TheDBPassword"})
-                               .with_content(%r{maxTotal="20"})
-                               .with_content(%r{maxIdle="20"})
-                               .with_content(%r{validationQuery="select 1"})
+              is_expected.to contain_file(FILENAME_SERVER_XML).
+                with_content(%r{Resource name="jdbc/TestJndiDSName"}).
+                with_content(%r{driverClassName="org.postgresql.Driver"}).
+                with_content(%r{url="jdbc:postgresql://TheSQLServer:4711/TheJiraDB"}).
+                with_content(%r{username="TheDBUser"}).
+                with_content(%r{password="TheDBPassword"}).
+                with_content(%r{maxTotal="20"}).
+                with_content(%r{maxIdle="20"}).
+                with_content(%r{validationQuery="select 1"})
             end
 
             it do
-              is_expected.not_to contain_file('/home/jira/dbconfig.xml')
-                                   .with_content(%r{jdbc:postgresql://TheSQLServer:4711/TheJiraDB})
-                                   .with_content(%r{<pool-max-size>20</pool-max-size>})
-                                   .with_content(%r{<pool-min-size>20</pool-min-size>})
-                                   .with_content(%r{<validation-query>select version\(\);</validation-query>})
+              is_expected.not_to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{jdbc:postgresql://TheSQLServer:4711/TheJiraDB}).
+                with_content(%r{<pool-max-size>20</pool-max-size>}).
+                with_content(%r{<pool-min-size>20</pool-min-size>}).
+                with_content(%r{<validation-query>select version\(\);</validation-query>})
             end
 
             it do
-              is_expected.to contain_file('/home/jira/dbconfig.xml')
-                               .with_content(%r{<name>defaultDS</name>})
-                               .with_content(%r{<delegator-name>default</delegator-name>})
-                               .with_content(%r{<database-type>postgres72</database-type>})
-                               .with_content(%r{<schema-name>public</schema-name>})
-                               .with_content(%r{<jndi-datasource>\s*<jndi-name>java:comp/env/jdbc/TestJndiDSName</jndi-name>\s*</jndi-datasource>})
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{<name>defaultDS</name>}).
+                with_content(%r{<delegator-name>default</delegator-name>}).
+                with_content(%r{<database-type>postgres72</database-type>}).
+                with_content(%r{<schema-name>public</schema-name>}).
+                with_content(%r{<jndi-datasource>\s*<jndi-name>java:comp/env/jdbc/TestJndiDSName</jndi-name>\s*</jndi-datasource>})
             end
           end
 
           context 'Non JNDI DS usage' do
-
-            let :params do
-              {
-                'javahome': '/opt/java',
-                'db': 'postgresql',
-                'dbport': 4711,
-                'dbserver': 'TheSQLServer',
-                'dbname': 'TheJiraDB',
-                'dbuser': 'TheDBUser',
-                'dbpassword': 'TheDBPassword',
-              }
+            let(:params) do
+              super().merge(
+                db: 'postgresql',
+                dbport: 4711,
+                dbserver: 'TheSQLServer',
+                dbname: 'TheJiraDB',
+                dbuser: 'TheDBUser',
+                dbpassword: 'TheDBPassword',
+              )
             end
 
             it do
-              is_expected.not_to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml')
-                               .with_content(%r{Resource name="jdbc/TestJndiDSName"})
-                               .with_content(%r{driverClassName="org.postgresql.Driver"})
-                               .with_content(%r{url="jdbc:postgresql://TheSQLServer:4711/TheJiraDB"})
-                               .with_content(%r{username="TheDBUser"})
-                               .with_content(%r{password="TheDBPassword"})
-                               .with_content(%r{maxTotal="20"})
-                               .with_content(%r{maxIdle="20"})
-                               .with_content(%r{validationQuery="select 1"})
+              is_expected.not_to contain_file(FILENAME_SERVER_XML).
+                with_content(%r{Resource name="jdbc/TestJndiDSName"}).
+                with_content(%r{driverClassName="org.postgresql.Driver"}).
+                with_content(%r{url="jdbc:postgresql://TheSQLServer:4711/TheJiraDB"}).
+                with_content(%r{username="TheDBUser"}).
+                with_content(%r{password="TheDBPassword"}).
+                with_content(%r{maxTotal="20"}).
+                with_content(%r{maxIdle="20"}).
+                with_content(%r{validationQuery="select 1"})
             end
 
             it do
-              is_expected.to contain_file('/home/jira/dbconfig.xml')
-                                   .with_content(%r{jdbc:postgresql://TheSQLServer:4711/TheJiraDB})
-                                   .with_content(%r{<pool-max-size>20</pool-max-size>})
-                                   .with_content(%r{<pool-min-size>20</pool-min-size>})
-                                   .with_content(%r{<validation-query>select version\(\);</validation-query>})
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{jdbc:postgresql://TheSQLServer:4711/TheJiraDB}).
+                with_content(%r{<pool-max-size>20</pool-max-size>}).
+                with_content(%r{<pool-min-size>20</pool-min-size>}).
+                with_content(%r{<validation-query>select version\(\);</validation-query>})
             end
 
             it do
-              is_expected.not_to contain_file('/home/jira/dbconfig.xml')
-                               .with_content(%r{<name>defaultDS</name>})
-                               .with_content(%r{<delegator-name>default</delegator-name>})
-                               .with_content(%r{<database-type>postgres72</database-type>})
-                               .with_content(%r{<schema-name>public</schema-name>})
-                               .with_content(%r{<jndi-datasource>\s*<jndi-name>java:comp/env/jdbc/TestJndiDSName</jndi-name>\s*</jndi-datasource>})
+              is_expected.not_to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{<name>defaultDS</name>}).
+                with_content(%r{<delegator-name>default</delegator-name>}).
+                with_content(%r{<database-type>postgres72</database-type>}).
+                with_content(%r{<schema-name>public</schema-name>}).
+                with_content(%r{<jndi-datasource>\s*<jndi-name>java:comp/env/jdbc/TestJndiDSName</jndi-name>\s*</jndi-datasource>})
             end
           end
 
           context 'sqlserver params' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
+              super().merge(
                 db: 'sqlserver',
                 dbport: '1433',
                 dbschema: 'public'
-              }
+              )
             end
 
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/setenv.sh') }
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/user.sh') }
-            it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml') }
+            it { is_expected.to contain_file(FILENAME_SETENV_SH) }
+            it { is_expected.to contain_file(FILENAME_USER_SH) }
+            it { is_expected.to contain_file(FILENAME_SERVER_XML) }
             it do
-              is_expected.to contain_file('/home/jira/dbconfig.xml').
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
                 with_content(%r{<schema-name>public</schema-name>})
             end
           end
 
           context 'custom dburl' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
+              super().merge(
                 dburl: 'my custom dburl'
-              }
+              )
             end
 
             it do
-              is_expected.to contain_file('/home/jira/dbconfig.xml').
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
                 with_content(%r{<url>my custom dburl</url>})
             end
           end
 
           context 'customise tomcat connector' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
+              super().merge(
                 tomcat_port: 9229
-              }
+              )
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+              is_expected.to contain_file(FILENAME_SERVER_XML).
                 with_content(%r{<Connector port=\"9229\"\s+relaxedPathChars=}m)
             end
           end
@@ -321,10 +311,9 @@ describe 'jira' do
           context 'server.xml listeners' do
             context 'version greater than 8' do
               let(:params) do
-                {
+                super().merge(
                   version: '8.1.0',
-                  javahome: '/opt/java'
-                }
+                )
               end
 
               it do
@@ -336,215 +325,187 @@ describe 'jira' do
 
           context 'customise tomcat connector with a binding address' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
+              super().merge(
                 tomcat_port: 9229,
                 tomcat_address: '127.0.0.1'
-              }
+              )
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+              is_expected.to contain_file(FILENAME_SERVER_XML).
                 with_content(%r{<Connector port=\"9229\"\s+address=\"127\.0\.0\.1\"\s+relaxedPathChars=}m)
             end
           end
 
           context 'tomcat context path' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
+              super().merge(
                 contextpath: '/jira'
-              }
+              )
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+              is_expected.to contain_file(FILENAME_SERVER_XML).
                 with_content(%r{path="/jira"})
             end
           end
 
           context 'tomcat port' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
-                tomcat_port: 8888
-              }
+              super().merge(
+                tomcat_port: 8888,
+              )
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+              is_expected.to contain_file(FILENAME_SERVER_XML).
                 with_content(%r{port="8888"})
             end
           end
 
           context 'tomcat acceptCount' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
-                tomcat_accept_count: 200
-              }
+              super().merge(
+                tomcat_accept_count: 200,
+              )
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+              is_expected.to contain_file(FILENAME_SERVER_XML).
                 with_content(%r{acceptCount="200"})
             end
           end
 
           context 'tomcat MaxHttpHeaderSize' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
-                tomcat_max_http_header_size: 4096
-              }
+              super().merge(
+                tomcat_max_http_header_size: 4096,
+              )
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+              is_expected.to contain_file(FILENAME_SERVER_XML).
                 with_content(%r{maxHttpHeaderSize="4096"})
             end
           end
 
           context 'tomcat MinSpareThreads' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
-                tomcat_min_spare_threads: 50
-              }
+              super().merge(
+                tomcat_min_spare_threads: 50,
+              )
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+              is_expected.to contain_file(FILENAME_SERVER_XML).
                 with_content(%r{minSpareThreads="50"})
             end
           end
 
           context 'tomcat ConnectionTimeout' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
-                tomcat_connection_timeout: 25_000
-              }
+              super().merge(
+                tomcat_connection_timeout: 25_000,
+              )
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+              is_expected.to contain_file(FILENAME_SERVER_XML).
                 with_content(%r{connectionTimeout="25000"})
             end
           end
 
           context 'tomcat EnableLookups' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
-                tomcat_enable_lookups: true
-              }
+              super().merge(
+                tomcat_enable_lookups: true,
+              )
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+              is_expected.to contain_file(FILENAME_SERVER_XML).
                 with_content(%r{enableLookups="true"})
             end
           end
 
           context 'tomcat Protocol' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
-                tomcat_protocol: 'HTTP/1.1'
-              }
+              super().merge(
+                tomcat_protocol: 'HTTP/1.1',
+              )
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+              is_expected.to contain_file(FILENAME_SERVER_XML).
                 with_content(%r{protocol="HTTP/1.1"})
             end
           end
 
           context 'tomcat UseBodyEncodingForURI' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
-                tomcat_use_body_encoding_for_uri: false
-              }
+              super().merge(
+                tomcat_use_body_encoding_for_uri: false,
+              )
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+              is_expected.to contain_file(FILENAME_SERVER_XML).
                 with_content(%r{useBodyEncodingForURI="false"})
             end
           end
 
           context 'tomcat DisableUploadTimeout' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
-                tomcat_disable_upload_timeout: false
-              }
+              super().merge(
+                tomcat_disable_upload_timeout: false,
+              )
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+              is_expected.to contain_file(FILENAME_SERVER_XML).
                 with_content(%r{disableUploadTimeout="false"})
             end
           end
 
           context 'tomcat EnableLookups' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
-                tomcat_enable_lookups: true
-              }
+              super().merge(
+                tomcat_enable_lookups: true,
+              )
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+              is_expected.to contain_file(FILENAME_SERVER_XML).
                 with_content(%r{enableLookups="true"})
             end
           end
 
           context 'tomcat maxThreads' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
-                tomcat_max_threads: 300
-              }
+              super().merge(
+                tomcat_max_threads: 300,
+              )
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+              is_expected.to contain_file(FILENAME_SERVER_XML).
                 with_content(%r{maxThreads="300"})
             end
           end
 
           context 'tomcat proxy path' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
+              super().merge(
                 proxy: {
                   'scheme' => 'https',
                   'proxyName' => 'www.example.com',
                   'proxyPort' => '9999'
-                }
-              }
+                },
+              )
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+              is_expected.to contain_file(FILENAME_SERVER_XML).
                 with_content(%r{proxyName = 'www\.example\.com'}).
                 with_content(%r{scheme = 'https'}).
                 with_content(%r{proxyPort = '9999'})
@@ -554,35 +515,31 @@ describe 'jira' do
           context 'ajp proxy' do
             context 'with valid config including protocol AJP/1.3' do
               let(:params) do
-                {
-                  version: '8.13.5',
-                  javahome: '/opt/java',
+                super().merge(
                   ajp: {
                     'port' => '8009',
                     'protocol' => 'AJP/1.3'
-                  }
-                }
+                  },
+                )
               end
 
               it do
-                is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+                is_expected.to contain_file(FILENAME_SERVER_XML).
                   with_content(%r{<Connector enableLookups="false" URIEncoding="UTF-8"\s+port = "8009"\s+protocol = "AJP/1.3"\s+/>})
               end
             end
             context 'with valid config including protocol org.apache.coyote.ajp.AjpNioProtocol' do
               let(:params) do
-                {
-                  version: '8.13.5',
-                  javahome: '/opt/java',
+                super().merge(
                   ajp: {
                     'port' => '8009',
                     'protocol' => 'org.apache.coyote.ajp.AjpNioProtocol'
-                  }
-                }
+                  },
+                )
               end
 
               it do
-                is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+                is_expected.to contain_file(FILENAME_SERVER_XML).
                   with_content(%r{<Connector enableLookups="false" URIEncoding="UTF-8"\s+port = "8009"\s+protocol = "org.apache.coyote.ajp.AjpNioProtocol"\s+/>})
               end
             end
@@ -590,9 +547,7 @@ describe 'jira' do
 
           context 'tomcat additional connectors, without default' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
+              super().merge(
                 tomcat_default_connector: false,
                 tomcat_additional_connectors: {
                   8081 => {
@@ -612,12 +567,12 @@ describe 'jira' do
                     'proxyPort' => '8124',
                     'scheme' => 'http'
                   }
-                }
-              }
+                },
+              )
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+              is_expected.to contain_file(FILENAME_SERVER_XML).
                 without_content(%r{<Connector port="8080"}).
                 with_content(%r{<Connector port="8081"}).
                 with_content(%r{connectionTimeout="20000"}).
@@ -639,26 +594,23 @@ describe 'jira' do
 
           context 'tomcat access log format' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
-                tomcat_accesslog_format: '%a %{jira.request.id}r %{jira.request.username}r %t %I'
-              }
+              super().merge(
+                tomcat_accesslog_format: '%a %{jira.request.id}r %{jira.request.username}r %t %I',
+              )
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+              is_expected.to contain_file(FILENAME_SERVER_XML).
                 with_content(%r{pattern="%a %{jira.request.id}r %{jira.request.username}r %t %I"/>})
             end
           end
 
           context 'tomcat access log format with x-forward-for handling' do
             let(:params) do
-              {
+              super().merge(
                 version: '8.16.0',
-                javahome: '/opt/java',
                 tomcat_accesslog_enable_xforwarded_for: true,
-              }
+              )
             end
 
             it do
@@ -670,11 +622,10 @@ describe 'jira' do
 
           context 'with script_check_java_managed enabled' do
             let(:params) do
-              {
+              super().merge(
                 script_check_java_manage: true,
                 version: '8.1.0',
-                javahome: '/opt/java'
-              }
+              )
             end
 
             it do
@@ -685,45 +636,39 @@ describe 'jira' do
 
           context 'context resources' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
-                resources: { 'testdb' => { 'auth' => 'Container' } }
-              }
+              super().merge(
+                resources: { 'testdb' => { 'auth' => 'Container' } },
+              )
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/context.xml').
+              is_expected.to contain_file("#{INSTALLATION_BASE_PATH}/conf/context.xml").
                 with_content(%r{<Resource name = "testdb"\n        auth = "Container"\n    />})
             end
           end
 
           context 'disable notifications' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
-                disable_notifications: true
-              }
+              super().merge(
+                disable_notifications: true,
+              )
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/bin/setenv.sh').
+              is_expected.to contain_file(FILENAME_SETENV_SH).
                 with_content(%r{^DISABLE_NOTIFICATIONS=})
             end
           end
 
           context 'native ssl support default params' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
-                tomcat_native_ssl: true
-              }
+              super().merge(
+                tomcat_native_ssl: true,
+              )
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+              is_expected.to contain_file(FILENAME_SERVER_XML).
                 with_content(%r{redirectPort="8443"}).
                 with_content(%r{port="8443"}).
                 with_content(%r{keyAlias="jira"}).
@@ -737,9 +682,7 @@ describe 'jira' do
 
           context 'native ssl support custom params' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
+              super().merge(
                 tomcat_native_ssl: true,
                 tomcat_https_port: 9443,
                 tomcat_address: '127.0.0.1',
@@ -748,12 +691,12 @@ describe 'jira' do
                 tomcat_key_alias: 'keystorealias',
                 tomcat_keystore_file: '/tmp/keyfile.ks',
                 tomcat_keystore_pass: 'keystorepass',
-                tomcat_keystore_type: 'PKCS12'
-              }
+                tomcat_keystore_type: 'PKCS12',
+              )
             end
 
             it do
-              is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.13.5-standalone/conf/server.xml').
+              is_expected.to contain_file(FILENAME_SERVER_XML).
                 with_content(%r{redirectPort="9443"}).
                 with_content(%r{port="9443"}).
                 with_content(%r{keyAlias="keystorealias"}).
@@ -768,11 +711,9 @@ describe 'jira' do
 
           context 'enable secure admin sessions' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
-                enable_secure_admin_sessions: true
-              }
+              super().merge(
+                enable_secure_admin_sessions: true,
+              )
             end
 
             it do
@@ -783,11 +724,9 @@ describe 'jira' do
 
           context 'disable secure admin sessions' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
-                enable_secure_admin_sessions: false
-              }
+              super().merge(
+                enable_secure_admin_sessions: false,
+              )
             end
 
             it do
@@ -798,13 +737,11 @@ describe 'jira' do
 
           context 'jira-config.properties' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
+              super().merge(
                 jira_config_properties: {
                   'ops.bar.group.size.opsbar-transitions' => '4'
-                }
-              }
+                },
+              )
             end
 
             it do
@@ -816,12 +753,10 @@ describe 'jira' do
 
           context 'enable clustering' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
+              super().merge(
                 datacenter: true,
-                shared_homedir: '/mnt/jira_shared_home_dir'
-              }
+                shared_homedir: '/mnt/jira_shared_home_dir',
+              )
             end
 
             it do
@@ -833,15 +768,13 @@ describe 'jira' do
 
           context 'enable clustering with ehcache options' do
             let(:params) do
-              {
-                version: '8.13.5',
-                javahome: '/opt/java',
+              super().merge(
                 datacenter: true,
                 shared_homedir: '/mnt/jira_shared_home_dir',
                 ehcache_listener_host: 'jira.foo.net',
                 ehcache_listener_port: 42,
-                ehcache_object_port: 401
-              }
+                ehcache_object_port: 401,
+              )
             end
 
             it do
@@ -856,11 +789,10 @@ describe 'jira' do
 
           context 'jira-8.12 - OpenJDK jvm params' do
             let(:params) do
-              {
+              super().merge(
                 version: '8.16.0',
-                javahome: '/opt/java',
-                jvm_type: 'openjdk-11'
-              }
+                jvm_type: 'openjdk-11',
+              )
             end
 
             it { is_expected.to compile.with_all_deps }
@@ -875,7 +807,7 @@ describe 'jira' do
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.16.0-standalone/bin/user.sh') }
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.16.0-standalone/conf/server.xml') }
             it do
-              is_expected.to contain_file('/home/jira/dbconfig.xml').
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
                 with_content(%r{jdbc:postgresql://localhost:5432/jira}).
                 with_content(%r{<schema-name>public</schema-name>})
             end
@@ -885,14 +817,13 @@ describe 'jira' do
 
           context 'jira-8.12 - custom jvm params' do
             let(:params) do
-              {
+              super().merge(
                 version: '8.16.0',
-                javahome: '/opt/java',
                 java_opts: '-XX:-TEST_OPTIONAL',
                 jvm_gc_args: '-XX:-TEST_GC_ARG',
                 jvm_code_cache_args: '-XX:-TEST_CODECACHE',
-                jvm_extra_args: '-XX:-TEST_EXTRA'
-              }
+                jvm_extra_args: '-XX:-TEST_EXTRA',
+              )
             end
 
             it { is_expected.to compile.with_all_deps }
@@ -907,12 +838,78 @@ describe 'jira' do
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.16.0-standalone/bin/user.sh') }
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.16.0-standalone/conf/server.xml') }
             it do
-              is_expected.to contain_file('/home/jira/dbconfig.xml').
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
                 with_content(%r{jdbc:postgresql://localhost:5432/jira}).
                 with_content(%r{<schema-name>public</schema-name>})
             end
             it { is_expected.not_to contain_file('/home/jira/cluster.properties') }
             it { is_expected.not_to contain_file('/opt/jira/atlassian-jira-software-8.16.0-standalone/bin/check-java.sh') }
+          end
+
+          context 'simple plugin download' do
+            let(:params) do
+              super().merge(
+                use_jndi_ds: true,
+                jndi_ds_name: 'TestJndiDSName',
+                plugins: {
+                  'test.jar': {
+                    source: 'https://www.example.com/fine-jira-plugin.tgz',
+                    username: 'TheUser',
+                    password: 'ThePassword',
+                    checksum: '123abc',
+                    checksum_type: 'sha512',
+                  }
+                },
+              )
+            end
+
+            it { is_expected.to compile.with_all_deps }
+
+            it do
+              is_expected.to contain_archive("#{INSTALLATION_BASE_PATH}/atlassian-jira/WEB-INF/lib/test.jar").
+                with({
+                       'source' => 'https://www.example.com/fine-jira-plugin.tgz',
+                       'ensure' => 'present',
+                       'username' => 'TheUser',
+                       'password' => 'ThePassword',
+                       'checksum' => '123abc',
+                       'checksum_type' => 'sha512',
+                     })
+            end
+
+            it do
+              is_expected.to contain_file(FILENAME_SERVER_XML).
+                with_content(%r{Resource name="jdbc/TestJndiDSName"})
+            end
+
+            context 'ensure absent marked plugin isn\'t downloaded' do
+              let(:params) do
+                super().merge(
+                  plugins: {
+                    'test.jar': { ensure: 'absent' }
+                  },
+                )
+              end
+
+              it do
+                is_expected.to contain_archive("#{INSTALLATION_BASE_PATH}/atlassian-jira/WEB-INF/lib/test.jar").
+                  with({ 'ensure' => 'absent' })
+              end
+            end
+
+            context 'ensure DS is correctly created' do
+              let(:params) do
+                super().merge(
+                  use_jndi_ds: true,
+                  jndi_ds_name: 'TestJndiDSName',
+                )
+              end
+
+              it do
+                is_expected.to contain_file(FILENAME_SERVER_XML).
+                  with_content(%r{Resource name="jdbc/TestJndiDSName"})
+              end
+            end
           end
         end
       end
