@@ -412,7 +412,7 @@ class jira (
   Optional[Integer[0]] $poolsize                                    = undef,
   Optional[Boolean] $enable_connection_pooling                      = undef,
 ) {
-  // To maintain compatibility with previous behaviour, we check for not-servicedesk instead of specifying the 
+  # To maintain compatibility with previous behaviour, we check for not-servicedesk instead of specifying the 
   if $product != 'servicedesk' and versioncmp($jira::version, '8.0.0') < 0 {
     fail('JIRA versions older than 8.0.0 are no longer supported. Please use an older version of this module to upgrade first.')
   }
