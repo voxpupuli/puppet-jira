@@ -274,7 +274,7 @@ class jira (
 
   # Jira Settings
   String $version                                                   = '8.13.5',
-  String $product                                                   = 'jira',
+  String[1] $product                                                = 'jira',
   Stdlib::Absolutepath $installdir                                  = '/opt/jira',
   Stdlib::Absolutepath $homedir                                     = '/home/jira',
   Boolean $manage_user                                              = true,
@@ -354,7 +354,7 @@ class jira (
   # Command to stop jira in preparation to upgrade. This is configurable
   # incase the jira service is managed outside of puppet. eg: using the
   # puppetlabs-corosync module: 'crm resource stop jira && sleep 15'
-  # Note: the command should return either 0 or  5 
+  # Note: the command should return either 0 or  5
   # when the service doesn't exist
   String $stop_jira                                                 = 'systemctl stop jira.service && sleep 15',
   # Whether to manage the 'check-java.sh' script, and where to retrieve
@@ -412,8 +412,12 @@ class jira (
   Optional[Integer[0]] $poolsize                                    = undef,
   Optional[Boolean] $enable_connection_pooling                      = undef,
 ) {
-  if versioncmp($jira::version, '8.0.0') < 0 {
+  # To maintain compatibility with previous behaviour, we check for not-servicedesk instead of specifying the 
+  if $product != 'servicedesk' and versioncmp($jira::version, '8.0.0') < 0 {
     fail('JIRA versions older than 8.0.0 are no longer supported. Please use an older version of this module to upgrade first.')
+  }
+  if $product == 'servicedesk' and versioncmp($jira::version, '4.10.0') < 0 {
+    fail('JIRA servicedesk versions older than 4.10.0 are no longer supported. Please use an older version of this module to upgrade first.')
   }
 
   if $datacenter and !$shared_homedir {
