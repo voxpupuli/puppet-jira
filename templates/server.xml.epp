@@ -87,7 +87,7 @@
                     keystoreType="<%= $jira::tomcat_keystore_type %>"
 <%   if $jira::proxy { -%>
 <%     jira::sort_hash($jira::proxy).each |$key, $value| { -%>
-                    <%= key %> = '<%= $value %>'
+                    <%= $key %> = '<%= $value %>'
 <%     } -%>
 <%   } -%>
         />
