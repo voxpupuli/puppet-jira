@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<%# Some defaults are set in jira::config based on DB -%>
+<jira-database-config>
+  <name>defaultDS</name>
+  <delegator-name>default</delegator-name>
+  <database-type><%= $jira::config::dbtype %></database-type>
+<% if $jira::config::dbschema != undef { -%>
+  <schema-name><%= $jira::config::dbschema %></schema-name>
+<% } -%>
+  <jndi-datasource>
+    <jndi-name>java:comp/env/jdbc/<%= $jira::jndi_ds_name %></jndi-name>
+  </jndi-datasource>
+</jira-database-config>

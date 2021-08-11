@@ -48,7 +48,7 @@
 <% if $jira::tomcat_native_ssl and $jira::tomcat_redirect_https_port { -%>
                    redirectPort="<%= $jira::tomcat_redirect_https_port %>"
 <% } else { -%>
-                   redirectPort="<%= $jira::tomcat_https_port%>"
+                   redirectPort="<%= $jira::tomcat_https_port %>"
 <% } -%>
 <% if $jira::proxy { -%>
 <%   jira::sort_hash($jira::proxy).each |$key, $value| { -%>
@@ -115,11 +115,22 @@
 
                     <Resource name="UserTransaction" auth="Container" type="javax.transaction.UserTransaction"
                               factory="org.objectweb.jotm.UserTransactionFactory" jotm.timeout="60"/>
+<% if $jira::use_jndi_ds { %>
+                    <!-- If you're using JIRA 6.4 or below; change maxTotal to maxActive -->
+                    <Resource name="jdbc/<%= $jira::jndi_ds_name %>" auth="Container" type="javax.sql.DataSource"
+                            driverClassName="<%= $jira::config::dbdriver %>"
+                            url="<%= $jira::config::dburl %>"
+                            username="<%= $jira::dbuser %>"
+                            password="<%= $jira::dbpassword %>"
+                            maxTotal="<%= $jira::config::pool_max_size %>"
+                            maxIdle="<%= $jira::config::pool_max_idle %>"
+                            validationQuery="select 1"
+                    />
+<% } -%>
                     <Manager pathname=""/>
                     <JarScanner scanManifest="false"/>
                     <Valve className="org.apache.catalina.valves.StuckThreadDetectionValve" threshold="120" />
                 </Context>
-
             </Host>
 
           <Valve className="org.apache.catalina.valves.AccessLogValve" resolveHosts="false"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
- 
-<%# Some default are set in jira::config based on DB -%>
+
+<%# Some defaults are set in jira::config based on DB -%>
 <jira-database-config>
   <name>defaultDS</name>
   <delegator-name>default</delegator-name>

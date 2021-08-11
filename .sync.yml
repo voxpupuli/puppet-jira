@@ -3,3 +3,6 @@ Gemfile:
   optional:
     ':test:':
       - gem: puppet-lint-param-docs
+spec/spec_helper.rb:
+  spec_overrides:
+    - "require 'support/acceptance/constants.rb'"

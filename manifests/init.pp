@@ -58,6 +58,10 @@
 #   EHCache configuration for clustered mode
 # @param ehcache_object_port
 #   EHCache configuration for clustered mode
+# @param use_jndi_ds
+#   If true, the database will be configured as JNDI datasource in server.xml and then referenced in dbconfig.xml
+# @param jndi_ds_name
+#   Configures the JNDI datasource name
 # @param db
 #   The kind of database to use.
 # @param dbname
@@ -263,6 +267,15 @@
 #   undocumented SSO parameter
 # @param session_lastvalidation
 #   undocumented SSO parameter
+# @param plugins
+#   an array of hashes defining custom plugins to install
+#   a single plugin configuration will has the following form
+#     installation_name: this name wil be used to install the plugin within jira
+#     source: url of plugin to be fetched
+#     username: the username for authentification, if necessary
+#     password: the password for authentification, if necessary
+#     checksum: the checksum of the plugin, to determine the need for an upgrade
+#     checksumtype: the type of checksum used (none|md5|sha1|sha2|sha256|sha384|sha512). (default: none)
 # @param jvm_permgen
 #   Deprecated. Exists to notify users that they're trying to configure a parameter that has no effect
 # @param poolsize
@@ -296,6 +309,8 @@ class jira (
   Optional[Stdlib::Port] $ehcache_listener_port                     = undef,
   Optional[Stdlib::Port] $ehcache_object_port                       = undef,
   # Database Settings
+  Boolean $use_jndi_ds                                              = false,
+  String[1] $jndi_ds_name                                           = 'JiraDS',
   Enum['postgresql','mysql','sqlserver','oracle','h2'] $db          = 'postgresql',
   String $dbuser                                                    = 'jiraadm',
   String $dbpassword                                                = 'mypassword',
@@ -352,10 +367,9 @@ class jira (
   $service_notify                                                   = undef,
   $service_subscribe                                                = undef,
   # Command to stop jira in preparation to upgrade. This is configurable
-  # incase the jira service is managed outside of puppet. eg: using the
+  # in case the jira service is managed outside of puppet. eg: using the
   # puppetlabs-corosync module: 'crm resource stop jira && sleep 15'
-  # Note: the command should return either 0 or  5
-  # when the service doesn't exist
+  # Note: the command should return either 0 or 5 when the service doesn't exist
   String $stop_jira                                                 = 'systemctl stop jira.service && sleep 15',
   # Whether to manage the 'check-java.sh' script, and where to retrieve
   # the script from.
@@ -411,8 +425,10 @@ class jira (
   Optional[String] $jvm_permgen                                     = undef,
   Optional[Integer[0]] $poolsize                                    = undef,
   Optional[Boolean] $enable_connection_pooling                      = undef,
+  # plugin installation
+  Array[Hash] $plugins                                              = [],
 ) {
-  # To maintain compatibility with previous behaviour, we check for not-servicedesk instead of specifying the 
+  # To maintain compatibility with previous behaviour, we check for not-servicedesk instead of specifying the
   if $product != 'servicedesk' and versioncmp($jira::version, '8.0.0') < 0 {
     fail('JIRA versions older than 8.0.0 are no longer supported. Please use an older version of this module to upgrade first.')
   }
@@ -475,5 +491,35 @@ class jira (
 
   if ($enable_sso) {
     class { 'jira::sso': }
+  }
+
+  # install any given library or remove them
+  $plugins.each |Hash $plugin_data| {
+    $target = "${jira::webappdir}/atlassian-jira/WEB-INF/lib/${$plugin_data['installation_name']}"
+    if  $plugin_data['ensure'] == 'absent' {
+      archive {
+        $target:
+          ensure        => 'absent',
+      }
+    } else {
+      $_target_defaults = {
+        ensure        => 'present',
+        source        => $plugin_data['source'],
+        checksum      => $plugin_data['checksum'],
+        checksum_type => $plugin_data['checksum_type'],
+      }
+      $_username = !empty($plugin_data['username']) ? {
+        default => {},
+        true    => { username => $plugin_data['username'] }
+      }
+      $_password = !empty($plugin_data['password']) ? {
+        default => {},
+        true    => { password => $plugin_data['password'] }
+      }
+      $_plugin_archive = {
+        $target => $_target_defaults + $_username + $_password
+      }
+      create_resources(archive, $_plugin_archive)
+    }
   }
 }
