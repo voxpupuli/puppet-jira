@@ -64,6 +64,10 @@ The following parameters are available in the `jira` class:
 * [`manage_user`](#manage_user)
 * [`user`](#user)
 * [`group`](#group)
+* [`installdir_owner`](#installdir_owner)
+* [`installdir_group`](#installdir_group)
+* [`installdir_mode`](#installdir_mode)
+* [`homedir_mode`](#homedir_mode)
 * [`uid`](#uid)
 * [`gid`](#gid)
 * [`shell`](#shell)
@@ -180,7 +184,7 @@ Default value: `'8.13.5'`
 
 ##### <a name="product"></a>`product`
 
-Data type: `String`
+Data type: `String[1]`
 
 Atlassian product to install.
 
@@ -225,6 +229,38 @@ Data type: `String`
 Group that the service will run as
 
 Default value: `'jira'`
+
+##### <a name="installdir_owner"></a>`installdir_owner`
+
+Data type: `String[1]`
+
+The owner of the installation directory.
+
+Default value: `'root'`
+
+##### <a name="installdir_group"></a>`installdir_group`
+
+Data type: `String[1]`
+
+The group of the installation directory.
+
+Default value: `'root'`
+
+##### <a name="installdir_mode"></a>`installdir_mode`
+
+Data type: `Stdlib::Filemode`
+
+The permissions of the installation directory. Note that the JIRA service user must have at least execute permission on the directory.
+
+Default value: `'0755'`
+
+##### <a name="homedir_mode"></a>`homedir_mode`
+
+Data type: `Optional[Stdlib::Filemode]`
+
+The permissions of the service user's home directory, where JIRA's data will reside
+
+Default value: ``undef``
 
 ##### <a name="uid"></a>`uid`
 
@@ -373,7 +409,7 @@ Default value: ``undef``
 
 ##### <a name="dbschema"></a>`dbschema`
 
-Data type: `Any`
+Data type: `Optional[String[1]]`
 
 The database schema, if applicable. Defaults to 'public' with PostgreSQL
 
@@ -391,7 +427,9 @@ Default value: ``undef``
 
 Data type: `Optional[String]`
 
-Configures JDBC connection settings
+Configures additional JDBC connection properties in dbconfig.xml
+For PostgreSQL, a default value of "tcpKeepAlive=true;socketTimeout=240" will be used
+See https://confluence.atlassian.com/jirakb/connection-problems-to-postgresql-result-in-stuck-threads-in-jira-1047534091.html
 
 Default value: ``undef``
 
