@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v5.1.0](https://github.com/voxpupuli/puppet-jira/tree/v5.1.0) (2021-08-20)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v5.0.1...v5.1.0)
+
+**Implemented enhancements:**
+
+- Configure recommended JDBC connection-properties by default for PostgreSQL databases [\#381](https://github.com/voxpupuli/puppet-jira/pull/381) ([oranenj](https://github.com/oranenj))
+- Allow managing installation and home directory modes and enforce installdir permissions by default [\#378](https://github.com/voxpupuli/puppet-jira/pull/378) ([oranenj](https://github.com/oranenj))
+
+**Fixed bugs:**
+
+- use variable instead of literal in server.xml [\#385](https://github.com/voxpupuli/puppet-jira/pull/385) ([dacron](https://github.com/dacron))
+
+**Closed issues:**
+
+- connection-settings parameter in dbconfig.xml template should be connection-properties instead [\#380](https://github.com/voxpupuli/puppet-jira/issues/380)
+- JIRA will not start if the installation directory mode is missing o+x [\#377](https://github.com/voxpupuli/puppet-jira/issues/377)
+
+**Merged pull requests:**
+
+- switch from camptocamp/systemd to voxpupuli/systemd [\#386](https://github.com/voxpupuli/puppet-jira/pull/386) ([bastelfreak](https://github.com/bastelfreak))
+- Extend the version check to the tailored jira servicedesk version [\#383](https://github.com/voxpupuli/puppet-jira/pull/383) ([diLLec](https://github.com/diLLec))
+- Add note about RHEL 8 and SELinux and clean up a bit [\#379](https://github.com/voxpupuli/puppet-jira/pull/379) ([oranenj](https://github.com/oranenj))
+
 ## [v5.0.1](https://github.com/voxpupuli/puppet-jira/tree/v5.0.1) (2021-04-23)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v5.0.0...v5.0.1)
