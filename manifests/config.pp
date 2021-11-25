@@ -151,17 +151,21 @@ class jira::config {
   # Configuration logic ends, resources begin:
 
   file { "${jira::webappdir}/bin/user.sh":
-    content => epp('jira/user.sh.epp'),
+    content => epp("${module_name}/user.sh.epp"),
     mode    => '0755',
   }
 
   file { "${jira::webappdir}/bin/setenv.sh":
-    content => epp('jira/setenv.sh.epp'),
+    content => epp("${module_name}/setenv.sh.epp"),
     mode    => '0755',
   }
 
+  $dbconfig_template = $jira::use_jndi_ds ? {
+    true    => "${module_name}/dbconfig.jndi.xml.epp",
+    default => "${module_name}/dbconfig.xml.epp"
+  }
   file { "${jira::homedir}/dbconfig.xml":
-    content => epp('jira/dbconfig.xml.epp'),
+    content => epp($dbconfig_template),
     mode    => '0600',
   }
 
@@ -174,12 +178,12 @@ class jira::config {
   }
 
   file { "${jira::webappdir}/conf/server.xml":
-    content => epp('jira/server.xml.epp'),
+    content => epp("${module_name}/server.xml.epp"),
     mode    => '0600',
   }
 
   file { "${jira::webappdir}/conf/context.xml":
-    content => epp('jira/context.xml.epp'),
+    content => epp("${module_name}/context.xml.epp"),
     mode    => '0600',
   }
 
@@ -195,7 +199,7 @@ class jira::config {
 
   if $jira::datacenter {
     file { "${jira::homedir}/cluster.properties":
-      content => epp('jira/cluster.properties.epp'),
+      content => epp("${module_name}/cluster.properties.epp"),
       mode    => '0600',
     }
   }
