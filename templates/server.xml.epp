@@ -74,7 +74,7 @@
                     enableLookups="<%= $jira::tomcat_enable_lookups %>"
                     disableUploadTimeout="<%= $jira::tomcat_disable_upload_timeout %>"
                     acceptCount="<%= $jira::tomcat_accept_count %>"
-<%   if $jira::proxy['scheme'] { -%>
+<%   if ! $jira::proxy['scheme'] { -%>
                     scheme="https"
 <%   } -%>
                     secure="true"
