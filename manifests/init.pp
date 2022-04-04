@@ -407,7 +407,7 @@ class jira (
   # Additional connectors in server.xml
   Jira::Tomcat_connectors $tomcat_additional_connectors             = {},
   # Context path (usualy used in combination with a reverse proxy)
-  String $contextpath                                               = '',
+  Optional[String[1]] $contextpath                                  = undef,
   # Resources for context.xml
   Hash $resources                                                   = {},
   # Enable SingleSignOn via Crowd
@@ -514,10 +514,10 @@ class jira (
       }
       $_password = !empty($plugin_data['password']) ? {
         default => {},
-        true    => { password => $plugin_data['password'] }
+        true    => { password => $plugin_data['password'] },
       }
       $_plugin_archive = {
-        $target => $_target_defaults + $_username + $_password
+        $target => $_target_defaults + $_username + $_password,
       }
       create_resources(archive, $_plugin_archive)
     }
