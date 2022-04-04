@@ -77,9 +77,9 @@ describe 'jira postgresql' do
   end
 
   specify do
-    expect(user('jira')).to exist
-    expect(user('jira')).to belong_to_group 'jira'
-    expect(user('jira')).to have_login_shell '/bin/true'
+    expect(user('jira')).to exist.
+      and belong_to_group 'jira'.
+        and have_login_shell '/bin/true'
   end
 
   describe command('wget -q --tries=24 --retry-connrefused --read-timeout=10 -O- localhost:8080') do
