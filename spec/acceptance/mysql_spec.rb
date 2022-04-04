@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 describe 'jira mysql' do
@@ -60,7 +62,7 @@ describe 'jira mysql' do
       }
     EOS
 
-    WGET_CMD = 'wget -q --tries=24 --retry-connrefused --read-timeout=10 --no-check-certificate localhost:8081'.freeze
+    WGET_CMD = 'wget -q --tries=24 --retry-connrefused --read-timeout=10 --no-check-certificate localhost:8081'
     apply_manifest(pp, catch_failures: true)
     sleep 60
     shell WGET_CMD, acceptable_exit_codes: [0, 8]

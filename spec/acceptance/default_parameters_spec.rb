@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 describe 'jira postgresql' do
@@ -45,7 +47,7 @@ describe 'jira postgresql' do
     EOS
 
     # jira just takes *ages* to start up :-(
-    WGET_CMD = 'wget -q --tries=24 --retry-connrefused --read-timeout=10 localhost:8080'.freeze
+    WGET_CMD = 'wget -q --tries=24 --retry-connrefused --read-timeout=10 localhost:8080'
     apply_manifest(pp, catch_failures: true)
     sleep 60
     shell WGET_CMD, acceptable_exit_codes: [0, 8]

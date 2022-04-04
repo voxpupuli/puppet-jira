@@ -1,11 +1,13 @@
-require 'spec_helper.rb'
+# frozen_string_literal: true
+
+require 'spec_helper'
 
 # set some constants to keep it DRY
-REGEXP_DISABLE_NOTIFICATIONS = %r{#DISABLE_NOTIFICATIONS=}
-REGEXP_POSTGRESQL_URL = %r{jdbc:postgresql://localhost:5432/jira}
-REGEXP_PUBLIC_SCHEMA = %r{<schema-name>public</schema-name>}
-HTTP11 = 'HTTP/1.1'.freeze
-PLUGIN_SOURCE_URL = 'https://www.example.com/fine-jira-plugin.tgz'.freeze
+REGEXP_DISABLE_NOTIFICATIONS = %r{#DISABLE_NOTIFICATIONS=}.freeze
+REGEXP_POSTGRESQL_URL = %r{jdbc:postgresql://localhost:5432/jira}.freeze
+REGEXP_PUBLIC_SCHEMA = %r{<schema-name>public</schema-name>}.freeze
+HTTP11 = 'HTTP/1.1'
+PLUGIN_SOURCE_URL = 'https://www.example.com/fine-jira-plugin.tgz'
 describe 'jira' do
   describe 'jira::config' do
     let(:params) do
@@ -24,13 +26,17 @@ describe 'jira' do
 
           context 'default params' do
             it { is_expected.to compile.with_all_deps }
+
             it do
               is_expected.to contain_file(FILENAME_SETENV_SH).
                 with_content(REGEXP_DISABLE_NOTIFICATIONS)
             end
+
             it { is_expected.to contain_file(FILENAME_USER_SH) }
             it { is_expected.to contain_file(FILENAME_SERVER_XML) }
+
             # Also ensure that we actually omit elements by default
+
             it do
               is_expected.to contain_file(FILENAME_DBCONFIG_XML).
                 with_content(REGEXP_POSTGRESQL_URL).
@@ -48,6 +54,7 @@ describe 'jira' do
                 with_content(%r{<validation-query>select version\(\);}).
                 with_content(%r{<connection-properties>tcpKeepAlive=true;socketTimeout=240})
             end
+
             it { is_expected.not_to contain_file(FILENAME_CLUSTER_PROPS) }
             it { is_expected.not_to contain_file(FILENAME_CHECK_JAVA_SH) }
           end
@@ -75,6 +82,7 @@ describe 'jira' do
 
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_package('java-11-openjdk-headless') }
+
             it do
               is_expected.to contain_file(FILENAME_DBCONFIG_XML).
                 with_content(%r{<validation-query>select 1</validation-query>}).
@@ -96,6 +104,7 @@ describe 'jira' do
             it { is_expected.to contain_file(FILENAME_SETENV_SH) }
             it { is_expected.to contain_file(FILENAME_USER_SH) }
             it { is_expected.to contain_file(FILENAME_SERVER_XML) }
+
             it do
               is_expected.to contain_file(FILENAME_DBCONFIG_XML).
                 with_content(%r{<connection-properties>TEST-SETTING;</connection-properties>}).
@@ -115,6 +124,7 @@ describe 'jira' do
             it { is_expected.to contain_file(FILENAME_SETENV_SH) }
             it { is_expected.to contain_file(FILENAME_USER_SH) }
             it { is_expected.to contain_file(FILENAME_SERVER_XML) }
+
             it do
               is_expected.to contain_file(FILENAME_DBCONFIG_XML).
                 with_content(%r{jdbc:mysql://localhost:3306/jira})
@@ -273,6 +283,7 @@ describe 'jira' do
             it { is_expected.to contain_file(FILENAME_SETENV_SH) }
             it { is_expected.to contain_file(FILENAME_USER_SH) }
             it { is_expected.to contain_file(FILENAME_SERVER_XML) }
+
             it do
               is_expected.to contain_file(FILENAME_DBCONFIG_XML).
                 with_content(REGEXP_PUBLIC_SCHEMA)
@@ -301,7 +312,7 @@ describe 'jira' do
 
             it do
               is_expected.to contain_file(FILENAME_SERVER_XML).
-                with_content(%r{<Connector port=\"9229\"\s+relaxedPathChars=}m)
+                with_content(%r{<Connector port="9229"\s+relaxedPathChars=}m)
             end
           end
 
@@ -315,7 +326,7 @@ describe 'jira' do
 
               it do
                 is_expected.to contain_file('/opt/jira/atlassian-jira-software-8.1.0-standalone/conf/server.xml').
-                  with_content(%r{<Listener className=\"org.apache.catalina.core.JreMemoryLeakPreventionListener\"})
+                  with_content(%r{<Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener"})
               end
             end
           end
@@ -330,7 +341,7 @@ describe 'jira' do
 
             it do
               is_expected.to contain_file(FILENAME_SERVER_XML).
-                with_content(%r{<Connector port=\"9229\"\s+address=\"127\.0\.0\.1\"\s+relaxedPathChars=}m)
+                with_content(%r{<Connector port="9229"\s+address="127\.0\.0\.1"\s+relaxedPathChars=}m)
             end
           end
 
@@ -494,7 +505,7 @@ describe 'jira' do
             let(:params) do
               super().merge(
                 proxy: {
-                  'scheme'    => 'https',
+                  'scheme' => 'https',
                   'proxyName' => 'www.example.com',
                   'proxyPort' => '9999'
                 }
@@ -539,7 +550,7 @@ describe 'jira' do
             let(:params) do
               super().merge(
                 proxy: {
-                  'scheme'    => 'https',
+                  'scheme' => 'https',
                   'proxyName' => 'www.example.com',
                   'proxyPort' => '9999'
                 },
@@ -561,7 +572,7 @@ describe 'jira' do
               let(:params) do
                 super().merge(
                   ajp: {
-                    'port'     => '8009',
+                    'port' => '8009',
                     'protocol' => 'AJP/1.3'
                   }
                 )
@@ -572,11 +583,12 @@ describe 'jira' do
                   with_content(%r{<Connector enableLookups="false" URIEncoding="UTF-8"\s+port = "8009"\s+protocol = "AJP/1.3"\s+/>})
               end
             end
+
             context 'with valid config including protocol org.apache.coyote.ajp.AjpNioProtocol' do
               let(:params) do
                 super().merge(
                   ajp: {
-                    'port'     => '8009',
+                    'port' => '8009',
                     'protocol' => 'org.apache.coyote.ajp.AjpNioProtocol'
                   }
                 )
@@ -837,21 +849,25 @@ describe 'jira' do
             end
 
             it { is_expected.to compile.with_all_deps }
+
             it do
               is_expected.to contain_file(FILENAME_SETENV_SH).
                 with_content(REGEXP_DISABLE_NOTIFICATIONS).
                 with_content(%r{JVM_SUPPORT_RECOMMENDED_ARGS=''}).
-                with_content(%r{JVM_GC_ARGS='.+ \-XX:\+ExplicitGCInvokesConcurrent}).
+                with_content(%r{JVM_GC_ARGS='.+ -XX:\+ExplicitGCInvokesConcurrent}).
                 with_content(%r{JVM_CODE_CACHE_ARGS='\S+InitialCodeCacheSize=32m \S+ReservedCodeCacheSize=512m}).
                 with_content(%r{JVM_REQUIRED_ARGS='.+InterningDocumentFactory})
             end
+
             it { is_expected.to contain_file(FILENAME_USER_SH) }
             it { is_expected.to contain_file(FILENAME_SERVER_XML) }
+
             it do
               is_expected.to contain_file(FILENAME_DBCONFIG_XML).
                 with_content(REGEXP_POSTGRESQL_URL).
                 with_content(REGEXP_PUBLIC_SCHEMA)
             end
+
             it { is_expected.not_to contain_file(FILENAME_CLUSTER_PROPS) }
             it { is_expected.not_to contain_file(FILENAME_CHECK_JAVA_SH) }
           end
@@ -867,6 +883,7 @@ describe 'jira' do
             end
 
             it { is_expected.to compile.with_all_deps }
+
             it do
               is_expected.to contain_file(FILENAME_SETENV_SH).
                 with_content(REGEXP_DISABLE_NOTIFICATIONS).
@@ -875,13 +892,16 @@ describe 'jira' do
                 with_content(%r{JVM_CODE_CACHE_ARGS=\S+TEST_CODECACHE}).
                 with_content(%r{JVM_EXTRA_ARGS=\S+TEST_EXTRA})
             end
+
             it { is_expected.to contain_file(FILENAME_USER_SH) }
             it { is_expected.to contain_file(FILENAME_SERVER_XML) }
+
             it do
               is_expected.to contain_file(FILENAME_DBCONFIG_XML).
                 with_content(REGEXP_POSTGRESQL_URL).
                 with_content(REGEXP_PUBLIC_SCHEMA)
             end
+
             it { is_expected.not_to contain_file(FILENAME_CLUSTER_PROPS) }
             it { is_expected.not_to contain_file(FILENAME_CHECK_JAVA_SH) }
           end
