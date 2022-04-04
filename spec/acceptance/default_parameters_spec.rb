@@ -47,18 +47,18 @@ describe 'jira postgresql' do
     EOS
 
     # jira just takes *ages* to start up :-(
-    WGET_CMD = 'wget -q --tries=24 --retry-connrefused --read-timeout=10 localhost:8080'
+    wget_cmd = 'wget -q --tries=24 --retry-connrefused --read-timeout=10 localhost:8080'
     apply_manifest(pp, catch_failures: true)
     sleep 60
-    shell WGET_CMD, acceptable_exit_codes: [0, 8]
+    shell wget_cmd, acceptable_exit_codes: [0, 8]
     sleep 60
-    shell WGET_CMD, acceptable_exit_codes: [0, 8]
+    shell wget_cmd, acceptable_exit_codes: [0, 8]
     sleep 60
     apply_manifest(pp_upgrade, catch_failures: true)
     sleep 60
-    shell WGET_CMD, acceptable_exit_codes: [0, 8]
+    shell wget_cmd, acceptable_exit_codes: [0, 8]
     sleep 60
-    shell WGET_CMD, acceptable_exit_codes: [0, 8]
+    shell wget_cmd, acceptable_exit_codes: [0, 8]
     sleep 60
     apply_manifest(pp_upgrade, catch_failures: true)
   end
@@ -76,16 +76,10 @@ describe 'jira postgresql' do
     it { is_expected.to be_running }
   end
 
-  describe user('jira') do
-    it { is_expected.to exist }
-  end
-
-  describe user('jira') do
-    it { is_expected.to belong_to_group 'jira' }
-  end
-
-  describe user('jira') do
-    it { is_expected.to have_login_shell '/bin/true' }
+  specify do
+    expect(user('jira')).to exist
+    expect(user('jira')).to belong_to_group 'jira'
+    expect(user('jira')).to have_login_shell '/bin/true'
   end
 
   describe command('wget -q --tries=24 --retry-connrefused --read-timeout=10 -O- localhost:8080') do

@@ -62,12 +62,12 @@ describe 'jira mysql' do
       }
     EOS
 
-    WGET_CMD = 'wget -q --tries=24 --retry-connrefused --read-timeout=10 --no-check-certificate localhost:8081'
+    wget_cmd = 'wget -q --tries=24 --retry-connrefused --read-timeout=10 --no-check-certificate localhost:8081'
     apply_manifest(pp, catch_failures: true)
     sleep 60
-    shell WGET_CMD, acceptable_exit_codes: [0, 8]
+    shell wget_cmd, acceptable_exit_codes: [0, 8]
     sleep 60
-    shell WGET_CMD, acceptable_exit_codes: [0, 8]
+    shell wget_cmd, acceptable_exit_codes: [0, 8]
     sleep 60
     apply_manifest(pp, catch_changes: true)
   end
@@ -85,24 +85,20 @@ describe 'jira mysql' do
     it { is_expected.to be_running }
   end
 
-  describe user('jira') do
-    it { is_expected.to exist }
+  specify do
+    expect(user('jira')).to exist
+    expect(user('jira')).to belong_to_group 'jira'
+    expect(user('jira')).to have_login_shell '/bin/true'
   end
 
-  describe user('jira') do
-    it { is_expected.to belong_to_group 'jira' }
+  specify do
+    expect(command('wget -q --tries=24 --retry-connrefused --no-check-certificate --read-timeout=10 -O- localhost:8081')).
+      to have_attributes(stdout: %r{8.13.5})
   end
 
-  describe user('jira') do
-    it { is_expected.to have_login_shell '/bin/true' }
-  end
-
-  describe command('wget -q --tries=24 --retry-connrefused --no-check-certificate --read-timeout=10 -O- localhost:8081') do
-    its(:stdout) { is_expected.to include('8.13.5') }
-  end
-
-  describe command('wget -q --tries=24 --retry-connrefused --no-check-certificate --read-timeout=10 -O- https://localhost:8443') do
-    its(:stdout) { is_expected.to include('8.13.5') }
+  specify do
+    expect(command('wget -q --tries=24 --retry-connrefused --no-check-certificate --read-timeout=10 -O- https://localhost:8443')).
+      to have_attributes(stdout: %r{8.13.5})
   end
 
   describe 'shutdown' do

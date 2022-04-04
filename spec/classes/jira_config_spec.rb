@@ -475,19 +475,6 @@ describe 'jira' do
             end
           end
 
-          context 'tomcat EnableLookups' do
-            let(:params) do
-              super().merge(
-                tomcat_enable_lookups: true
-              )
-            end
-
-            it do
-              is_expected.to contain_file(FILENAME_SERVER_XML).
-                with_content(%r{enableLookups="true"})
-            end
-          end
-
           context 'tomcat maxThreads' do
             let(:params) do
               super().merge(
