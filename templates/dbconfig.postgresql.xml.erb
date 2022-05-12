@@ -24,6 +24,6 @@
     <pool-test-while-idle><%= scope.lookupvar('jira::pool_test_while_idle') %></pool-test-while-idle>
     <pool-test-on-borrow><%= scope.lookupvar('jira::pool_test_on_borrow') %></pool-test-on-borrow>
 <% end -%>
-    <connection-properties>tcpKeepAlive=true;socketTimeout=240</connection-properties>
+    <connection-properties>tcpKeepAlive=true;socketTimeout=<%= scope.lookupvar('jira::tcpkeepalive') %></connection-properties>   
   </jdbc-datasource>
 </jira-database-config>

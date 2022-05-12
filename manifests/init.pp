@@ -81,6 +81,7 @@ class jira (
   $pool_remove_abandoned_timeout                                    = 300,
   $pool_test_while_idle                                             = true,
   $pool_test_on_borrow                                              = false,
+  $tcpkeepalive                                                     = 240, 
   # JVM Settings
   $javahome                                                         = undef,
   $jvm_xms                                                          = '256m',
