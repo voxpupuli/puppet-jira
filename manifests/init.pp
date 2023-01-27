@@ -517,7 +517,7 @@ class jira (
         true    => { password => $plugin_data['password'] }
       }
       $_plugin_archive = {
-        $target => $_target_defaults + $_username + $_password
+        $target => $_target_defaults + $_username + $_password,
       }
       create_resources(archive, $_plugin_archive)
     }
