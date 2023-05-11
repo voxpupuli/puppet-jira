@@ -307,7 +307,7 @@ class jira (
   Hash $jira_config_properties                                      = {},
   Boolean $datacenter                                               = false,
   Optional[Stdlib::AbsolutePath] $shared_homedir                    = undef,
-  String $node_id                                                   = $::fqdn,
+  String $node_id                                                   = $facts['networking']['fqdn'],
   Optional[Stdlib::Host] $ehcache_listener_host                     = undef,
   Optional[Stdlib::Port] $ehcache_listener_port                     = undef,
   Optional[Stdlib::Port] $ehcache_object_port                       = undef,
@@ -363,7 +363,7 @@ class jira (
   Boolean $disable_notifications                                    = false,
   Optional[String] $proxy_server                                    = undef,
   Optional[Enum['none','http','https','ftp']] $proxy_type           = undef,
-# Manage service
+  # Manage service
   Boolean $service_manage                                           = true,
   Stdlib::Ensure::Service $service_ensure                           = 'running',
   Boolean $service_enable                                           = true,
