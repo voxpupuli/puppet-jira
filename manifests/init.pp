@@ -52,6 +52,8 @@
 #   Set to true to enable clustered mode (JIRA Datacenter)
 # @param shared_homedir
 #   Shared data directory for all JIRA instances in a cluster
+# @param node_id
+#   sets the unique nodeid for JIEA Datacenter. Defaults to fqdn
 # @param ehcache_listener_host
 #   EHCache configuration for clustered mode
 # @param ehcache_listener_port
@@ -305,6 +307,7 @@ class jira (
   Hash $jira_config_properties                                      = {},
   Boolean $datacenter                                               = false,
   Optional[Stdlib::AbsolutePath] $shared_homedir                    = undef,
+  String $node_id                                                   = $::fqdn,
   Optional[Stdlib::Host] $ehcache_listener_host                     = undef,
   Optional[Stdlib::Port] $ehcache_listener_port                     = undef,
   Optional[Stdlib::Port] $ehcache_object_port                       = undef,
@@ -360,7 +363,7 @@ class jira (
   Boolean $disable_notifications                                    = false,
   Optional[String] $proxy_server                                    = undef,
   Optional[Enum['none','http','https','ftp']] $proxy_type           = undef,
-  # Manage service
+# Manage service
   Boolean $service_manage                                           = true,
   Stdlib::Ensure::Service $service_ensure                           = 'running',
   Boolean $service_enable                                           = true,
@@ -517,7 +520,7 @@ class jira (
         true    => { password => $plugin_data['password'] }
       }
       $_plugin_archive = {
-        $target => $_target_defaults + $_username + $_password
+        $target => $_target_defaults + $_username + $_password,
       }
       create_resources(archive, $_plugin_archive)
     }
