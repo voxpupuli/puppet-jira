@@ -64,11 +64,11 @@ describe 'jira mysql' do
 
     wget_cmd = 'wget -q --tries=24 --retry-connrefused --read-timeout=10 --no-check-certificate localhost:8081'
     apply_manifest(pp, catch_failures: true)
-    sleep 60
+    sleep SLEEP_SECONDS
     shell wget_cmd, acceptable_exit_codes: [0, 8]
-    sleep 60
+    sleep SLEEP_SECONDS
     shell wget_cmd, acceptable_exit_codes: [0, 8]
-    sleep 60
+    sleep SLEEP_SECONDS
     apply_manifest(pp, catch_changes: true)
   end
 

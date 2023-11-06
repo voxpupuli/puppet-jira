@@ -16,3 +16,5 @@ FILENAME_SERVER_XML = "#{PATH_INSTALLATION_BASE}/conf/server.xml"
 FILENAME_DBCONFIG_XML = '/home/jira/dbconfig.xml'
 FILENAME_CLUSTER_PROPS = '/home/jira/cluster.properties'
 FILENAME_JIRA_CONFIG_PROPS = '/home/jira/jira-config.properties'
+
+SLEEP_SECONDS = 120

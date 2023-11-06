@@ -49,17 +49,17 @@ describe 'jira postgresql' do
     # jira just takes *ages* to start up :-(
     wget_cmd = 'wget -q --tries=24 --retry-connrefused --read-timeout=10 localhost:8080'
     apply_manifest(pp, catch_failures: true)
-    sleep 60
+    sleep SLEEP_SECONDS
     shell wget_cmd, acceptable_exit_codes: [0, 8]
-    sleep 60
+    sleep SLEEP_SECONDS
     shell wget_cmd, acceptable_exit_codes: [0, 8]
-    sleep 60
+    sleep SLEEP_SECONDS
     apply_manifest(pp_upgrade, catch_failures: true)
-    sleep 60
+    sleep SLEEP_SECONDS
     shell wget_cmd, acceptable_exit_codes: [0, 8]
-    sleep 60
+    sleep SLEEP_SECONDS
     shell wget_cmd, acceptable_exit_codes: [0, 8]
-    sleep 60
+    sleep SLEEP_SECONDS
     apply_manifest(pp_upgrade, catch_failures: true)
   end
 
