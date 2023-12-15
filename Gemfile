@@ -7,7 +7,7 @@ group :test do
   gem 'voxpupuli-test', '~> 7.0',   :require => false
   gem 'coveralls',                  :require => false
   gem 'simplecov-console',          :require => false
-  gem 'puppet_metadata', '~> 3.0',  :require => false
+  gem 'puppet_metadata', '~> 3.5',  :require => false
   gem 'puppet-lint-param-docs',     :require => false
 end
 
@@ -17,7 +17,7 @@ group :development do
 end
 
 group :system_tests do
-  gem 'voxpupuli-acceptance', '~> 2.0',  :require => false
+  gem 'voxpupuli-acceptance', '~> 3.0',  :require => false
 end
 
 group :release do
