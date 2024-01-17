@@ -15,17 +15,27 @@ describe 'jira postgresql' do
         'Debian' => '/usr/lib/jvm/java-1.11.0-openjdk-amd64',
       }
 
-      class { 'postgresql::server': }
+      # The output of `systemctl status postgresql` is non ascii which
+      # breaks the Exec in Postgresql::Server::Instance::Reload
+      # on rhel based docker containers
+      # We don't need the output.
+      class { 'postgresql::server':
+        service_status => 'systemctl status postgresql > /dev/null'
+      }
 
       postgresql::server::db { 'jira':
         user     => 'jiraadm',
         password => postgresql::postgresql_password('jiraadm', 'mypassword'),
       }
 
+      # There is a bug in the check-java.sh that prevents jira from starting on Centos Stream 8
+      # https://jira.atlassian.com/browse/JRASERVER-77097
+      # Running with script_check_java_manage => true to solve this
       class { 'jira':
-        java_package => $java_package,
-        javahome     => $java_home,
-        require      => Postgresql::Server::Db['jira'],
+        java_package             => $java_package,
+        javahome                 => $java_home,
+        script_check_java_manage => true,
+        require                  => Postgresql::Server::Db['jira'],
       }
     EOS
     pp_upgrade = <<-EOS
@@ -40,9 +50,10 @@ describe 'jira postgresql' do
       }
 
       class { 'jira':
-        version      => '8.16.0',
-        java_package => $java_package,
-        javahome     => $java_home,
+        version                  => '8.16.0',
+        java_package             => $java_package,
+        javahome                 => $java_home,
+        script_check_java_manage => true,
       }
     EOS
 
@@ -53,14 +64,16 @@ describe 'jira postgresql' do
     shell wget_cmd, acceptable_exit_codes: [0, 8]
     sleep SLEEP_SECONDS
     shell wget_cmd, acceptable_exit_codes: [0, 8]
-    sleep SLEEP_SECONDS
+
+    apply_manifest(pp, catch_changes: true)
+
     apply_manifest(pp_upgrade, catch_failures: true)
     sleep SLEEP_SECONDS
     shell wget_cmd, acceptable_exit_codes: [0, 8]
     sleep SLEEP_SECONDS
     shell wget_cmd, acceptable_exit_codes: [0, 8]
-    sleep SLEEP_SECONDS
-    apply_manifest(pp_upgrade, catch_failures: true)
+
+    apply_manifest(pp_upgrade, catch_changes: true)
   end
 
   describe process('java') do
@@ -76,10 +89,9 @@ describe 'jira postgresql' do
     it { is_expected.to be_running }
   end
 
-  specify do
-    expect(user('jira')).to exist.
-      and belong_to_group 'jira'.
-        and have_login_shell '/bin/true'
+  describe user('jira') do
+    it { is_expected.to belong_to_group 'jira' }
+    it { is_expected.to have_login_shell '/bin/true' }
   end
 
   describe command('wget -q --tries=24 --retry-connrefused --read-timeout=10 -O- localhost:8080') do

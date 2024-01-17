@@ -5,8 +5,27 @@ require 'spec_helper_acceptance'
 describe 'jira mysql' do
   it 'installs with defaults' do
     pp = <<-EOS
+      # On ubuntu 20.04 and 22.04 the default is to install mariadb
+      # As the ubuntu 20.04 runner we use in github actions allready has mysql installed
+      # a apparmor error is triggerd when using mariadb in this test..
+      # Forcing the use of mysql
+      if $facts['os']['name'] == 'Ubuntu' and versioncmp($facts['os']['release']['major'], '20.04') >= 0 {
+        $mysql_service_name = 'mysql'
+        $mysql_server_package = 'mysql-server'
+        $mysql_client_package = 'mysql-client'
+      } else {
+        $mysql_service_name = undef
+        $mysql_server_package = undef
+        $mysql_client_package = undef
+      }
+
       class { 'mysql::server':
         root_password => 'strongpassword',
+        package_name => $mysql_server_package,
+        service_name => $mysql_service_name,
+      }
+      class { 'mysql::client':
+        package_name => $mysql_client_package,
       }
 
       # Default MySQL is too old for utf8mb4 on CentOS 7, or something. Also Ubuntu 20.04
@@ -46,19 +65,23 @@ describe 'jira mysql' do
         require     => Exec['tmpkey'],
       }
 
+      # There is a bug in the check-java.sh that prevents jira from starting on Centos Stream 8
+      # https://jira.atlassian.com/browse/JRASERVER-77097
+      # Running with script_check_java_manage => true to solve this
       class { 'jira':
-        installdir           => '/opt/atlassian-jira',
-        homedir              => '/opt/jira-home',
-        javahome             => '/usr',
-        jvm_type             => 'oracle-jdk-1.8',
-        db                   => 'mysql',
-        dbport               => 3306,
-        dbdriver             => 'com.mysql.jdbc.Driver',
-        dbtype               => 'mysql',
-        tomcat_port          => 8081,
-        tomcat_native_ssl    => true,
-        tomcat_keystore_file => '/tmp/jira.ks',
-        require              => [Mysql::Db['jira'], Java_ks['jira']],
+        installdir               => '/opt/atlassian-jira',
+        homedir                  => '/opt/jira-home',
+        javahome                 => '/usr',
+        jvm_type                 => 'oracle-jdk-1.8',
+        db                       => 'mysql',
+        dbport                   => 3306,
+        dbdriver                 => 'com.mysql.jdbc.Driver',
+        dbtype                   => 'mysql',
+        tomcat_port              => 8081,
+        tomcat_native_ssl        => true,
+        tomcat_keystore_file     => '/tmp/jira.ks',
+        script_check_java_manage => true,
+        require                  => [Mysql::Db['jira'], Java_ks['jira']],
       }
     EOS
 
@@ -68,7 +91,7 @@ describe 'jira mysql' do
     shell wget_cmd, acceptable_exit_codes: [0, 8]
     sleep SLEEP_SECONDS
     shell wget_cmd, acceptable_exit_codes: [0, 8]
-    sleep SLEEP_SECONDS
+
     apply_manifest(pp, catch_changes: true)
   end
 
@@ -85,10 +108,9 @@ describe 'jira mysql' do
     it { is_expected.to be_running }
   end
 
-  specify do
-    expect(user('jira')).to exist.
-      and belong_to_group 'jira'.
-        and have_login_shell '/bin/true'
+  describe user('jira') do
+    it { is_expected.to belong_to_group 'jira' }
+    it { is_expected.to have_login_shell '/bin/true' }
   end
 
   specify do
