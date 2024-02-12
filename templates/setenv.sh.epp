@@ -89,6 +89,14 @@ fi
 
 JAVA_OPTS="-Xms${JVM_MINIMUM_MEMORY} -Xmx${JVM_MAXIMUM_MEMORY} ${JVM_CODE_CACHE_ARGS} ${JAVA_OPTS} ${JVM_REQUIRED_ARGS} ${DISABLE_NOTIFICATIONS} ${JVM_SUPPORT_RECOMMENDED_ARGS} ${JVM_EXTRA_ARGS} ${JIRA_HOME_MINUSD} ${START_JIRA_JAVA_OPTS}"
 
+j_ver=`echo "$($JAVA_HOME/bin/java -version 2>&1)" | grep "version" | awk '{ print substr($3, 2, length($3)-2); }'`
+IFS='.' read -a j_ver_parts <<< "$j_ver"
+
+if [[ ${j_ver_parts[0]} = 17 ]]; then
+  JVM_OPENS=$(cat $PRGDIR/java-opens.txt)
+  JAVA_OPTS="$JVM_OPENS $JAVA_OPTS"
+fi
+
 export JAVA_OPTS
 
 # DO NOT remove the following line
