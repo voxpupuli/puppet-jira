@@ -1,4 +1,6 @@
-require 'spec_helper.rb'
+# frozen_string_literal: true
+
+require 'spec_helper'
 
 describe 'jira' do
   describe 'jira::service' do
@@ -22,6 +24,7 @@ describe 'jira' do
               is_expected.to contain_file('/etc/systemd/system/jira.service').
                 with_content(%r{Atlassian Systemd Jira Service})
             end
+
             it { is_expected.to contain_service('jira') }
           end
 
@@ -32,6 +35,7 @@ describe 'jira' do
 
             it { is_expected.not_to contain_service('jira') }
           end
+
           context 'with service_ensure set to stopped' do
             let(:params) do
               super().merge(

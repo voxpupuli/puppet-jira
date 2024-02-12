@@ -1,7 +1,9 @@
-require 'spec_helper.rb'
+# frozen_string_literal: true
+
+require 'spec_helper'
 
 # set some constants to keep it DRY
-PATH_CROWD_PROPS = "#{PATH_INSTALLATION_BASE}/atlassian-jira/WEB-INF/classes/crowd.properties".freeze
+PATH_CROWD_PROPS = "#{PATH_INSTALLATION_BASE}/atlassian-jira/WEB-INF/classes/crowd.properties"
 
 describe 'jira' do
   describe 'jira::sso' do
@@ -38,6 +40,7 @@ describe 'jira' do
                 with_content(%r{application.name                        appname})
             end
           end
+
           context 'with non default params' do
             let(:params) do
               super().merge(
@@ -50,6 +53,7 @@ describe 'jira' do
             end
 
             it { is_expected.to contain_file(PATH_CROWD_PROPS) }
+
             it do
               is_expected.to contain_file(PATH_CROWD_PROPS).
                 with_content(%r{application.name                        app}).
