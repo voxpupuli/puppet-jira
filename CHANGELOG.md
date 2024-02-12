@@ -379,7 +379,7 @@ This is the last release with Puppet 3 support!
 - We added JIRA 7 Support
 
 ### Improvements
-- Use defined function to test for the existence of the fact ::jira_ver
+- Use defined function to test for the existence of the fact jira_ver
 - Added hieradata examples for Oracle DB backend
 - Added containment for mysql_connector class
 - Support STRICT_VARIABLES=yes
