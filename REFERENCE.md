@@ -1152,7 +1152,7 @@ Default value: `undef`
 
 Java Virtual Machine (JVM) types
 
-Alias of `Enum['openjdk-11', 'oracle-jdk-1.8']`
+Alias of `Enum['openjdk-11', 'oracle-jdk-1.8', 'openjdk-17']`
 
 ### <a name="Jira--Tomcat_attributes"></a>`Jira::Tomcat_attributes`
 

@@ -26,7 +26,7 @@ class jira::config {
   }
 
   # JVM args. These will be the defaults if not overridden
-  if $jira::jvm_type == 'openjdk-11' {
+  if $jira::jvm_type == 'openjdk-11' or $jira::jvm_type == 'openjdk-17' {
     $jvm_gc_args = '-XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent'
   } else {
     $jvm_gc_args = '-XX:+ExplicitGCInvokesConcurrent'

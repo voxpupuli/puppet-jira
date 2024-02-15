@@ -1,6 +1,6 @@
 # START INSTALLER MAGIC ! DO NOT EDIT !
 JIRA_USER="<%= $jira::user %>" # user created by puppet
 SHELL="/bin/bash"
-# # END INSTALLER MAGIC ! DO NOT EDIT !
+# END INSTALLER MAGIC ! DO NOT EDIT !
 
 export JIRA_USER SHELL

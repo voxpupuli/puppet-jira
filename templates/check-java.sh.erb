@@ -31,10 +31,10 @@ else
     java_version=${values[0]}
 fi
 
-if [ "$java_version" -ne 8 ] && [ "$java_version" -ne 11 ]
+if [ "$java_version" -ne 8 ] && [ "$java_version" -ne 11 ] && [ "$java_version" -ne 17 ]
 then
     echo "****************************************************************************"
-    echo "*******      Wrong JVM version! Jira requires 1.8 or 11 to run.      *******"
+    echo "*******    Wrong JVM version! Jira requires 1.8, 11 or 17 to run.    *******"
     echo "****************************************************************************"
     echo "***"
     echo "*** Output of java -version command is:"

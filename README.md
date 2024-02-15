@@ -39,9 +39,10 @@ Puppet.
 
 * JIRA requires a Java Developers Kit (JDK) or Java Run-time Environment (JRE)
   platform to be installed on your server's operating system. Oracle JDK / JRE
-  (formerly Sun JDK / JRE) versions 8 (and 11 since JIRA 8.2) are currently
-  supported by Atlassian. OpenJDK version 8 (and 11 since JIRA 8.2) are supported
-  as well - Atlassian recommends to use AdoptOpenJDK to get better support
+  (formerly Sun JDK / JRE) versions 8 (and 11 since JIRA 8.2 and 17 since JIRA
+  9.5) are currently supported by Atlassian. OpenJDK version 8 (and 11 since
+  JIRA 8.2 and 17 since JIRA 9.5) are supported as well - Atlassian recommends
+  to use AdoptOpenJDK to get better support
 
 * JIRA requires a relational database to store its issue data. This module
   currently supports PostgreSQL and MySQL and Oracle and Microsoft SQL Server.
@@ -51,9 +52,9 @@ Puppet.
 * Whilst not required, for production use we recommend using nginx/apache as a
   reverse proxy to JIRA. We suggest using the puppet/nginx puppet module.
 
-* On RHEL 8 and variants, you may experience SELinux denials if you use a custom
-  installation directory that is not under `/opt`. To fix this, add an fcontext
-  equivalence between `/opt` and your desired directory:
+* On RHEL 8 and 9 and variants, you may experience SELinux denials if you use a
+  custom installation directory that is not under `/opt`. To fix this, add an
+  fcontext equivalence between `/opt` and your desired directory:
   `semanage fcontext -a /apps/jira -e /opt`
   and run `restorecon`.
 
@@ -249,16 +250,16 @@ Reverse proxy can be configured as a hash as part of the JIRA resource
 
 ## Limitations
 
-* Puppet 6.1.0
+* Puppet 7.x, 8.x
 * Puppet Enterprise
 
 The puppetlabs repositories can be found at:
 <http://yum.puppetlabs.com/> and <http://apt.puppetlabs.com/>
 
-* RedHat 7, 8 or compatible (CentOS, Oracle Linux, etc)
+* RedHat 7, 8, 9 or compatible (CentOS, Oracle Linux, etc)
 * Ubuntu 18.04, 20.04
 
-* Jira 8.x
+* Jira 8.x, 9.x
 
 * PostgreSQL
 * MySQL

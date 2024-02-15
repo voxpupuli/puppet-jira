@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
   Licensed to the Apache Software Foundation (ASF) under one or more
   contributor license agreements.  See the NOTICE file distributed with
@@ -17,12 +16,11 @@
   limitations under the License.
 -->
 <Server port="<%= $jira::tomcat_shutdown_port %>" shutdown="SHUTDOWN">
-    <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+    <Listener className="org.apache.catalina.startup.VersionLoggerListener"/>
+    <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on"/>
     <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener"/>
     <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
     <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener"/>
-
-    <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
 
     <Service name="Catalina">
 <% if $jira::tomcat_default_connector { -%>
@@ -39,16 +37,16 @@
                    maxHttpHeaderSize="<%= $jira::tomcat_max_http_header_size %>"
                    protocol="<%= $jira::tomcat_protocol %>"
                    useBodyEncodingForURI="<%= $jira::tomcat_use_body_encoding_for_uri %>"
-                   acceptCount="<%= $jira::tomcat_accept_count %>"
-<% if ! $jira::proxy['scheme'] { -%>
-                   scheme="http"
-<% } -%>
-                   disableUploadTimeout="<%= $jira::tomcat_disable_upload_timeout %>"
-                   bindOnInit="false"
 <% if $jira::tomcat_native_ssl and $jira::tomcat_redirect_https_port { -%>
                    redirectPort="<%= $jira::tomcat_redirect_https_port %>"
 <% } else { -%>
-                   redirectPort="<%= $jira::tomcat_https_port %>"
+                   redirectPort="<%= $jira::tomcat_https_port%>"
+<% } -%>
+                   acceptCount="<%= $jira::tomcat_accept_count %>"
+                   disableUploadTimeout="<%= $jira::tomcat_disable_upload_timeout %>"
+                   bindOnInit="false"
+<% if ! $jira::proxy['scheme'] { -%>
+                   scheme="http"
 <% } -%>
 <% if $jira::proxy { -%>
 <%   jira::sort_hash($jira::proxy).each |$key, $value| { -%>
@@ -59,37 +57,36 @@
 <%- } -%>
 
 <% if $jira::tomcat_native_ssl { -%>
-        <Connector
-                    port="<%= $jira::tomcat_https_port %>"
-                    protocol="<%= $jira::config::tomcat_protocol_ssl_real %>"
-                    <%- if $jira::tomcat_address { -%>
-                    address="<%= $jira::tomcat_address %>"
-                    <%- } -%>
-                    relaxedPathChars="[]|"
-                    relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
-                    maxHttpHeaderSize="<%= $jira::tomcat_max_http_header_size %>"
-                    SSLEnabled="true"
-                    maxThreads="<%= $jira::tomcat_max_threads %>"
-                    minSpareThreads="<%= $jira::tomcat_min_spare_threads %>"
-                    enableLookups="<%= $jira::tomcat_enable_lookups %>"
-                    disableUploadTimeout="<%= $jira::tomcat_disable_upload_timeout %>"
-                    acceptCount="<%= $jira::tomcat_accept_count %>"
-<%   if ! $jira::proxy['scheme'] { -%>
-                    scheme="https"
+        <Connector port="<%= $jira::tomcat_https_port %>"
+                   <%- if $jira::tomcat_address { -%>
+                   address="<%= $jira::tomcat_address %>"
+                   <%- } -%>
+                   relaxedPathChars="[]|"
+                   relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
+                   maxThreads="<%= $jira::tomcat_max_threads %>"
+                   minSpareThreads="<%= $jira::tomcat_min_spare_threads %>"
+                   enableLookups="<%= $jira::tomcat_enable_lookups %>"
+                   maxHttpHeaderSize="<%= $jira::tomcat_max_http_header_size %>"
+                   protocol="<%= $jira::config::tomcat_protocol_ssl_real %>"
+                   useBodyEncodingForURI="<%= $jira::tomcat_use_body_encoding_for_uri %>"
+                   acceptCount="<%= $jira::tomcat_accept_count %>"
+                   disableUploadTimeout="<%= $jira::tomcat_disable_upload_timeout %>"
+<%   if $jira::proxy['scheme'] { -%>
+                   scheme="https"
 <%   } -%>
-                    secure="true"
-                    clientAuth="false"
-                    sslProtocol="TLS"
-                    useBodyEncodingForURI="true"
-                    keyAlias="<%= $jira::tomcat_key_alias %>"
-                    keystoreFile="<%= $jira::tomcat_keystore_file %>"
-                    keystorePass="<%= $jira::tomcat_keystore_pass %>"
-                    keystoreType="<%= $jira::tomcat_keystore_type %>"
 <%   if $jira::proxy { -%>
 <%     jira::sort_hash($jira::proxy).each |$key, $value| { -%>
-                    <%= $key %> = '<%= $value %>'
+                   <%= $key %> = '<%= $value %>'
 <%     } -%>
 <%   } -%>
+                   SSLEnabled="true"
+                   secure="true"
+                   clientAuth="false"
+                   sslProtocol="TLS"
+                   keyAlias="<%= $jira::tomcat_key_alias %>"
+                   keystoreFile="<%= $jira::tomcat_keystore_file %>"
+                   keystorePass="<%= $jira::tomcat_keystore_pass %>"
+                   keystoreType="<%= $jira::tomcat_keystore_type %>"
         />
 <% } -%>
 
@@ -108,11 +105,11 @@
 <% } -%>
                    />
 <% } -%>
+
         <Engine name="Catalina" defaultHost="localhost">
             <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true">
 
                 <Context path="<%= $jira::contextpath %>" docBase="${catalina.home}/atlassian-jira" reloadable="false" useHttpOnly="true">
-
                     <Resource name="UserTransaction" auth="Container" type="javax.transaction.UserTransaction"
                               factory="org.objectweb.jotm.UserTransactionFactory" jotm.timeout="60"/>
 <% if $jira::use_jndi_ds { %>
@@ -131,14 +128,13 @@
                     <JarScanner scanManifest="false"/>
                     <Valve className="org.apache.catalina.valves.StuckThreadDetectionValve" threshold="120" />
                 </Context>
+
             </Host>
-
-          <Valve className="org.apache.catalina.valves.AccessLogValve" resolveHosts="false"
+            <Valve className="org.apache.catalina.valves.AccessLogValve" resolveHosts="false"
 <% if $jira::tomcat_accesslog_enable_xforwarded_for { %>
-                 requestAttributesEnabled="true"
+                   requestAttributesEnabled="true"
 <% } -%>
-                 pattern="<%= $jira::tomcat_accesslog_format %>"/>
-
+                   pattern="<%= $jira::tomcat_accesslog_format %>"/>
 <% if $jira::tomcat_accesslog_enable_xforwarded_for { %>
             <Valve
               className="org.apache.catalina.valves.RemoteIpValve"
