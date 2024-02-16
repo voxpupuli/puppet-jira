@@ -60,6 +60,8 @@
 #   EHCache configuration for clustered mode
 # @param use_jndi_ds
 #   If true, the database will be configured as JNDI datasource in server.xml and then referenced in dbconfig.xml
+# @param use_ucp
+#   If true, the database will be configured with oracles ucp connection driver
 # @param jndi_ds_name
 #   Configures the JNDI datasource name
 # @param db
@@ -308,6 +310,7 @@ class jira (
   Optional[Stdlib::Port] $ehcache_object_port                       = undef,
   # Database Settings
   Boolean $use_jndi_ds                                              = false,
+  Boolean $use_ucp                                                  = false,
   String[1] $jndi_ds_name                                           = 'JiraDS',
   Enum['postgresql','mysql','sqlserver','oracle','h2'] $db          = 'postgresql',
   String $dbuser                                                    = 'jiraadm',
