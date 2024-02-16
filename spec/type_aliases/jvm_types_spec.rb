@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe 'Jira::Jvm_types' do
   describe 'valid attributes' do
-    %w[openjdk-11 oracle-jdk-1.8].each do |value|
+    %w[openjdk-11 oracle-jdk-1.8 openjdk-17].each do |value|
       describe value.inspect do
         it { is_expected.to allow_value(value) }
       end
