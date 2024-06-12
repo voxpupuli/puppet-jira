@@ -1,4 +1,6 @@
-require 'spec_helper.rb'
+# frozen_string_literal: true
+
+require 'spec_helper'
 
 describe 'jira' do
   describe 'jira::install' do
@@ -18,11 +20,13 @@ describe 'jira' do
             end
 
             it { is_expected.to compile.with_all_deps }
+
             it do
               is_expected.to contain_exec('stop-jira-for-version-change').
                 with_command('systemctl stop jira.service && sleep 15')
             end
           end
+
           context 'custom params' do
             let(:params) do
               {

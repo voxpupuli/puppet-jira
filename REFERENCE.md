@@ -20,18 +20,15 @@
 
 ### Functions
 
-#### Public Functions
-
-
 #### Private Functions
 
 * `jira::sort_hash`: Sort a hash
 
 ### Data types
 
-* [`Jira::Jvm_types`](#jirajvm_types): Java Virtual Machine (JVM) types
-* [`Jira::Tomcat_attributes`](#jiratomcat_attributes): A hash of string keys to arbitrary values that will be rendered as XML attributes
-* [`Jira::Tomcat_connectors`](#jiratomcat_connectors): A set of attribute hashes keyed by connector port number
+* [`Jira::Jvm_types`](#Jira--Jvm_types): Java Virtual Machine (JVM) types
+* [`Jira::Tomcat_attributes`](#Jira--Tomcat_attributes): A hash of string keys to arbitrary values that will be rendered as XML attributes
+* [`Jira::Tomcat_connectors`](#Jira--Tomcat_connectors): A set of attribute hashes keyed by connector port number
 
 ## Classes
 
@@ -57,124 +54,126 @@
 
 The following parameters are available in the `jira` class:
 
-* [`version`](#version)
-* [`product`](#product)
-* [`installdir`](#installdir)
-* [`homedir`](#homedir)
-* [`manage_user`](#manage_user)
-* [`user`](#user)
-* [`group`](#group)
-* [`installdir_owner`](#installdir_owner)
-* [`installdir_group`](#installdir_group)
-* [`installdir_mode`](#installdir_mode)
-* [`homedir_mode`](#homedir_mode)
-* [`uid`](#uid)
-* [`gid`](#gid)
-* [`shell`](#shell)
-* [`enable_secure_admin_sessions`](#enable_secure_admin_sessions)
-* [`jira_config_properties`](#jira_config_properties)
-* [`datacenter`](#datacenter)
-* [`shared_homedir`](#shared_homedir)
-* [`ehcache_listener_host`](#ehcache_listener_host)
-* [`ehcache_listener_port`](#ehcache_listener_port)
-* [`ehcache_object_port`](#ehcache_object_port)
-* [`db`](#db)
-* [`dbname`](#dbname)
-* [`dbuser`](#dbuser)
-* [`dbpassword`](#dbpassword)
-* [`dbserver`](#dbserver)
-* [`dbport`](#dbport)
-* [`dbtype`](#dbtype)
-* [`dbdriver`](#dbdriver)
-* [`dbschema`](#dbschema)
-* [`dburl`](#dburl)
-* [`connection_settings`](#connection_settings)
-* [`oracle_use_sid`](#oracle_use_sid)
-* [`mysql_connector_manage`](#mysql_connector_manage)
-* [`mysql_connector_version`](#mysql_connector_version)
-* [`mysql_connector_product`](#mysql_connector_product)
-* [`mysql_connector_install`](#mysql_connector_install)
-* [`mysql_connector_format`](#mysql_connector_format)
-* [`mysql_connector_url`](#mysql_connector_url)
-* [`pool_min_size`](#pool_min_size)
-* [`pool_max_size`](#pool_max_size)
-* [`pool_max_wait`](#pool_max_wait)
-* [`validation_query`](#validation_query)
-* [`validation_query_timeout`](#validation_query_timeout)
-* [`min_evictable_idle_time`](#min_evictable_idle_time)
-* [`time_between_eviction_runs`](#time_between_eviction_runs)
-* [`pool_max_idle`](#pool_max_idle)
-* [`pool_remove_abandoned`](#pool_remove_abandoned)
-* [`pool_remove_abandoned_timeout`](#pool_remove_abandoned_timeout)
-* [`pool_test_while_idle`](#pool_test_while_idle)
-* [`pool_test_on_borrow`](#pool_test_on_borrow)
-* [`java_package`](#java_package)
-* [`javahome`](#javahome)
-* [`jvm_type`](#jvm_type)
-* [`jvm_xms`](#jvm_xms)
-* [`jvm_xmx`](#jvm_xmx)
-* [`java_opts`](#java_opts)
-* [`jvm_gc_args`](#jvm_gc_args)
-* [`jvm_code_cache_args`](#jvm_code_cache_args)
-* [`jvm_extra_args`](#jvm_extra_args)
-* [`jvm_nofiles_limit`](#jvm_nofiles_limit)
-* [`catalina_opts`](#catalina_opts)
-* [`download_url`](#download_url)
-* [`checksum`](#checksum)
-* [`disable_notifications`](#disable_notifications)
-* [`proxy_server`](#proxy_server)
-* [`proxy_type`](#proxy_type)
-* [`service_manage`](#service_manage)
-* [`service_ensure`](#service_ensure)
-* [`service_enable`](#service_enable)
-* [`service_notify`](#service_notify)
-* [`service_subscribe`](#service_subscribe)
-* [`stop_jira`](#stop_jira)
-* [`script_check_java_manage`](#script_check_java_manage)
-* [`script_check_java_template`](#script_check_java_template)
-* [`tomcat_address`](#tomcat_address)
-* [`tomcat_port`](#tomcat_port)
-* [`tomcat_shutdown_port`](#tomcat_shutdown_port)
-* [`tomcat_max_http_header_size`](#tomcat_max_http_header_size)
-* [`tomcat_min_spare_threads`](#tomcat_min_spare_threads)
-* [`tomcat_connection_timeout`](#tomcat_connection_timeout)
-* [`tomcat_enable_lookups`](#tomcat_enable_lookups)
-* [`tomcat_native_ssl`](#tomcat_native_ssl)
-* [`tomcat_https_port`](#tomcat_https_port)
-* [`tomcat_redirect_https_port`](#tomcat_redirect_https_port)
-* [`tomcat_protocol`](#tomcat_protocol)
-* [`tomcat_protocol_ssl`](#tomcat_protocol_ssl)
-* [`tomcat_use_body_encoding_for_uri`](#tomcat_use_body_encoding_for_uri)
-* [`tomcat_disable_upload_timeout`](#tomcat_disable_upload_timeout)
-* [`tomcat_key_alias`](#tomcat_key_alias)
-* [`tomcat_keystore_file`](#tomcat_keystore_file)
-* [`tomcat_keystore_pass`](#tomcat_keystore_pass)
-* [`tomcat_keystore_type`](#tomcat_keystore_type)
-* [`tomcat_accesslog_format`](#tomcat_accesslog_format)
-* [`tomcat_accesslog_enable_xforwarded_for`](#tomcat_accesslog_enable_xforwarded_for)
-* [`tomcat_max_threads`](#tomcat_max_threads)
-* [`tomcat_accept_count`](#tomcat_accept_count)
-* [`proxy`](#proxy)
-* [`ajp`](#ajp)
-* [`tomcat_default_connector`](#tomcat_default_connector)
-* [`tomcat_additional_connectors`](#tomcat_additional_connectors)
-* [`contextpath`](#contextpath)
-* [`resources`](#resources)
-* [`enable_sso`](#enable_sso)
-* [`application_name`](#application_name)
-* [`application_password`](#application_password)
-* [`application_login_url`](#application_login_url)
-* [`crowd_server_url`](#crowd_server_url)
-* [`crowd_base_url`](#crowd_base_url)
-* [`session_isauthenticated`](#session_isauthenticated)
-* [`session_tokenkey`](#session_tokenkey)
-* [`session_validationinterval`](#session_validationinterval)
-* [`session_lastvalidation`](#session_lastvalidation)
-* [`jvm_permgen`](#jvm_permgen)
-* [`poolsize`](#poolsize)
-* [`enable_connection_pooling`](#enable_connection_pooling)
+* [`version`](#-jira--version)
+* [`product`](#-jira--product)
+* [`installdir`](#-jira--installdir)
+* [`homedir`](#-jira--homedir)
+* [`manage_user`](#-jira--manage_user)
+* [`user`](#-jira--user)
+* [`group`](#-jira--group)
+* [`installdir_owner`](#-jira--installdir_owner)
+* [`installdir_group`](#-jira--installdir_group)
+* [`installdir_mode`](#-jira--installdir_mode)
+* [`homedir_mode`](#-jira--homedir_mode)
+* [`uid`](#-jira--uid)
+* [`gid`](#-jira--gid)
+* [`shell`](#-jira--shell)
+* [`enable_secure_admin_sessions`](#-jira--enable_secure_admin_sessions)
+* [`jira_config_properties`](#-jira--jira_config_properties)
+* [`datacenter`](#-jira--datacenter)
+* [`shared_homedir`](#-jira--shared_homedir)
+* [`ehcache_listener_host`](#-jira--ehcache_listener_host)
+* [`ehcache_listener_port`](#-jira--ehcache_listener_port)
+* [`ehcache_object_port`](#-jira--ehcache_object_port)
+* [`use_jndi_ds`](#-jira--use_jndi_ds)
+* [`jndi_ds_name`](#-jira--jndi_ds_name)
+* [`db`](#-jira--db)
+* [`dbname`](#-jira--dbname)
+* [`dbuser`](#-jira--dbuser)
+* [`dbpassword`](#-jira--dbpassword)
+* [`dbserver`](#-jira--dbserver)
+* [`dbport`](#-jira--dbport)
+* [`dbtype`](#-jira--dbtype)
+* [`dbdriver`](#-jira--dbdriver)
+* [`dbschema`](#-jira--dbschema)
+* [`dburl`](#-jira--dburl)
+* [`connection_settings`](#-jira--connection_settings)
+* [`oracle_use_sid`](#-jira--oracle_use_sid)
+* [`mysql_connector_manage`](#-jira--mysql_connector_manage)
+* [`mysql_connector_version`](#-jira--mysql_connector_version)
+* [`mysql_connector_product`](#-jira--mysql_connector_product)
+* [`mysql_connector_install`](#-jira--mysql_connector_install)
+* [`mysql_connector_format`](#-jira--mysql_connector_format)
+* [`mysql_connector_url`](#-jira--mysql_connector_url)
+* [`pool_min_size`](#-jira--pool_min_size)
+* [`pool_max_size`](#-jira--pool_max_size)
+* [`pool_max_wait`](#-jira--pool_max_wait)
+* [`validation_query`](#-jira--validation_query)
+* [`validation_query_timeout`](#-jira--validation_query_timeout)
+* [`min_evictable_idle_time`](#-jira--min_evictable_idle_time)
+* [`time_between_eviction_runs`](#-jira--time_between_eviction_runs)
+* [`pool_max_idle`](#-jira--pool_max_idle)
+* [`pool_remove_abandoned`](#-jira--pool_remove_abandoned)
+* [`pool_remove_abandoned_timeout`](#-jira--pool_remove_abandoned_timeout)
+* [`pool_test_while_idle`](#-jira--pool_test_while_idle)
+* [`pool_test_on_borrow`](#-jira--pool_test_on_borrow)
+* [`java_package`](#-jira--java_package)
+* [`javahome`](#-jira--javahome)
+* [`jvm_type`](#-jira--jvm_type)
+* [`jvm_xms`](#-jira--jvm_xms)
+* [`jvm_xmx`](#-jira--jvm_xmx)
+* [`java_opts`](#-jira--java_opts)
+* [`jvm_gc_args`](#-jira--jvm_gc_args)
+* [`jvm_code_cache_args`](#-jira--jvm_code_cache_args)
+* [`jvm_extra_args`](#-jira--jvm_extra_args)
+* [`jvm_nofiles_limit`](#-jira--jvm_nofiles_limit)
+* [`download_url`](#-jira--download_url)
+* [`checksum`](#-jira--checksum)
+* [`disable_notifications`](#-jira--disable_notifications)
+* [`proxy_server`](#-jira--proxy_server)
+* [`proxy_type`](#-jira--proxy_type)
+* [`service_manage`](#-jira--service_manage)
+* [`service_ensure`](#-jira--service_ensure)
+* [`service_enable`](#-jira--service_enable)
+* [`service_notify`](#-jira--service_notify)
+* [`service_subscribe`](#-jira--service_subscribe)
+* [`stop_jira`](#-jira--stop_jira)
+* [`script_check_java_manage`](#-jira--script_check_java_manage)
+* [`script_check_java_template`](#-jira--script_check_java_template)
+* [`tomcat_address`](#-jira--tomcat_address)
+* [`tomcat_port`](#-jira--tomcat_port)
+* [`tomcat_shutdown_port`](#-jira--tomcat_shutdown_port)
+* [`tomcat_max_http_header_size`](#-jira--tomcat_max_http_header_size)
+* [`tomcat_min_spare_threads`](#-jira--tomcat_min_spare_threads)
+* [`tomcat_connection_timeout`](#-jira--tomcat_connection_timeout)
+* [`tomcat_enable_lookups`](#-jira--tomcat_enable_lookups)
+* [`tomcat_native_ssl`](#-jira--tomcat_native_ssl)
+* [`tomcat_https_port`](#-jira--tomcat_https_port)
+* [`tomcat_redirect_https_port`](#-jira--tomcat_redirect_https_port)
+* [`tomcat_protocol`](#-jira--tomcat_protocol)
+* [`tomcat_protocol_ssl`](#-jira--tomcat_protocol_ssl)
+* [`tomcat_use_body_encoding_for_uri`](#-jira--tomcat_use_body_encoding_for_uri)
+* [`tomcat_disable_upload_timeout`](#-jira--tomcat_disable_upload_timeout)
+* [`tomcat_key_alias`](#-jira--tomcat_key_alias)
+* [`tomcat_keystore_file`](#-jira--tomcat_keystore_file)
+* [`tomcat_keystore_pass`](#-jira--tomcat_keystore_pass)
+* [`tomcat_keystore_type`](#-jira--tomcat_keystore_type)
+* [`tomcat_accesslog_format`](#-jira--tomcat_accesslog_format)
+* [`tomcat_accesslog_enable_xforwarded_for`](#-jira--tomcat_accesslog_enable_xforwarded_for)
+* [`tomcat_max_threads`](#-jira--tomcat_max_threads)
+* [`tomcat_accept_count`](#-jira--tomcat_accept_count)
+* [`proxy`](#-jira--proxy)
+* [`ajp`](#-jira--ajp)
+* [`tomcat_default_connector`](#-jira--tomcat_default_connector)
+* [`tomcat_additional_connectors`](#-jira--tomcat_additional_connectors)
+* [`contextpath`](#-jira--contextpath)
+* [`resources`](#-jira--resources)
+* [`enable_sso`](#-jira--enable_sso)
+* [`application_name`](#-jira--application_name)
+* [`application_password`](#-jira--application_password)
+* [`application_login_url`](#-jira--application_login_url)
+* [`crowd_server_url`](#-jira--crowd_server_url)
+* [`crowd_base_url`](#-jira--crowd_base_url)
+* [`session_isauthenticated`](#-jira--session_isauthenticated)
+* [`session_tokenkey`](#-jira--session_tokenkey)
+* [`session_validationinterval`](#-jira--session_validationinterval)
+* [`session_lastvalidation`](#-jira--session_lastvalidation)
+* [`plugins`](#-jira--plugins)
+* [`jvm_permgen`](#-jira--jvm_permgen)
+* [`poolsize`](#-jira--poolsize)
+* [`enable_connection_pooling`](#-jira--enable_connection_pooling)
 
-##### <a name="version"></a>`version`
+##### <a name="-jira--version"></a>`version`
 
 Data type: `String`
 
@@ -182,7 +181,7 @@ The JIRA version to install or upgrade to. Changing this will trigger a restart
 
 Default value: `'8.13.5'`
 
-##### <a name="product"></a>`product`
+##### <a name="-jira--product"></a>`product`
 
 Data type: `String[1]`
 
@@ -190,7 +189,7 @@ Atlassian product to install.
 
 Default value: `'jira'`
 
-##### <a name="installdir"></a>`installdir`
+##### <a name="-jira--installdir"></a>`installdir`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -198,7 +197,7 @@ The directory in which JIRA software packages will be extracted
 
 Default value: `'/opt/jira'`
 
-##### <a name="homedir"></a>`homedir`
+##### <a name="-jira--homedir"></a>`homedir`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -206,15 +205,15 @@ The directory for JIRA's runtime data that persists between versions.
 
 Default value: `'/home/jira'`
 
-##### <a name="manage_user"></a>`manage_user`
+##### <a name="-jira--manage_user"></a>`manage_user`
 
 Data type: `Boolean`
 
 Whether to manage the service user
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="user"></a>`user`
+##### <a name="-jira--user"></a>`user`
 
 Data type: `String`
 
@@ -222,7 +221,7 @@ User that the service will run as
 
 Default value: `'jira'`
 
-##### <a name="group"></a>`group`
+##### <a name="-jira--group"></a>`group`
 
 Data type: `String`
 
@@ -230,7 +229,7 @@ Group that the service will run as
 
 Default value: `'jira'`
 
-##### <a name="installdir_owner"></a>`installdir_owner`
+##### <a name="-jira--installdir_owner"></a>`installdir_owner`
 
 Data type: `String[1]`
 
@@ -238,7 +237,7 @@ The owner of the installation directory.
 
 Default value: `'root'`
 
-##### <a name="installdir_group"></a>`installdir_group`
+##### <a name="-jira--installdir_group"></a>`installdir_group`
 
 Data type: `String[1]`
 
@@ -246,7 +245,7 @@ The group of the installation directory.
 
 Default value: `'root'`
 
-##### <a name="installdir_mode"></a>`installdir_mode`
+##### <a name="-jira--installdir_mode"></a>`installdir_mode`
 
 Data type: `Stdlib::Filemode`
 
@@ -254,31 +253,31 @@ The permissions of the installation directory. Note that the JIRA service user m
 
 Default value: `'0755'`
 
-##### <a name="homedir_mode"></a>`homedir_mode`
+##### <a name="-jira--homedir_mode"></a>`homedir_mode`
 
 Data type: `Optional[Stdlib::Filemode]`
 
 The permissions of the service user's home directory, where JIRA's data will reside
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="uid"></a>`uid`
+##### <a name="-jira--uid"></a>`uid`
 
 Data type: `Optional[Integer[0]]`
 
 The desired UID for the service user
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="gid"></a>`gid`
+##### <a name="-jira--gid"></a>`gid`
 
 Data type: `Optional[Integer[0]]`
 
 The desired GID for the service group
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="shell"></a>`shell`
+##### <a name="-jira--shell"></a>`shell`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -286,15 +285,15 @@ The shell of the service user
 
 Default value: `'/bin/true'`
 
-##### <a name="enable_secure_admin_sessions"></a>`enable_secure_admin_sessions`
+##### <a name="-jira--enable_secure_admin_sessions"></a>`enable_secure_admin_sessions`
 
 Data type: `Boolean`
 
 Enables secure administrator sessions
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="jira_config_properties"></a>`jira_config_properties`
+##### <a name="-jira--jira_config_properties"></a>`jira_config_properties`
 
 Data type: `Hash`
 
@@ -303,47 +302,63 @@ See https://confluence.atlassian.com/adminjiraserver0813/advanced-jira-applicati
 
 Default value: `{}`
 
-##### <a name="datacenter"></a>`datacenter`
+##### <a name="-jira--datacenter"></a>`datacenter`
 
 Data type: `Boolean`
 
 Set to true to enable clustered mode (JIRA Datacenter)
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="shared_homedir"></a>`shared_homedir`
+##### <a name="-jira--shared_homedir"></a>`shared_homedir`
 
 Data type: `Optional[Stdlib::AbsolutePath]`
 
 Shared data directory for all JIRA instances in a cluster
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="ehcache_listener_host"></a>`ehcache_listener_host`
+##### <a name="-jira--ehcache_listener_host"></a>`ehcache_listener_host`
 
 Data type: `Optional[Stdlib::Host]`
 
 EHCache configuration for clustered mode
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="ehcache_listener_port"></a>`ehcache_listener_port`
-
-Data type: `Optional[Stdlib::Port]`
-
-EHCache configuration for clustered mode
-
-Default value: ``undef``
-
-##### <a name="ehcache_object_port"></a>`ehcache_object_port`
+##### <a name="-jira--ehcache_listener_port"></a>`ehcache_listener_port`
 
 Data type: `Optional[Stdlib::Port]`
 
 EHCache configuration for clustered mode
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="db"></a>`db`
+##### <a name="-jira--ehcache_object_port"></a>`ehcache_object_port`
+
+Data type: `Optional[Stdlib::Port]`
+
+EHCache configuration for clustered mode
+
+Default value: `undef`
+
+##### <a name="-jira--use_jndi_ds"></a>`use_jndi_ds`
+
+Data type: `Boolean`
+
+If true, the database will be configured as JNDI datasource in server.xml and then referenced in dbconfig.xml
+
+Default value: `false`
+
+##### <a name="-jira--jndi_ds_name"></a>`jndi_ds_name`
+
+Data type: `String[1]`
+
+Configures the JNDI datasource name
+
+Default value: `'JiraDS'`
+
+##### <a name="-jira--db"></a>`db`
 
 Data type: `Enum['postgresql','mysql','sqlserver','oracle','h2']`
 
@@ -351,7 +366,7 @@ The kind of database to use.
 
 Default value: `'postgresql'`
 
-##### <a name="dbname"></a>`dbname`
+##### <a name="-jira--dbname"></a>`dbname`
 
 Data type: `String`
 
@@ -359,7 +374,7 @@ The database name to connect to
 
 Default value: `'jira'`
 
-##### <a name="dbuser"></a>`dbuser`
+##### <a name="-jira--dbuser"></a>`dbuser`
 
 Data type: `String`
 
@@ -367,7 +382,7 @@ Database username
 
 Default value: `'jiraadm'`
 
-##### <a name="dbpassword"></a>`dbpassword`
+##### <a name="-jira--dbpassword"></a>`dbpassword`
 
 Data type: `String`
 
@@ -375,7 +390,7 @@ Database password
 
 Default value: `'mypassword'`
 
-##### <a name="dbserver"></a>`dbserver`
+##### <a name="-jira--dbserver"></a>`dbserver`
 
 Data type: `String`
 
@@ -383,47 +398,47 @@ Database host DNS name or IP address
 
 Default value: `'localhost'`
 
-##### <a name="dbport"></a>`dbport`
+##### <a name="-jira--dbport"></a>`dbport`
 
 Data type: `Optional[Variant[Integer,String]]`
 
 The database port. Default depends on `$db`
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="dbtype"></a>`dbtype`
+##### <a name="-jira--dbtype"></a>`dbtype`
 
 Data type: `Optional[String]`
 
 The database type. Default depends on `$db`
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="dbdriver"></a>`dbdriver`
+##### <a name="-jira--dbdriver"></a>`dbdriver`
 
 Data type: `Optional[String]`
 
 The database driver class. Default depends on `$db`
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="dbschema"></a>`dbschema`
+##### <a name="-jira--dbschema"></a>`dbschema`
 
 Data type: `Optional[String[1]]`
 
 The database schema, if applicable. Defaults to 'public' with PostgreSQL
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="dburl"></a>`dburl`
+##### <a name="-jira--dburl"></a>`dburl`
 
 Data type: `Optional[String]`
 
 Set this if you wish to use a custom database URL
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="connection_settings"></a>`connection_settings`
+##### <a name="-jira--connection_settings"></a>`connection_settings`
 
 Data type: `Optional[String]`
 
@@ -431,25 +446,25 @@ Configures additional JDBC connection properties in dbconfig.xml
 For PostgreSQL, a default value of "tcpKeepAlive=true;socketTimeout=240" will be used
 See https://confluence.atlassian.com/jirakb/connection-problems-to-postgresql-result-in-stuck-threads-in-jira-1047534091.html
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="oracle_use_sid"></a>`oracle_use_sid`
+##### <a name="-jira--oracle_use_sid"></a>`oracle_use_sid`
 
 Data type: `Boolean`
 
 Affects the database URL format for Oracle depending on whether you connect via a SID or a service name
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="mysql_connector_manage"></a>`mysql_connector_manage`
+##### <a name="-jira--mysql_connector_manage"></a>`mysql_connector_manage`
 
 Data type: `Boolean`
 
 If true, the module will download and install the MySQL connector for JDBC
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="mysql_connector_version"></a>`mysql_connector_version`
+##### <a name="-jira--mysql_connector_version"></a>`mysql_connector_version`
 
 Data type: `String`
 
@@ -457,7 +472,7 @@ Version of the connector to install
 
 Default value: `'8.0.23'`
 
-##### <a name="mysql_connector_product"></a>`mysql_connector_product`
+##### <a name="-jira--mysql_connector_product"></a>`mysql_connector_product`
 
 Data type: `String`
 
@@ -465,7 +480,7 @@ Determines the filename for the download
 
 Default value: `'mysql-connector-java'`
 
-##### <a name="mysql_connector_install"></a>`mysql_connector_install`
+##### <a name="-jira--mysql_connector_install"></a>`mysql_connector_install`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -473,7 +488,7 @@ Directory in which the connector will be installed
 
 Default value: `'/opt/MySQL-connector'`
 
-##### <a name="mysql_connector_format"></a>`mysql_connector_format`
+##### <a name="-jira--mysql_connector_format"></a>`mysql_connector_format`
 
 Data type: `String`
 
@@ -481,7 +496,7 @@ Format of the downloaded package
 
 Default value: `'tar.gz'`
 
-##### <a name="mysql_connector_url"></a>`mysql_connector_url`
+##### <a name="-jira--mysql_connector_url"></a>`mysql_connector_url`
 
 Data type: `Stdlib::HTTPUrl`
 
@@ -489,119 +504,119 @@ Source for the connector
 
 Default value: `'https://dev.mysql.com/get/Downloads/Connector-J'`
 
-##### <a name="pool_min_size"></a>`pool_min_size`
+##### <a name="-jira--pool_min_size"></a>`pool_min_size`
 
 Data type: `Optional[Integer[0]]`
 
 Configures pool-min-size in dbconfig.xml
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="pool_max_size"></a>`pool_max_size`
+##### <a name="-jira--pool_max_size"></a>`pool_max_size`
 
 Data type: `Optional[Integer[0]]`
 
 Configures pool-max-size in dbconfig.xml
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="pool_max_wait"></a>`pool_max_wait`
+##### <a name="-jira--pool_max_wait"></a>`pool_max_wait`
 
 Data type: `Optional[Integer[-1]]`
 
 Configures pool-max-wait in dbconfig.xml
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="validation_query"></a>`validation_query`
+##### <a name="-jira--validation_query"></a>`validation_query`
 
 Data type: `Optional[String]`
 
 Configures validation_query in dbconfig.xml
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="validation_query_timeout"></a>`validation_query_timeout`
+##### <a name="-jira--validation_query_timeout"></a>`validation_query_timeout`
 
 Data type: `Optional[Integer[0]]`
 
 Configures validation_query_timeout in dbconfig.xml
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="min_evictable_idle_time"></a>`min_evictable_idle_time`
+##### <a name="-jira--min_evictable_idle_time"></a>`min_evictable_idle_time`
 
 Data type: `Optional[Integer[0]]`
 
 Configures min-evictable-idle-time-millis in dbconfig.xml
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="time_between_eviction_runs"></a>`time_between_eviction_runs`
+##### <a name="-jira--time_between_eviction_runs"></a>`time_between_eviction_runs`
 
 Data type: `Optional[Integer[0]]`
 
 Configures time-between-eviction-runs-millis in dbconfig.xml
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="pool_max_idle"></a>`pool_max_idle`
+##### <a name="-jira--pool_max_idle"></a>`pool_max_idle`
 
 Data type: `Optional[Integer[0]]`
 
 Configures pool-max-idle in dbconfig.xml
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="pool_remove_abandoned"></a>`pool_remove_abandoned`
+##### <a name="-jira--pool_remove_abandoned"></a>`pool_remove_abandoned`
 
 Data type: `Optional[Boolean]`
 
 Configures pool-remove-abandoned in dbconfig.xml
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="pool_remove_abandoned_timeout"></a>`pool_remove_abandoned_timeout`
+##### <a name="-jira--pool_remove_abandoned_timeout"></a>`pool_remove_abandoned_timeout`
 
 Data type: `Optional[Integer[0]]`
 
 Configures pool-remove-abandoned-timeout in dbconfig.xml
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="pool_test_while_idle"></a>`pool_test_while_idle`
+##### <a name="-jira--pool_test_while_idle"></a>`pool_test_while_idle`
 
 Data type: `Optional[Boolean]`
 
 Configures pool-test-while-idle in dbconfig.xml
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="pool_test_on_borrow"></a>`pool_test_on_borrow`
+##### <a name="-jira--pool_test_on_borrow"></a>`pool_test_on_borrow`
 
 Data type: `Optional[Boolean]`
 
 Configures pool-test-on-borrow in dbconfig.xml
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="java_package"></a>`java_package`
+##### <a name="-jira--java_package"></a>`java_package`
 
 Data type: `Optional[String[1]]`
 
 If defined, the module will install this package before installing JIRA.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="javahome"></a>`javahome`
+##### <a name="-jira--javahome"></a>`javahome`
 
 Data type: `Optional[Stdlib::AbsolutePath]`
 
 The location of an installed JVM. Must be set even if you specify java_package
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="jvm_type"></a>`jvm_type`
+##### <a name="-jira--jvm_type"></a>`jvm_type`
 
 Data type: `Jira::Jvm_types`
 
@@ -609,7 +624,7 @@ The type of JVM to use. Affects some defaults for the arguments below
 
 Default value: `'openjdk-11'`
 
-##### <a name="jvm_xms"></a>`jvm_xms`
+##### <a name="-jira--jvm_xms"></a>`jvm_xms`
 
 Data type: `String`
 
@@ -617,7 +632,7 @@ Java -Xms parameter
 
 Default value: `'256m'`
 
-##### <a name="jvm_xmx"></a>`jvm_xmx`
+##### <a name="-jira--jvm_xmx"></a>`jvm_xmx`
 
 Data type: `String`
 
@@ -625,39 +640,39 @@ Java -Xmx parameter
 
 Default value: `'1024m'`
 
-##### <a name="java_opts"></a>`java_opts`
+##### <a name="-jira--java_opts"></a>`java_opts`
 
 Data type: `Optional[String]`
 
 Configures JVM_SUPPORT_RECOMMENDED_ARGS in setenv.sh. This is the preferred option to override.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="jvm_gc_args"></a>`jvm_gc_args`
+##### <a name="-jira--jvm_gc_args"></a>`jvm_gc_args`
 
 Data type: `Optional[String]`
 
 Configures JVM_GC_ARGS in setenv.sh
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="jvm_code_cache_args"></a>`jvm_code_cache_args`
+##### <a name="-jira--jvm_code_cache_args"></a>`jvm_code_cache_args`
 
 Data type: `Optional[String]`
 
 Configures JVM_CODE_CACHE_ARGS in setenv.sh
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="jvm_extra_args"></a>`jvm_extra_args`
+##### <a name="-jira--jvm_extra_args"></a>`jvm_extra_args`
 
 Data type: `Optional[String]`
 
 Configures JVM_EXTRA_ARGS in setenv.sh
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="jvm_nofiles_limit"></a>`jvm_nofiles_limit`
+##### <a name="-jira--jvm_nofiles_limit"></a>`jvm_nofiles_limit`
 
 Data type: `Integer`
 
@@ -665,15 +680,7 @@ Set the limit for open files
 
 Default value: `16384`
 
-##### <a name="catalina_opts"></a>`catalina_opts`
-
-Data type: `String`
-
-Does nothing :-)
-
-Default value: `''`
-
-##### <a name="download_url"></a>`download_url`
+##### <a name="-jira--download_url"></a>`download_url`
 
 Data type: `Stdlib::HTTPUrl`
 
@@ -681,47 +688,47 @@ Base URL for downloading Atlassian software
 
 Default value: `'https://product-downloads.atlassian.com/software/jira/downloads'`
 
-##### <a name="checksum"></a>`checksum`
+##### <a name="-jira--checksum"></a>`checksum`
 
 Data type: `Optional[String]`
 
 Optional checksum to verify the downloaded package
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="disable_notifications"></a>`disable_notifications`
+##### <a name="-jira--disable_notifications"></a>`disable_notifications`
 
 Data type: `Boolean`
 
 Configures JIRA to disable e-mail handlers
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="proxy_server"></a>`proxy_server`
+##### <a name="-jira--proxy_server"></a>`proxy_server`
 
 Data type: `Optional[String]`
 
 Configures the proxy server to use for downloads
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="proxy_type"></a>`proxy_type`
+##### <a name="-jira--proxy_type"></a>`proxy_type`
 
 Data type: `Optional[Enum['none','http','https','ftp']]`
 
 Configures the proxy type
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="service_manage"></a>`service_manage`
+##### <a name="-jira--service_manage"></a>`service_manage`
 
 Data type: `Boolean`
 
 Whether to manage the jira service
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="service_ensure"></a>`service_ensure`
+##### <a name="-jira--service_ensure"></a>`service_ensure`
 
 Data type: `Stdlib::Ensure::Service`
 
@@ -729,31 +736,31 @@ Service state to ensure
 
 Default value: `'running'`
 
-##### <a name="service_enable"></a>`service_enable`
+##### <a name="-jira--service_enable"></a>`service_enable`
 
 Data type: `Boolean`
 
 Whether to enable the service on boot
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="service_notify"></a>`service_notify`
+##### <a name="-jira--service_notify"></a>`service_notify`
 
 Data type: `Any`
 
 Service notify parameter
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="service_subscribe"></a>`service_subscribe`
+##### <a name="-jira--service_subscribe"></a>`service_subscribe`
 
 Data type: `Any`
 
 Service subscribe parameter
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="stop_jira"></a>`stop_jira`
+##### <a name="-jira--stop_jira"></a>`stop_jira`
 
 Data type: `String`
 
@@ -761,15 +768,15 @@ The command used to stop jira prior to upgrades. You can override this if you us
 
 Default value: `'systemctl stop jira.service && sleep 15'`
 
-##### <a name="script_check_java_manage"></a>`script_check_java_manage`
+##### <a name="-jira--script_check_java_manage"></a>`script_check_java_manage`
 
 Data type: `Boolean`
 
 undocumented
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="script_check_java_template"></a>`script_check_java_template`
+##### <a name="-jira--script_check_java_template"></a>`script_check_java_template`
 
 Data type: `String`
 
@@ -777,15 +784,15 @@ undocumented
 
 Default value: `'jira/check-java.sh.erb'`
 
-##### <a name="tomcat_address"></a>`tomcat_address`
+##### <a name="-jira--tomcat_address"></a>`tomcat_address`
 
 Data type: `Optional[String]`
 
 Tomcat bind address
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="tomcat_port"></a>`tomcat_port`
+##### <a name="-jira--tomcat_port"></a>`tomcat_port`
 
 Data type: `Stdlib::Port`
 
@@ -793,7 +800,7 @@ Tomcat bind port
 
 Default value: `8080`
 
-##### <a name="tomcat_shutdown_port"></a>`tomcat_shutdown_port`
+##### <a name="-jira--tomcat_shutdown_port"></a>`tomcat_shutdown_port`
 
 Data type: `Stdlib::Port`
 
@@ -801,7 +808,7 @@ Tomcat shutdown command port
 
 Default value: `8005`
 
-##### <a name="tomcat_max_http_header_size"></a>`tomcat_max_http_header_size`
+##### <a name="-jira--tomcat_max_http_header_size"></a>`tomcat_max_http_header_size`
 
 Data type: `Integer`
 
@@ -809,7 +816,7 @@ Tomcat connector setting
 
 Default value: `8192`
 
-##### <a name="tomcat_min_spare_threads"></a>`tomcat_min_spare_threads`
+##### <a name="-jira--tomcat_min_spare_threads"></a>`tomcat_min_spare_threads`
 
 Data type: `Integer[0]`
 
@@ -817,7 +824,7 @@ Tomcat connector setting
 
 Default value: `25`
 
-##### <a name="tomcat_connection_timeout"></a>`tomcat_connection_timeout`
+##### <a name="-jira--tomcat_connection_timeout"></a>`tomcat_connection_timeout`
 
 Data type: `Integer[0]`
 
@@ -825,23 +832,23 @@ Tomcat connector setting
 
 Default value: `20000`
 
-##### <a name="tomcat_enable_lookups"></a>`tomcat_enable_lookups`
+##### <a name="-jira--tomcat_enable_lookups"></a>`tomcat_enable_lookups`
 
 Data type: `Boolean`
 
 Tomcat connector setting
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="tomcat_native_ssl"></a>`tomcat_native_ssl`
+##### <a name="-jira--tomcat_native_ssl"></a>`tomcat_native_ssl`
 
 Data type: `Boolean`
 
 Enables a native SSL connector
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="tomcat_https_port"></a>`tomcat_https_port`
+##### <a name="-jira--tomcat_https_port"></a>`tomcat_https_port`
 
 Data type: `Stdlib::Port`
 
@@ -849,7 +856,7 @@ Tomcat port for the native SSL connector
 
 Default value: `8443`
 
-##### <a name="tomcat_redirect_https_port"></a>`tomcat_redirect_https_port`
+##### <a name="-jira--tomcat_redirect_https_port"></a>`tomcat_redirect_https_port`
 
 Data type: `Optional[Stdlib::Port]`
 
@@ -857,9 +864,9 @@ Specify which port to redirect internally when using port redirection from 80 to
 from 443 to 8443 or with proxy server in front, defaults to $tomcat_https_port. To be used
 with tomcat_native_ssl.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="tomcat_protocol"></a>`tomcat_protocol`
+##### <a name="-jira--tomcat_protocol"></a>`tomcat_protocol`
 
 Data type: `String`
 
@@ -867,31 +874,31 @@ Tomcat connector setting
 
 Default value: `'HTTP/1.1'`
 
-##### <a name="tomcat_protocol_ssl"></a>`tomcat_protocol_ssl`
+##### <a name="-jira--tomcat_protocol_ssl"></a>`tomcat_protocol_ssl`
 
 Data type: `Optional[String]`
 
 Tomcat connector setting
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="tomcat_use_body_encoding_for_uri"></a>`tomcat_use_body_encoding_for_uri`
-
-Data type: `Boolean`
-
-Tomcat connector setting
-
-Default value: ``true``
-
-##### <a name="tomcat_disable_upload_timeout"></a>`tomcat_disable_upload_timeout`
+##### <a name="-jira--tomcat_use_body_encoding_for_uri"></a>`tomcat_use_body_encoding_for_uri`
 
 Data type: `Boolean`
 
 Tomcat connector setting
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="tomcat_key_alias"></a>`tomcat_key_alias`
+##### <a name="-jira--tomcat_disable_upload_timeout"></a>`tomcat_disable_upload_timeout`
+
+Data type: `Boolean`
+
+Tomcat connector setting
+
+Default value: `true`
+
+##### <a name="-jira--tomcat_key_alias"></a>`tomcat_key_alias`
 
 Data type: `String`
 
@@ -899,7 +906,7 @@ Key alias in the keystore for the SSL connector
 
 Default value: `'jira'`
 
-##### <a name="tomcat_keystore_file"></a>`tomcat_keystore_file`
+##### <a name="-jira--tomcat_keystore_file"></a>`tomcat_keystore_file`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -907,7 +914,7 @@ Path to a Java keystore for the SSL connector
 
 Default value: `'/home/jira/jira.jks'`
 
-##### <a name="tomcat_keystore_pass"></a>`tomcat_keystore_pass`
+##### <a name="-jira--tomcat_keystore_pass"></a>`tomcat_keystore_pass`
 
 Data type: `String`
 
@@ -915,7 +922,7 @@ Keystore passphrase
 
 Default value: `'changeit'`
 
-##### <a name="tomcat_keystore_type"></a>`tomcat_keystore_type`
+##### <a name="-jira--tomcat_keystore_type"></a>`tomcat_keystore_type`
 
 Data type: `Enum['JKS', 'JCEKS', 'PKCS12']`
 
@@ -923,7 +930,7 @@ Keystore type
 
 Default value: `'JKS'`
 
-##### <a name="tomcat_accesslog_format"></a>`tomcat_accesslog_format`
+##### <a name="-jira--tomcat_accesslog_format"></a>`tomcat_accesslog_format`
 
 Data type: `String`
 
@@ -931,7 +938,7 @@ Format string for Tomcat access log
 
 Default value: `'%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;'`
 
-##### <a name="tomcat_accesslog_enable_xforwarded_for"></a>`tomcat_accesslog_enable_xforwarded_for`
+##### <a name="-jira--tomcat_accesslog_enable_xforwarded_for"></a>`tomcat_accesslog_enable_xforwarded_for`
 
 Data type: `Boolean`
 
@@ -940,9 +947,9 @@ If a proxy operates before JIRA, the access logs will only contain the IP addres
 instead of the address of the user. With `X-Forwarded-For` the proxy can forward the users IP
 address to the JIRA application server so that it can be logged correctly.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="tomcat_max_threads"></a>`tomcat_max_threads`
+##### <a name="-jira--tomcat_max_threads"></a>`tomcat_max_threads`
 
 Data type: `Integer`
 
@@ -950,7 +957,7 @@ Tomcat connector setting
 
 Default value: `150`
 
-##### <a name="tomcat_accept_count"></a>`tomcat_accept_count`
+##### <a name="-jira--tomcat_accept_count"></a>`tomcat_accept_count`
 
 Data type: `Integer`
 
@@ -958,7 +965,7 @@ Tomcat connector setting
 
 Default value: `100`
 
-##### <a name="proxy"></a>`proxy`
+##### <a name="-jira--proxy"></a>`proxy`
 
 Data type: `Hash`
 
@@ -967,7 +974,7 @@ The confusing naming is retained for backwards compatibility
 
 Default value: `{}`
 
-##### <a name="ajp"></a>`ajp`
+##### <a name="-jira--ajp"></a>`ajp`
 
 Data type: `Hash`
 
@@ -975,15 +982,15 @@ Properties for an AJP connector
 
 Default value: `{}`
 
-##### <a name="tomcat_default_connector"></a>`tomcat_default_connector`
+##### <a name="-jira--tomcat_default_connector"></a>`tomcat_default_connector`
 
 Data type: `Boolean`
 
 If set to false, the default connector will be omitted
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="tomcat_additional_connectors"></a>`tomcat_additional_connectors`
+##### <a name="-jira--tomcat_additional_connectors"></a>`tomcat_additional_connectors`
 
 Data type: `Jira::Tomcat_connectors`
 
@@ -1004,15 +1011,15 @@ https://confluence.atlassian.com/kb/how-to-bypass-a-reverse-proxy-or-ssl-in-appl
 
 Default value: `{}`
 
-##### <a name="contextpath"></a>`contextpath`
+##### <a name="-jira--contextpath"></a>`contextpath`
 
-Data type: `String`
+Data type: `Optional[String[1]]`
 
 Tomcat context path for the web service
 
-Default value: `''`
+Default value: `undef`
 
-##### <a name="resources"></a>`resources`
+##### <a name="-jira--resources"></a>`resources`
 
 Data type: `Hash`
 
@@ -1020,15 +1027,15 @@ undocumented
 
 Default value: `{}`
 
-##### <a name="enable_sso"></a>`enable_sso`
+##### <a name="-jira--enable_sso"></a>`enable_sso`
 
 Data type: `Boolean`
 
 Enable single sign-on via Crowd
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="application_name"></a>`application_name`
+##### <a name="-jira--application_name"></a>`application_name`
 
 Data type: `String`
 
@@ -1036,7 +1043,7 @@ Crowd application name
 
 Default value: `'crowd'`
 
-##### <a name="application_password"></a>`application_password`
+##### <a name="-jira--application_password"></a>`application_password`
 
 Data type: `String`
 
@@ -1044,7 +1051,7 @@ Crowd application password
 
 Default value: `'1234'`
 
-##### <a name="application_login_url"></a>`application_login_url`
+##### <a name="-jira--application_login_url"></a>`application_login_url`
 
 Data type: `Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]`
 
@@ -1052,7 +1059,7 @@ Crowd application login URL
 
 Default value: `'https://crowd.example.com/console/'`
 
-##### <a name="crowd_server_url"></a>`crowd_server_url`
+##### <a name="-jira--crowd_server_url"></a>`crowd_server_url`
 
 Data type: `Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]`
 
@@ -1060,7 +1067,7 @@ Crowd server URL
 
 Default value: `'https://crowd.example.com/services/'`
 
-##### <a name="crowd_base_url"></a>`crowd_base_url`
+##### <a name="-jira--crowd_base_url"></a>`crowd_base_url`
 
 Data type: `Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]`
 
@@ -1068,7 +1075,7 @@ Crowd base URL
 
 Default value: `'https://crowd.example.com/'`
 
-##### <a name="session_isauthenticated"></a>`session_isauthenticated`
+##### <a name="-jira--session_isauthenticated"></a>`session_isauthenticated`
 
 Data type: `String`
 
@@ -1076,7 +1083,7 @@ undocumented SSO parameter
 
 Default value: `'session.isauthenticated'`
 
-##### <a name="session_tokenkey"></a>`session_tokenkey`
+##### <a name="-jira--session_tokenkey"></a>`session_tokenkey`
 
 Data type: `String`
 
@@ -1084,7 +1091,7 @@ undocumented SSO parameter
 
 Default value: `'session.tokenkey'`
 
-##### <a name="session_validationinterval"></a>`session_validationinterval`
+##### <a name="-jira--session_validationinterval"></a>`session_validationinterval`
 
 Data type: `Integer`
 
@@ -1092,7 +1099,7 @@ undocumented SSO parameter
 
 Default value: `5`
 
-##### <a name="session_lastvalidation"></a>`session_lastvalidation`
+##### <a name="-jira--session_lastvalidation"></a>`session_lastvalidation`
 
 Data type: `String`
 
@@ -1100,61 +1107,62 @@ undocumented SSO parameter
 
 Default value: `'session.lastvalidation'`
 
-##### <a name="jvm_permgen"></a>`jvm_permgen`
+##### <a name="-jira--plugins"></a>`plugins`
+
+Data type: `Array[Hash]`
+
+an array of hashes defining custom plugins to install
+a single plugin configuration will has the following form
+  installation_name: this name wil be used to install the plugin within jira
+  source: url of plugin to be fetched
+  username: the username for authentification, if necessary
+  password: the password for authentification, if necessary
+  checksum: the checksum of the plugin, to determine the need for an upgrade
+  checksumtype: the type of checksum used (none|md5|sha1|sha2|sha256|sha384|sha512). (default: none)
+
+Default value: `[]`
+
+##### <a name="-jira--jvm_permgen"></a>`jvm_permgen`
 
 Data type: `Optional[String]`
 
 Deprecated. Exists to notify users that they're trying to configure a parameter that has no effect
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="poolsize"></a>`poolsize`
+##### <a name="-jira--poolsize"></a>`poolsize`
 
 Data type: `Optional[Integer[0]]`
 
 Deprecated alias for `$pool_max_size`.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="enable_connection_pooling"></a>`enable_connection_pooling`
+##### <a name="-jira--enable_connection_pooling"></a>`enable_connection_pooling`
 
 Data type: `Optional[Boolean]`
 
 Deprecated. Has no effect.
 
-Default value: ``undef``
-
-## Functions
+Default value: `undef`
 
 ## Data types
 
-### <a name="jirajvm_types"></a>`Jira::Jvm_types`
+### <a name="Jira--Jvm_types"></a>`Jira::Jvm_types`
 
 Java Virtual Machine (JVM) types
 
-Alias of
+Alias of `Enum['openjdk-11', 'oracle-jdk-1.8']`
 
-```puppet
-Enum['openjdk-11', 'oracle-jdk-1.8']
-```
-
-### <a name="jiratomcat_attributes"></a>`Jira::Tomcat_attributes`
+### <a name="Jira--Tomcat_attributes"></a>`Jira::Tomcat_attributes`
 
 A hash of string keys to arbitrary values that will be rendered as XML attributes
 
-Alias of
+Alias of `Hash[String[1], Scalar]`
 
-```puppet
-Hash[String[1], Scalar]
-```
-
-### <a name="jiratomcat_connectors"></a>`Jira::Tomcat_connectors`
+### <a name="Jira--Tomcat_connectors"></a>`Jira::Tomcat_connectors`
 
 A set of attribute hashes keyed by connector port number
 
-Alias of
-
-```puppet
-Hash[Stdlib::Port::Unprivileged, Jira::Tomcat_attributes]
-```
+Alias of `Hash[Stdlib::Port::Unprivileged, Jira::Tomcat_attributes]`
 

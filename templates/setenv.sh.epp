@@ -38,7 +38,7 @@ JVM_CODE_CACHE_ARGS='<%= pick_default($jira::jvm_code_cache_args, $jira::config:
 #
 # The following are the required arguments for Jira.
 #
-<%- if versioncmp($jira::version, '8.11.0') > 0 { -%>
+<%- if ($jira::product != "servicedesk" and versioncmp($jira::version, '8.11.0') > 0) or ($jira::product == "servicedesk" and (versioncmp($jira::version, '4.11.0') > 0)){ -%>
 JVM_REQUIRED_ARGS='-Djava.awt.headless=true -Datlassian.standalone=JIRA -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true -Dmail.mime.decodeparameters=true -Dorg.dom4j.factory=com.atlassian.core.xml.InterningDocumentFactory'
 <% } else { -%>
 JVM_REQUIRED_ARGS='-Djava.awt.headless=true -Datlassian.standalone=JIRA -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true -Dmail.mime.decodeparameters=true'
@@ -88,6 +88,14 @@ if [ "$JIRA_HOME" != "" ]; then
 fi
 
 JAVA_OPTS="-Xms${JVM_MINIMUM_MEMORY} -Xmx${JVM_MAXIMUM_MEMORY} ${JVM_CODE_CACHE_ARGS} ${JAVA_OPTS} ${JVM_REQUIRED_ARGS} ${DISABLE_NOTIFICATIONS} ${JVM_SUPPORT_RECOMMENDED_ARGS} ${JVM_EXTRA_ARGS} ${JIRA_HOME_MINUSD} ${START_JIRA_JAVA_OPTS}"
+
+j_ver=`echo "$($JAVA_HOME/bin/java -version 2>&1)" | grep "version" | awk '{ print substr($3, 2, length($3)-2); }'`
+IFS='.' read -a j_ver_parts <<< "$j_ver"
+
+if [[ ${j_ver_parts[0]} = 17 ]]; then
+  JVM_OPENS=$(cat $PRGDIR/java-opens.txt)
+  JAVA_OPTS="$JVM_OPENS $JAVA_OPTS"
+fi
 
 export JAVA_OPTS
 

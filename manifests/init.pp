@@ -144,8 +144,6 @@
 #   Configures JVM_EXTRA_ARGS in setenv.sh
 # @param jvm_nofiles_limit
 #   Set the limit for open files
-# @param catalina_opts
-#   Does nothing :-)
 # @param download_url
 #   Base URL for downloading Atlassian software
 # @param checksum
@@ -353,7 +351,6 @@ class jira (
   Optional[String] $jvm_code_cache_args                             = undef,
   Optional[String] $jvm_extra_args                                  = undef,
   Integer $jvm_nofiles_limit                                        = 16384,
-  String $catalina_opts                                             = '',
   # Misc Settings
   Stdlib::HTTPUrl $download_url                                     = 'https://product-downloads.atlassian.com/software/jira/downloads',
   Optional[String] $checksum                                        = undef,
@@ -407,7 +404,7 @@ class jira (
   # Additional connectors in server.xml
   Jira::Tomcat_connectors $tomcat_additional_connectors             = {},
   # Context path (usualy used in combination with a reverse proxy)
-  String $contextpath                                               = '',
+  Optional[String[1]] $contextpath                                  = undef,
   # Resources for context.xml
   Hash $resources                                                   = {},
   # Enable SingleSignOn via Crowd
@@ -514,10 +511,10 @@ class jira (
       }
       $_password = !empty($plugin_data['password']) ? {
         default => {},
-        true    => { password => $plugin_data['password'] }
+        true    => { password => $plugin_data['password'] },
       }
       $_plugin_archive = {
-        $target => $_target_defaults + $_username + $_password
+        $target => $_target_defaults + $_username + $_password,
       }
       create_resources(archive, $_plugin_archive)
     }

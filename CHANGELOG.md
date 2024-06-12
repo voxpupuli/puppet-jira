@@ -4,6 +4,36 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v6.0.0](https://github.com/voxpupuli/puppet-jira/tree/v6.0.0) (2024-02-13)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v5.1.0...v6.0.0)
+
+**Breaking changes:**
+
+- Drop Puppet 6 support [\#404](https://github.com/voxpupuli/puppet-jira/pull/404) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Fix tests with modulesync 7.3.0; allow latest dependency versions [\#414](https://github.com/voxpupuli/puppet-jira/pull/414) ([h-haaks](https://github.com/h-haaks))
+- Add Puppet 8 support [\#408](https://github.com/voxpupuli/puppet-jira/pull/408) ([bastelfreak](https://github.com/bastelfreak))
+- Allow custom plugin installation and usage of JNDI database connections [\#389](https://github.com/voxpupuli/puppet-jira/pull/389) ([ThomasMinor](https://github.com/ThomasMinor))
+
+**Fixed bugs:**
+
+- Update setenv.sh.epp if statement to work with service desk [\#400](https://github.com/voxpupuli/puppet-jira/pull/400) ([techtino](https://github.com/techtino))
+- Avoid duplicate scheme declaration when using proxy with SSL [\#396](https://github.com/voxpupuli/puppet-jira/pull/396) ([jmcnatt](https://github.com/jmcnatt))
+
+**Closed issues:**
+
+- JVM\_OPENS not set for JIRA Java 17 support [\#412](https://github.com/voxpupuli/puppet-jira/issues/412)
+- cluster.properties.epp - soon to be deprecated code by Puppet 8 [\#411](https://github.com/voxpupuli/puppet-jira/issues/411)
+
+**Merged pull requests:**
+
+- Bugfix java 17 support per atlassian upstream [\#413](https://github.com/voxpupuli/puppet-jira/pull/413) ([valentino-aguiar-gsa](https://github.com/valentino-aguiar-gsa))
+- Remove legacy top-scope syntax [\#410](https://github.com/voxpupuli/puppet-jira/pull/410) ([smortex](https://github.com/smortex))
+- Allow up-to-date dependencies [\#393](https://github.com/voxpupuli/puppet-jira/pull/393) ([smortex](https://github.com/smortex))
+
 ## [v5.1.0](https://github.com/voxpupuli/puppet-jira/tree/v5.1.0) (2021-08-20)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v5.0.1...v5.1.0)
@@ -379,7 +409,7 @@ This is the last release with Puppet 3 support!
 - We added JIRA 7 Support
 
 ### Improvements
-- Use defined function to test for the existence of the fact ::jira_ver
+- Use defined function to test for the existence of the fact jira_ver
 - Added hieradata examples for Oracle DB backend
 - Added containment for mysql_connector class
 - Support STRICT_VARIABLES=yes
