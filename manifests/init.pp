@@ -330,7 +330,7 @@ class jira (
   Stdlib::HTTPUrl $mysql_connector_url                              = 'https://dev.mysql.com/get/Downloads/Connector-J',
   Optional[Integer[0]] $pool_min_size                               = undef,
   Optional[Integer[0]] $pool_max_size                               = undef,
-  Optional[Integer[-1]] $pool_max_wait                              = undef,
+  Optional[Integer[0]] $pool_max_wait                               = undef,
   Optional[String] $validation_query                                = undef,
   Optional[Integer[0]] $validation_query_timeout                    = undef,
   Optional[Integer[0]] $min_evictable_idle_time                     = undef,
