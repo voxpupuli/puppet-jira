@@ -36,11 +36,13 @@ class jira::install {
     }
   }
 
-  file { $jira::homedir:
-    ensure => 'directory',
-    owner  => $jira::user,
-    group  => $jira::group,
-    mode   => $jira::homedir_mode,
+  if $jira::manage_homedir {
+    file { $jira::homedir:
+      ensure => 'directory',
+      owner  => $jira::user,
+      group  => $jira::group,
+      mode   => $jira::homedir_mode,
+    }
   }
 
   if ! defined(File[$jira::installdir]) {

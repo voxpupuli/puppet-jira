@@ -58,6 +58,7 @@ The following parameters are available in the `jira` class:
 * [`product`](#-jira--product)
 * [`installdir`](#-jira--installdir)
 * [`homedir`](#-jira--homedir)
+* [`manage_homedir`](#-jira--manage_homedir)
 * [`manage_user`](#-jira--manage_user)
 * [`user`](#-jira--user)
 * [`group`](#-jira--group)
@@ -204,6 +205,14 @@ Data type: `Stdlib::Absolutepath`
 The directory for JIRA's runtime data that persists between versions.
 
 Default value: `'/home/jira'`
+
+##### <a name="-jira--manage_homedir"></a>`manage_homedir`
+
+Data type: `Boolean`
+
+Whether to manage the homedir
+
+Default value: `true`
 
 ##### <a name="-jira--manage_user"></a>`manage_user`
 

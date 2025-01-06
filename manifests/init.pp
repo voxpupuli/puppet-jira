@@ -23,6 +23,8 @@
 #   The directory in which JIRA software packages will be extracted
 # @param homedir
 #   The directory for JIRA's runtime data that persists between versions.
+# @param manage_homedir
+#   Whether to manage the homedir
 # @param manage_user
 #   Whether to manage the service user
 # @param user
@@ -288,6 +290,7 @@ class jira (
   String[1] $product                                                = 'jira',
   Stdlib::Absolutepath $installdir                                  = '/opt/jira',
   Stdlib::Absolutepath $homedir                                     = '/home/jira',
+  Boolean $manage_homedir                                           = true,
   Boolean $manage_user                                              = true,
   String $user                                                      = 'jira',
   String $group                                                     = 'jira',
