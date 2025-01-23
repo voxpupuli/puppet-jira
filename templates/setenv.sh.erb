@@ -49,6 +49,8 @@ DISABLE_NOTIFICATIONS=" -Datlassian.mail.senddisabled=true -Datlassian.mail.fetc
 #-----------------------------------------------------------------------------------
 JVM_EXTRA_ARGS=""
 
+JVM_OPENS=$(cat $PRGDIR/java-opens.txt)
+
 PRGDIR=`dirname "$0"`
 cat "${PRGDIR}"/jirabanner.txt
 
