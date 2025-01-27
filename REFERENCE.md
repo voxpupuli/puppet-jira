@@ -80,6 +80,7 @@ The following parameters are available in the `jira` class:
 * [`jndi_ds_name`](#-jira--jndi_ds_name)
 * [`db`](#-jira--db)
 * [`dbname`](#-jira--dbname)
+* [`change_dbpassword`](#-jira--change_dbpassword)
 * [`dbuser`](#-jira--dbuser)
 * [`dbpassword`](#-jira--dbpassword)
 * [`dbserver`](#-jira--dbserver)
@@ -382,6 +383,14 @@ Data type: `String`
 The database name to connect to
 
 Default value: `'jira'`
+
+##### <a name="-jira--change_dbpassword"></a>`change_dbpassword`
+
+Data type: `Boolean`
+
+Set to true to actually generate a dbconfig.xml with the password - otherwise write "{ATL_SECURED}"
+
+Default value: `false`
 
 ##### <a name="-jira--dbuser"></a>`dbuser`
 
