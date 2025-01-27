@@ -81,6 +81,7 @@ The following parameters are available in the `jira` class:
 * [`db`](#-jira--db)
 * [`dbname`](#-jira--dbname)
 * [`dbuser`](#-jira--dbuser)
+* [`change_dbpassword`](#-jira--change_dbpassword)
 * [`dbpassword`](#-jira--dbpassword)
 * [`dbserver`](#-jira--dbserver)
 * [`dbport`](#-jira--dbport)
@@ -390,6 +391,14 @@ Data type: `String`
 Database username
 
 Default value: `'jiraadm'`
+
+##### <a name="-jira--change_dbpassword"></a>`change_dbpassword`
+
+Data type: `Boolean`
+
+Set to true to actually generate a dbconfig.xml with the password - otherwise write "{ATL_SECURED}"
+
+Default value: `false`
 
 ##### <a name="-jira--dbpassword"></a>`dbpassword`
 
