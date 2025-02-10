@@ -47,7 +47,9 @@ class jira::config {
       fail('You need to set jira::tomcat_native_ssl to true when using jira::tomcat_redirect_https_port')
     }
   }
-
+  
+  $change_dbpassword = $jira::change_dbpassword
+  
   if $jira::dbport {
     $dbport = $jira::dbport
   } else {
