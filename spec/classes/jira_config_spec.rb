@@ -14,6 +14,7 @@ describe 'jira' do
       {
         javahome: '/opt/java',
         version: DEFAULT_VERSION,
+        
       }
     end
 
@@ -172,7 +173,8 @@ describe 'jira' do
                 dbserver: 'TheSQLServer',
                 dbname: 'TheJiraDB',
                 dbuser: 'TheDBUser',
-                dbpassword: 'TheDBPassword'
+                dbpassword: 'TheDBPassword',
+                change_dbpassword: true
               )
             end
 
@@ -195,7 +197,8 @@ describe 'jira' do
                 dbserver: 'TheSQLServer',
                 dbname: 'TheJiraDB',
                 dbuser: 'TheDBUser',
-                dbpassword: 'TheDBPassword'
+                dbpassword: 'TheDBPassword',
+                change_dbpassword: true
               )
             end
 
@@ -237,7 +240,8 @@ describe 'jira' do
                 dbserver: 'TheSQLServer',
                 dbname: 'TheJiraDB',
                 dbuser: 'TheDBUser',
-                dbpassword: 'TheDBPassword'
+                dbpassword: 'TheDBPassword',
+                change_dbpassword: true
               )
             end
 
