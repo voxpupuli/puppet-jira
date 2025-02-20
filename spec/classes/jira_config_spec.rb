@@ -14,7 +14,6 @@ describe 'jira' do
       {
         javahome: '/opt/java',
         version: DEFAULT_VERSION,
-        
       }
     end
 
