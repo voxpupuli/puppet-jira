@@ -54,6 +54,7 @@ describe 'jira postgresql' do
         java_package             => $java_package,
         javahome                 => $java_home,
         script_check_java_manage => true,
+        change_dbpassword        => true
       }
     EOS
 
