@@ -68,6 +68,8 @@
 #   The kind of database to use.
 # @param dbname
 #   The database name to connect to
+# @param change_dbpassword
+#   Set to true to actually generate a dbconfig.xml with the password - otherwise write "{ATL_SECURED}"
 # @param dbuser
 #   Database username
 # @param dbpassword
@@ -313,6 +315,7 @@ class jira (
   Boolean $use_jndi_ds                                              = false,
   String[1] $jndi_ds_name                                           = 'JiraDS',
   Enum['postgresql','mysql','sqlserver','oracle','h2'] $db          = 'postgresql',
+  Boolean $change_dbpassword                                        = false,
   String $dbuser                                                    = 'jiraadm',
   String $dbpassword                                                = 'mypassword',
   String $dbserver                                                  = 'localhost',

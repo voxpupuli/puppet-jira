@@ -54,6 +54,7 @@ describe 'jira postgresql' do
         java_package             => $java_package,
         javahome                 => $java_home,
         script_check_java_manage => true,
+        change_dbpassword        => true,
       }
     EOS
 
@@ -94,7 +95,11 @@ describe 'jira postgresql' do
     it { is_expected.to have_login_shell '/bin/true' }
   end
 
-  describe command('wget -q --tries=24 --retry-connrefused --read-timeout=10 -O- localhost:8080') do
+  describe command('tail -100 ~jira/log/atlassian-jira.log') do
+    its(:stdout) { is_expected.to include('INFO') }
+  end
+
+  describe command('wget -q --tries=54 --retry-connrefused --read-timeout=10 -O- localhost:8080') do
     its(:stdout) { is_expected.to include('8.16.0') }
   end
 
