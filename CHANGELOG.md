@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v6.1.1](https://github.com/voxpupuli/puppet-jira/tree/v6.1.1) (2025-02-24)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v6.1.0...v6.1.1)
+
+Due to some CI issues, the `v6.1.0` release was tagged as `v6.1.0` but contains `v6.1.0-rc0` in metadata.json. `v6.1.1` is just a rerelease.
+
+## [v6.1.0](https://github.com/voxpupuli/puppet-jira/tree/v6.1.0) (2025-02-24)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v6.0.0...v6.1.0)
+
+**Implemented enhancements:**
+
+- Add manage\_homedir support [\#392](https://github.com/voxpupuli/puppet-jira/issues/392)
+- Add "change database password" parameter - JIRA \>10.3 [\#429](https://github.com/voxpupuli/puppet-jira/pull/429) ([diLLec](https://github.com/diLLec))
+- Add `manage_homedir` parameter [\#428](https://github.com/voxpupuli/puppet-jira/pull/428) ([Joris29](https://github.com/Joris29))
+- Allow puppet/systemd 8.x [\#427](https://github.com/voxpupuli/puppet-jira/pull/427) ([jay7x](https://github.com/jay7x))
+- update puppet-systemd upper bound to 8.0.0 [\#423](https://github.com/voxpupuli/puppet-jira/pull/423) ([TheMeier](https://github.com/TheMeier))
+- Add Debian 11 support [\#397](https://github.com/voxpupuli/puppet-jira/pull/397) ([root-expert](https://github.com/root-expert))
+
+**Fixed bugs:**
+
+- Update Readme, fix CI Badge, Links, Code Block formats, add Reference… [\#420](https://github.com/voxpupuli/puppet-jira/pull/420) ([rwaffen](https://github.com/rwaffen))
+
 ## [v6.0.0](https://github.com/voxpupuli/puppet-jira/tree/v6.0.0) (2024-02-13)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v5.1.0...v6.0.0)
