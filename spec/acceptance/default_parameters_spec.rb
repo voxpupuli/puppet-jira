@@ -98,11 +98,11 @@ describe 'jira postgresql' do
   describe command('tail -100 ~jira/log/atlassian-jira.log') do
     its(:stdout) { is_expected.to include('INFO') }
   end
-  
+
   describe command('wget -q --tries=54 --retry-connrefused --read-timeout=10 -O- localhost:8080') do
     its(:stdout) { is_expected.to include('8.16.0') }
   end
-  
+
   describe 'shutdown' do
     it { shell('service jira stop', acceptable_exit_codes: [0, 1]) }
     it { shell('pkill -9 -f postgres', acceptable_exit_codes: [0, 1]) }
