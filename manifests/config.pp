@@ -48,7 +48,11 @@ class jira::config {
     }
   }
 
-  $change_dbpassword = $jira::change_dbpassword
+  if versioncmp($jira::version, '10.3.0') >= 0 {
+    $change_dbpassword = $jira::change_dbpassword
+  } else {
+    $change_dbpassword = true
+  }
 
   if $jira::dbport {
     $dbport = $jira::dbport
