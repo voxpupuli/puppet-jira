@@ -77,7 +77,6 @@ describe 'jira mysql' do
         dbport                   => 3306,
         dbdriver                 => 'com.mysql.jdbc.Driver',
         dbtype                   => 'mysql',
-        change_dbpassword        => true,
         tomcat_port              => 8081,
         tomcat_native_ssl        => true,
         tomcat_keystore_file     => '/tmp/jira.ks',

@@ -91,6 +91,42 @@ describe 'jira' do
             end
           end
 
+          context 'default params with java install and mysql > 10.3.0 and change_dbpassword=true' do
+            let(:params) do
+              {
+                version: 10.3.3
+                db: 'mysql',
+                dbpassword: 'test',
+                change_dbpassword: true,
+                javahome: '/usr/lib/jvm/jre-11-openjdk',
+                java_package: 'java-11-openjdk-headless',
+              }
+            end
+
+            it do
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{<password>test</password>}).
+            end
+          end
+
+          context 'default params with java install and mysql > 10.3.0 and change_dbpassword=false' do
+            let(:params) do
+              {
+                version: 10.3.3
+                db: 'mysql',
+                dbpassword: 'test',
+                change_dbpassword: false,
+                javahome: '/usr/lib/jvm/jre-11-openjdk',
+                java_package: 'java-11-openjdk-headless',
+              }
+            end
+
+            it do
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{<password>{ATL_SECURED}</password>}).
+            end
+          end
+
           context 'database settings' do
             let(:params) do
               super().merge(
@@ -172,8 +208,7 @@ describe 'jira' do
                 dbserver: 'TheSQLServer',
                 dbname: 'TheJiraDB',
                 dbuser: 'TheDBUser',
-                dbpassword: 'TheDBPassword',
-                change_dbpassword: true
+                dbpassword: 'TheDBPassword'
               )
             end
 
@@ -196,8 +231,7 @@ describe 'jira' do
                 dbserver: 'TheSQLServer',
                 dbname: 'TheJiraDB',
                 dbuser: 'TheDBUser',
-                dbpassword: 'TheDBPassword',
-                change_dbpassword: true
+                dbpassword: 'TheDBPassword'
               )
             end
 
@@ -239,8 +273,7 @@ describe 'jira' do
                 dbserver: 'TheSQLServer',
                 dbname: 'TheJiraDB',
                 dbuser: 'TheDBUser',
-                dbpassword: 'TheDBPassword',
-                change_dbpassword: true
+                dbpassword: 'TheDBPassword'
               )
             end
 

@@ -12,10 +12,11 @@
     <url><%= $jira::config::dburl %></url>
     <driver-class><%= $jira::config::dbdriver %></driver-class>
     <username><%= $jira::dbuser %></username>
-    <%- if $jira::config::change_dbpassword { -%>
+    <%- if versioncmp($jira::version, '10.3.0') < 0 or $jira::config::change_dbpassword { -%>
     <password><%= $jira::dbpassword %></password>
     <%- } else { -%>
     <password>{ATL_SECURED}</password>
+    <%- } -%>
     <%- } -%>
 <%# For most of these, Jira defaults are better... -%>
 <% if $jira::config::pool_min_size != undef { -%>

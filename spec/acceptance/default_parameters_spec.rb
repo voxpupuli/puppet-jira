@@ -53,8 +53,7 @@ describe 'jira postgresql' do
         version                  => '8.16.0',
         java_package             => $java_package,
         javahome                 => $java_home,
-        script_check_java_manage => true,
-        change_dbpassword        => true,
+        script_check_java_manage => true
       }
     EOS
 

@@ -69,7 +69,7 @@
 # @param dbname
 #   The database name to connect to
 # @param change_dbpassword
-#   Set to true to actually generate a dbconfig.xml with the password - otherwise write "{ATL_SECURED}"
+#   Set to true to actually generate a dbconfig.xml with the password - otherwise write "{ATL_SECURED}" (for JIRA versions > 10.3.0)
 # @param dbuser
 #   Database username
 # @param dbpassword
