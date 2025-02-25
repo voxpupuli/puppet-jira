@@ -23,6 +23,8 @@
 #   The directory in which JIRA software packages will be extracted
 # @param homedir
 #   The directory for JIRA's runtime data that persists between versions.
+# @param manage_homedir
+#   Whether to manage the homedir
 # @param manage_user
 #   Whether to manage the service user
 # @param user
@@ -66,6 +68,8 @@
 #   The kind of database to use.
 # @param dbname
 #   The database name to connect to
+# @param change_dbpassword
+#   Set to true to actually generate a dbconfig.xml with the password - otherwise write "{ATL_SECURED}"
 # @param dbuser
 #   Database username
 # @param dbpassword
@@ -288,6 +292,7 @@ class jira (
   String[1] $product                                                = 'jira',
   Stdlib::Absolutepath $installdir                                  = '/opt/jira',
   Stdlib::Absolutepath $homedir                                     = '/home/jira',
+  Boolean $manage_homedir                                           = true,
   Boolean $manage_user                                              = true,
   String $user                                                      = 'jira',
   String $group                                                     = 'jira',
@@ -310,6 +315,7 @@ class jira (
   Boolean $use_jndi_ds                                              = false,
   String[1] $jndi_ds_name                                           = 'JiraDS',
   Enum['postgresql','mysql','sqlserver','oracle','h2'] $db          = 'postgresql',
+  Boolean $change_dbpassword                                        = false,
   String $dbuser                                                    = 'jiraadm',
   String $dbpassword                                                = 'mypassword',
   String $dbserver                                                  = 'localhost',

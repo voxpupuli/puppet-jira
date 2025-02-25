@@ -48,6 +48,8 @@ class jira::config {
     }
   }
 
+  $change_dbpassword = $jira::change_dbpassword
+
   if $jira::dbport {
     $dbport = $jira::dbport
   } else {

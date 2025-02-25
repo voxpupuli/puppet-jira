@@ -12,7 +12,11 @@
     <url><%= $jira::config::dburl %></url>
     <driver-class><%= $jira::config::dbdriver %></driver-class>
     <username><%= $jira::dbuser %></username>
+    <%- if $jira::config::change_dbpassword { -%>
     <password><%= $jira::dbpassword %></password>
+    <%- } else { -%>
+    <password>{ATL_SECURED}</password>
+    <%- } -%>
 <%# For most of these, Jira defaults are better... -%>
 <% if $jira::config::pool_min_size != undef { -%>
     <pool-min-size><%= $jira::config::pool_min_size %></pool-min-size>
@@ -20,14 +24,20 @@
 <% if $jira::config::pool_max_size != undef { -%>
     <pool-max-size><%= $jira::config::pool_max_size %></pool-max-size>
 <% } -%>
-<% if $jira::config::pool_max_idle != undef { -%>
-    <pool-max-idle><%= $jira::config::pool_max_idle %></pool-max-idle>
-<% } -%>
 <% if $jira::config::pool_max_wait != undef { -%>
     <pool-max-wait><%= $jira::config::pool_max_wait %></pool-max-wait>
 <% } -%>
+<% if $jira::config::validation_query != undef { -%>
+    <validation-query><%= $jira::config::validation_query %></validation-query>
+<% } -%>
 <% if $jira::config::min_evictable_idle_time != undef { -%>
     <min-evictable-idle-time-millis><%= $jira::config::min_evictable_idle_time %></min-evictable-idle-time-millis>
+<% } -%>
+<% if $jira::config::time_between_eviction_runs != undef { -%>
+    <time-between-eviction-runs-millis><%= $jira::config::time_between_eviction_runs %></time-between-eviction-runs-millis>
+<% } -%>
+<% if $jira::config::pool_max_idle != undef { -%>
+    <pool-max-idle><%= $jira::config::pool_max_idle %></pool-max-idle>
 <% } -%>
 <% if $jira::config::pool_remove_abandoned != undef { -%>
     <pool-remove-abandoned><%= $jira::config::pool_remove_abandoned %></pool-remove-abandoned>
@@ -35,20 +45,14 @@
 <% if $jira::config::pool_remove_abandoned_timeout != undef { -%>
     <pool-remove-abandoned-timeout><%= $jira::config::pool_remove_abandoned_timeout %></pool-remove-abandoned-timeout>
 <% } -%>
-<% if $jira::config::pool_test_while_idle != undef { -%>
-    <pool-test-while-idle><%= $jira::config::pool_test_while_idle %></pool-test-while-idle>
-<% } -%>
 <% if $jira::config::pool_test_on_borrow != undef { -%>
     <pool-test-on-borrow><%= $jira::config::pool_test_on_borrow %></pool-test-on-borrow>
 <% } -%>
-<% if $jira::config::validation_query != undef { -%>
-    <validation-query><%= $jira::config::validation_query %></validation-query>
+<% if $jira::config::pool_test_while_idle != undef { -%>
+    <pool-test-while-idle><%= $jira::config::pool_test_while_idle %></pool-test-while-idle>
 <% } -%>
 <% if $jira::config::validation_query_timeout != undef { -%>
     <validation-query-timeout><%= $jira::config::validation_query_timeout %></validation-query-timeout>
-<% } -%>
-<% if $jira::config::time_between_eviction_runs != undef { -%>
-    <time-between-eviction-runs-millis><%= $jira::config::time_between_eviction_runs %></time-between-eviction-runs-millis>
 <% } -%>
 <% if $jira::config::connection_settings { -%>
     <connection-properties><%= $jira::config::connection_settings %></connection-properties>
