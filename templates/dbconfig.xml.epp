@@ -17,7 +17,6 @@
     <%- } else { -%>
     <password>{ATL_SECURED}</password>
     <%- } -%>
-    <%- } -%>
 <%# For most of these, Jira defaults are better... -%>
 <% if $jira::config::pool_min_size != undef { -%>
     <pool-min-size><%= $jira::config::pool_min_size %></pool-min-size>
