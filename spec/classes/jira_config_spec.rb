@@ -94,7 +94,7 @@ describe 'jira' do
           context 'default params with java install and mysql > 10.3.0 and change_dbpassword=true' do
             let(:params) do
               {
-                version: 10.3.3
+                version: '10.3.3',
                 db: 'mysql',
                 dbpassword: 'test',
                 change_dbpassword: true,
@@ -105,14 +105,14 @@ describe 'jira' do
 
             it do
               is_expected.to contain_file(FILENAME_DBCONFIG_XML).
-                with_content(%r{<password>test</password>}).
+                with_content(%r{<password>test</password>})
             end
           end
 
           context 'default params with java install and mysql > 10.3.0 and change_dbpassword=false' do
             let(:params) do
               {
-                version: 10.3.3
+                version: '10.3.3',
                 db: 'mysql',
                 dbpassword: 'test',
                 change_dbpassword: false,
@@ -123,7 +123,7 @@ describe 'jira' do
 
             it do
               is_expected.to contain_file(FILENAME_DBCONFIG_XML).
-                with_content(%r{<password>{ATL_SECURED}</password>}).
+                with_content(%r{<password>{ATL_SECURED}</password>})
             end
           end
 

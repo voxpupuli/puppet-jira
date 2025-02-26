@@ -12,7 +12,7 @@
     <url><%= $jira::config::dburl %></url>
     <driver-class><%= $jira::config::dbdriver %></driver-class>
     <username><%= $jira::dbuser %></username>
-    <%- if versioncmp($jira::version, '10.3.0') < 0 or $jira::config::change_dbpassword { -%>
+    <%- if $jira::config::change_dbpassword { -%>
     <password><%= $jira::dbpassword %></password>
     <%- } else { -%>
     <password>{ATL_SECURED}</password>

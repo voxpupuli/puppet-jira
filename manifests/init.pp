@@ -69,7 +69,7 @@
 # @param dbname
 #   The database name to connect to
 # @param change_dbpassword
-#   Set to true to actually generate a dbconfig.xml with the password - otherwise write "{ATL_SECURED}" (for JIRA versions > 10.3.0)
+#   Set to true to actually generate a dbconfig.xml with the password - otherwise write "{ATL_SECURED}" (defaults to true in JIRA versions < 10.3.0)
 # @param dbuser
 #   Database username
 # @param dbpassword
@@ -482,6 +482,11 @@ class jira (
 
   if $javahome == undef {
     fail('You need to specify a value for javahome')
+  }
+
+  $change_dbpassword_real = versioncmp($version, '10.3.0') ? {
+    -1      => true,
+    default => $change_dbpassword,
   }
 
   contain jira::install
