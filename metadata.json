@@ -1,6 +1,6 @@
 {
   "name": "puppet-jira",
-  "version": "6.0.1-rc0",
+  "version": "6.1.1",
   "author": "Vox Pupuli",
   "summary": "Module to install, configure and manage Atlassian Jira",
   "license": "Apache-2.0",
@@ -14,7 +14,7 @@
   "dependencies": [
     {
       "name": "puppet/systemd",
-      "version_requirement": ">= 3.0.0 < 8.0.0"
+      "version_requirement": ">= 3.0.0 < 9.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
