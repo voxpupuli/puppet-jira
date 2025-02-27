@@ -6,13 +6,13 @@ describe 'jira postgresql' do
   it 'installs with defaults' do
     pp = <<-EOS
       $java_package = $facts['os']['family'] ? {
-        'RedHat' => 'java-11-openjdk-headless',
-        'Debian' => 'openjdk-11-jre-headless',
+        'RedHat' => 'java-17-openjdk-headless',
+        'Debian' => 'openjdk-17-jdk-headless',
       }
 
       $java_home = $facts['os']['family'] ? {
-        'RedHat' => '/usr/lib/jvm/jre-11-openjdk',
-        'Debian' => '/usr/lib/jvm/java-1.11.0-openjdk-amd64',
+        'RedHat' => '/usr/lib/jvm/jre-17-openjdk',
+        'Debian' => '/usr/lib/jvm/java-17-openjdk-amd64',
       }
 
       # The output of `systemctl status postgresql` is non ascii which
@@ -41,13 +41,13 @@ describe 'jira postgresql' do
     EOS
     pp_upgrade = <<-EOS
       $java_package = $facts['os']['family'] ? {
-        'RedHat' => 'java-11-openjdk-headless',
-        'Debian' => 'openjdk-11-jre-headless',
+        'RedHat' => 'java-17-openjdk-headless',
+        'Debian' => 'openjdk-17-jdk-headless',
       }
 
       $java_home = $facts['os']['family'] ? {
-        'RedHat' => '/usr/lib/jvm/jre-11-openjdk',
-        'Debian' => '/usr/lib/jvm/java-1.11.0-openjdk-amd64',
+        'RedHat' => '/usr/lib/jvm/jre-17-openjdk',
+        'Debian' => '/usr/lib/jvm/java-17-openjdk-amd64',
       }
 
       class { 'jira':
@@ -100,7 +100,7 @@ describe 'jira postgresql' do
   end
 
   describe command('wget -q --tries=54 --retry-connrefused --read-timeout=10 -O- localhost:8080') do
-    its(:stdout) { is_expected.to include('8.16.0') }
+    its(:stdout) { is_expected.to include('9.12.18') }
   end
 
   describe 'shutdown' do
