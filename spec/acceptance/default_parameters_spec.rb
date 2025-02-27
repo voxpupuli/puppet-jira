@@ -51,7 +51,7 @@ describe 'jira postgresql' do
       }
 
       class { 'jira':
-        version                  => '8.16.0',
+        version                  => '9.12.18',
         java_package             => $java_package,
         javahome                 => $java_home,
         script_check_java_manage => true
