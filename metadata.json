@@ -62,7 +62,8 @@
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "11"
+        "11",
+        "12"
       ]
     },
     {
