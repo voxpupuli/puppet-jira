@@ -91,7 +91,7 @@ describe 'jira' do
             end
           end
 
-          context 'default params with java install and mysql > 10.3.0 and change_dbpassword=true' do
+          context 'default params with java install, mysql, and jira > 10.3.0 and change_dbpassword=true' do
             let(:params) do
               {
                 version: '10.3.3',
@@ -109,7 +109,7 @@ describe 'jira' do
             end
           end
 
-          context 'default params with java install and mysql > 10.3.0 and change_dbpassword=false' do
+          context 'default params with java install, mysql, and jira > 10.3.0 and change_dbpassword=false' do
             let(:params) do
               {
                 version: '10.3.3',
