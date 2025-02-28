@@ -24,11 +24,14 @@ context 'jira 10 only on RedHat >=8 and Debian-11', if: on_supported_os do
         if $facts['os']['family']  == 'RedHat' {
           $java_package = 'java-17-openjdk'
           $java_home = '/usr/lib/jvm/jre-17-openjdk'
-          $manage_dnf_module = true
+          $manage_dnf_module = $facts['os']['release']['major'] ? {
+            8       => true,
+            default => false   # RHEL-9 has pgsql 13 as a default 
+          }          
         }
         elsif $facts['os']['family']  == 'Debian' {
           $java_package = 'openjdk-17-jre'
-          $java_home = '/usr/lib/jvm/java-1.17.0-openjdk-amd64'
+          $java_home = '/usr/lib/jvm/java-17-openjdk-amd64'
           $manage_dnf_module = false
         }
       EOS
