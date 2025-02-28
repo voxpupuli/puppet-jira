@@ -484,9 +484,15 @@ class jira (
     fail('You need to specify a value for javahome')
   }
 
-  $change_dbpassword_real = versioncmp($version, '10.3.0') ? {
-    -1      => true,
-    default => $change_dbpassword,
+  if $facts['jira_running_dbconfig_exists'] {
+    $change_dbpassword_real = versioncmp($version, '10.3.0') ? {
+      -1      => true,
+      default => $change_dbpassword,
+    }
+  }
+  else {
+    # jira propably not installed
+    $change_dbpassword_real = true
   }
 
   contain jira::install
