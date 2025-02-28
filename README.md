@@ -247,6 +247,11 @@ Reverse proxy can be configured as a hash as part of the JIRA resource
    },
 ```
 
+### notes on secret encryption in dbconfig.xml
+The JIRA process will read the dbconfig.xml on startup replace it with the string "{ATL_SECURED}". The password is moved
+into `<shared_homedir>/keys/javax.crypto.spec.SecretKeySpec_<some random number>`. It is important that this directory
+is not located inside of the installation dir as you would lose it in the case of an update.
+
 ## Reference
 
 see [REFERENCE.md](REFERENCE.md)
