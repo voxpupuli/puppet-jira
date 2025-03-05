@@ -20,7 +20,8 @@ describe 'jira postgresql' do
       # on rhel based docker containers
       # We don't need the output.
       class { 'postgresql::server':
-        service_status => 'systemctl status postgresql > /dev/null'
+        service_status => 'systemctl status postgresql > /dev/null',
+        needs_initdb   => true
       }
 
       postgresql::server::db { 'jira':
