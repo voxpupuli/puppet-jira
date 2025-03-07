@@ -12,7 +12,7 @@ node default {
   }
 
   -> class { 'jira':
-    javahome    => '/opt/java/latest',
+    javahome => '/opt/java/latest',
   }
 
   include jira::facts
