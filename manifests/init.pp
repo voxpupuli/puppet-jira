@@ -484,7 +484,12 @@ class jira (
     fail('You need to specify a value for javahome')
   }
 
-  if fact('jira_running_dbconfig_exists') == undef or $facts['jira_running_dbconfig_exists'] {
+  $is_insalled_deferred = Deferred('jira::is_installed', [$jira::user])
+  $is_installed = $is_insalled_deferred =~ Deferred ? {
+    true  => jira::is_installed($jira::user),
+    false => $is_insalled_deferred
+  }
+  if $is_installed {
     # use the parameter if the fact did not run (confine), or the fact shows that there is a dbconfig.xml in place
     $change_dbpassword_real = versioncmp($version, '10.3.0') ? {
       -1      => true,
