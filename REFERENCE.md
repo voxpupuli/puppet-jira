@@ -20,6 +20,10 @@
 
 ### Functions
 
+#### Public Functions
+
+* [`jira::is_installed`](#jira--is_installed): Check if JIRA is already installed
+
 #### Private Functions
 
 * `jira::sort_hash`: Sort a hash
@@ -1163,6 +1167,26 @@ Data type: `Optional[Boolean]`
 Deprecated. Has no effect.
 
 Default value: `undef`
+
+## Functions
+
+### <a name="jira--is_installed"></a>`jira::is_installed`
+
+Type: Ruby 4.x API
+
+Check if JIRA is already installed
+
+#### `jira::is_installed(String[1] $jira_user)`
+
+The jira::is_installed function.
+
+Returns: `Boolean`
+
+##### `jira_user`
+
+Data type: `String[1]`
+
+
 
 ## Data types
 
