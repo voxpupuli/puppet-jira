@@ -502,7 +502,7 @@ class jira (
     if  $plugin_data['ensure'] == 'absent' {
       archive {
         $target:
-          ensure        => 'absent',
+          ensure => 'absent',
       }
     } else {
       $_target_defaults = {
