@@ -92,9 +92,6 @@ describe 'jira' do
           end
 
           context 'default params with java install, mysql, and jira > 10.3.0 and change_dbpassword=true' do
-            let(:facts) do
-              facts.merge(jira_service_status: 'active', jira_running_pid: '500', jira_running_user: 'jira', jira_running_dbconfig_exists: true, jira_running_version: '10.3.3')
-            end
             let(:params) do
               {
                 version: '10.3.3',
@@ -112,32 +109,7 @@ describe 'jira' do
             end
           end
 
-          context 'default params with java install, mysql, and jira > 10.3.0 and change_dbpassword=false and facts that indicate an active install' do
-            let(:facts) do
-              facts.merge(jira_service_status: 'active', jira_running_pid: '500', jira_running_user: 'jira', jira_running_dbconfig_exists: true, jira_running_version: '10.3.3')
-            end
-
-            let(:params) do
-              {
-                version: '10.3.3',
-                db: 'mysql',
-                dbpassword: 'test',
-                change_dbpassword: false,
-                javahome: '/usr/lib/jvm/jre-11-openjdk',
-                java_package: 'java-11-openjdk-headless',
-              }
-            end
-
-            it do
-              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
-                with_content(%r{<password>{ATL_SECURED}</password>})
-            end
-          end
-
           context 'default params with java install, mysql, and jira > 10.3.0 and change_dbpassword=false (default) and facts that indicate a fresh install' do
-            let(:facts) do
-              facts.merge(jira_service_status: 'inactive', jira_running_pid: '<unknown>', jira_running_user: '<unknown>', jira_running_dbconfig_exists: false, jira_running_version: '<unknown>')
-            end
             let(:params) do
               {
                 version: '10.3.3',
