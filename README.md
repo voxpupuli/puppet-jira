@@ -93,11 +93,21 @@ If you would prefer to use Hiera then see jira.yaml file for an example.
 The module can install a package for you using your OS's package manager.
 Note that there's no smarts here. You need to set javahome correctly.
 
+*Pre JIRA 10*
 ```puppet
   # this example works on RHEL
   class { 'jira':
     java_package  => 'java-11-openjdk-headless'
     javahome      => '/usr/lib/jvm/jre-11-opendjk/',
+  }
+```
+
+*Post JIRA 10*
+```puppet
+  # this example works on RHEL
+  class { 'jira':
+    java_package  => 'java-17-openjdk'
+    javahome      => '/usr/lib/jvm/jre-17-opendjk/',
   }
 ```
 
@@ -113,7 +123,7 @@ doing large version upgrades. Always backup your database and your home director
   class { 'jira':
     java_package  => 'java-11-openjdk-headless'
     javahome      => '/usr/lib/jvm/jre-11-opendjk/',
-    version     => '8.16.0',
+    version       => '8.16.0',
   }
 ```
 

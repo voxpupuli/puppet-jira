@@ -3,18 +3,19 @@
 require 'spec_helper_acceptance'
 
 def on_supported_os
-  (fact('os.family') == 'Debian' and fact('os.release.major') >= '22.04') or
-    (fact('os.family') == 'RedHat' and fact('os.release.major') >= '8')
+  family = fact('os.family')
+  major = fact('os.release.major')
+  (family == 'Debian' and (major >= '22.04' or major >= '11')) or (family == 'RedHat' and major >= '8')
 end
 
 prepare = <<-EOS
-  package {'diffutils':
-    ensure  => installed
-  }
-  file_line{'enable show_diff':
-    path => '/etc/puppetlabs/puppet/puppet.conf',
-    line => 'show_diff = true'
-  }
+  # package {'diffutils':
+  #   ensure  => installed
+  # }
+  # file_line{'enable show_diff':
+  #   path => '/etc/puppetlabs/puppet/puppet.conf',
+  #   line => 'show_diff = true'
+  # }
 EOS
 
 pre = <<-EOS
@@ -26,14 +27,18 @@ pre = <<-EOS
     $pgsql_data_dir = '/var/lib/pgsql'
     $manage_dnf_module = $facts['os']['release']['major'] ? {
       '8'       => true,
-      default => false # RHEL-9 has pgsql 13 as a default
+      default   => false # RHEL-9 has pgsql 13 as a default
     }
     $autoremove_command = 'dnf --exclude="systemd*" autoremove -y'
   }
   elsif $facts['os']['family']  == 'Debian' {
+    $postgresql_version = $facts['os']['release']['major'] ? {
+      '11'    => '13',
+      '20.04' => '13',
+      default => '14'
+    }
     $java_package = 'openjdk-17-jre'
     $java_home = '/usr/lib/jvm/java-17-openjdk-amd64'
-    $postgresql_version = '14'
     $pgsql_package_name = "postgresql-${postgresql_version}"
     $pgsql_data_dir = "/var/lib/postgresql/${postgresql_version}/main/"
     $manage_dnf_module = false
@@ -90,14 +95,14 @@ pp_upgrade = pre + pp_upgrade
 
 pp_remove = <<-EOS
   package {$java_package:
-    ensure => absent
+    ensure => purged
   }
   exec {'clear JIRA home':
     command => 'rm -Rf ~jira/*',
     provider => shell,
   }
   package {$pgsql_package_name:
-     ensure => absent
+     ensure => purged
   }
   if $manage_dnf_module {
     exec {"dnf module reset postgresql":
