@@ -484,9 +484,9 @@ class jira (
     fail('You need to specify a value for javahome')
   }
 
-  $is_insalled_deferred = Deferred('jira::is_installed', [$jira::user])
+  $is_insalled_deferred = Deferred('jira::is_installed', [$jira::homedir])
   $is_installed = $is_insalled_deferred =~ Deferred ? {
-    true  => jira::is_installed($jira::user),
+    true  => jira::is_installed($jira::homedir),
     false => $is_insalled_deferred
   }
   if $is_installed {

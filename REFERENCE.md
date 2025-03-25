@@ -1176,13 +1176,13 @@ Type: Ruby 4.x API
 
 Check if JIRA is already installed
 
-#### `jira::is_installed(String[1] $jira_user)`
+#### `jira::is_installed(String[1] $homedir)`
 
 The jira::is_installed function.
 
 Returns: `Boolean`
 
-##### `jira_user`
+##### `homedir`
 
 Data type: `String[1]`
 

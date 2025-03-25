@@ -3,14 +3,14 @@
 # @summary Check if JIRA is already installed
 Puppet::Functions.create_function(:'jira::is_installed') do
   dispatch :default_impl do
-    # @param jira_user The user under which JIRA is being installed
+    # @param homedir The directory for JIRA's runtime data that persists between versions.
     # @return [Boolean] install status
-    param 'String[1]', :jira_user
+    param 'String[1]', :homedir
     return_type 'Boolean'
   end
 
-  def default_impl(jira_user)
-    File.exist? format('%s/dbconfig.xml', Dir.home(jira_user))
+  def default_impl(homedir)
+    File.exist? format('%s/dbconfig.xml', homedir)
   rescue StandardError
     false
   end

@@ -3,7 +3,8 @@
 require 'spec_helper_acceptance'
 
 def on_supported_os
-  (fact('os.family') == 'Debian' and fact('os.release.major') == '22.04') or (fact('os.family') == 'RedHat' and fact('os.release.major') >= '8')
+  (fact('os.family') == 'Debian' and fact('os.release.major') >= '22.04') or
+    (fact('os.family') == 'RedHat' and fact('os.release.major') >= '8')
 end
 
 prepare = <<-EOS
