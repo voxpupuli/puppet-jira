@@ -20,6 +20,10 @@
 
 ### Functions
 
+#### Public Functions
+
+* [`jira::is_installed`](#jira--is_installed): Check if JIRA is already installed
+
 #### Private Functions
 
 * `jira::sort_hash`: Sort a hash
@@ -388,7 +392,7 @@ Default value: `'jira'`
 
 Data type: `Boolean`
 
-Set to true to actually generate a dbconfig.xml with the password - otherwise write "{ATL_SECURED}"
+Set to true to actually generate a dbconfig.xml with the password - otherwise write "{ATL_SECURED}" (defaults to true in JIRA versions < 10.3.0)
 
 Default value: `false`
 
@@ -1163,6 +1167,26 @@ Data type: `Optional[Boolean]`
 Deprecated. Has no effect.
 
 Default value: `undef`
+
+## Functions
+
+### <a name="jira--is_installed"></a>`jira::is_installed`
+
+Type: Ruby 4.x API
+
+Check if JIRA is already installed
+
+#### `jira::is_installed(String[1] $homedir)`
+
+The jira::is_installed function.
+
+Returns: `Boolean`
+
+##### `homedir`
+
+Data type: `String[1]`
+
+
 
 ## Data types
 

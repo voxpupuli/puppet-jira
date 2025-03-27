@@ -69,7 +69,7 @@
 # @param dbname
 #   The database name to connect to
 # @param change_dbpassword
-#   Set to true to actually generate a dbconfig.xml with the password - otherwise write "{ATL_SECURED}"
+#   Set to true to actually generate a dbconfig.xml with the password - otherwise write "{ATL_SECURED}" (defaults to true in JIRA versions < 10.3.0)
 # @param dbuser
 #   Database username
 # @param dbpassword
@@ -482,6 +482,23 @@ class jira (
 
   if $javahome == undef {
     fail('You need to specify a value for javahome')
+  }
+
+  $is_insalled_deferred = Deferred('jira::is_installed', [$jira::homedir])
+  $is_installed = $is_insalled_deferred =~ Deferred ? {
+    true  => jira::is_installed($jira::homedir),
+    false => $is_insalled_deferred
+  }
+  if $is_installed {
+    # use the parameter if the fact did not run (confine), or the fact shows that there is a dbconfig.xml in place
+    $change_dbpassword_real = versioncmp($version, '10.3.0') ? {
+      -1      => true,
+      default => $change_dbpassword,
+    }
+  }
+  else {
+    # jira probably not installed
+    $change_dbpassword_real = true
   }
 
   contain jira::install

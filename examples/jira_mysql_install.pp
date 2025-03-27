@@ -2,7 +2,6 @@ node default {
   class { 'mysql::server':
     root_password => 'strongpassword',
   }
-
   -> mysql::db { 'jira':
     user     => 'jiraadm',
     password => 'mypassword',

@@ -48,8 +48,6 @@ class jira::config {
     }
   }
 
-  $change_dbpassword = $jira::change_dbpassword
-
   if $jira::dbport {
     $dbport = $jira::dbport
   } else {
@@ -106,6 +104,7 @@ class jira::config {
     deprecation('jira::poolsize', 'jira::poolsize is deprecated and simply sets max-pool-size. Please use jira::pool_max_size instead and remove this configuration')
   }
 
+  $change_dbpassword = $jira::change_dbpassword_real
   $pool_min_size = pick($jira::pool_min_size, 20)
   $pool_max_size = pick($jira::pool_max_size, $jira::poolsize, 20)
   $pool_max_wait = pick($jira::pool_max_wait, 30000)

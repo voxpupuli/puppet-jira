@@ -93,11 +93,21 @@ If you would prefer to use Hiera then see jira.yaml file for an example.
 The module can install a package for you using your OS's package manager.
 Note that there's no smarts here. You need to set javahome correctly.
 
+*Pre JIRA 10*
 ```puppet
   # this example works on RHEL
   class { 'jira':
     java_package  => 'java-11-openjdk-headless'
     javahome      => '/usr/lib/jvm/jre-11-opendjk/',
+  }
+```
+
+*Post JIRA 10*
+```puppet
+  # this example works on RHEL
+  class { 'jira':
+    java_package  => 'java-17-openjdk'
+    javahome      => '/usr/lib/jvm/jre-17-opendjk/',
   }
 ```
 
@@ -113,7 +123,7 @@ doing large version upgrades. Always backup your database and your home director
   class { 'jira':
     java_package  => 'java-11-openjdk-headless'
     javahome      => '/usr/lib/jvm/jre-11-opendjk/',
-    version     => '8.16.0',
+    version       => '8.16.0',
   }
 ```
 
@@ -246,6 +256,11 @@ Reverse proxy can be configured as a hash as part of the JIRA resource
      proxyPort    => '443',
    },
 ```
+
+### notes on secret encryption in dbconfig.xml
+The JIRA process will read the dbconfig.xml on startup replace it with the string "{ATL_SECURED}". The password is moved
+into `<shared_homedir>/keys/javax.crypto.spec.SecretKeySpec_<some random number>`. It is important that this directory
+is not located inside of the installation dir as you would lose it in the case of an update.
 
 ## Reference
 
