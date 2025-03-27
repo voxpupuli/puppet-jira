@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v6.2.0](https://github.com/voxpupuli/puppet-jira/tree/v6.2.0) (2025-03-27)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v6.1.1...v6.2.0)
+
+**Implemented enhancements:**
+
+- metadata.json: Add OpenVox [\#442](https://github.com/voxpupuli/puppet-jira/pull/442) ([jstraw](https://github.com/jstraw))
+- Add AlmaLinux/Rocky support [\#438](https://github.com/voxpupuli/puppet-jira/pull/438) ([bastelfreak](https://github.com/bastelfreak))
+- Add Ubuntu 22.04 support [\#437](https://github.com/voxpupuli/puppet-jira/pull/437) ([bastelfreak](https://github.com/bastelfreak))
+- Add EL9 support [\#435](https://github.com/voxpupuli/puppet-jira/pull/435) ([bastelfreak](https://github.com/bastelfreak))
+
+**Fixed bugs:**
+
+- Fix breaking change regression of PR \#429 [\#434](https://github.com/voxpupuli/puppet-jira/pull/434) ([diLLec](https://github.com/diLLec))
+
 ## [v6.1.1](https://github.com/voxpupuli/puppet-jira/tree/v6.1.1) (2025-02-24)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v6.1.0...v6.1.1)
