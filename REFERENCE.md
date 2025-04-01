@@ -22,7 +22,7 @@
 
 #### Public Functions
 
-* [`jira::is_installed`](#jira--is_installed): Check if JIRA is already installed
+* [`jira::db_password_atl_secured`](#jira--db_password_atl_secured): Check if Jira has changed the db password to {ATL_SECURED}
 
 #### Private Functions
 
@@ -1170,15 +1170,15 @@ Default value: `undef`
 
 ## Functions
 
-### <a name="jira--is_installed"></a>`jira::is_installed`
+### <a name="jira--db_password_atl_secured"></a>`jira::db_password_atl_secured`
 
 Type: Ruby 4.x API
 
-Check if JIRA is already installed
+Check if Jira has changed the db password to {ATL_SECURED}
 
-#### `jira::is_installed(String[1] $homedir)`
+#### `jira::db_password_atl_secured(String[1] $homedir)`
 
-The jira::is_installed function.
+The jira::db_password_atl_secured function.
 
 Returns: `Boolean`
 

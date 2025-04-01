@@ -2,6 +2,16 @@
 
 require 'spec_helper'
 
+require 'rspec-puppet/cache'
+
+module RSpec::Puppet
+  module Support
+    def self.clear_cache
+      @@cache = RSpec::Puppet::Cache.new # rubocop:disable Style/ClassVars
+    end
+  end
+end
+
 # set some constants to keep it DRY
 REGEXP_DISABLE_NOTIFICATIONS = %r{#DISABLE_NOTIFICATIONS=}.freeze
 REGEXP_POSTGRESQL_URL = %r{jdbc:postgresql://localhost:5432/jira}.freeze
@@ -24,7 +34,7 @@ describe 'jira' do
             facts
           end
 
-          context 'default params' do
+          context 'with default params' do
             it { is_expected.to compile.with_all_deps }
 
             it do
@@ -59,7 +69,7 @@ describe 'jira' do
             it { is_expected.not_to contain_file(FILENAME_CHECK_JAVA_SH) }
           end
 
-          context 'default params with java install' do
+          context 'with java install' do
             let(:params) do
               {
                 javahome: '/usr/lib/jvm/jre-11-openjdk',
@@ -71,17 +81,15 @@ describe 'jira' do
             it { is_expected.to contain_package('java-11-openjdk-headless') }
           end
 
-          context 'default params with java install and mysql' do
+          context 'with mysql' do
             let(:params) do
               {
-                db: 'mysql',
                 javahome: '/usr/lib/jvm/jre-11-openjdk',
-                java_package: 'java-11-openjdk-headless',
+                db: 'mysql',
               }
             end
 
             it { is_expected.to compile.with_all_deps }
-            it { is_expected.to contain_package('java-11-openjdk-headless') }
 
             it do
               is_expected.to contain_file(FILENAME_DBCONFIG_XML).
@@ -91,39 +99,136 @@ describe 'jira' do
             end
           end
 
-          context 'default params with java install, mysql, and jira > 10.3.0 and change_dbpassword=true' do
+          context 'with version < 1.3.0' do
             let(:params) do
               {
-                version: '10.3.3',
-                db: 'mysql',
+                javahome: '/opt/java',
+                version: DEFAULT_VERSION,
                 dbpassword: 'test',
-                change_dbpassword: true,
-                javahome: '/usr/lib/jvm/jre-11-openjdk',
-                java_package: 'java-11-openjdk-headless',
               }
             end
 
             it do
               is_expected.to contain_file(FILENAME_DBCONFIG_XML).
                 with_content(%r{<password>test</password>})
+            end
+
+            context 'change_dbpassword=true' do
+              let(:params) do
+                {
+                  javahome: '/opt/java',
+                  version: DEFAULT_VERSION,
+                  dbpassword: 'test',
+                  change_dbpassword: true,
+                }
+              end
+
+              it do
+                is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                  with_content(%r{<password>test</password>})
+              end
             end
           end
 
-          context 'default params with java install, mysql, and jira > 10.3.0 and change_dbpassword=false (default) and facts that indicate a fresh install' do
-            let(:params) do
-              {
-                version: '10.3.3',
-                db: 'mysql',
-                dbpassword: 'test',
-                change_dbpassword: false,
-                javahome: '/usr/lib/jvm/jre-11-openjdk',
-                java_package: 'java-11-openjdk-headless',
-              }
+          context 'with version >= 10.3.0' do
+            context 'no atl_secured password' do
+              let(:params) do
+                {
+                  javahome: '/usr/lib/jvm/jre-11-openjdk',
+                  version: '10.3.3',
+                  dbpassword: 'test',
+                }
+              end
+
+              before do
+                RSpec::Puppet::Support.clear_cache
+                allow(PuppetX::Jira::Jira).to receive(:db_password_atl_secured).and_return(false)
+              end
+
+              after do
+                RSpec::Puppet::Support.clear_cache
+              end
+
+              it do
+                is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                  with_content(%r{<password>test</password>})
+              end
             end
 
-            it do
-              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
-                with_content(%r{<password>test</password>})
+            context 'atl_secured password' do
+              let(:params) do
+                {
+                  javahome: '/usr/lib/jvm/jre-11-openjdk',
+                  version: '10.3.3',
+                  dbpassword: 'test',
+                }
+              end
+
+              before do
+                RSpec::Puppet::Support.clear_cache
+                allow(PuppetX::Jira::Jira).to receive(:db_password_atl_secured).and_return(true)
+              end
+
+              after do
+                RSpec::Puppet::Support.clear_cache
+              end
+
+              it do
+                is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                  with_content(%r{<password>{ATL_SECURED}</password>})
+              end
+            end
+
+            context 'change_dbpassword=true' do
+              context 'no atl_secured password' do
+                let(:params) do
+                  {
+                    javahome: '/usr/lib/jvm/jre-11-openjdk',
+                    version: '10.3.3',
+                    dbpassword: 'test',
+                    change_dbpassword: true,
+                  }
+                end
+
+                before do
+                  RSpec::Puppet::Support.clear_cache
+                  allow(PuppetX::Jira::Jira).to receive(:db_password_atl_secured).and_return(false)
+                end
+
+                after do
+                  RSpec::Puppet::Support.clear_cache
+                end
+
+                it do
+                  is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                    with_content(%r{<password>test</password>})
+                end
+              end
+
+              context 'atl_secured password' do
+                let(:params) do
+                  {
+                    javahome: '/usr/lib/jvm/jre-11-openjdk',
+                    version: '10.3.3',
+                    dbpassword: 'test',
+                    change_dbpassword: true,
+                  }
+                end
+
+                before do
+                  RSpec::Puppet::Support.clear_cache
+                  allow(PuppetX::Jira::Jira).to receive(:db_password_atl_secured).and_return(true)
+                end
+
+                after do
+                  RSpec::Puppet::Support.clear_cache
+                end
+
+                it do
+                  is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                    with_content(%r{<password>test</password>})
+                end
+              end
             end
           end
 
