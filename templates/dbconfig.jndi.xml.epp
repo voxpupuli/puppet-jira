@@ -4,11 +4,11 @@
 <jira-database-config>
   <name>defaultDS</name>
   <delegator-name>default</delegator-name>
-  <database-type><%= $jira::config::dbtype %></database-type>
-<% if $jira::config::dbschema != undef { -%>
-  <schema-name><%= $jira::config::dbschema %></schema-name>
+  <database-type><%= $dbtype %></database-type>
+<% if $dbschema != undef { -%>
+  <schema-name><%= $dbschema %></schema-name>
 <% } -%>
   <jndi-datasource>
-    <jndi-name>java:comp/env/jdbc/<%= $jira::jndi_ds_name %></jndi-name>
+    <jndi-name>java:comp/env/jdbc/<%= $jndi_ds_name %></jndi-name>
   </jndi-datasource>
 </jira-database-config>
