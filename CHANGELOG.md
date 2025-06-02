@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v6.2.1](https://github.com/voxpupuli/puppet-jira/tree/v6.2.1) (2025-06-02)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v6.2.0...v6.2.1)
+
+**Fixed bugs:**
+
+- Use Deferred on epp call to generate dbconfig.xml [\#445](https://github.com/voxpupuli/puppet-jira/pull/445) ([h-haaks](https://github.com/h-haaks))
+
+**Closed issues:**
+
+- With release 6.2.0 puppet again starts to change dbconfig.xml on every agent run [\#444](https://github.com/voxpupuli/puppet-jira/issues/444)
+
 ## [v6.2.0](https://github.com/voxpupuli/puppet-jira/tree/v6.2.0) (2025-03-27)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v6.1.1...v6.2.0)
