@@ -28,13 +28,7 @@ describe 'jira mysql' do
         package_name => $mysql_client_package,
       }
 
-      # Default MySQL is too old for utf8mb4 on CentOS 7, or something. Also Ubuntu 20.04
-      # for some reason fails with utf8
-      if $facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] == '7' {
-        $cs = 'utf8'
-      } else {
-        $cs = 'utf8mb4'
-      }
+      $cs = 'utf8mb4'
 
       mysql::db { 'jira':
         charset  => $cs,

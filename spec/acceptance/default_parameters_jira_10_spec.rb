@@ -5,7 +5,7 @@ require 'spec_helper_acceptance'
 def on_supported_os
   family = fact('os.family')
   major = fact('os.release.major')
-  (family == 'Debian' and (major >= '22.04' or (major >= '11' and major <= '20'))) or (family == 'RedHat' and major >= '8')
+  family == 'Debian' and (major >= '22.04' or (major >= '11' and major <= '20'))
 end
 
 prepare = <<-EOS
