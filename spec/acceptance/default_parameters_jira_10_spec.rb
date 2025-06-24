@@ -2,12 +2,6 @@
 
 require 'spec_helper_acceptance'
 
-def on_supported_os
-  family = fact('os.family')
-  major = fact('os.release.major')
-  family == 'Debian' and (major >= '22.04' or (major >= '11' and major <= '20'))
-end
-
 prepare = <<-EOS
   # package {'diffutils':
   #   ensure  => installed
@@ -127,7 +121,7 @@ pp_remove = <<-EOS
 EOS
 pp_remove = pre + pp_remove
 
-context 'jira 10 only on RedHat >=8 and Debian-11', if: on_supported_os do
+context 'jira 10' do
   describe 'jira 10 postgresql' do
     it 'installs jira 10 with defaults' do
       apply_manifest(prepare, catch_failures: true)
