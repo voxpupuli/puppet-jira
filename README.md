@@ -268,14 +268,7 @@ see [REFERENCE.md](REFERENCE.md)
 
 ## Limitations
 
-* Puppet 6.1.0
-* Puppet Enterprise
-
-The puppetlabs repositories can be found at:
-<http://yum.puppetlabs.com/> and <http://apt.puppetlabs.com/>
-
-* RedHat 7, 8 or compatible (CentOS, Oracle Linux, etc)
-* Ubuntu 18.04, 20.04
+See `metadata.json` for supported Puppet platforms and components.
 
 * Jira 8.x
 

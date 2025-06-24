@@ -5,36 +5,12 @@ require 'spec_helper_acceptance'
 describe 'jira mysql' do
   it 'installs with defaults' do
     pp = <<-EOS
-      # On ubuntu 20.04 and 22.04 the default is to install mariadb
-      # As the ubuntu 20.04 runner we use in github actions allready has mysql installed
-      # a apparmor error is triggerd when using mariadb in this test..
-      # Forcing the use of mysql
-      if $facts['os']['name'] == 'Ubuntu' and versioncmp($facts['os']['release']['major'], '20.04') >= 0 {
-        $mysql_service_name = 'mysql'
-        $mysql_server_package = 'mysql-server'
-        $mysql_client_package = 'mysql-client'
-      } else {
-        $mysql_service_name = undef
-        $mysql_server_package = undef
-        $mysql_client_package = undef
-      }
-
       class { 'mysql::server':
         root_password => 'strongpassword',
-        package_name => $mysql_server_package,
-        service_name => $mysql_service_name,
       }
-      class { 'mysql::client':
-        package_name => $mysql_client_package,
-      }
+      include mysql::client
 
-      # Default MySQL is too old for utf8mb4 on CentOS 7, or something. Also Ubuntu 20.04
-      # for some reason fails with utf8
-      if $facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] == '7' {
-        $cs = 'utf8'
-      } else {
-        $cs = 'utf8mb4'
-      }
+      $cs = 'utf8mb4'
 
       mysql::db { 'jira':
         charset  => $cs,
