@@ -20,8 +20,7 @@
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 6. [Limitations - OS compatibility, etc.](#limitations)
 7. [Development - Guide for contributing to the module](#development)
-8. [Testing - How to test the JIRA module](#testing)
-9. [Contributors](#contributors)
+8. [Contributors](#contributors)
 
 ## Overview
 
@@ -286,48 +285,7 @@ Please feel free to raise any issues here for bug fixes. We also welcome feature
 requests. Feel free to make a pull request for anything and we make the effort to
 review and merge. We prefer with tests if possible.
 
-## Testing
-
-### How to test the JIRA module
-
-Using [puppetlabs_spec_helper](https://github.com/puppetlabs/puppetlabs_spec_helper).
-Simply run:
-
-```shell
-bundle install && bundle exec rake spec
-```
-
-to get results.
-
-```shell
-ruby -S rspec spec/classes/jira_install_spec.rb --color
-.
-
-Finished in 0.38159 seconds
-1 example, 0 failures
-```
-
-Using [Beaker - Puppet Labs cloud enabled acceptance testing tool.](https://github.com/puppetlabs/beaker).
-
-The beaker tests will install oracle Java to /opt/java. When running the beaker
-tests you agree that you accept the [oracle java license](http://www.oracle.com/technetwork/java/javase/terms/license/index.html).
-
-```shell
-bundle install
-BEAKER_set=ubuntu-server-12042-x64 bundle exec rake beaker
-BEAKER_set=ubuntu-server-1404-x64 bundle exec rake beaker
-BEAKER_set=debian-73-x64 bundle exec rake beaker
-BEAKER_set=centos-64-x64 bundle exec rake beaker
-BEAKER_set=centos-70-x64 bundle exec rake beaker
-BEAKER_set=centos-64-x64-pe bundle exec rake beaker
-```
-
-To save build time it is useful to host the installation files locally on a web
-server. You can use the download_url environment variable to overwrite the default.
-
-```shell
-export download_url="'http://my.local.server/'"
-```
+For details, see <https://github.com/voxpupuli/puppet-jira/blob/master/.github/CONTRIBUTING.md>.
 
 ## Contributors
 
