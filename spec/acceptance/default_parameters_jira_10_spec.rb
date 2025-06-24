@@ -2,16 +2,6 @@
 
 require 'spec_helper_acceptance'
 
-prepare = <<-EOS
-  # package {'diffutils':
-  #   ensure  => installed
-  # }
-  # file_line{'enable show_diff':
-  #   path => '/etc/puppetlabs/puppet/puppet.conf',
-  #   line => 'show_diff = true'
-  # }
-EOS
-
 pre = <<-EOS
   if $facts['os']['family']  == 'RedHat' {
     $java_package = 'java-17-openjdk'
@@ -19,17 +9,19 @@ pre = <<-EOS
     $postgresql_version = '13'
     $pgsql_package_name = 'postgresql-server'
     $pgsql_data_dir = '/var/lib/pgsql'
+
     $manage_dnf_module = $facts['os']['release']['major'] ? {
-      '8'       => true,
-      default   => false # RHEL-9 has pgsql 13 as a default
+      '8'     => true,
+      default => false, # RHEL-9 has pgsql 13 as a default
     }
+
     $autoremove_command = 'dnf --exclude="systemd*" autoremove -y'
-  }
-  elsif $facts['os']['family']  == 'Debian' {
+  } elsif $facts['os']['family'] == 'Debian' {
     $postgresql_version = $facts['os']['release']['major'] ? {
       '11'    => '13',
-      default => '14'
+      default => '14',
     }
+
     $java_package = 'openjdk-17-jre'
     $java_home = '/usr/lib/jvm/java-17-openjdk-amd64'
     $pgsql_package_name = "postgresql-${postgresql_version}"
@@ -37,6 +29,7 @@ pre = <<-EOS
     $manage_dnf_module = false
     $autoremove_command = 'apt autoremove -y'
   }
+
   $jira_install_dir = '/opt/jira/'
   $postgres_service = 'postgresql'
   $jira_service = 'jira'
@@ -51,9 +44,10 @@ pp = <<-EOS
     manage_dnf_module => $manage_dnf_module,
     version           => $postgresql_version,
   }
+
   class { 'postgresql::server':
     service_status => 'systemctl status postgresql > /dev/null',
-    needs_initdb   => true
+    needs_initdb   => true,
   }
 
   postgresql::server::db { 'jira':
@@ -70,9 +64,10 @@ pp = <<-EOS
     javahome                 => $java_home,
     script_check_java_manage => false,
     connection_settings      => 'tcpKeepAlive=true',
-    require                  => Postgresql::Server::Db['jira']
+    require                  => Postgresql::Server::Db['jira'],
   }
 EOS
+
 pp = pre + pp
 
 pp_upgrade = <<-EOS
@@ -81,50 +76,58 @@ pp_upgrade = <<-EOS
     java_package             => $java_package,
     javahome                 => $java_home,
     connection_settings      => 'tcpKeepAlive=true',
-    script_check_java_manage => false
+    script_check_java_manage => false,
   }
 EOS
+
 pp_upgrade = pre + pp_upgrade
 
 pp_remove = <<-EOS
-  package {$java_package:
-    ensure => purged
+  package { $java_package:
+    ensure => purged,
   }
-  exec {'clear JIRA home':
-    command => 'rm -Rf ~jira/*',
+
+  exec { 'clear JIRA home':
+    command  => 'rm -Rf ~jira/*',
     provider => shell,
   }
-  package {$pgsql_package_name:
-     ensure => purged
+
+  package { $pgsql_package_name:
+    ensure => purged,
   }
+
   if $manage_dnf_module {
-    exec {"dnf module reset postgresql":
-      command => 'dnf module reset -y postgresql',
+    exec { 'dnf module reset postgresql':
+      command  => 'dnf module reset -y postgresql',
       provider => shell,
     }
   }
-  exec {"autoremove cleanup":
-    command => $autoremove_command,
+
+  exec { 'autoremove cleanup':
+    command  => $autoremove_command,
     provider => shell,
   }
-  exec {'cleanup pgsql and JIRA install dir':
-    command => "rm -Rf ${pgsql_data_dir}/* ${$jira_install_dir}/atlassian-jira-software*",
+
+  exec { 'cleanup pgsql and JIRA install dir':
+    command  => "rm -Rf ${pgsql_data_dir}/* ${$jira_install_dir}/atlassian-jira-software*",
     provider => shell,
-    require => Exec['autoremove cleanup'],
+    require  => Exec['autoremove cleanup'],
   }
-  service{$postgres_service:
-    ensure => stopped
+
+  service { $postgres_service:
+    ensure => stopped,
   }
-  service{$jira_service:
-    ensure => stopped
+
+  service { $jira_service:
+    ensure => stopped,
   }
 EOS
+
 pp_remove = pre + pp_remove
 
 context 'jira 10' do
   describe 'jira 10 postgresql' do
     it 'installs jira 10 with defaults' do
-      apply_manifest(prepare, catch_failures: true)
       # jira just takes *ages* to start up :-(
       wget_cmd = 'wget -q --tries=24 --retry-connrefused --read-timeout=10 localhost:8080'
       apply_manifest(pp, catch_failures: true)
@@ -173,7 +176,7 @@ context 'jira 10' do
         apply_manifest(pp_remove, catch_failures: true)
       end
 
-      it { shell('service jira stop', acceptable_exit_codes: [0, 1]) }
+      it { shell('systemctl stop jira', acceptable_exit_codes: [0, 1]) }
       it { shell('pkill -9 -f postgres', acceptable_exit_codes: [0, 1]) }
       it { shell('pkill -9 -f jira', acceptable_exit_codes: [0, 1]) }
     end
