@@ -117,6 +117,18 @@
                               factory="org.objectweb.jotm.UserTransactionFactory" jotm.timeout="60"/>
 <% if $jira::use_jndi_ds { %>
                     <!-- If you're using JIRA 6.4 or below; change maxTotal to maxActive -->
+  <% if $jira::use_ucp { -%>
+                    <Resource name="jdbc/<%= $jira::jndi_ds_name %>" auth="Container" type="oracle.ucp.jdbc.PoolDataSource"
+                            factory="oracle.ucp.jdbc.PoolDataSourceImpl"
+                            connectionFactoryClassName="oracle.jdbc.pool.OracleDataSource"
+                            url="<%= $jira::config::dburl %>"
+                            user="<%= $jira::dbuser %>"
+                            password="<%= $jira::dbpassword %>"
+                            maxTotal="<%= $jira::config::pool_max_size %>"
+                            maxIdle="<%= $jira::config::pool_max_idle %>"
+                            validationQuery="select 1"
+                    />
+  <% } else { -%>
                     <Resource name="jdbc/<%= $jira::jndi_ds_name %>" auth="Container" type="javax.sql.DataSource"
                             driverClassName="<%= $jira::config::dbdriver %>"
                             url="<%= $jira::config::dburl %>"
@@ -126,6 +138,7 @@
                             maxIdle="<%= $jira::config::pool_max_idle %>"
                             validationQuery="select 1"
                     />
+  <% } -%>
 <% } -%>
                     <Manager pathname=""/>
                     <JarScanner scanManifest="false"/>
