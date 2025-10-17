@@ -167,7 +167,8 @@ class jira::config {
         'oracle'     => "jdbc:${jira::db}:thin:@${jira::dbserver}:${dbport}${oracle_separator}${jira::dbname}",
         'sqlserver'  => "jdbc:jtds:${jira::db}://${jira::dbserver}:${dbport}/${jira::dbname}",
         'h2'         => "jdbc:h2:file:/${jira::homedir}/database/${jira::dbname}",
-    }),
+      }
+    ),
     dbdriver => $dbdriver,
     dbuser => $jira::dbuser,
     dbpassword => $jira::dbpassword,
