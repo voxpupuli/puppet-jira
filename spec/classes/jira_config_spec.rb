@@ -305,6 +305,17 @@ describe 'jira' do
             end
           end
 
+          context 'oracle custom dburl' do
+            let(:params) do
+              super().merge(
+                db: 'oracle',
+                dburl: 'jdbc:oracle:thin:@localhost:1521/mydatabase'
+              )
+            end
+
+            it { is_expected.to raise_error(Puppet::Error, %r{Unknown variable: 'oracle_separator'}) }
+          end
+
           context 'postgres params' do
             let(:params) do
               super().merge(
