@@ -161,14 +161,7 @@ class jira::config {
     change_dbpassword => $jira::change_dbpassword,
     dbtype => $dbtype,
     dbschema => $dbschema,
-    dburl => pick($jira::dburl, $jira::db ? {
-        'postgresql' => "jdbc:${jira::db}://${jira::dbserver}:${dbport}/${jira::dbname}",
-        'mysql'      => "jdbc:${jira::db}://${jira::dbserver}:${dbport}/${jira::dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB",
-        'oracle'     => "jdbc:${jira::db}:thin:@${jira::dbserver}:${dbport}${oracle_separator}${jira::dbname}",
-        'sqlserver'  => "jdbc:jtds:${jira::db}://${jira::dbserver}:${dbport}/${jira::dbname}",
-        'h2'         => "jdbc:h2:file:/${jira::homedir}/database/${jira::dbname}",
-      }
-    ),
+    dburl => $dburl,
     dbdriver => $dbdriver,
     dbuser => $jira::dbuser,
     dbpassword => $jira::dbpassword,

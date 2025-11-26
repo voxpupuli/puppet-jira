@@ -313,7 +313,10 @@ describe 'jira' do
               )
             end
 
-            it { is_expected.to raise_error(Puppet::Error, %r{Unknown variable: 'oracle_separator'}) }
+            it do
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{jdbc:oracle:thin:@localhost:1521/mydatabase})
+            end
           end
 
           context 'postgres params' do
