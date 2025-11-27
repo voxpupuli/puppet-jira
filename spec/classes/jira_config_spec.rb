@@ -62,7 +62,8 @@ describe 'jira' do
                 with_content(%r{<pool-test-while-idle>true}).
                 with_content(%r{<pool-test-on-borrow>false}).
                 with_content(%r{<validation-query>select version\(\);}).
-                with_content(%r{<connection-properties>tcpKeepAlive=true;socketTimeout=240})
+                with_content(%r{<connection-properties>tcpKeepAlive=true;socketTimeout=240}).
+                without_content(%r{<validation-query-timeout>})
             end
 
             it { is_expected.not_to contain_file(FILENAME_CLUSTER_PROPS) }
@@ -79,24 +80,6 @@ describe 'jira' do
 
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_package('java-11-openjdk-headless') }
-          end
-
-          context 'with mysql' do
-            let(:params) do
-              {
-                javahome: '/usr/lib/jvm/jre-11-openjdk',
-                db: 'mysql',
-              }
-            end
-
-            it { is_expected.to compile.with_all_deps }
-
-            it do
-              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
-                with_content(%r{<validation-query>select 1</validation-query>}).
-                with_content(%r{<validation-query-timeout>3</validation-query-timeout>}).
-                without_content(%r{<connection-properties>})
-            end
           end
 
           context 'with version < 1.3.0' do
@@ -232,7 +215,17 @@ describe 'jira' do
             end
           end
 
-          context 'database settings' do
+          context 'with unsupported db' do
+            let(:params) do
+              super().merge(
+                db: 'imaginarydb'
+              )
+            end
+
+            it { is_expected.not_to compile }
+          end
+
+          context 'with default db and custom database settings' do
             let(:params) do
               super().merge(
                 connection_settings: 'TEST-SETTING;',
@@ -248,6 +241,9 @@ describe 'jira' do
 
             it do
               is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{<database-type>postgres72</database-type>}).
+                with_content(%r{<url>jdbc:postgresql://localhost:5432/jira</url>}).
+                with_content(%r{<driver-class>org.postgresql.Driver</driver-class>}).
                 with_content(%r{<connection-properties>TEST-SETTING;</connection-properties>}).
                 with_content(%r{<pool-max-size>200</pool-max-size>}).
                 with_content(%r{<pool-min-size>10</pool-min-size>}).
@@ -255,12 +251,55 @@ describe 'jira' do
             end
           end
 
-          context 'mysql params' do
+          context 'with default db and custom dbport' do
+            let(:params) do
+              super().merge(
+                dbport: '666'
+              )
+            end
+
+            it do
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{<url>jdbc:postgresql://localhost:666/jira</url>})
+            end
+          end
+
+          context 'with default db and custom dbriver' do
+            let(:params) do
+              super().merge(
+                dbdriver: 'mydriver'
+              )
+            end
+
+            it do
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{<url>jdbc:postgresql://localhost:5432/jira</url>}).
+                with_content(%r{<driver-class>mydriver</driver-class>})
+            end
+          end
+
+          context 'with default db and custom dbtype' do
+            let(:params) do
+              super().merge(
+                dbtype: 'mydbtype'
+              )
+            end
+
+            it do
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{<database-type>mydbtype</database-type>}).
+                with_content(%r{<url>jdbc:postgresql://localhost:5432/jira</url>})
+            end
+          end
+
+          context 'with mysql db and default database settings' do
             let(:params) do
               super().merge(
                 db: 'mysql'
               )
             end
+
+            it { is_expected.to compile.with_all_deps }
 
             it { is_expected.to contain_file(FILENAME_SETENV_SH) }
             it { is_expected.to contain_file(FILENAME_USER_SH) }
@@ -268,31 +307,157 @@ describe 'jira' do
 
             it do
               is_expected.to contain_file(FILENAME_DBCONFIG_XML).
-                with_content(%r{jdbc:mysql://localhost:3306/jira})
+                with_content(%r{<database-type>mysql</database-type>}).
+                with_content(%r{<url>jdbc:mysql://localhost:3306/jira\?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB</url>}).
+                with_content(%r{<driver-class>com.mysql.jdbc.Driver</driver-class>}).
+                with_content(%r{<validation-query>select 1</validation-query>}).
+                with_content(%r{<validation-query-timeout>3</validation-query-timeout>}).
+                without_content(%r{<connection-properties>})
             end
           end
 
-          context 'oracle params' do
+          context 'with mysql db and custom url' do
             let(:params) do
               super().merge(
-                db: 'oracle',
-                dbname: 'mydatabase'
+                db: 'mysql',
+                dburl: 'jdbc:mysql://localhost:9999/myjira'
               )
             end
 
             it do
               is_expected.to contain_file(FILENAME_DBCONFIG_XML).
-                with_content(%r{jdbc:oracle:thin:@localhost:1521:mydatabase}).
-                with_content(%r{<database-type>oracle10g}).
-                with_content(%r{<driver-class>oracle.jdbc.OracleDriver})
+                with_content(%r{<url>jdbc:mysql://localhost:9999/myjira</url>})
             end
           end
 
-          context 'oracle servicename' do
+          context 'with mysql db and custom url with dbname and dbserver' do
+            let(:params) do
+              super().merge(
+                db: 'mysql',
+                dburl: 'jdbc:mysql://localhost:666/jiradb',
+                dbname: 'mydatabase',
+                dbserver: 'myhost'
+              )
+            end
+
+            it do
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{<url>jdbc:mysql://localhost:666/jiradb</url>})
+            end
+          end
+
+          context 'with sqlserver db and default database settings' do
+            let(:params) do
+              super().merge(
+                db: 'sqlserver'
+              )
+            end
+
+            it { is_expected.to compile.with_all_deps }
+
+            it { is_expected.to contain_file(FILENAME_SETENV_SH) }
+            it { is_expected.to contain_file(FILENAME_USER_SH) }
+            it { is_expected.to contain_file(FILENAME_SERVER_XML) }
+
+            it do
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{<database-type>mssql</database-type>}).
+                with_content(%r{<url>jdbc:jtds:sqlserver://localhost:1433/jira</url>}).
+                with_content(%r{<driver-class>com.microsoft.sqlserver.jdbc.SQLServerDriver</driver-class>}).
+                with_content(%r{<validation-query>select 1</validation-query>}).
+                without_content(%r{<validation-query-timeout>}).
+                without_content(%r{<connection-properties>})
+            end
+          end
+
+          context 'with sqlserver db and custom url' do
+            let(:params) do
+              super().merge(
+                db: 'sqlserver',
+                dburl: 'jdbc:sqlserver://localhost:9999/myjira'
+              )
+            end
+
+            it do
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{<url>jdbc:sqlserver://localhost:9999/myjira</url>})
+            end
+          end
+
+          context 'with sqlserver db and custom url with dbname and dbserver' do
+            let(:params) do
+              super().merge(
+                db: 'sqlserver',
+                dburl: 'jdbc:jtds:sqlserver://localhost:666/jiradb',
+                dbname: 'mydatabase',
+                dbserver: 'myhost'
+              )
+            end
+
+            it do
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{<url>jdbc:jtds:sqlserver://localhost:666/jiradb</url>})
+            end
+          end
+
+          context 'with oracle db and default database settings' do
+            let(:params) do
+              super().merge(
+                db: 'oracle'
+              )
+            end
+
+            it { is_expected.to compile.with_all_deps }
+
+            it { is_expected.to contain_file(FILENAME_SETENV_SH) }
+            it { is_expected.to contain_file(FILENAME_USER_SH) }
+            it { is_expected.to contain_file(FILENAME_SERVER_XML) }
+
+            it do
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{<database-type>oracle10g</database-type>}).
+                with_content(%r{<url>jdbc:oracle:thin:@localhost:1521:jira</url>}).
+                with_content(%r{<driver-class>oracle.jdbc.OracleDriver</driver-class>}).
+                with_content(%r{<validation-query>select 1 from dual</validation-query>}).
+                without_content(%r{<validation-query-timeout>}).
+                without_content(%r{<connection-properties>})
+            end
+          end
+
+          context 'with oracle db and custom url' do
             let(:params) do
               super().merge(
                 db: 'oracle',
-                dbport: 1522,
+                dburl: 'jdbc:oracle:thin:@localhost:9999/mydatabase'
+              )
+            end
+
+            it do
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{<url>jdbc:oracle:thin:@localhost:9999/mydatabase</url>})
+            end
+          end
+
+          context 'with oracle db and custom url with dbname and dbserver' do
+            let(:params) do
+              super().merge(
+                db: 'oracle',
+                dburl: 'jdbc:oracle:thin:@localhost:666/mydatabase',
+                dbname: 'mydatabase',
+                dbserver: 'myhost'
+              )
+            end
+
+            it do
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{<url>jdbc:oracle:thin:@localhost:666/mydatabase</url>})
+            end
+          end
+
+          context 'with oracle db and not use oracle sid' do
+            let(:params) do
+              super().merge(
+                db: 'oracle',
                 dbserver: 'oracleserver',
                 oracle_use_sid: false,
                 dbname: 'mydatabase'
@@ -301,7 +466,61 @@ describe 'jira' do
 
             it do
               is_expected.to contain_file(FILENAME_DBCONFIG_XML).
-                with_content(%r{jdbc:oracle:thin:@oracleserver:1522/mydatabase})
+                with_content(%r{jdbc:oracle:thin:@oracleserver:1521/mydatabase})
+            end
+          end
+
+          context 'with h2 db and default database settings' do
+            let(:params) do
+              super().merge(
+                db: 'h2'
+              )
+            end
+
+            it { is_expected.to compile.with_all_deps }
+
+            it { is_expected.to contain_file(FILENAME_SETENV_SH) }
+            it { is_expected.to contain_file(FILENAME_USER_SH) }
+            it { is_expected.to contain_file(FILENAME_SERVER_XML) }
+
+            it do
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{<database-type>h2</database-type>}).
+                with_content(%r{<url>jdbc:h2:file://home/jira/database/jira</url>}).
+                with_content(%r{<driver-class>org.h2.Driver</driver-class>}).
+                without_content(%r{<validation-query>}).
+                without_content(%r{<validation-query-timeout>}).
+                without_content(%r{<connection-properties>})
+            end
+          end
+
+          context 'with h2 db and custom url' do
+            let(:params) do
+              super().merge(
+                db: 'h2',
+                dburl: 'jdbc:h2:file://home/jira/database/myjira'
+              )
+            end
+
+            it do
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{<url>jdbc:h2:file://home/jira/database/myjira</url>})
+            end
+          end
+
+          context 'with h2 db and custom url with dbname and dbserver' do
+            let(:params) do
+              super().merge(
+                db: 'h2',
+                dburl: 'jdbc:h2:file://var/opt/jira/database/jiradb',
+                dbname: 'mydatabase',
+                dbserver: 'myhost'
+              )
+            end
+
+            it do
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{<url>jdbc:h2:file://var/opt/jira/database/jiradb</url>})
             end
           end
 
@@ -428,19 +647,6 @@ describe 'jira' do
             it do
               is_expected.to contain_file(FILENAME_DBCONFIG_XML).
                 with_content(REGEXP_PUBLIC_SCHEMA)
-            end
-          end
-
-          context 'custom dburl' do
-            let(:params) do
-              super().merge(
-                dburl: 'my custom dburl'
-              )
-            end
-
-            it do
-              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
-                with_content(%r{<url>my custom dburl</url>})
             end
           end
 
