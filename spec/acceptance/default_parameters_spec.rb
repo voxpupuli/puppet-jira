@@ -16,11 +16,22 @@ describe 'jira postgresql' do
 
       postgresql::server::db { 'jira':
         user     => 'jiraadm',
+        grant    => 'ALL',
         password => postgresql::postgresql_password('jiraadm', 'mypassword'),
       }
 
+      # This is needed for postgresql 15 but is backwards compatible
+      postgresql::server::grant { 'jira':
+        db          => 'jira',
+        object_type => 'SCHEMA',
+        object_name => 'public',
+        privilege   => 'ALL',
+        role        => 'jiraadm',
+        require     => Postgresql::Server::Db['jira'],
+      }
+
       class { 'jira':
-        require => Postgresql::Server::Db['jira'],
+        require => Postgresql::Server::Grant['jira'],
       }
     EOS
 
