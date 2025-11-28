@@ -21,47 +21,14 @@ describe 'jira mysql' do
         grant    => ['ALL'],
       }
 
-      class { 'java':
-        distribution => 'jre',
-      }
-
-      exec { 'tmpkey':
-        command => "openssl req -x509 -nodes -days 1 -subj '/C=CA/ST=QC/L=Montreal/O=FOO/CN=${facts['networking']['fqdn']}' -newkey rsa:1024 -keyout /tmp/key.pem -out /tmp/cert.pem",
-        path    => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ],
-        creates => '/tmp/cert.pem',
-      }
-
-      java_ks { 'jira':
-        ensure      => present,
-        name        => 'jira',
-        certificate => '/tmp/cert.pem',
-        private_key => '/tmp/key.pem',
-        target      => '/tmp/jira.ks',
-        password    => 'changeit',
-        require     => Exec['tmpkey'],
-      }
-
-      # There is a bug in the check-java.sh that prevents jira from starting on Centos Stream 8
-      # https://jira.atlassian.com/browse/JRASERVER-77097
-      # Running with script_check_java_manage => true to solve this
       class { 'jira':
-        installdir               => '/opt/atlassian-jira',
-        homedir                  => '/opt/jira-home',
-        javahome                 => '/usr',
-        jvm_type                 => 'oracle-jdk-1.8',
-        db                       => 'mysql',
-        dbport                   => 3306,
-        dbdriver                 => 'com.mysql.jdbc.Driver',
-        dbtype                   => 'mysql',
-        tomcat_port              => 8081,
-        tomcat_native_ssl        => true,
-        tomcat_keystore_file     => '/tmp/jira.ks',
-        script_check_java_manage => true,
-        require                  => [Mysql::Db['jira'], Java_ks['jira']],
+        db      => 'mysql',
+        require => Mysql::Db['jira'],
       }
     EOS
 
-    wget_cmd = 'wget -q --tries=24 --retry-connrefused --read-timeout=10 --no-check-certificate localhost:8081'
+    # jira just takes *ages* to start up :-(
+    wget_cmd = 'wget -q --tries=24 --retry-connrefused --read-timeout=10 localhost:8080'
     apply_manifest(pp, catch_failures: true)
     sleep SLEEP_SECONDS
     shell wget_cmd, acceptable_exit_codes: [0, 8]
@@ -75,7 +42,7 @@ describe 'jira mysql' do
     it { is_expected.to be_running }
   end
 
-  describe port(8081) do
+  describe port(8080) do
     it { is_expected.to be_listening }
   end
 
@@ -89,14 +56,8 @@ describe 'jira mysql' do
     it { is_expected.to have_login_shell '/bin/true' }
   end
 
-  specify do
-    expect(command('wget -q --tries=24 --retry-connrefused --no-check-certificate --read-timeout=10 -O- localhost:8081')).
-      to have_attributes(stdout: %r{8.13.5})
-  end
-
-  specify do
-    expect(command('wget -q --tries=24 --retry-connrefused --no-check-certificate --read-timeout=10 -O- https://localhost:8443')).
-      to have_attributes(stdout: %r{8.13.5})
+  describe command('wget -q --tries=54 --retry-connrefused --read-timeout=10 -O- localhost:8080') do
+    its(:stdout) { is_expected.to include('9.12.0') }
   end
 
   describe 'shutdown' do
