@@ -1189,6 +1189,54 @@ describe 'jira' do
             end
           end
 
+          context 'enable clustering with short fqdn' do
+            let(:params) do
+              super().merge(
+                datacenter: true,
+                shared_homedir: '/mnt/jira_shared_home_dir'
+              )
+            end
+
+            let(:facts) do
+              super().merge(
+                networking: {
+                  'fqdn' => 'short-hostname.example.com',
+                  'hostname' => 'short-hostname'
+                }
+              )
+            end
+
+            it do
+              is_expected.to contain_file(FILENAME_CLUSTER_PROPS).
+                with_content(%r{jira.node.id = short-hostname.example.com}).
+                with_content(%r{jira.shared.home = /mnt/jira_shared_home_dir})
+            end
+          end
+
+          context 'enable clustering with long fqdn exceeding 60 characters' do
+            let(:params) do
+              super().merge(
+                datacenter: true,
+                shared_homedir: '/mnt/jira_shared_home_dir'
+              )
+            end
+
+            let(:facts) do
+              super().merge(
+                networking: {
+                  'fqdn' => 'this-is-a-very-long-hostname-that-exceeds-sixty-characters.example.com',
+                  'hostname' => 'long-hostname'
+                }
+              )
+            end
+
+            it do
+              is_expected.to contain_file(FILENAME_CLUSTER_PROPS).
+                with_content(%r{jira.node.id = long-hostname}).
+                with_content(%r{jira.shared.home = /mnt/jira_shared_home_dir})
+            end
+          end
+
           context 'OpenJDK jvm params' do
             let(:params) do
               super().merge(
