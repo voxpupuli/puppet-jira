@@ -185,7 +185,7 @@ Data type: `String`
 
 The JIRA version to install or upgrade to. Changing this will trigger a restart
 
-Default value: `'8.13.5'`
+Default value: `'9.12.0'`
 
 ##### <a name="-jira--product"></a>`product`
 

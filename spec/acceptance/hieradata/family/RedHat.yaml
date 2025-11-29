@@ -1,0 +1,3 @@
+---
+jira::java_package: java-17-openjdk
+jira::javahome: /usr/lib/jvm/jre-17-openjdk
