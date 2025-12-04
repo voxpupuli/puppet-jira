@@ -68,6 +68,214 @@ describe 'jira' do
 
             it { is_expected.not_to contain_file(FILENAME_CLUSTER_PROPS) }
             it { is_expected.not_to contain_file(FILENAME_CHECK_JAVA_SH) }
+
+            # Test web.xml management with default values
+            it do
+              is_expected.to contain_augeas('jira-web.xml-session-timeout').
+                with_changes(['set session-config/session-timeout/#text 300'])
+            end
+
+            it 'removes HTTPS redirect when disabled' do
+              is_expected.to contain_augeas('jira-web.xml-https-redirect').
+                with_changes(['rm security-constraint[user-data-constraint/transport-guarantee/#text="CONFIDENTIAL"]']).
+                with_onlyif('match security-constraint/user-data-constraint/transport-guarantee[#text="CONFIDENTIAL"] size > 0')
+            end
+          end
+
+          context 'with enable_https_redirect' do
+            let(:params) do
+              {
+                javahome: '/opt/java',
+                version: DEFAULT_VERSION,
+                enable_https_redirect: true,
+              }
+            end
+
+            it { is_expected.to compile.with_all_deps }
+
+            it 'configures HTTPS redirect in web.xml' do
+              is_expected.to contain_augeas('jira-web.xml-https-redirect').
+                with_onlyif('match security-constraint/user-data-constraint/transport-guarantee[#text="CONFIDENTIAL"] size == 0').
+                with_changes([
+                               'set security-constraint[last()+1]/web-resource-collection/web-resource-name/#text "all-except-attachments"',
+                               'set security-constraint[last()]/web-resource-collection/url-pattern[1]/#text "*.jsp"',
+                               'set security-constraint[last()]/web-resource-collection/url-pattern[2]/#text "*.jspa"',
+                               'set security-constraint[last()]/web-resource-collection/url-pattern[3]/#text "/browse/*"',
+                               'set security-constraint[last()]/web-resource-collection/url-pattern[4]/#text "/issues/*"',
+                               'set security-constraint[last()]/user-data-constraint/transport-guarantee/#text "CONFIDENTIAL"',
+                             ])
+            end
+
+            it 'does not remove HTTPS redirect' do
+              is_expected.to contain_augeas('jira-web.xml-https-redirect').
+                with_onlyif('match security-constraint/user-data-constraint/transport-guarantee[#text="CONFIDENTIAL"] size == 0')
+            end
+          end
+
+          context 'with custom session_timeout' do
+            let(:params) do
+              {
+                javahome: '/opt/java',
+                version: DEFAULT_VERSION,
+                session_timeout: 480,
+              }
+            end
+
+            it { is_expected.to compile.with_all_deps }
+
+            it 'sets custom session timeout' do
+              is_expected.to contain_augeas('jira-web.xml-session-timeout').
+                with_changes(['set session-config/session-timeout/#text 480'])
+            end
+
+            it 'removes HTTPS redirect when disabled' do
+              is_expected.to contain_augeas('jira-web.xml-https-redirect').
+                with_changes(['rm security-constraint[user-data-constraint/transport-guarantee/#text="CONFIDENTIAL"]']).
+                with_onlyif('match security-constraint/user-data-constraint/transport-guarantee[#text="CONFIDENTIAL"] size > 0')
+            end
+          end
+
+          context 'with both enable_https_redirect and custom session_timeout' do
+            let(:params) do
+              {
+                javahome: '/opt/java',
+                version: DEFAULT_VERSION,
+                enable_https_redirect: true,
+                session_timeout: 600,
+              }
+            end
+
+            it { is_expected.to compile.with_all_deps }
+
+            it 'sets custom session timeout' do
+              is_expected.to contain_augeas('jira-web.xml-session-timeout').
+                with_changes(['set session-config/session-timeout/#text 600'])
+            end
+
+            it 'configures HTTPS redirect' do
+              is_expected.to contain_augeas('jira-web.xml-https-redirect')
+            end
+          end
+
+          context 'web.xml augeas resources' do
+            let(:params) do
+              {
+                javahome: '/opt/java',
+                version: DEFAULT_VERSION,
+              }
+            end
+
+            it 'manages session timeout with augeas' do
+              is_expected.to contain_augeas('jira-web.xml-session-timeout').
+                with_incl("#{PATH_INSTALLATION_BASE}/atlassian-jira/WEB-INF/web.xml").
+                with_lens('Xml.lns').
+                with_context("/files#{PATH_INSTALLATION_BASE}/atlassian-jira/WEB-INF/web.xml/web-app")
+            end
+
+            it 'manages https redirect with augeas' do
+              is_expected.to contain_augeas('jira-web.xml-https-redirect').
+                with_incl("#{PATH_INSTALLATION_BASE}/atlassian-jira/WEB-INF/web.xml").
+                with_lens('Xml.lns').
+                with_onlyif('match security-constraint/user-data-constraint/transport-guarantee[#text="CONFIDENTIAL"] size > 0')
+            end
+          end
+
+          context 'with web.xml and different JIRA versions' do
+            let(:params) do
+              {
+                javahome: '/opt/java',
+                version: '9.4.0',
+                enable_https_redirect: true,
+                session_timeout: 360,
+              }
+            end
+
+            it { is_expected.to compile.with_all_deps }
+
+            it 'manages custom session timeout' do
+              is_expected.to contain_augeas('jira-web.xml-session-timeout').
+                with_changes(['set session-config/session-timeout/#text 360'])
+            end
+
+            it 'enables https redirect' do
+              is_expected.to contain_augeas('jira-web.xml-https-redirect').
+                with_onlyif('match security-constraint/user-data-constraint/transport-guarantee[#text="CONFIDENTIAL"] size == 0').
+                with_changes([
+                               'set security-constraint[last()+1]/web-resource-collection/web-resource-name/#text "all-except-attachments"',
+                               'set security-constraint[last()]/web-resource-collection/url-pattern[1]/#text "*.jsp"',
+                               'set security-constraint[last()]/web-resource-collection/url-pattern[2]/#text "*.jspa"',
+                               'set security-constraint[last()]/web-resource-collection/url-pattern[3]/#text "/browse/*"',
+                               'set security-constraint[last()]/web-resource-collection/url-pattern[4]/#text "/issues/*"',
+                               'set security-constraint[last()]/user-data-constraint/transport-guarantee/#text "CONFIDENTIAL"',
+                             ])
+            end
+          end
+
+          context 'with web.xml and OpenJDK 11' do
+            let(:params) do
+              {
+                javahome: '/usr/lib/jvm/jre-11-openjdk',
+                java_package: 'java-11-openjdk-headless',
+                jvm_type: 'openjdk-11',
+                enable_https_redirect: true,
+                session_timeout: 420,
+              }
+            end
+
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to contain_package('java-11-openjdk-headless') }
+
+            it 'manages custom session timeout' do
+              is_expected.to contain_augeas('jira-web.xml-session-timeout').
+                with_changes(['set session-config/session-timeout/#text 420'])
+            end
+
+            it 'enables https redirect' do
+              is_expected.to contain_augeas('jira-web.xml-https-redirect').
+                with_onlyif('match security-constraint/user-data-constraint/transport-guarantee[#text="CONFIDENTIAL"] size == 0').
+                with_changes([
+                               'set security-constraint[last()+1]/web-resource-collection/web-resource-name/#text "all-except-attachments"',
+                               'set security-constraint[last()]/web-resource-collection/url-pattern[1]/#text "*.jsp"',
+                               'set security-constraint[last()]/web-resource-collection/url-pattern[2]/#text "*.jspa"',
+                               'set security-constraint[last()]/web-resource-collection/url-pattern[3]/#text "/browse/*"',
+                               'set security-constraint[last()]/web-resource-collection/url-pattern[4]/#text "/issues/*"',
+                               'set security-constraint[last()]/user-data-constraint/transport-guarantee/#text "CONFIDENTIAL"',
+                             ])
+            end
+          end
+
+          context 'with minimum session timeout' do
+            let(:params) do
+              {
+                javahome: '/opt/java',
+                version: DEFAULT_VERSION,
+                session_timeout: 1,
+              }
+            end
+
+            it { is_expected.to compile.with_all_deps }
+
+            it 'allows minimum valid session timeout' do
+              is_expected.to contain_augeas('jira-web.xml-session-timeout').
+                with_changes(['set session-config/session-timeout/#text 1'])
+            end
+          end
+
+          context 'with large session timeout' do
+            let(:params) do
+              {
+                javahome: '/opt/java',
+                version: DEFAULT_VERSION,
+                session_timeout: 1440,
+              }
+            end
+
+            it { is_expected.to compile.with_all_deps }
+
+            it 'allows large session timeout (24 hours)' do
+              is_expected.to contain_augeas('jira-web.xml-session-timeout').
+                with_changes(['set session-config/session-timeout/#text 1440'])
+            end
           end
 
           context 'with java install' do

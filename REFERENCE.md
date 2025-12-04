@@ -164,6 +164,8 @@ The following parameters are available in the `jira` class:
 * [`tomcat_additional_connectors`](#-jira--tomcat_additional_connectors)
 * [`contextpath`](#-jira--contextpath)
 * [`resources`](#-jira--resources)
+* [`enable_https_redirect`](#-jira--enable_https_redirect)
+* [`session_timeout`](#-jira--session_timeout)
 * [`enable_sso`](#-jira--enable_sso)
 * [`application_name`](#-jira--application_name)
 * [`application_password`](#-jira--application_password)
@@ -1048,6 +1050,23 @@ Data type: `Hash`
 undocumented
 
 Default value: `{}`
+
+##### <a name="-jira--enable_https_redirect"></a>`enable_https_redirect`
+
+Data type: `Boolean`
+
+Enable HTTPS redirection in web.xml. When enabled, adds a security constraint that redirects
+certain URL patterns (*.jsp, *.jspa, /browse/*, /issues/*) to HTTPS.
+
+Default value: `false`
+
+##### <a name="-jira--session_timeout"></a>`session_timeout`
+
+Data type: `Integer[1]`
+
+Session timeout in minutes in web.xml.
+
+Default value: `300`
 
 ##### <a name="-jira--enable_sso"></a>`enable_sso`
 
