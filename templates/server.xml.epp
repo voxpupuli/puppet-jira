@@ -108,7 +108,7 @@
 <% } -%>
                    />
 <% } -%>
-        <Engine name="Catalina" defaultHost="localhost">
+        <Engine name="Catalina" defaultHost="localhost"<% if $jira::jvm_route { %> jvmRoute="<%= $jira::jvm_route %>"<% } %>>
             <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true">
 
                 <Context path="<%= $jira::contextpath %>" docBase="${catalina.home}/atlassian-jira" reloadable="false" useHttpOnly="true">
