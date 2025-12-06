@@ -9,6 +9,7 @@ Environment="JAVA_HOME=<%= $jira::javahome %>"
 User=<%= $jira::user %>
 ExecStart=<%= $jira::webappdir %>/bin/start-jira.sh
 ExecStop=<%= $jira::webappdir %>/bin/stop-jira.sh
+LimitNOFILE=<%= $jira::jvm_nofiles_limit %>
 
 [Install]
 WantedBy=multi-user.target
