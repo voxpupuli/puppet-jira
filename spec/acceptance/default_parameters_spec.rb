@@ -5,23 +5,13 @@ require 'spec_helper_acceptance'
 describe 'jira postgresql' do
   it 'installs with defaults' do
     pp = <<-EOS
-      $java_package = $facts['os']['family'] ? {
-        'RedHat' => 'java-11-openjdk-headless',
-        'Debian' => 'openjdk-11-jre-headless',
-      }
-
-      $java_home = $facts['os']['family'] ? {
-        'RedHat' => '/usr/lib/jvm/jre-11-openjdk',
-        'Debian' => '/usr/lib/jvm/java-1.11.0-openjdk-amd64',
-      }
-
       # The output of `systemctl status postgresql` is non ascii which
       # breaks the Exec in Postgresql::Server::Instance::Reload
       # on rhel based docker containers
       # We don't need the output.
       class { 'postgresql::server':
         service_status => 'systemctl status postgresql > /dev/null',
-        needs_initdb   => true
+        needs_initdb   => true,
       }
 
       postgresql::server::db { 'jira':
@@ -29,32 +19,14 @@ describe 'jira postgresql' do
         password => postgresql::postgresql_password('jiraadm', 'mypassword'),
       }
 
-      # There is a bug in the check-java.sh that prevents jira from starting on Centos Stream 8
-      # https://jira.atlassian.com/browse/JRASERVER-77097
-      # Running with script_check_java_manage => true to solve this
       class { 'jira':
-        java_package             => $java_package,
-        javahome                 => $java_home,
-        script_check_java_manage => true,
-        require                  => Postgresql::Server::Db['jira'],
+        require => Postgresql::Server::Db['jira'],
       }
     EOS
+
     pp_upgrade = <<-EOS
-      $java_package = $facts['os']['family'] ? {
-        'RedHat' => 'java-11-openjdk-headless',
-        'Debian' => 'openjdk-11-jre-headless',
-      }
-
-      $java_home = $facts['os']['family'] ? {
-        'RedHat' => '/usr/lib/jvm/jre-11-openjdk',
-        'Debian' => '/usr/lib/jvm/java-1.11.0-openjdk-amd64',
-      }
-
       class { 'jira':
-        version                  => '8.16.0',
-        java_package             => $java_package,
-        javahome                 => $java_home,
-        script_check_java_manage => true
+        version => '9.12.29',
       }
     EOS
 
@@ -100,7 +72,7 @@ describe 'jira postgresql' do
   end
 
   describe command('wget -q --tries=54 --retry-connrefused --read-timeout=10 -O- localhost:8080') do
-    its(:stdout) { is_expected.to include('8.16.0') }
+    its(:stdout) { is_expected.to include('9.12.29') }
   end
 
   describe 'shutdown' do
