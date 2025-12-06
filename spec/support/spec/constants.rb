@@ -13,6 +13,7 @@ FILENAME_SETENV_SH = "#{PATH_INSTALLATION_BASE}/bin/setenv.sh"
 FILENAME_USER_SH = "#{PATH_INSTALLATION_BASE}/bin/user.sh"
 FILENAME_CHECK_JAVA_SH = "#{PATH_INSTALLATION_BASE}/bin/check-java.sh"
 FILENAME_SERVER_XML = "#{PATH_INSTALLATION_BASE}/conf/server.xml"
+FILENAME_WEB_XML = "#{PATH_INSTALLATION_BASE}/atlassian-jira/WEB-INF/web.xml"
 FILENAME_DBCONFIG_XML = '/home/jira/dbconfig.xml'
 FILENAME_CLUSTER_PROPS = '/home/jira/cluster.properties'
 FILENAME_JIRA_CONFIG_PROPS = '/home/jira/jira-config.properties'

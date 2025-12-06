@@ -249,6 +249,11 @@
 #   Tomcat context path for the web service
 # @param resources
 #   undocumented
+# @param enable_https_redirect
+#   Enable HTTPS redirection in web.xml. When enabled, adds a security constraint that redirects
+#   certain URL patterns (*.jsp, *.jspa, /browse/*, /issues/*) to HTTPS.
+# @param session_timeout
+#   Session timeout in minutes in web.xml.
 # @param enable_sso
 #   Enable single sign-on via Crowd
 # @param application_name
@@ -413,6 +418,9 @@ class jira (
   Optional[String[1]] $contextpath                                  = undef,
   # Resources for context.xml
   Hash $resources                                                   = {},
+  # web.xml settings
+  Boolean $enable_https_redirect                                    = false,
+  Integer[1] $session_timeout                                       = 300,
   # Enable SingleSignOn via Crowd
   Boolean $enable_sso                                               = false,
   String $application_name                                          = 'crowd',

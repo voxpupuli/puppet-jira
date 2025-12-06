@@ -203,6 +203,46 @@ class jira::config {
     mode    => '0600',
   }
 
+  $webxml_path = "${jira::webappdir}/atlassian-jira/WEB-INF/web.xml"
+
+  augeas { 'jira-web.xml-session-timeout':
+    incl    => $webxml_path,
+    lens    => 'Xml.lns',
+    context => "/files${webxml_path}/web-app",
+    changes => [
+      "set session-config/session-timeout/#text ${jira::session_timeout}",
+    ],
+    require => Class['jira::install'],
+  }
+
+  $https_changes = $jira::enable_https_redirect ? {
+    true  => [
+      'set security-constraint[last()+1]/web-resource-collection/web-resource-name/#text "all-except-attachments"',
+      'set security-constraint[last()]/web-resource-collection/url-pattern[1]/#text "*.jsp"',
+      'set security-constraint[last()]/web-resource-collection/url-pattern[2]/#text "*.jspa"',
+      'set security-constraint[last()]/web-resource-collection/url-pattern[3]/#text "/browse/*"',
+      'set security-constraint[last()]/web-resource-collection/url-pattern[4]/#text "/issues/*"',
+      'set security-constraint[last()]/user-data-constraint/transport-guarantee/#text "CONFIDENTIAL"',
+    ],
+    false => [
+      'rm security-constraint[user-data-constraint/transport-guarantee/#text="CONFIDENTIAL"]',
+    ],
+  }
+
+  $https_onlyif = $jira::enable_https_redirect ? {
+    true  => 'match security-constraint/user-data-constraint/transport-guarantee[#text="CONFIDENTIAL"] size == 0',
+    false => 'match security-constraint/user-data-constraint/transport-guarantee[#text="CONFIDENTIAL"] size > 0',
+  }
+
+  augeas { 'jira-web.xml-https-redirect':
+    incl    => $webxml_path,
+    lens    => 'Xml.lns',
+    context => "/files${webxml_path}/web-app",
+    changes => $https_changes,
+    onlyif  => $https_onlyif,
+    require => Class['jira::install'],
+  }
+
   file { "${jira::homedir}/jira-config.properties":
     content => inline_epp(@(EOF)
         <% $merged_jira_config_properties.each |$key, $val| { -%>
