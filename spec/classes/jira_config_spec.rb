@@ -1647,6 +1647,21 @@ describe 'jira' do
               end
             end
           end
+
+          context 'with version >= 9.4.0' do
+            let(:params) do
+              {
+                javahome: '/opt/java',
+                version: '9.4.0',
+              }
+            end
+
+            it do
+              is_expected.to contain_file(FILENAME_DBCONFIG_XML).
+                with_content(%r{<connection-properties>tcpKeepAlive=true}).
+                without_content(%r{socketTimeout=240})
+            end
+          end
         end
       end
     end

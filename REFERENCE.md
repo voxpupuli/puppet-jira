@@ -467,7 +467,8 @@ Default value: `undef`
 Data type: `Optional[String]`
 
 Configures additional JDBC connection properties in dbconfig.xml
-For PostgreSQL, a default value of "tcpKeepAlive=true;socketTimeout=240" will be used
+For PostgreSQL, a default value of "tcpKeepAlive=true;socketTimeout=240" will be used for JIRA < 9.4.0.
+For JIRA >= 9.4.0, the default is "tcpKeepAlive=true".
 See https://confluence.atlassian.com/jirakb/connection-problems-to-postgresql-result-in-stuck-threads-in-jira-1047534091.html
 
 Default value: `undef`
