@@ -4,6 +4,32 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v7.0.0](https://github.com/voxpupuli/puppet-jira/tree/v7.0.0) (2025-11-27)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v6.2.1...v7.0.0)
+
+**Breaking changes:**
+
+- Drop puppet, update openvox minimum version to 8.19 [\#462](https://github.com/voxpupuli/puppet-jira/pull/462) ([TheMeier](https://github.com/TheMeier))
+- Drop support for EOL Ubuntu 18.04 and Ubuntu 20.04 [\#454](https://github.com/voxpupuli/puppet-jira/pull/454) ([kenyon](https://github.com/kenyon))
+- Drop support for EOL EL7 [\#452](https://github.com/voxpupuli/puppet-jira/pull/452) ([kenyon](https://github.com/kenyon))
+
+**Implemented enhancements:**
+
+- puppet/archive Allow 8.x [\#461](https://github.com/voxpupuli/puppet-jira/pull/461) ([TheMeier](https://github.com/TheMeier))
+
+**Fixed bugs:**
+
+- Unknown variable: 'oracle\_separator'. [\#468](https://github.com/voxpupuli/puppet-jira/issues/468)
+- \[database\] Use `dburl` variable properly [\#466](https://github.com/voxpupuli/puppet-jira/pull/466) ([Joris29](https://github.com/Joris29))
+
+**Merged pull requests:**
+
+- Add more database unit tests [\#470](https://github.com/voxpupuli/puppet-jira/pull/470) ([Joris29](https://github.com/Joris29))
+- Jira 10 acceptance test puppet code cleanup [\#457](https://github.com/voxpupuli/puppet-jira/pull/457) ([kenyon](https://github.com/kenyon))
+- README: link to contributing doc for testing instructions [\#455](https://github.com/voxpupuli/puppet-jira/pull/455) ([kenyon](https://github.com/kenyon))
+- `metadata.json`: increase `puppetlabs/stdlib` minimum version to 8.4.0 [\#453](https://github.com/voxpupuli/puppet-jira/pull/453) ([kenyon](https://github.com/kenyon))
+
 ## [v6.2.1](https://github.com/voxpupuli/puppet-jira/tree/v6.2.1) (2025-06-02)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-jira/compare/v6.2.0...v6.2.1)
