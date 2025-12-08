@@ -1,0 +1,5 @@
+---
+jira::java_package: openjdk-17-jre
+jira::javahome: /usr/lib/jvm/java-17-openjdk-amd64
+
+postgresql::globals::manage_package_repo: true

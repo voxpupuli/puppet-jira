@@ -295,7 +295,7 @@
 class jira (
 
   # Jira Settings
-  String $version                                                   = '8.13.5',
+  String $version                                                   = '9.12.0',
   String[1] $product                                                = 'jira',
   Stdlib::Absolutepath $installdir                                  = '/opt/jira',
   Stdlib::Absolutepath $homedir                                     = '/home/jira',
