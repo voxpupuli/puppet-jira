@@ -112,6 +112,23 @@ describe 'jira' do
             end
           end
 
+          context 'with jvm_route' do
+            let(:params) do
+              {
+                javahome: '/opt/java',
+                version: DEFAULT_VERSION,
+                jvm_route: 'node1',
+              }
+            end
+
+            it { is_expected.to compile.with_all_deps }
+
+            it 'configures jvmRoute in server.xml' do
+              is_expected.to contain_file(FILENAME_SERVER_XML).
+                with_content(%r{<Engine name="Catalina" defaultHost="localhost" jvmRoute="node1">})
+            end
+          end
+
           context 'with custom session_timeout' do
             let(:params) do
               {

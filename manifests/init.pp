@@ -181,6 +181,8 @@
 #   Tomcat bind port
 # @param tomcat_shutdown_port
 #   Tomcat shutdown command port
+# @param jvm_route
+#   The jvmRoute to use for load balancing
 # @param tomcat_max_http_header_size
 #   Tomcat connector setting
 # @param tomcat_min_spare_threads
@@ -388,6 +390,7 @@ class jira (
   Optional[String] $tomcat_address                                  = undef,
   Stdlib::Port $tomcat_port                                         = 8080,
   Stdlib::Port $tomcat_shutdown_port                                = 8005,
+  Optional[String[1]] $jvm_route                                    = undef,
   Integer $tomcat_max_http_header_size                              = 8192,
   Integer[0] $tomcat_min_spare_threads                              = 25,
   Integer[0] $tomcat_connection_timeout                             = 20000,

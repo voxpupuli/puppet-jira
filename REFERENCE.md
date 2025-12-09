@@ -139,6 +139,7 @@ The following parameters are available in the `jira` class:
 * [`tomcat_address`](#-jira--tomcat_address)
 * [`tomcat_port`](#-jira--tomcat_port)
 * [`tomcat_shutdown_port`](#-jira--tomcat_shutdown_port)
+* [`jvm_route`](#-jira--jvm_route)
 * [`tomcat_max_http_header_size`](#-jira--tomcat_max_http_header_size)
 * [`tomcat_min_spare_threads`](#-jira--tomcat_min_spare_threads)
 * [`tomcat_connection_timeout`](#-jira--tomcat_connection_timeout)
@@ -832,6 +833,14 @@ Data type: `Stdlib::Port`
 Tomcat shutdown command port
 
 Default value: `8005`
+
+##### <a name="-jira--jvm_route"></a>`jvm_route`
+
+Data type: `Optional[String[1]]`
+
+The jvmRoute to use for load balancing
+
+Default value: `undef`
 
 ##### <a name="-jira--tomcat_max_http_header_size"></a>`tomcat_max_http_header_size`
 
