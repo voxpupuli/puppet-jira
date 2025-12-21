@@ -6,8 +6,6 @@ pre = <<-EOS
   if $facts['os']['family']  == 'RedHat' {
     $java_package = 'java-17-openjdk'
     $java_home = '/usr/lib/jvm/jre-17-openjdk'
-    $postgresql_version = '13'
-    $pgsql_package_name = 'postgresql-server'
     $pgsql_data_dir = '/var/lib/pgsql'
 
     $manage_dnf_module = $facts['os']['release']['major'] ? {
@@ -17,22 +15,14 @@ pre = <<-EOS
 
     $autoremove_command = 'dnf --exclude="systemd*" autoremove -y'
   } elsif $facts['os']['family'] == 'Debian' {
-    $postgresql_version = $facts['os']['release']['major'] ? {
-      '11'    => '13',
-      default => '14',
-    }
-
     $java_package = 'openjdk-17-jre'
     $java_home = '/usr/lib/jvm/java-17-openjdk-amd64'
-    $pgsql_package_name = "postgresql-${postgresql_version}"
-    $pgsql_data_dir = "/var/lib/postgresql/${postgresql_version}/main/"
+    $pgsql_data_dir = "/var/lib/postgresql/*/main/"
     $manage_dnf_module = false
     $autoremove_command = 'apt autoremove -y'
   }
 
   $jira_install_dir = '/opt/jira/'
-  $postgres_service = 'postgresql'
-  $jira_service = 'jira'
 EOS
 
 pp = <<-EOS
@@ -42,7 +32,6 @@ pp = <<-EOS
   # We don't need the output.
   class { 'postgresql::globals':
     manage_dnf_module => $manage_dnf_module,
-    version           => $postgresql_version,
   }
 
   class { 'postgresql::server':
@@ -92,8 +81,8 @@ pp_remove = <<-EOS
     provider => shell,
   }
 
-  package { $pgsql_package_name:
-    ensure => purged,
+  class { 'postgresql::server':
+    package_ensure => purged,
   }
 
   if $manage_dnf_module {
@@ -114,11 +103,11 @@ pp_remove = <<-EOS
     require  => Exec['autoremove cleanup'],
   }
 
-  service { $postgres_service:
+  service { 'postgresql':
     ensure => stopped,
   }
 
-  service { $jira_service:
+  service { 'jira':
     ensure => stopped,
   }
 EOS
