@@ -55,16 +55,12 @@ pp = <<-EOS
     password => postgresql::postgresql_password('jiraadm', 'mypassword'),
   }
 
-  # There is a bug in the check-java.sh that prevents jira from starting on Centos Stream 8
-  # https://jira.atlassian.com/browse/JRASERVER-77097
-  # Running with script_check_java_manage => true to solve this
   class { 'jira':
-    version                  => '10.3.2',
-    java_package             => $java_package,
-    javahome                 => $java_home,
-    script_check_java_manage => false,
-    connection_settings      => 'tcpKeepAlive=true',
-    require                  => Postgresql::Server::Db['jira'],
+    version             => '10.3.2',
+    java_package        => $java_package,
+    javahome            => $java_home,
+    connection_settings => 'tcpKeepAlive=true',
+    require             => Postgresql::Server::Db['jira'],
   }
 EOS
 
@@ -72,11 +68,10 @@ pp = pre + pp
 
 pp_upgrade = <<-EOS
   class { 'jira':
-    version                  => '10.3.3',
-    java_package             => $java_package,
-    javahome                 => $java_home,
-    connection_settings      => 'tcpKeepAlive=true',
-    script_check_java_manage => false,
+    version             => '10.3.3',
+    java_package        => $java_package,
+    javahome            => $java_home,
+    connection_settings => 'tcpKeepAlive=true',
   }
 EOS
 
