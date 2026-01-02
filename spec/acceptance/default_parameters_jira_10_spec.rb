@@ -6,33 +6,16 @@ pre = <<-EOS
   if $facts['os']['family']  == 'RedHat' {
     $java_package = 'java-17-openjdk'
     $java_home = '/usr/lib/jvm/jre-17-openjdk'
-    $postgresql_version = '13'
     $pgsql_package_name = 'postgresql-server'
     $pgsql_data_dir = '/var/lib/pgsql'
-
-    $manage_dnf_module = $facts['os']['release']['major'] ? {
-      '8'     => true,
-      default => false, # RHEL-9 has pgsql 13 as a default
-    }
-
     $autoremove_command = 'dnf --exclude="systemd*" autoremove -y'
   } elsif $facts['os']['family'] == 'Debian' {
-    $postgresql_version = $facts['os']['release']['major'] ? {
-      '11'    => '13',
-      default => '14',
-    }
-
     $java_package = 'openjdk-17-jre'
     $java_home = '/usr/lib/jvm/java-17-openjdk-amd64'
-    $pgsql_package_name = "postgresql-${postgresql_version}"
-    $pgsql_data_dir = "/var/lib/postgresql/${postgresql_version}/main/"
-    $manage_dnf_module = false
+    $pgsql_package_name = 'postgresql-15'
+    $pgsql_data_dir = '/var/lib/postgresql/15/main/'
     $autoremove_command = 'apt autoremove -y'
   }
-
-  $jira_install_dir = '/opt/jira/'
-  $postgres_service = 'postgresql'
-  $jira_service = 'jira'
 EOS
 
 pp = <<-EOS
@@ -40,11 +23,6 @@ pp = <<-EOS
   # breaks the Exec in Postgresql::Server::Instance::Reload
   # on rhel based docker containers
   # We don't need the output.
-  class { 'postgresql::globals':
-    manage_dnf_module => $manage_dnf_module,
-    version           => $postgresql_version,
-  }
-
   class { 'postgresql::server':
     service_status => 'systemctl status postgresql > /dev/null',
     needs_initdb   => true,
@@ -52,19 +30,26 @@ pp = <<-EOS
 
   postgresql::server::db { 'jira':
     user     => 'jiraadm',
+    grant    => 'ALL',
     password => postgresql::postgresql_password('jiraadm', 'mypassword'),
   }
 
-  # There is a bug in the check-java.sh that prevents jira from starting on Centos Stream 8
-  # https://jira.atlassian.com/browse/JRASERVER-77097
-  # Running with script_check_java_manage => true to solve this
+  # This is needed for postgresql 15 but is backwards compatible
+  postgresql::server::grant { 'jira':
+    db          => 'jira',
+    object_type => 'SCHEMA',
+    object_name => 'public',
+    privilege   => 'ALL',
+    role        => 'jiraadm',
+    require     => Postgresql::Server::Db['jira'],
+  }
+
   class { 'jira':
-    version                  => '10.3.2',
-    java_package             => $java_package,
-    javahome                 => $java_home,
-    script_check_java_manage => false,
-    connection_settings      => 'tcpKeepAlive=true',
-    require                  => Postgresql::Server::Db['jira'],
+    version             => '10.3.2',
+    connection_settings => 'tcpKeepAlive=true',
+    java_package        => $java_package,
+    javahome            => $java_home,
+    require             => Postgresql::Server::Grant['jira'],
   }
 EOS
 
@@ -72,11 +57,8 @@ pp = pre + pp
 
 pp_upgrade = <<-EOS
   class { 'jira':
-    version                  => '10.3.3',
-    java_package             => $java_package,
-    javahome                 => $java_home,
-    connection_settings      => 'tcpKeepAlive=true',
-    script_check_java_manage => false,
+    version             => '10.3.3',
+    connection_settings => 'tcpKeepAlive=true',
   }
 EOS
 
@@ -96,29 +78,22 @@ pp_remove = <<-EOS
     ensure => purged,
   }
 
-  if $manage_dnf_module {
-    exec { 'dnf module reset postgresql':
-      command  => 'dnf module reset -y postgresql',
-      provider => shell,
-    }
-  }
-
   exec { 'autoremove cleanup':
     command  => $autoremove_command,
     provider => shell,
   }
 
   exec { 'cleanup pgsql and JIRA install dir':
-    command  => "rm -Rf ${pgsql_data_dir}/* ${$jira_install_dir}/atlassian-jira-software*",
+    command  => "rm -Rf ${pgsql_data_dir}/* /opt/jira/atlassian-jira-software*",
     provider => shell,
     require  => Exec['autoremove cleanup'],
   }
 
-  service { $postgres_service:
+  service { 'postgresql':
     ensure => stopped,
   }
 
-  service { $jira_service:
+  service { 'jira':
     ensure => stopped,
   }
 EOS
