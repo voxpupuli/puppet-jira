@@ -19,7 +19,8 @@ pre = <<-EOS
   } elsif $facts['os']['family'] == 'Debian' {
     $postgresql_version = $facts['os']['release']['major'] ? {
       '11'    => '13',
-      default => '14',
+      '12'    => '15',
+      default => 'FIXME',
     }
 
     $java_package = 'openjdk-17-jre'
