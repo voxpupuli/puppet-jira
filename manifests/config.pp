@@ -151,7 +151,11 @@ class jira::config {
     $jira::connection_settings
   } else {
     $jira::db ? {
-      'postgresql' => 'tcpKeepAlive=true;socketTimeout=240',
+      'postgresql' => if (versioncmp($jira::version, '9.4.0') < 0) {
+        'tcpKeepAlive=true;socketTimeout=240'
+      } else {
+        'tcpKeepAlive=true'
+      },
       default => undef,
     }
   }

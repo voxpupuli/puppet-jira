@@ -88,7 +88,8 @@
 #   Set this if you wish to use a custom database URL
 # @param connection_settings
 #   Configures additional JDBC connection properties in dbconfig.xml
-#   For PostgreSQL, a default value of "tcpKeepAlive=true;socketTimeout=240" will be used
+#   For PostgreSQL, a default value of "tcpKeepAlive=true;socketTimeout=240" will be used for JIRA < 9.4.0.
+#   For JIRA >= 9.4.0, the default is "tcpKeepAlive=true".
 #   See https://confluence.atlassian.com/jirakb/connection-problems-to-postgresql-result-in-stuck-threads-in-jira-1047534091.html
 # @param oracle_use_sid
 #   Affects the database URL format for Oracle depending on whether you connect via a SID or a service name
