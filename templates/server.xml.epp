@@ -79,18 +79,20 @@
 <%   } -%>
                     secure="true"
                     clientAuth="false"
-                    sslProtocol="TLS"
                     useBodyEncodingForURI="true"
-                    keyAlias="<%= $jira::tomcat_key_alias %>"
-                    keystoreFile="<%= $jira::tomcat_keystore_file %>"
-                    keystorePass="<%= $jira::tomcat_keystore_pass %>"
-                    keystoreType="<%= $jira::tomcat_keystore_type %>"
 <%   if $jira::proxy { -%>
 <%     jira::sort_hash($jira::proxy).each |$key, $value| { -%>
                     <%= $key %> = '<%= $value %>'
 <%     } -%>
 <%   } -%>
-        />
+        >
+            <SSLHostConfig sslProtocol="TLS">
+                <Certificate certificateKeyAlias="<%= $jira::tomcat_key_alias %>"
+                             certificateKeystoreFile="<%= $jira::tomcat_keystore_file %>"
+                             certificateKeystorePassword="<%= $jira::tomcat_keystore_pass %>"
+                             certificateKeystoreType="<%= $jira::tomcat_keystore_type %>" />
+            </SSLHostConfig>
+        </Connector>
 <% } -%>
 
 <% if !empty($jira::ajp) { -%>
