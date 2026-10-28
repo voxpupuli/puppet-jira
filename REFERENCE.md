@@ -1235,4 +1235,3 @@ Alias of `Hash[String[1], Scalar]`
 A set of attribute hashes keyed by connector port number
 
 Alias of `Hash[Stdlib::Port::Unprivileged, Jira::Tomcat_attributes]`
-
